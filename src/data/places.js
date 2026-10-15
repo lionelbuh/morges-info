@@ -16,6 +16,10 @@
  *                       neighbouring published points (approximate; confirm on the map)
  *  - 'unverified'     : no reliable position yet (not drawn on the map)
  *
+ * Optional fields follow src/data/schema.js: `address`, `website` and `openingHours` stay
+ * null unless verified; `photos` holds current photographs (with credit and licence);
+ * `lastVerified` is the date the record was last checked.
+ *
  * `archive` is reserved for the future historical photo archive. Its shape is
  * described and validated in ./archive.js. It stays empty in this version.
  */
@@ -65,6 +69,11 @@ export const PLACES = [
       { label: 'museums.ch — Château de Morges et ses musées', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/chateau-de-morges-et-ses-musees-2164.html' },
       { label: 'MySwitzerland — Château de Morges et ses musées', url: 'https://www.myswitzerland.com/en/experiences/chateau-de-morges-et-ses-musees/' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -100,6 +109,11 @@ export const PLACES = [
       HLS_MORGES,
       { label: 'Vaud Promotion — Protestant Church', url: 'https://www.vaud.ch/en/tourism/activites/protestant-church/' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -120,10 +134,10 @@ export const PLACES = [
       it: 'Municipio',
     },
     location: {
-      fr: 'Place de l’Hôtel-de-Ville 1, entre la Grand-Rue et la rue Louis-de-Savoie',
-      en: 'Place de l’Hôtel-de-Ville 1, between the Grand-Rue and the Rue Louis-de-Savoie',
-      de: 'Place de l’Hôtel-de-Ville 1, zwischen der Grand-Rue und der Rue Louis-de-Savoie',
-      it: 'Place de l’Hôtel-de-Ville 1, tra la Grand-Rue e la Rue Louis-de-Savoie',
+      fr: 'Place de l’Hôtel-de-Ville, entre la Grand-Rue et la rue Louis-de-Savoie',
+      en: 'Place de l’Hôtel-de-Ville, between the Grand-Rue and the Rue Louis-de-Savoie',
+      de: 'Place de l’Hôtel-de-Ville, zwischen der Grand-Rue und der Rue Louis-de-Savoie',
+      it: 'Place de l’Hôtel-de-Ville, tra la Grand-Rue e la Rue Louis-de-Savoie',
     },
     description: {
       fr: 'L’hôtel de ville intègre des constructions datant de 1510 à 1620. Il est inscrit à l’Inventaire suisse des biens culturels d’importance nationale (n° 6291). Le bâtiment a été transformé et restauré entre 2012 et 2014.',
@@ -136,6 +150,11 @@ export const PLACES = [
       { label: 'world-architects — Ferrari Architectes, Hôtel de Ville de Morges (2012–2014)', url: 'https://world-architects.com/en/projects/view/hotel-de-ville-de-morges' },
       { label: 'Wikidata Q3146164', url: 'https://www.wikidata.org/wiki/Q3146164' },
     ],
+    address: null,
+    website: 'https://www.morges.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -172,6 +191,11 @@ export const PLACES = [
       { label: 'ISOS — Inventaire fédéral des sites construits, Morges', url: 'https://api.isos.bak.admin.ch/ob/4493/doc/ISOS_4493.pdf' },
       { label: 'Morges Région Tourisme — Marché de Morges', url: 'https://www.morges-tourisme.ch/en/P7222/morges-market' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -210,6 +234,11 @@ export const PLACES = [
       it: 'Secondo il Dizionario storico della Svizzera, l’attività commerciale di Morges si sviluppò soprattutto nella metà meridionale della città, attorno al porto e alla Place du Marché. Il piano urbano prevedeva una piazza per il mercato settimanale.',
     },
     factSources: [HLS_MORGES],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -246,6 +275,11 @@ export const PLACES = [
       { label: 'Morges Région Tourisme — Fête de la Tulipe', url: 'https://www.morges-tourisme.ch/en/Z40279' },
       { label: 'CGN — Parc de l’Indépendance', url: 'https://www.cgn.ch/fr/parc-de-l-independance' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -283,6 +317,11 @@ export const PLACES = [
       { label: 'Musées de Lausanne (museris) — fiche Jean-Louis Lochmann', url: 'https://museris.lausanne.ch/SGP/getPDFFiche.aspx?id=4217' },
       { label: 'Ville de Morges — Histoire : les dates clés', url: 'https://www.morges.ch/vivre-a-morges/administration/administration-communale/historique/histoire-les-dates-cles-de-la-ville-de-morges-9151' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -315,7 +354,15 @@ export const PLACES = [
       de: 'Der heutige Hafen mit seinen zwei gebogenen Molen wurde zwischen 1691 und 1696 von der Berner Regierung erbaut, um ihre Flotte zu schützen; 1702 folgte das Zollgebäude. Ein kleiner Hafen ist bereits 1536 bezeugt. Heute liegen hier vor allem Freizeitboote.',
       it: 'Il porto attuale, con i suoi due moli curvi, fu costruito tra il 1691 e il 1696 dal governo bernese per ospitare la sua flottiglia; l’edificio della dogana seguì nel 1702. Un piccolo porto è già attestato nel 1536. Oggi accoglie soprattutto imbarcazioni da diporto.',
     },
-    factSources: [HLS_MORGES],
+    factSources: [
+      HLS_MORGES,
+      { label: 'ADAC Skipper-Portal — Port de Morges (port de plaisance)', url: 'https://skipper.adac.de/en/marinas/port-de-morges-2/' },
+    ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -351,6 +398,11 @@ export const PLACES = [
       { label: 'Wikipedia — Morges railway station', url: 'https://en.wikipedia.org/wiki/Morges_railway_station' },
       { label: 'Ville de Morges — Rue du Sablon et Rue Centrale', url: 'https://www.morges.ch/vivre-a-morges/rue-du-sablon-et-rue-centrale-203548' },
     ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
   {
@@ -386,6 +438,11 @@ export const PLACES = [
       { label: 'Théâtre de Beausobre — fiche technique 2025', url: 'https://beausobre.ch/wp-content/uploads/FICHE-TECHNIQUE-V7.4_2025.pdf' },
       { label: 'Morges Région Tourisme — Centre culturel et de loisirs de Beausobre', url: 'https://www.morges-tourisme.ch/en/P7094/culture-and-leisure-centre-of-beausobre' },
     ],
+    address: 'Avenue de Vertou 2, 1110 Morges',
+    website: 'https://beausobre.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-15',
     archive: { photos: [] },
   },
 ];

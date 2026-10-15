@@ -13,6 +13,11 @@ Fichier : `src/data/places.js`.
    (contrôlé par `tests/unit/places.test.js`).
 5. Les coordonnées doivent se trouver dans le périmètre de Morges (contrôlé par les tests).
 
+## Champs d'un lieu
+
+En plus des coordonnées, du nom et de la description : `address`, `website`, `openingHours` (null tant que
+non vérifiés), `photos` (photos actuelles avec auteur et licence), `lastVerified`. Voir `docs/CONTENT.md`.
+
 ## Ajouter un lieu
 
 1. Trouver le lieu sur <https://www.openstreetmap.org> et, si possible, dans une deuxième source
@@ -36,7 +41,7 @@ l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emp
 | --- | --- | --- |
 | Château de Morges | cross-checked | Wikipedia et Structurae concordent (~30 m) |
 | Temple de Morges | cross-checked | Mapcarta (OSM way 102523526) et AroundUs concordent |
-| Hôtel de Ville | cross-checked | Wikidata et Wikipédia concordent |
+| Hôtel de Ville | cross-checked | Wikidata et Wikipédia concordent. **Adresse non publiée** : les sources divergent (« Place de l'Hôtel-de-Ville 1 » selon une source, « Place de l'Hôtel-de-Ville 3 / Grand-Rue 81 » selon Wikimedia Commons) — à confirmer |
 | Grand-Rue | cross-checked | point représentatif d'une rue longue |
 | Place du Marché | estimated | emplacement indiqué par l'équipe Morges.info : intersection de la Grand-Rue et de la place de l'Hôtel-de-Ville. Point calculé entre l'hôtel de ville (Place de l'Hôtel-de-Ville 3 / Grand-Rue 81) et le n° 68 de la Grand-Rue, en face : 46.50866, 6.49786 (± 25 m). **À confirmer sur la prévisualisation** |
 | Parc de l'Indépendance | confirmed | position contrôlée sur la carte par l'équipe Morges.info (15.10.2026) |

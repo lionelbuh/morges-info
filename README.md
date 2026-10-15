@@ -1,19 +1,28 @@
 # Morges.info
 
-Carte interactive et multilingue de Morges (VD, Suisse), au bord du Léman.
-*Interactive multilingual map of Morges, Switzerland, on Lake Geneva.*
+**La vie locale, les bonnes adresses et la mémoire de Morges.**
+Guide local indépendant consacré à la commune de Morges (VD, Suisse).
 
-- **Langues :** français (par défaut), English, Deutsch, Italiano — sélecteur `FR | EN | DE | IT`
-- **Carte :** [MapLibre GL JS](https://maplibre.org) avec tuiles vectorielles [OpenFreeMap](https://openfreemap.org)
-  (données [OpenStreetMap](https://www.openstreetmap.org/copyright)), style sur mesure « Léman » — **sans clé d'API**
-- **Vue 2D / 3D** : carte à plat ou inclinée avec bâtiments en relief (hauteurs indicatives issues d'OSM)
-- **10 lieux** avec catégorie, emplacement, description dans les 4 langues, sources citées et statut de vérification
-- Recherche (insensible aux accents, dans les 4 langues), filtres par catégorie, liens directs (`/#chateau`, `?lang=de`)
-- Responsive : ordinateur, tablette, mobile (panneau en « bottom sheet » jusqu'à 900 px de large)
-- Site 100 % statique : hébergement gratuit ou presque
+| Page | URL | Contenu |
+| --- | --- | --- |
+| Accueil | `/` | présentation, aperçu de la carte, lieux, vie locale, récit à la une |
+| Carte | `/carte/` | carte interactive 2D / 3D, recherche, filtres, fiches des lieux |
+| Commerces | `/commerces/` | sélection éditoriale de commerces indépendants (en préparation) |
+| Histoire | `/histoire/` | repères historiques sourcés, futures archives photographiques |
+| Vie locale | `/vie-locale/` | événements à venir et infos pratiques, sources et dates de vérification |
+| Récits | `/recits/` | récits écrits à partir de sources citées |
+| À propos | `/a-propos/` | charte éditoriale, indépendance, publicité, crédits |
 
-> Les archives historiques (photos anciennes) sont une phase future. La structure de données est prête
-> (`src/data/archive.js`), mais aucune image n'est affichée et **aucun envoi public n'est possible**.
+- **Langues :** français (par défaut), English, Deutsch, Italiano — `FR | EN | DE | IT` sur toutes les pages
+- **Carte :** [MapLibre GL JS](https://maplibre.org) + tuiles vectorielles [OpenFreeMap](https://openfreemap.org)
+  (données [OpenStreetMap](https://www.openstreetmap.org/copyright)), **sans clé d'API**
+- **Contenus vérifiables :** chaque fait cite sa source ; les informations changeantes indiquent leur date de
+  vérification ; rien n'est inventé pour remplir un champ (voir [`docs/CONTENT.md`](docs/CONTENT.md))
+- Site statique multipage, pré-rendu en français pour le référencement ; aucune dépendance payante
+
+> Les archives historiques (photos anciennes) sont une phase future : le modèle de données est prêt
+> (`src/data/archive.js`, `src/data/history.js`), aucune image n'est publiée et **aucun envoi public n'est possible**.
+> Aucun commerce n'est encore listé : chaque adresse doit d'abord être vérifiée.
 
 ## Prérequis
 
@@ -24,7 +33,7 @@ Carte interactive et multilingue de Morges (VD, Suisse), au bord du Léman.
 
 ```bash
 npm install
-npm run dev          # développement : http://localhost:5173
+npm run dev          # développement : http://localhost:5173 (accueil), /carte/, /histoire/ …
 npm run build        # build de production dans dist/
 npm run preview      # prévisualise le build : http://localhost:4173
 ```
@@ -56,22 +65,18 @@ et à chaque pull request.
 ## Structure
 
 ```
-index.html                  page unique
-src/main.js                 assemblage : état, recherche, sélection, langue, 2D/3D, chargement différé de la carte
-src/map/map.js              carte MapLibre (marqueurs, contrôles, 2D/3D, libellés localisés)
-src/map/style.js            style de carte « Léman » (couleurs, couches, attribution, fournisseur de tuiles)
-src/data/places.js          lieux : coordonnées, textes FR/EN/DE/IT, sources, statut de vérification
-src/data/categories.js      catégories (couleur, icône)
-src/data/archive.js         modèle + validation des futures photos historiques
-src/i18n/index.js           moteur de traduction (t(), langue, persistance)
-src/i18n/locales/*.js       textes d'interface fr / en / de / it
-src/ui/                     composants : panneau d'information, liste & filtres, recherche, sélecteur de langue
+index.html, carte/, commerces/, histoire/, vie-locale/, recits/, a-propos/   une page HTML par section
+build/site-plugin.js        pré-rendu français des pages, sitemap.xml, robots.txt (plugin Vite, sans dépendance)
+src/site/                   pages de contenu : config (URL), layout (en-tête, pied, <head>), pages, composants, client
+src/main.js                 page carte : état, recherche, sélection, 2D/3D, chargement différé de MapLibre
+src/map/                    carte MapLibre (map.js) et style « Léman » (style.js)
+src/data/                   contenus : lieux, commerces, événements, infos pratiques, récits, histoire, archives, schéma
+src/i18n/                   moteur de traduction et textes fr / en / de / it
+src/ui/                     composants de la carte : panneau d'information, liste & filtres, recherche
 src/styles/main.css         styles
-tests/unit/                 tests Vitest
-tests/e2e/                  tests Playwright (+ fixtures : tuiles synthétiques, interception réseau)
-docs/MAP.md                 technologie de carte, fournisseur de tuiles, coûts, 3D
-docs/DATA.md                règles pour ajouter / vérifier un lieu, état de vérification
-docs/HISTORICAL_ARCHIVE.md  conception des archives historiques (phase future)
+tests/unit/                 tests Vitest (données, traductions, recherche, style, contenus, pages)
+tests/e2e/                  tests Playwright (carte, site, liens internes, SEO) + fixtures
+docs/                       CONTENT.md (contenus), MAP.md (carte), DATA.md (lieux), HISTORICAL_ARCHIVE.md
 ```
 
 ## Déploiement
@@ -79,10 +84,13 @@ docs/HISTORICAL_ARCHIVE.md  conception des archives historiques (phase future)
 `npm run build` produit un dossier `dist/` statique (chemins relatifs) qui peut être servi par n'importe quel
 hébergeur statique. Exemples (non configurés — à faire par le propriétaire du compte) :
 
+Le site utilise des URL absolues (`/carte/`, `/histoire/` …) : il doit être servi **à la racine** d'un domaine
+ou d'un sous-domaine (les prévisualisations Netlify / Cloudflare Pages le sont).
+
 - **Netlify / Cloudflare Pages :** commande de build `npm run build`, dossier de publication `dist`.
   Les deux proposent des prévisualisations automatiques par branche.
-- **GitHub Pages :** activer Pages dans les paramètres du dépôt (source « GitHub Actions ») puis ajouter un
-  workflow qui publie `dist/` avec `actions/upload-pages-artifact` et `actions/deploy-pages`.
+- **GitHub Pages :** possible avec un domaine personnalisé (site servi à la racine) ; une adresse de projet
+  `utilisateur.github.io/morges-info/` nécessiterait d'adapter `base` dans `vite.config.js`.
 - **Serveur classique (Apache/Nginx) :** copier le contenu de `dist/` à la racine du site.
 
 Le nom de domaine `morges.info` (DNS) doit être configuré chez l'hébergeur et le registraire par le

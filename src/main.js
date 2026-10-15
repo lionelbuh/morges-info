@@ -4,7 +4,7 @@ import { detectInitialLang, setLang, getLang, onLangChange, t, localized, transl
 import { filterPlaces } from './ui/search.js';
 import { createSidebar } from './ui/sidebar.js';
 import { createInfoPanel } from './ui/info-panel.js';
-import { mountLanguageSwitcher } from './ui/language-switcher.js';
+import { initChrome, renderChrome } from './site/chrome.js';
 
 const VIEW_KEY = 'morges-info:view';
 
@@ -37,14 +37,10 @@ const viewToggle = $('view-toggle');
 setLang(detectInitialLang(window.location.search), { persist: false });
 
 function applyDocumentLanguage() {
-  document.documentElement.lang = getLang();
-  document.title = t('meta.title');
-  document.querySelector('meta[name="description"]')?.setAttribute('content', t('meta.description'));
+  renderChrome('map');
   translateDom();
-  const url = new URL(window.location.href);
-  url.searchParams.set('lang', getLang());
-  window.history.replaceState(null, '', url);
 }
+initChrome();
 
 // ---------- components ----------
 const mapUiStrings = () => ({
@@ -156,7 +152,6 @@ const sidebar = createSidebar({
   onSelect: (id) => selectPlace(id, { fromList: true }),
 });
 
-mountLanguageSwitcher($('lang-switcher'));
 
 // ---------- behaviour ----------
 function visiblePlaces() {

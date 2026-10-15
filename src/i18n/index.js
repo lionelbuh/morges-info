@@ -33,6 +33,17 @@ export function localized(obj) {
   return obj[current] || obj[DEFAULT_LANG] || '';
 }
 
+/**
+ * Like localized(), but also says whether French was used as a fallback, so
+ * pages can show a "French only" notice for content not yet translated.
+ * Works for strings and for arrays of paragraphs.
+ */
+export function localizedWithFallback(obj) {
+  if (!obj) return { value: '', isFallback: false, lang: DEFAULT_LANG };
+  if (obj[current] !== undefined) return { value: obj[current], isFallback: false, lang: current };
+  return { value: obj[DEFAULT_LANG], isFallback: current !== DEFAULT_LANG, lang: DEFAULT_LANG };
+}
+
 export function getLang() {
   return current;
 }

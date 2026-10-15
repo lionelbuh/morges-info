@@ -74,11 +74,11 @@ async function expectMarkersOnCoordinates(page) {
 }
 
 test('loads in French by default with MapLibre map, 10 markers and attribution', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   await expect(page).toHaveTitle(/Carte interactive de Morges/);
-  await expect(page.locator('.lang-btn[data-lang="fr"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.lang-btn[data-lang="fr"]')).toHaveAttribute('aria-current', 'true');
   await expect(markers(page)).toHaveCount(10);
   await expect(page.locator('#results-count')).toHaveText('10 lieux');
   const attribution = page.locator('.maplibregl-ctrl-attrib');
@@ -91,7 +91,7 @@ test('loads in French by default with MapLibre map, 10 markers and attribution',
 });
 
 test('markers sit exactly on their coordinates in 2D and in 3D', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await waitForIdle(page);
   await expectMarkersOnCoordinates(page);
@@ -106,7 +106,7 @@ test('clicking a marker opens the matching information panel', async ({ page }) 
   for (const id of ['chateau', 'beausobre', 'gare']) {
     const place = PLACES.find((p) => p.id === id);
     // start from the overview each time: after a selection the map is zoomed in
-    await page.goto('/');
+    await page.goto('/carte/');
     await mapReady(page);
     await waitForIdle(page);
     await marker(page, id).click();
@@ -121,7 +121,7 @@ test('clicking a marker opens the matching information panel', async ({ page }) 
 });
 
 test('2D / 3D switch tilts the map, shows extruded buildings and the height note', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await expect(page.locator('#view-note')).toBeHidden();
 
@@ -155,7 +155,7 @@ test('2D / 3D switch tilts the map, shows extruded buildings and the height note
 });
 
 test('zoom controls work', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await waitForIdle(page);
   const zoom = () => page.evaluate(() => document.getElementById('map').__maplibre.getZoom());
@@ -176,7 +176,7 @@ const EXPECTED = {
 };
 
 test('all four languages translate the interface, map controls, markers and the open panel', async ({ page }) => {
-  await page.goto('/#gare');
+  await page.goto('/carte/#gare');
   await mapReady(page);
   await expect(panel(page)).toBeVisible();
   for (const [lang, exp] of Object.entries(EXPECTED)) {
@@ -189,7 +189,8 @@ test('all four languages translate the interface, map controls, markers and the 
     await expect(page.locator('.maplibregl-ctrl-zoom-in')).toHaveAttribute('aria-label', exp.zoomIn);
     await expect(page.locator('#view-toggle')).toHaveAttribute('aria-label', exp.view);
     await expect(marker(page, 'gare')).toHaveAttribute('aria-label', exp.name);
-    await expect(page).toHaveURL(new RegExp(`lang=${lang}`));
+    if (lang === 'fr') await expect(page).not.toHaveURL(/lang=/);
+    else await expect(page).toHaveURL(new RegExp(`lang=${lang}`));
   }
 });
 
@@ -200,17 +201,17 @@ test('language choice is kept after reload and can be set by URL', async ({ page
     await mapReady(page);
     await waitForIdle(page);
   };
-  await load('/');
+  await load('/carte/');
   await page.locator('.lang-btn[data-lang="de"]').click();
-  await load('/');
+  await load('/carte/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-  await load('/?lang=it');
+  await load('/carte/?lang=it');
   await expect(page.locator('html')).toHaveAttribute('lang', 'it');
   await expect(page.locator('.filters .chip').first()).toHaveText('Tutto');
 });
 
 test('search narrows the list and the map, Enter opens the first result', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await page.locator('#search-input').fill('chateau');
   await openList(page);
@@ -230,7 +231,7 @@ test('search narrows the list and the map, Enter opens the first result', async 
 });
 
 test('category filters work and can be reset', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await page.locator('.chip[data-category="lake"]').click();
   await expect(markers(page)).toHaveCount(3);
@@ -241,7 +242,7 @@ test('category filters work and can be reset', async ({ page }) => {
 });
 
 test('selecting from the list opens the panel; Place du Marché is mapped as an approximate position', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/carte/');
   await mapReady(page);
   await openList(page);
   await page.locator('.place-item[data-place-id="place-du-marche"]').click();
@@ -255,7 +256,7 @@ test('selecting from the list opens the panel; Place du Marché is mapped as an 
 });
 
 test('layout: no horizontal overflow, panel fits, controls and attribution stay visible', async ({ page }) => {
-  await page.goto('/#port');
+  await page.goto('/carte/#port');
   await mapReady(page);
   await expect(panel(page)).toHaveClass(/is-open/);
   const vp = page.viewportSize();
@@ -297,7 +298,7 @@ test('without WebGL2 the site still works and explains why the map is missing', 
       return original.call(this, type, ...rest);
     };
   });
-  await page.goto('/');
+  await page.goto('/carte/');
   await expect(page.locator('#map-fallback')).toBeVisible();
   await expect(page.locator('#view-toggle')).toBeHidden();
   await openList(page);

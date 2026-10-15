@@ -1,5 +1,7 @@
 import { getCategory } from '../data/categories.js';
-import { t, localized } from '../i18n/index.js';
+import { t, localized, getLang } from '../i18n/index.js';
+import { formatDate } from '../site/format.js';
+import { photoFigure } from '../site/components.js';
 import { escapeHtml } from './dom.js';
 import { ATTRIBUTION } from '../map/style.js';
 
@@ -60,7 +62,11 @@ export function createInfoPanel(el, { onClose, onFocus }) {
             <div><dt>${escapeHtml(t('panel.category'))}</dt><dd data-field="category">${escapeHtml(t(`categories.${place.category}`))}</dd></div>
             <div><dt>${escapeHtml(t('panel.location'))}</dt><dd data-field="location">${escapeHtml(localized(place.location))}</dd></div>
             ${c ? `<div><dt>${escapeHtml(t('panel.coordinates'))}</dt><dd data-field="coordinates">${formatCoord(c.lat)}° N, ${formatCoord(c.lng)}° E</dd></div>` : ''}
+            ${place.address && !place.address.startsWith(localized(place.location)) ? `<div><dt>${escapeHtml(t('common.address'))}</dt><dd data-field="address">${escapeHtml(place.address)}</dd></div>` : ''}
+            ${place.openingHours ? `<div><dt>${escapeHtml(t('common.hours'))}</dt><dd data-field="hours">${escapeHtml(localized(place.openingHours.text))}</dd></div>` : ''}
+            ${place.website ? `<div><dt>${escapeHtml(t('common.website'))}</dt><dd data-field="website"><a href="${escapeHtml(place.website)}" target="_blank" rel="noopener">${escapeHtml(place.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
           </dl>
+          ${place.photos && place.photos[0] ? photoFigure(place.photos[0]) : ''}
           <p class="panel-geo panel-geo--${place.geo.status}">${escapeHtml(t(`panel.geoStatus.${place.geo.status}`))}</p>
           ${c ? '' : `<p class="panel-notice">${escapeHtml(t('panel.notOnMap'))}</p>`}
           <h3>${escapeHtml(t('panel.description'))}</h3>
@@ -77,6 +83,7 @@ export function createInfoPanel(el, { onClose, onFocus }) {
             <h3 id="archive-title">${escapeHtml(t('panel.archiveTitle'))}</h3>
             <p>${escapeHtml(t('panel.archiveText'))}</p>
           </section>
+          ${place.lastVerified ? `<p class="panel-verified" data-field="last-verified">${escapeHtml(t('common.lastVerified', { date: formatDate(place.lastVerified, getLang()) }))}</p>` : ''}
           <details class="panel-sources">
             <summary>${escapeHtml(t('panel.sources'))}</summary>
             <h4>${escapeHtml(t('panel.factSources'))}</h4>

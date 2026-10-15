@@ -45,8 +45,17 @@ function markerElement(place) {
  * @param {{ center: {lat:number,lng:number}, lang: string, bounds?: [[number,number],[number,number]],
  *           onSelect: (id:string)=>void, getLabel: (place)=>string, uiStrings: ()=>Record<string,string> }} options
  */
-export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStrings }) {
+export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStrings, preview = false }) {
   const strings = uiStrings();
+  const locale = preview
+    ? undefined
+    : {
+        'NavigationControl.ZoomIn': strings.zoomIn,
+        'NavigationControl.ZoomOut': strings.zoomOut,
+        'NavigationControl.ResetBearing': strings.resetBearing,
+        'AttributionControl.ToggleAttribution': strings.toggleAttribution,
+        'Map.Title': strings.mapTitle,
+      };
   const map = new MapLibreMap({
     container: el,
     style: buildStyle({ lang }),
@@ -65,25 +74,33 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
     pitchWithRotate: true, // only active in 3D (dragRotate is disabled in 2D)
     touchPitch: false,
     fadeDuration: 150,
-    locale: {
-      'NavigationControl.ZoomIn': strings.zoomIn,
-      'NavigationControl.ZoomOut': strings.zoomOut,
-      'NavigationControl.ResetBearing': strings.resetBearing,
-      'AttributionControl.ToggleAttribution': strings.toggleAttribution,
-      'Map.Title': strings.mapTitle,
-    },
+    // Preview (home page): a still picture of the map; markers stay clickable.
+    interactive: !preview,
+    ...(locale ? { locale } : {}),
   });
   map.touchZoomRotate.disableRotation();
+
+  // Requests cancelled because the visitor is leaving the page are not errors.
+  // Any other map error is still reported.
+  let leaving = false;
+  const markLeaving = () => {
+    leaving = true;
+  };
+  window.addEventListener('beforeunload', markLeaving);
+  window.addEventListener('pagehide', markLeaving);
+  map.on('error', (event) => {
+    if (leaving) return;
+    console.error('Map error:', event.error || event);
+  });
   // Exposed for automated tests and debugging (read-only use).
   Object.defineProperty(el, '__maplibre', { value: map });
   el.dataset.view = '2d';
 
-  const nav = new NavigationControl({ visualizePitch: true, showCompass: true });
-  map.addControl(nav, 'top-left');
+  if (!preview) map.addControl(new NavigationControl({ visualizePitch: true, showCompass: true }), 'top-left');
   map.addControl(new AttributionControl({ compact: false }), 'bottom-right');
 
   if (bounds) {
-    map.fitBounds(bounds, { padding: 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
+    map.fitBounds(bounds, { padding: preview ? 40 : 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
   }
 
   /** @type {Map<string, {marker: Marker, el: HTMLButtonElement, place: object}>} */
@@ -237,6 +254,15 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
 
     resize() {
       map.resize();
+    },
+
+    /** Free the WebGL context (used when a page re-renders the preview). */
+    destroy() {
+      window.removeEventListener('beforeunload', markLeaving);
+      window.removeEventListener('pagehide', markLeaving);
+      markers.forEach((entry) => entry.marker.remove());
+      markers.clear();
+      map.remove();
     },
   };
 }

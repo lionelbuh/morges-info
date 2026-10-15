@@ -3,71 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Morges.info — Carte interactive de Morges</title>
-    <meta name="description" content="Carte interactive et multilingue de Morges, au bord du Léman : patrimoine, lac, culture et transports." />
+    <!--@head:home-->
     <meta name="theme-color" content="#f6f3ee" />
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
-  <body>
-    <a class="skip-link" href="#map" data-i18n="skip">Aller à la carte</a>
-
-    <header class="site-header">
-      <a class="brand" href="./" aria-label="Morges.info">
-        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="9" fill="#da291c" />
-          <path d="M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z" fill="#fff" />
-        </svg>
-        <span class="brand-text">
-          <span class="brand-name">Morges<span class="brand-dot">.info</span></span>
-          <span class="brand-tagline" data-i18n="header.tagline">Carte interactive de Morges, au bord du Léman</span>
-        </span>
-      </a>
-      <nav class="lang-switcher" id="lang-switcher" data-i18n-attr="aria-label:lang.label" aria-label="Langue"></nav>
-    </header>
-
-    <main class="layout">
-      <aside class="sidebar" id="sidebar" data-i18n-attr="aria-label:results.listLabel">
-        <div class="search">
-          <label class="visually-hidden" for="search-input" data-i18n="search.label">Rechercher un lieu</label>
-          <span class="search-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          </span>
-          <input id="search-input" type="search" autocomplete="off" spellcheck="false" data-i18n-attr="placeholder:search.placeholder" />
-          <button type="button" class="search-clear" id="search-clear" hidden data-i18n-attr="aria-label:search.clear">×</button>
-        </div>
-
-        <div class="filters-block">
-          <h2 class="section-label" data-i18n="filters.label">Catégories</h2>
-          <div class="filters" id="filters" role="group" data-i18n-attr="aria-label:filters.label"></div>
-        </div>
-
-        <div class="results-head">
-          <h2 class="section-label" data-i18n="results.listLabel">Liste des lieux</h2>
-          <span class="results-count" id="results-count" aria-live="polite"></span>
-          <button type="button" class="list-toggle" id="list-toggle" aria-expanded="false" aria-controls="place-list"></button>
-        </div>
-        <ul class="place-list" id="place-list"></ul>
-
-        <footer class="sidebar-footer">
-          <p data-i18n="footer.about"></p>
-          <p class="muted" data-i18n="footer.archive"></p>
-        </footer>
-      </aside>
-
-      <section class="map-wrap">
-        <div id="map" class="map" role="region" tabindex="-1" data-i18n-attr="aria-label:map.label"></div>
-        <div class="view-toggle" id="view-toggle" role="group" data-i18n-attr="aria-label:view.label">
-          <button type="button" data-view="2d" aria-pressed="true" data-i18n-attr="title:view.title2d">2D</button>
-          <button type="button" data-view="3d" aria-pressed="false" data-i18n-attr="title:view.title3d">3D</button>
-        </div>
-        <p class="view-note" id="view-note" hidden data-i18n="view.heightNote"></p>
-        <div class="map-fallback" id="map-fallback" hidden>
-          <p data-i18n="map.unsupported"></p>
-        </div>
-        <aside id="info-panel" class="info-panel" hidden aria-labelledby="panel-title" aria-live="polite"></aside>
-      </section>
-    </main>
-
-    <script type="module" src="./src/main.js"></script>
+  <body data-page="home">
+    <div id="site-top"><!--@header:home--></div>
+    <main id="main" class="page-main" tabindex="-1"><!--@main:home--></main>
+    <div id="site-bottom"><!--@footer:home--></div>
+    <script type="module" src="/src/site/client.js"></script>
   </body>
 </html>
