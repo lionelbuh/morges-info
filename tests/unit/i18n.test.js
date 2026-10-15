@@ -39,7 +39,8 @@ describe('translations', () => {
   });
 
   it('interpolates parameters and falls back to the key', () => {
-    expect(t('results.count', { n: 3 })).toBe('3 lieu(x)');
+    expect(t('results.countOther', { n: 3 })).toBe('3 lieux');
+    expect(t('results.countOne')).toBe('1 lieu');
     expect(t('does.not.exist')).toBe('does.not.exist');
   });
 

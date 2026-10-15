@@ -30,7 +30,7 @@ export function createSidebar({ filtersEl, listEl, countEl, onToggleCategory, on
     },
 
     renderList(places, selectedId) {
-      countEl.textContent = t('results.count', { n: places.length });
+      countEl.textContent = t(places.length === 1 ? 'results.countOne' : 'results.countOther', { n: places.length });
       if (places.length === 0) {
         listEl.innerHTML = `<li class="empty">${escapeHtml(t('results.none'))}</li>`;
         return;
@@ -40,7 +40,7 @@ export function createSidebar({ filtersEl, listEl, countEl, onToggleCategory, on
           const cat = CATEGORIES.find((c) => c.id === place.category);
           const selected = place.id === selectedId;
           return `<li>
-            <button type="button" class="place-item${selected ? ' is-selected' : ''}" data-place-id="${place.id}" aria-current="${selected}">
+            <button type="button" class="place-item${selected ? ' is-selected' : ''}" style="--pin:${cat.color}" data-place-id="${place.id}" aria-current="${selected}">
               <span class="place-icon" style="--pin:${cat.color}" aria-hidden="true">${cat.icon}</span>
               <span class="place-text">
                 <span class="place-name">${escapeHtml(localized(place.name))}</span>

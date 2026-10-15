@@ -176,7 +176,12 @@ export const PLACES = [
     geo: {
       status: 'unverified',
       sources: [],
-      note: 'No published source with a reliable position was found. Confirm on OpenStreetMap or with the Ville de Morges before adding coordinates.',
+      note:
+        'No published source with a reliable position was found (re-checked 2026-10-15). The name appears in the ' +
+        'Historical Dictionary of Switzerland as a historical market square; current street directories of Morges ' +
+        '(e.g. openalfa, Morges Région Tourisme) list no square of that name today, and the weekly market is held on ' +
+        'the Grand-Rue. Confirm the location (possibly a square now known under another name) on OpenStreetMap or ' +
+        'with the Ville de Morges before adding coordinates.',
     },
     name: {
       fr: 'Place du Marché',
@@ -208,6 +213,10 @@ export const PLACES = [
       sources: [
         { label: 'Club Nautique Morgien — Parc de l’Indépendance', url: 'https://www.cnmorges.ch/lieu/parc-de-lindependance/' },
       ],
+      note:
+        'A second web listing (publisher not identifiable from search results) gives 46.505657, 6.495521, about 40 m ' +
+        'from this point and consistent with the park lying between the castle, the lake and the river Morges. ' +
+        'Kept as single-source until confirmed on OpenStreetMap.',
     },
     name: {
       fr: 'Parc de l’Indépendance',
@@ -242,6 +251,10 @@ export const PLACES = [
       sources: [
         { label: 'Placegrab — Quai Jean-Louis-Lochmann, Morges', url: 'https://www.placegrab.com/switzerland/article-quai-du-mont-blanc-morges-287157/' },
       ],
+      note:
+        'The quay is a long lakeside street (built 1884–1890 according to the Ville de Morges). This is a representative ' +
+        'point taken from one listing on the quay; another listing on the same street (Coparking, 46.51079, 6.50144) ' +
+        'lies about 300 m north-east. Confirm a central point on OpenStreetMap.',
     },
     name: {
       fr: 'Quai Lochmann',
@@ -256,13 +269,14 @@ export const PLACES = [
       it: 'Quai Jean-Louis-Lochmann, sulla riva del lago, vicino al porto',
     },
     description: {
-      fr: 'Quai au bord du Léman, officiellement nommé quai Jean-Louis-Lochmann. Il porte le nom de Jean-Louis Lochmann (1812–1889), maître de gymnastique décédé à Morges.',
-      en: 'Lakeside quay officially named Quai Jean-Louis-Lochmann, after Jean-Louis Lochmann (1812–1889), a gymnastics teacher who died in Morges.',
-      de: 'Uferpromenade am Genfersee, offiziell Quai Jean-Louis-Lochmann genannt – nach Jean-Louis Lochmann (1812–1889), einem Turnlehrer, der in Morges starb.',
-      it: 'Lungolago ufficialmente denominato Quai Jean-Louis-Lochmann, in onore di Jean-Louis Lochmann (1812–1889), insegnante di ginnastica morto a Morges.',
+      fr: 'Quai au bord du Léman, construit entre 1884 et 1890 et officiellement nommé quai Jean-Louis-Lochmann. Il porte le nom de Jean-Louis Lochmann (1812–1889), maître de gymnastique décédé à Morges.',
+      en: 'Lakeside quay built between 1884 and 1890 and officially named Quai Jean-Louis-Lochmann, after Jean-Louis Lochmann (1812–1889), a gymnastics teacher who died in Morges.',
+      de: 'Uferquai am Genfersee, zwischen 1884 und 1890 erbaut und offiziell Quai Jean-Louis-Lochmann genannt – nach Jean-Louis Lochmann (1812–1889), einem Turnlehrer, der in Morges starb.',
+      it: 'Lungolago costruito tra il 1884 e il 1890 e ufficialmente denominato Quai Jean-Louis-Lochmann, in onore di Jean-Louis Lochmann (1812–1889), insegnante di ginnastica morto a Morges.',
     },
     factSources: [
       { label: 'Musées de Lausanne (museris) — fiche Jean-Louis Lochmann', url: 'https://museris.lausanne.ch/SGP/getPDFFiche.aspx?id=4217' },
+      { label: 'Ville de Morges — Histoire : les dates clés', url: 'https://www.morges.ch/vivre-a-morges/administration/administration-communale/historique/histoire-les-dates-cles-de-la-ville-de-morges-9151' },
     ],
     archive: { photos: [] },
   },

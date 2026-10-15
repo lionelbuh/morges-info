@@ -23,6 +23,7 @@ export default defineConfig({
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], launchOptions } },
     { name: 'tablet', use: { ...devices['Desktop Chrome'], viewport: { width: 820, height: 1180 }, hasTouch: true, launchOptions } },
+    { name: 'tablet-landscape', use: { ...devices['Desktop Chrome'], viewport: { width: 1180, height: 820 }, hasTouch: true, launchOptions } },
     { name: 'mobile', use: { ...devices['Pixel 7'], launchOptions } },
   ],
 });

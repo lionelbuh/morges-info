@@ -13,7 +13,8 @@ export default {
   },
   filters: { label: 'Categorie', all: 'Tutto' },
   results: {
-    count: '{n} luogo/i',
+    countOne: '1 luogo',
+    countOther: '{n} luoghi',
     none: 'Nessun luogo corrisponde alla ricerca.',
     listLabel: 'Elenco dei luoghi',
     toggleShow: 'Mostra elenco',
@@ -28,6 +29,7 @@ export default {
     transport: 'Trasporti',
   },
   panel: {
+    officialName: 'Nome ufficiale:',
     close: 'Chiudi',
     category: 'Categoria',
     location: 'Posizione',
@@ -47,7 +49,20 @@ export default {
     archiveTitle: 'Archivio storico',
     archiveText: 'Fotografie storiche autentiche, con data, fonte e autorizzazione, saranno aggiunte in una fase successiva.',
   },
-  map: { label: 'Mappa interattiva di Morges' },
+  map: {
+    label: 'Mappa interattiva di Morges',
+    zoomIn: 'Ingrandisci',
+    zoomOut: 'Riduci',
+    resetBearing: 'Trascina per ruotare la mappa, clicca per tornare a nord',
+    toggleAttribution: 'Mostra o nascondi i crediti',
+    unsupported: 'Il tuo browser non può visualizzare la mappa interattiva (WebGL 2 non disponibile). La ricerca, l’elenco dei luoghi e le schede restano utilizzabili.',
+  },
+  view: {
+    label: 'Visualizzazione della mappa',
+    title2d: 'Mappa piatta (2D)',
+    title3d: 'Mappa inclinata con edifici in rilievo (3D)',
+    heightNote: '3D: altezze indicative degli edifici da OpenStreetMap. In assenza di dati, un edificio è rappresentato alto 5 m.',
+  },
   footer: {
     about: 'Morges.info presenta la Morges di oggi. Le informazioni provengono da fonti pubbliche citate per ogni luogo.',
     archive: 'Archivio storico: prossimamente.',

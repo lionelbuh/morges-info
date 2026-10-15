@@ -1,17 +1,27 @@
 import './styles/main.css';
 import { PLACES, MORGES_CENTER, getPlace } from './data/places.js';
 import { detectInitialLang, setLang, getLang, onLangChange, t, localized, translateDom } from './i18n/index.js';
-import { createMap } from './map/map.js';
 import { filterPlaces } from './ui/search.js';
 import { createSidebar } from './ui/sidebar.js';
 import { createInfoPanel } from './ui/info-panel.js';
 import { mountLanguageSwitcher } from './ui/language-switcher.js';
+
+const VIEW_KEY = 'morges-info:view';
+
+function savedView() {
+  try {
+    return localStorage.getItem(VIEW_KEY) === '3d' ? '3d' : '2d';
+  } catch {
+    return '2d';
+  }
+}
 
 const state = {
   query: '',
   categories: new Set(),
   selectedId: null,
   listOpen: false,
+  view: savedView(),
 };
 
 const $ = (id) => document.getElementById(id);
@@ -19,6 +29,9 @@ const searchInput = $('search-input');
 const searchClear = $('search-clear');
 const listToggle = $('list-toggle');
 const sidebarEl = $('sidebar');
+const panelEl = $('info-panel');
+const mapEl = $('map');
+const viewToggle = $('view-toggle');
 
 // ---------- language ----------
 setLang(detectInitialLang(window.location.search), { persist: false });
@@ -34,15 +47,100 @@ function applyDocumentLanguage() {
 }
 
 // ---------- components ----------
-const map = createMap($('map'), {
-  center: MORGES_CENTER,
-  onSelect: (id) => selectPlace(id, { fromMap: true }),
-  getLabel: (place) => localized(place.name),
+const mapUiStrings = () => ({
+  zoomIn: t('map.zoomIn'),
+  zoomOut: t('map.zoomOut'),
+  resetBearing: t('map.resetBearing'),
+  toggleAttribution: t('map.toggleAttribution'),
+  mapTitle: t('map.label'),
 });
 
-const panel = createInfoPanel($('info-panel'), {
+function placesBounds() {
+  const coords = PLACES.filter((p) => p.coordinates).map((p) => p.coordinates);
+  const lats = coords.map((c) => c.lat);
+  const lngs = coords.map((c) => c.lng);
+  return [
+    [Math.min(...lngs), Math.min(...lats)],
+    [Math.max(...lngs), Math.max(...lats)],
+  ];
+}
+
+const noop = () => {};
+
+/** Placeholder until the map code has loaded; also used if WebGL2 is unavailable. */
+function createInactiveMap({ supported }) {
+  return {
+    supported,
+    setPlaces: noop,
+    select: noop,
+    focus: noop,
+    clearPadding: noop,
+    setView: noop,
+    getView: () => '2d',
+    setLanguage: noop,
+    resize: noop,
+  };
+}
+
+function showMapUnavailable() {
+  mapEl.classList.add('is-unavailable');
+  viewToggle.hidden = true;
+  $('map-fallback').hidden = false;
+  map = createInactiveMap({ supported: false });
+  render();
+}
+
+let map = createInactiveMap({ supported: true });
+
+/** MapLibre (~440 kB gzipped with its worker) is loaded after the interface is usable. */
+async function initMap() {
+  let mod;
+  try {
+    mod = await import('./map/map.js');
+  } catch (error) {
+    console.error('Map code failed to load', error);
+    showMapUnavailable();
+    return;
+  }
+  if (!mod.isWebGL2Supported()) {
+    showMapUnavailable();
+    return;
+  }
+  try {
+    map = mod.createMap(mapEl, {
+      center: MORGES_CENTER,
+      lang: getLang(),
+      bounds: placesBounds(),
+      onSelect: (id) => selectPlace(id, { fromMap: true }),
+      getLabel: (place) => localized(place.name),
+      uiStrings: mapUiStrings,
+    });
+  } catch (error) {
+    console.error('Map initialisation failed', error);
+    showMapUnavailable();
+    return;
+  }
+  mapEl.dataset.ready = 'true';
+  if (state.view === '3d') map.setView('3d', { animate: false });
+  render();
+  const place = state.selectedId && getPlace(state.selectedId);
+  if (place) map.focus(place, { padding: panelPadding() });
+}
+
+/** Room to leave for the info panel so the selected marker stays visible. */
+function panelPadding() {
+  if (panelEl.hidden) return {};
+  const mapBox = mapEl.getBoundingClientRect();
+  const box = panelEl.getBoundingClientRect();
+  const isSheet = box.width >= mapBox.width - 2; // mobile bottom sheet
+  return isSheet
+    ? { bottom: Math.min(box.height, mapBox.height * 0.7) }
+    : { right: Math.max(0, mapBox.right - box.left) + 8 };
+}
+
+const panel = createInfoPanel(panelEl, {
   onClose: () => selectPlace(null),
-  onFocus: (place) => map.focus(place),
+  onFocus: (place) => map.focus(place, { padding: panelPadding() }),
 });
 
 const sidebar = createSidebar({
@@ -75,6 +173,21 @@ function render() {
   listToggle.textContent = state.listOpen ? t('results.toggleHide') : t('results.toggleShow');
   listToggle.setAttribute('aria-expanded', String(state.listOpen));
   sidebarEl.classList.toggle('list-open', state.listOpen);
+  viewToggle.querySelectorAll('[data-view]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.view === state.view));
+  });
+  $('view-note').hidden = state.view !== '3d' || !map.supported;
+}
+
+function setView(view, opts) {
+  state.view = view === '3d' ? '3d' : '2d';
+  try {
+    localStorage.setItem(VIEW_KEY, state.view);
+  } catch {
+    /* ignore */
+  }
+  map.setView(state.view, opts);
+  render();
 }
 
 function selectPlace(id, { fromList = false } = {}) {
@@ -83,13 +196,14 @@ function selectPlace(id, { fromList = false } = {}) {
 
   if (place) {
     panel.open(place, { focusPanel: fromList });
-    map.focus(place);
+    map.focus(place, { padding: panelPadding() });
     if (fromList) state.listOpen = false; // on mobile, reveal the map
     if (window.location.hash !== `#${place.id}`) {
       window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${place.id}`);
     }
   } else {
     panel.close();
+    map.clearPadding();
     window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
   }
   render();
@@ -111,6 +225,10 @@ searchClear.addEventListener('click', () => {
   render();
   searchInput.focus();
 });
+viewToggle.addEventListener('click', (event) => {
+  const btn = event.target.closest('[data-view]');
+  if (btn && btn.dataset.view !== state.view) setView(btn.dataset.view);
+});
 listToggle.addEventListener('click', () => {
   state.listOpen = !state.listOpen;
   render();
@@ -123,7 +241,7 @@ window.addEventListener('hashchange', () => {
 
 onLangChange(() => {
   applyDocumentLanguage();
-  map.refreshLabels();
+  map.setLanguage(getLang());
   panel.refresh();
   render();
 });
@@ -133,4 +251,5 @@ applyDocumentLanguage();
 render();
 const initialId = window.location.hash.slice(1);
 if (initialId && getPlace(initialId)) selectPlace(initialId);
+initMap();
 

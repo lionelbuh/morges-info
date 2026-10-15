@@ -13,7 +13,8 @@ export default {
   },
   filters: { label: 'Catégories', all: 'Tout' },
   results: {
-    count: '{n} lieu(x)',
+    countOne: '1 lieu',
+    countOther: '{n} lieux',
     none: 'Aucun lieu ne correspond à votre recherche.',
     listLabel: 'Liste des lieux',
     toggleShow: 'Afficher la liste',
@@ -28,6 +29,7 @@ export default {
     transport: 'Transports',
   },
   panel: {
+    officialName: 'Nom officiel\u00a0:',
     close: 'Fermer',
     category: 'Catégorie',
     location: 'Emplacement',
@@ -47,7 +49,20 @@ export default {
     archiveTitle: 'Archives historiques',
     archiveText: 'Des photographies historiques authentiques, avec date, source et autorisation, seront ajoutées dans une phase ultérieure.',
   },
-  map: { label: 'Carte interactive de Morges' },
+  map: {
+    label: 'Carte interactive de Morges',
+    zoomIn: 'Zoom avant',
+    zoomOut: 'Zoom arrière',
+    resetBearing: 'Faire pivoter la carte ; cliquer pour revenir au nord',
+    toggleAttribution: 'Afficher ou masquer les crédits',
+    unsupported: 'Votre navigateur ne peut pas afficher la carte interactive (WebGL 2 indisponible). La recherche, la liste des lieux et les fiches restent utilisables.',
+  },
+  view: {
+    label: 'Mode d’affichage de la carte',
+    title2d: 'Carte à plat (2D)',
+    title3d: 'Carte inclinée avec bâtiments en relief (3D)',
+    heightNote: '3D : hauteurs indicatives issues d’OpenStreetMap. Sans donnée, un bâtiment est représenté avec 5 m de haut.',
+  },
   footer: {
     about: 'Morges.info présente Morges aujourd’hui. Les informations sont tirées de sources publiques citées pour chaque lieu.',
     archive: 'Archives historiques : prochainement.',

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Morges.info — Carte interactive de Morges</title>
     <meta name="description" content="Carte interactive et multilingue de Morges, au bord du Léman : patrimoine, lac, culture et transports." />
-    <meta name="theme-color" content="#16384a" />
+    <meta name="theme-color" content="#f6f3ee" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   </head>
   <body>
@@ -14,7 +14,7 @@
     <header class="site-header">
       <a class="brand" href="./" aria-label="Morges.info">
         <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="9" fill="#c8102e" />
+          <rect x="1" y="1" width="38" height="38" rx="9" fill="#da291c" />
           <path d="M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z" fill="#fff" />
         </svg>
         <span class="brand-text">
@@ -56,6 +56,14 @@
 
       <section class="map-wrap">
         <div id="map" class="map" role="region" tabindex="-1" data-i18n-attr="aria-label:map.label"></div>
+        <div class="view-toggle" id="view-toggle" role="group" data-i18n-attr="aria-label:view.label">
+          <button type="button" data-view="2d" aria-pressed="true" data-i18n-attr="title:view.title2d">2D</button>
+          <button type="button" data-view="3d" aria-pressed="false" data-i18n-attr="title:view.title3d">3D</button>
+        </div>
+        <p class="view-note" id="view-note" hidden data-i18n="view.heightNote"></p>
+        <div class="map-fallback" id="map-fallback" hidden>
+          <p data-i18n="map.unsupported"></p>
+        </div>
         <aside id="info-panel" class="info-panel" hidden aria-labelledby="panel-title" aria-live="polite"></aside>
       </section>
     </main>

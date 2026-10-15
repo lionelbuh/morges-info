@@ -1,76 +1,151 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { Map as MapLibreMap, Marker, NavigationControl, AttributionControl, setWorkerUrl } from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { getCategory } from '../data/categories.js';
+import { buildStyle, nameExpression, LOCALIZED_LABEL_LAYERS, ATTRIBUTION } from './style.js';
 
-/**
- * OpenStreetMap standard tiles. Free, no API key, but subject to the OSMF
- * Tile Usage Policy (https://operations.osmfoundation.org/policies/tiles/):
- * visible attribution, no bulk downloading, moderate traffic only.
- * For higher traffic, switch TILE_URL to a commercial/self-hosted provider.
- */
-export const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-export const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+setWorkerUrl(workerUrl);
 
-const DEFAULT_ZOOM = 15;
-const FOCUS_ZOOM = 17;
+export { ATTRIBUTION };
 
-function markerIcon(place, selected) {
+const DEFAULT_ZOOM = 15.4;
+const FOCUS_ZOOM = 16.8;
+const LABELS_ALL_ZOOM = 16.5; // from this zoom every marker shows its name
+export const VIEW_3D = { pitch: 55, bearing: -18 };
+
+/** MapLibre needs WebGL2. */
+export function isWebGL2Supported() {
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2'));
+  } catch {
+    return false;
+  }
+}
+
+const prefersReducedMotion = () =>
+  typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function markerElement(place) {
   const cat = getCategory(place.category);
-  return L.divIcon({
-    className: 'poi-marker',
-    html: `<span class="poi-pin${selected ? ' is-selected' : ''}" style="--pin:${cat.color}"><span class="poi-glyph" aria-hidden="true">${cat.icon}</span></span>`,
-    iconSize: [34, 42],
-    iconAnchor: [17, 40],
-    tooltipAnchor: [0, -38],
-  });
+  const el = document.createElement('button');
+  el.type = 'button';
+  el.className = 'poi-marker';
+  el.dataset.placeId = place.id;
+  el.style.setProperty('--pin', cat.color);
+  el.innerHTML = `
+    <span class="poi-pin"><span class="poi-glyph" aria-hidden="true">${cat.icon}</span></span>
+    <span class="poi-label"></span>`;
+  return el;
 }
 
 /**
- * Create the Leaflet map.
+ * Create the MapLibre map.
  * @param {HTMLElement} el
- * @param {{ center: {lat:number,lng:number}, onSelect: (id:string)=>void, getLabel: (place)=>string }} options
+ * @param {{ center: {lat:number,lng:number}, lang: string, bounds?: [[number,number],[number,number]],
+ *           onSelect: (id:string)=>void, getLabel: (place)=>string, uiStrings: ()=>Record<string,string> }} options
  */
-export function createMap(el, { center, onSelect, getLabel }) {
-  const map = L.map(el, {
-    center: [center.lat, center.lng],
+export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStrings }) {
+  const strings = uiStrings();
+  const map = new MapLibreMap({
+    container: el,
+    style: buildStyle({ lang }),
+    center: [center.lng, center.lat],
     zoom: DEFAULT_ZOOM,
-    minZoom: 12,
+    minZoom: 11,
     maxZoom: 19,
-    zoomControl: false,
+    maxPitch: 60,
+    // Region around Morges: keeps navigation focused and tile requests modest.
+    maxBounds: [
+      [6.3, 46.42],
+      [6.7, 46.6],
+    ],
+    attributionControl: false,
+    dragRotate: false,
+    pitchWithRotate: true, // only active in 3D (dragRotate is disabled in 2D)
+    touchPitch: false,
+    fadeDuration: 150,
+    locale: {
+      'NavigationControl.ZoomIn': strings.zoomIn,
+      'NavigationControl.ZoomOut': strings.zoomOut,
+      'NavigationControl.ResetBearing': strings.resetBearing,
+      'AttributionControl.ToggleAttribution': strings.toggleAttribution,
+      'Map.Title': strings.mapTitle,
+    },
   });
-  L.control.zoom({ position: 'topleft' }).addTo(map);
-  map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+  map.touchZoomRotate.disableRotation();
+  // Exposed for automated tests and debugging (read-only use).
+  Object.defineProperty(el, '__maplibre', { value: map });
+  el.dataset.view = '2d';
 
-  L.tileLayer(TILE_URL, {
-    maxZoom: 19,
-    attribution: TILE_ATTRIBUTION,
-  }).addTo(map);
+  const nav = new NavigationControl({ visualizePitch: true, showCompass: true });
+  map.addControl(nav, 'top-left');
+  map.addControl(new AttributionControl({ compact: false }), 'bottom-right');
 
-  /** @type {Map<string, L.Marker>} */
-  const markers = new Map();
-  const placesById = new Map();
-  let selectedId = null;
-
-  function refreshMarker(id) {
-    const marker = markers.get(id);
-    const place = placesById.get(id);
-    if (!marker || !place) return;
-    marker.setIcon(markerIcon(place, id === selectedId));
-    const label = getLabel(place);
-    marker.unbindTooltip().bindTooltip(label, { direction: 'top', className: 'poi-tooltip' });
-    marker.setZIndexOffset(id === selectedId ? 1000 : 0);
-    const iconEl = marker.getElement();
-    if (iconEl) {
-      iconEl.setAttribute('title', label);
-      iconEl.setAttribute('aria-label', label);
-      iconEl.setAttribute('role', 'button');
-      iconEl.dataset.placeId = id;
-    }
+  if (bounds) {
+    map.fitBounds(bounds, { padding: 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
   }
 
+  /** @type {Map<string, {marker: Marker, el: HTMLButtonElement, place: object}>} */
+  const markers = new Map();
+  let selectedId = null;
+  let view = '2d';
+
+  function syncMarker(id) {
+    const entry = markers.get(id);
+    if (!entry) return;
+    const label = getLabel(entry.place);
+    const selected = id === selectedId;
+    entry.el.setAttribute('aria-label', label);
+    entry.el.setAttribute('aria-pressed', String(selected));
+    entry.el.title = label;
+    entry.el.querySelector('.poi-label').textContent = label;
+    entry.el.classList.toggle('is-selected', selected);
+    entry.el.style.zIndex = selected ? '10' : '';
+  }
+
+  function syncZoomClass() {
+    el.classList.toggle('show-all-labels', map.getZoom() >= LABELS_ALL_ZOOM);
+  }
+  map.on('zoomend', syncZoomClass);
+  map.on('load', syncZoomClass);
+
+  function setView3d(enabled, { animate = true } = {}) {
+    view = enabled ? '3d' : '2d';
+    const apply = () => {
+      map.setLayoutProperty('building-3d', 'visibility', enabled ? 'visible' : 'none');
+      map.setLayoutProperty('building', 'visibility', enabled ? 'none' : 'visible');
+      el.dataset.buildings = enabled ? '3d' : '2d';
+    };
+    if (map.isStyleLoaded()) apply();
+    else map.once('load', apply);
+
+    // Rotation and tilt gestures only in 3D, so the 2D map stays simple to use.
+    if (enabled) {
+      map.dragRotate.enable();
+      map.touchZoomRotate.enableRotation();
+      map.touchPitch.enable();
+    } else {
+      map.dragRotate.disable();
+      map.touchZoomRotate.disableRotation();
+      map.touchPitch.disable();
+    }
+    const camera = enabled
+      ? { pitch: VIEW_3D.pitch, bearing: VIEW_3D.bearing, zoom: Math.max(map.getZoom(), 15.5) }
+      : { pitch: 0, bearing: 0 };
+    if (animate && !prefersReducedMotion()) map.easeTo({ ...camera, duration: 900 });
+    else map.jumpTo(camera);
+    el.classList.toggle('is-3d', enabled);
+    el.dataset.view = view;
+  }
+
+  map.on('moveend', () => {
+    el.dataset.pitch = String(Math.round(map.getPitch()));
+  });
+
   return {
-    leaflet: map,
+    maplibre: map,
+    supported: true,
 
     /** Show exactly these places (places without coordinates are skipped). */
     setPlaces(places) {
@@ -78,22 +153,27 @@ export function createMap(el, { center, onSelect, getLabel }) {
       places.forEach((place) => {
         if (!place.coordinates) return;
         wanted.add(place.id);
-        placesById.set(place.id, place);
         if (!markers.has(place.id)) {
-          const marker = L.marker([place.coordinates.lat, place.coordinates.lng], {
-            icon: markerIcon(place, place.id === selectedId),
-            keyboard: true,
-            riseOnHover: true,
+          const elMarker = markerElement(place);
+          elMarker.addEventListener('click', (event) => {
+            event.stopPropagation();
+            onSelect(place.id);
           });
-          marker.on('click', () => onSelect(place.id));
-          marker.addTo(map);
-          markers.set(place.id, marker);
+          const marker = new Marker({
+            element: elMarker,
+            anchor: 'bottom',
+            pitchAlignment: 'viewport',
+            rotationAlignment: 'viewport',
+          })
+            .setLngLat([place.coordinates.lng, place.coordinates.lat])
+            .addTo(map);
+          markers.set(place.id, { marker, el: elMarker, place });
         }
-        refreshMarker(place.id);
+        syncMarker(place.id);
       });
-      for (const [id, marker] of markers) {
+      for (const [id, entry] of markers) {
         if (!wanted.has(id)) {
-          marker.remove();
+          entry.marker.remove();
           markers.delete(id);
         }
       }
@@ -102,24 +182,61 @@ export function createMap(el, { center, onSelect, getLabel }) {
     select(id) {
       const previous = selectedId;
       selectedId = id;
-      if (previous) refreshMarker(previous);
-      if (id) refreshMarker(id);
+      if (previous) syncMarker(previous);
+      if (id) syncMarker(id);
     },
 
-    focus(place) {
+    /** Centre a place, leaving room for the info panel (`padding` in px). */
+    focus(place, { padding = {} } = {}) {
       if (!place || !place.coordinates) return;
-      map.flyTo([place.coordinates.lat, place.coordinates.lng], Math.max(map.getZoom(), FOCUS_ZOOM), {
-        duration: 0.6,
-      });
+      const camera = {
+        center: [place.coordinates.lng, place.coordinates.lat],
+        zoom: Math.max(map.getZoom(), FOCUS_ZOOM),
+        padding: { top: 0, right: 0, bottom: 0, left: 0, ...padding },
+      };
+      if (prefersReducedMotion()) map.jumpTo(camera);
+      else map.easeTo({ ...camera, duration: 700 });
     },
 
-    /** Re-label markers after a language change. */
-    refreshLabels() {
-      markers.forEach((_, id) => refreshMarker(id));
+    clearPadding() {
+      map.easeTo({ padding: { top: 0, right: 0, bottom: 0, left: 0 }, duration: prefersReducedMotion() ? 0 : 300 });
     },
 
-    invalidateSize() {
-      map.invalidateSize();
+    setView(next, opts) {
+      setView3d(next === '3d', opts);
+    },
+
+    getView() {
+      return view;
+    },
+
+    /** Re-label markers, map labels and built-in controls after a language change. */
+    setLanguage(nextLang) {
+      markers.forEach((_, id) => syncMarker(id));
+      const apply = () => {
+        LOCALIZED_LABEL_LAYERS.forEach((layerId) => {
+          if (map.getLayer(layerId)) map.setLayoutProperty(layerId, 'text-field', nameExpression(nextLang));
+        });
+      };
+      if (map.isStyleLoaded()) apply();
+      else map.once('load', apply);
+
+      const s = uiStrings();
+      const setLabel = (selector, text) => {
+        el.querySelectorAll(selector).forEach((node) => {
+          node.title = text;
+          node.setAttribute('aria-label', text);
+        });
+      };
+      setLabel('.maplibregl-ctrl-zoom-in', s.zoomIn);
+      setLabel('.maplibregl-ctrl-zoom-out', s.zoomOut);
+      setLabel('.maplibregl-ctrl-compass', s.resetBearing);
+      setLabel('.maplibregl-ctrl-attrib-button', s.toggleAttribution);
+      map.getCanvas().setAttribute('aria-label', s.mapTitle);
+    },
+
+    resize() {
+      map.resize();
     },
   };
 }

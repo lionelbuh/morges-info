@@ -1,7 +1,7 @@
 import { getCategory } from '../data/categories.js';
 import { t, localized } from '../i18n/index.js';
 import { escapeHtml } from './dom.js';
-import { TILE_ATTRIBUTION } from '../map/map.js';
+import { ATTRIBUTION } from '../map/style.js';
 
 function sourceList(sources) {
   if (!sources || sources.length === 0) return '<li>—</li>';
@@ -44,6 +44,11 @@ export function createInfoPanel(el, { onClose, onFocus }) {
         <header class="panel-header" style="--cat:${cat.color}">
           <span class="panel-badge"><span aria-hidden="true">${cat.icon}</span> ${escapeHtml(t(`categories.${place.category}`))}</span>
           <h2 id="panel-title" class="panel-title">${escapeHtml(localized(place.name))}</h2>
+          ${
+            localized(place.name).includes(place.name.fr)
+              ? ''
+              : `<p class="panel-official">${escapeHtml(t('panel.officialName'))} <span lang="fr">${escapeHtml(place.name.fr)}</span></p>`
+          }
           <button type="button" class="panel-close" data-action="close" aria-label="${escapeHtml(t('panel.close'))}">×</button>
         </header>
         <div class="panel-body">
@@ -75,7 +80,7 @@ export function createInfoPanel(el, { onClose, onFocus }) {
             <h4>${escapeHtml(t('panel.geoSources'))}</h4>
             <ul>${sourceList(place.geo.sources)}</ul>
           </details>
-          <p class="panel-attribution">${TILE_ATTRIBUTION}</p>
+          <p class="panel-attribution">${ATTRIBUTION}</p>
         </div>
       </div>`;
   }

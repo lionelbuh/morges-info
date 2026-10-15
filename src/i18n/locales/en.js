@@ -13,7 +13,8 @@ export default {
   },
   filters: { label: 'Categories', all: 'All' },
   results: {
-    count: '{n} place(s)',
+    countOne: '1 place',
+    countOther: '{n} places',
     none: 'No place matches your search.',
     listLabel: 'List of places',
     toggleShow: 'Show list',
@@ -28,6 +29,7 @@ export default {
     transport: 'Transport',
   },
   panel: {
+    officialName: 'Official name:',
     close: 'Close',
     category: 'Category',
     location: 'Location',
@@ -47,7 +49,20 @@ export default {
     archiveTitle: 'Historical archive',
     archiveText: 'Authentic historical photographs, with date, source and permission, will be added in a later phase.',
   },
-  map: { label: 'Interactive map of Morges' },
+  map: {
+    label: 'Interactive map of Morges',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    resetBearing: 'Drag to rotate the map, click to reset north',
+    toggleAttribution: 'Show or hide credits',
+    unsupported: 'Your browser cannot display the interactive map (WebGL 2 unavailable). Search, the list of places and the information panels still work.',
+  },
+  view: {
+    label: 'Map view',
+    title2d: 'Flat map (2D)',
+    title3d: 'Tilted map with buildings in relief (3D)',
+    heightNote: '3D: indicative building heights from OpenStreetMap. Where no data exists, a building is shown 5 m high.',
+  },
   footer: {
     about: 'Morges.info presents Morges as it is today. Information comes from public sources cited for each place.',
     archive: 'Historical archive: coming soon.',
