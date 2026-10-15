@@ -9,9 +9,12 @@
  *    `geo.status: 'unverified'`. The place is then listed but not drawn on the map.
  *
  * geo.status values:
+ *  - 'confirmed'      : position checked visually on the map by the Morges.info team
  *  - 'cross-checked'  : two or more independent sources agree (within ~30 m)
  *  - 'single-source'  : one published source; should be confirmed on OpenStreetMap
- *  - 'unverified'     : no reliable position yet
+ *  - 'estimated'      : location described by the Morges.info team, coordinates derived from
+ *                       neighbouring published points (approximate; confirm on the map)
+ *  - 'unverified'     : no reliable position yet (not drawn on the map)
  *
  * `archive` is reserved for the future historical photo archive. Its shape is
  * described and validated in ./archive.js. It stays empty in this version.
@@ -19,6 +22,9 @@
 
 /** @typedef {'fr'|'en'|'de'|'it'} Lang */
 /** @typedef {Record<Lang, string>} Localized */
+
+/** Indication given by the Morges.info project team (no public URL). */
+const TEAM = (what) => ({ label: `Équipe Morges.info — ${what} (15.10.2026)` });
 
 const HLS_MORGES = {
   label: 'Dictionnaire historique de la Suisse (DHS), article « Morges »',
@@ -171,17 +177,19 @@ export const PLACES = [
   {
     id: 'place-du-marche',
     category: 'streets',
-    // Exact position not yet verified — intentionally not drawn on the map.
-    coordinates: null,
+    // Approximate: derived from the town hall and Grand-Rue 68, which face each other across the Grand-Rue.
+    coordinates: { lat: 46.50866, lng: 6.49786 },
     geo: {
-      status: 'unverified',
-      sources: [],
+      status: 'estimated',
+      sources: [
+        TEAM('emplacement : intersection de la Grand-Rue et de la place de l’Hôtel-de-Ville'),
+        { label: 'Wikimedia Commons — Hôtel de ville, Morges (Place de l’Hôtel-de-Ville 3 / Grand-Rue 81 ; 46.50842, 6.49790)', url: 'https://commons.wikimedia.org/wiki/Category:H%C3%B4tel_de_ville,_Morges' },
+        { label: 'Apple Plans — Grand-Rue 68, en face (46.50890, 6.49782)', url: 'https://maps.apple.com/place?coordinate=46.5089023%2C6.4978197&name=GRAND-RUE+68%2CMorges' },
+      ],
       note:
-        'No published source with a reliable position was found (re-checked 2026-10-15). The name appears in the ' +
-        'Historical Dictionary of Switzerland as a historical market square; current street directories of Morges ' +
-        '(e.g. openalfa, Morges Région Tourisme) list no square of that name today, and the weekly market is held on ' +
-        'the Grand-Rue. Confirm the location (possibly a square now known under another name) on OpenStreetMap or ' +
-        'with the Ville de Morges before adding coordinates.',
+        'Location given by the Morges.info team: where the Place de l’Hôtel-de-Ville meets the Grand-Rue. The town hall ' +
+        '(Place de l’Hôtel-de-Ville 3 / Grand-Rue 81) and Grand-Rue 68 face each other across the street; the point is ' +
+        'their midpoint, i.e. on the Grand-Rue in front of the town hall. Accuracy about ±25 m — confirm on the preview.',
     },
     name: {
       fr: 'Place du Marché',
@@ -190,10 +198,10 @@ export const PLACES = [
       it: 'Place du Marché (Piazza del Mercato)',
     },
     location: {
-      fr: 'Emplacement exact en cours de vérification',
-      en: 'Exact location awaiting verification',
-      de: 'Genaue Lage wird noch überprüft',
-      it: 'Posizione esatta in corso di verifica',
+      fr: 'À l’intersection de la Grand-Rue et de la place de l’Hôtel-de-Ville',
+      en: 'Where the Grand-Rue meets the Place de l’Hôtel-de-Ville',
+      de: 'An der Kreuzung von Grand-Rue und Place de l’Hôtel-de-Ville',
+      it: 'All’incrocio tra la Grand-Rue e la Place de l’Hôtel-de-Ville',
     },
     description: {
       fr: 'Selon le Dictionnaire historique de la Suisse, l’activité commerciale de Morges s’est développée surtout dans la moitié sud de la ville, autour du port et de la place du Marché. Le plan de la ville prévoyait une place destinée au marché hebdomadaire.',
@@ -209,14 +217,12 @@ export const PLACES = [
     category: 'lake',
     coordinates: { lat: 46.5053265, lng: 6.4958408 },
     geo: {
-      status: 'single-source',
+      status: 'confirmed',
       sources: [
         { label: 'Club Nautique Morgien — Parc de l’Indépendance', url: 'https://www.cnmorges.ch/lieu/parc-de-lindependance/' },
+        TEAM('position contrôlée sur la carte'),
       ],
-      note:
-        'A second web listing (publisher not identifiable from search results) gives 46.505657, 6.495521, about 40 m ' +
-        'from this point and consistent with the park lying between the castle, the lake and the river Morges. ' +
-        'Kept as single-source until confirmed on OpenStreetMap.',
+      note: 'Position checked on the map by the Morges.info team on 2026-10-15.',
     },
     name: {
       fr: 'Parc de l’Indépendance',
@@ -247,14 +253,13 @@ export const PLACES = [
     category: 'lake',
     coordinates: { lat: 46.50816, lng: 6.49983 },
     geo: {
-      status: 'single-source',
+      status: 'confirmed',
       sources: [
         { label: 'Placegrab — Quai Jean-Louis-Lochmann, Morges', url: 'https://www.placegrab.com/switzerland/article-quai-du-mont-blanc-morges-287157/' },
+        TEAM('position contrôlée sur la carte'),
       ],
       note:
-        'The quay is a long lakeside street (built 1884–1890 according to the Ville de Morges). This is a representative ' +
-        'point taken from one listing on the quay; another listing on the same street (Coparking, 46.51079, 6.50144) ' +
-        'lies about 300 m north-east. Confirm a central point on OpenStreetMap.',
+        'Representative point on a long lakeside quay; checked on the map by the Morges.info team on 2026-10-15.',
     },
     name: {
       fr: 'Quai Lochmann',

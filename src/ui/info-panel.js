@@ -6,7 +6,11 @@ import { ATTRIBUTION } from '../map/style.js';
 function sourceList(sources) {
   if (!sources || sources.length === 0) return '<li>—</li>';
   return sources
-    .map((s) => `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.label)}</a></li>`)
+    .map((s) =>
+      s.url
+        ? `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.label)}</a></li>`
+        : `<li>${escapeHtml(s.label)}</li>`,
+    )
     .join('');
 }
 

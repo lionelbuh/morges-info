@@ -749,6 +749,14 @@ button {
   background: #f4ead6;
   color: #7a5414;
 }
+.panel-geo--confirmed {
+  background: var(--sage-pale);
+  color: #3f5634;
+}
+.panel-geo--estimated {
+  background: #f4ead6;
+  color: #7a5414;
+}
 .panel-geo--unverified {
   background: #f6dedb;
   color: #8a231a;

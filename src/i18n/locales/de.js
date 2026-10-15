@@ -39,6 +39,8 @@ export default {
     geoSources: 'Position',
     factSources: 'Informationen',
     geoStatus: {
+      confirmed: 'Position vom Morges.info-Team auf der Karte überprüft',
+      estimated: 'Ungefähre Position (± 25 m), angegeben vom Morges.info-Team',
       'cross-checked': 'Position durch mehrere Quellen bestätigt',
       'single-source': 'Position aus einer einzigen Quelle',
       unverified: 'Position nicht überprüft',

@@ -73,13 +73,13 @@ async function expectMarkersOnCoordinates(page) {
   }
 }
 
-test('loads in French by default with MapLibre map, 9 markers and attribution', async ({ page }) => {
+test('loads in French by default with MapLibre map, 10 markers and attribution', async ({ page }) => {
   await page.goto('/');
   await mapReady(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   await expect(page).toHaveTitle(/Carte interactive de Morges/);
   await expect(page.locator('.lang-btn[data-lang="fr"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(markers(page)).toHaveCount(9); // Place du Marché has no verified position yet
+  await expect(markers(page)).toHaveCount(10);
   await expect(page.locator('#results-count')).toHaveText('10 lieux');
   const attribution = page.locator('.maplibregl-ctrl-attrib');
   await expect(attribution).toBeVisible();
@@ -215,7 +215,7 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await page.locator('#search-input').fill('chateau');
   await openList(page);
   await expect(page.locator('.place-item').first()).toHaveAttribute('data-place-id', 'chateau');
-  await expect(markers(page)).not.toHaveCount(9);
+  await expect(markers(page)).not.toHaveCount(10);
   await page.locator('#search-input').fill('Bahnhof'); // German name works in the French UI
   await expect(markers(page)).toHaveCount(1);
   await page.locator('#search-input').press('Enter');
@@ -226,7 +226,7 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await expect(page.locator('.place-list .empty')).toBeVisible();
   await expect(markers(page)).toHaveCount(0);
   await page.locator('#search-clear').click();
-  await expect(markers(page)).toHaveCount(9);
+  await expect(markers(page)).toHaveCount(10);
 });
 
 test('category filters work and can be reset', async ({ page }) => {
@@ -237,16 +237,19 @@ test('category filters work and can be reset', async ({ page }) => {
   await page.locator('.chip[data-category="culture"]').click();
   await expect(markers(page)).toHaveCount(4);
   await page.locator('.chip[data-category=""]').click();
-  await expect(markers(page)).toHaveCount(9);
+  await expect(markers(page)).toHaveCount(10);
 });
 
-test('selecting from the list opens the panel; unverified place shows a notice', async ({ page }) => {
+test('selecting from the list opens the panel; Place du Marché is mapped as an approximate position', async ({ page }) => {
   await page.goto('/');
   await mapReady(page);
   await openList(page);
   await page.locator('.place-item[data-place-id="place-du-marche"]').click();
   await expect(panel(page).locator('.panel-title')).toHaveText('Place du Marché');
-  await expect(panel(page).locator('.panel-notice')).toBeVisible();
+  await expect(panel(page).locator('[data-field="location"]')).toContainText('Grand-Rue');
+  await expect(panel(page).locator('.panel-geo')).toHaveClass(/panel-geo--estimated/);
+  await expect(panel(page).locator('.panel-notice')).toHaveCount(0);
+  await expect(marker(page, 'place-du-marche')).toHaveClass(/is-selected/);
   await page.keyboard.press('Escape');
   await expect(panel(page)).toBeHidden();
 });

@@ -29,7 +29,8 @@ Les positions ont été vérifiées par recherche web (Wikipedia, Wikidata, Mapc
 annuaires de rues, etc.). **L'accès direct à OpenStreetMap, Nominatim, Overpass, Wikidata et au géoportail
 fédéral était bloqué dans l'environnement de développement** : un contrôle visuel des marqueurs sur la carte
 réelle est donc nécessaire avant publication (prévisualisation, voir README). Aucune coordonnée n'a été
-modifiée lors de la revérification, faute de source plus fiable que celles déjà citées.
+modifiée lors de la revérification, faute de source plus fiable que celles déjà citées. Le 15.10.2026,
+l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emplacement de la place du Marché.
 
 | Lieu | Statut | Constat / à faire |
 | --- | --- | --- |
@@ -37,9 +38,9 @@ modifiée lors de la revérification, faute de source plus fiable que celles dé
 | Temple de Morges | cross-checked | Mapcarta (OSM way 102523526) et AroundUs concordent |
 | Hôtel de Ville | cross-checked | Wikidata et Wikipédia concordent |
 | Grand-Rue | cross-checked | point représentatif d'une rue longue |
-| **Place du Marché** | **unverified** | aucune source de position fiable ; aucun annuaire de rues actuel ne liste une « place du Marché » à Morges ; le DHS la mentionne comme place de marché historique ; le marché actuel se tient sur la Grand-Rue. **À localiser** (OSM / Ville de Morges) — peut-être une place connue aujourd'hui sous un autre nom |
-| Parc de l'Indépendance | single-source | une seconde fiche web (éditeur non identifiable) donne un point à ~40 m ; à confirmer sur OSM |
-| Quai Lochmann | single-source | quai long ; point représentatif ; une autre fiche sur le même quai se trouve ~300 m au nord-est ; choisir un point central sur OSM |
+| Place du Marché | estimated | emplacement indiqué par l'équipe Morges.info : intersection de la Grand-Rue et de la place de l'Hôtel-de-Ville. Point calculé entre l'hôtel de ville (Place de l'Hôtel-de-Ville 3 / Grand-Rue 81) et le n° 68 de la Grand-Rue, en face : 46.50866, 6.49786 (± 25 m). **À confirmer sur la prévisualisation** |
+| Parc de l'Indépendance | confirmed | position contrôlée sur la carte par l'équipe Morges.info (15.10.2026) |
+| Quai Lochmann | confirmed | position contrôlée sur la carte par l'équipe Morges.info (15.10.2026) ; point représentatif d'un quai long |
 | Port de Morges | cross-checked | trois annuaires nautiques concordent |
 | Gare de Morges | cross-checked | Wikipedia et Structurae concordent |
 | Théâtre de Beausobre | cross-checked | Mapcarta (OSM node 6444731534) et Wikipédia concordent |

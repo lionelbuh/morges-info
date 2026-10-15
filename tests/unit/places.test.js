@@ -38,7 +38,7 @@ describe('places data', () => {
 
   it.each(PLACES.map((p) => [p.id, p]))('%s has coordinates consistent with its verification status', (_, place) => {
     const { geo, coordinates } = place;
-    expect(['cross-checked', 'single-source', 'unverified']).toContain(geo.status);
+    expect(['confirmed', 'cross-checked', 'single-source', 'estimated', 'unverified']).toContain(geo.status);
     if (geo.status === 'unverified') {
       expect(coordinates).toBeNull();
       return;
@@ -52,10 +52,23 @@ describe('places data', () => {
 
   it.each(PLACES.map((p) => [p.id, p]))('%s cites at least one source for its facts', (_, place) => {
     expect(place.factSources.length).toBeGreaterThan(0);
-    for (const s of [...place.factSources, ...place.geo.sources]) {
+    for (const s of place.factSources) {
       expect(s.label).toBeTruthy();
       expect(s.url).toMatch(/^https:\/\//);
     }
+    // position sources may be an indication from the Morges.info team (no URL)
+    for (const s of place.geo.sources) {
+      expect(s.label).toBeTruthy();
+      if (s.url !== undefined) expect(s.url).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('documents how approximate or team-provided positions were obtained', () => {
+    for (const place of PLACES.filter((p) => ['estimated', 'confirmed'].includes(p.geo.status))) {
+      expect(place.geo.note, place.id).toBeTruthy();
+      expect(place.geo.sources.some((s) => s.label.includes('Morges.info')), place.id).toBe(true);
+    }
+    expect(PLACES.find((p) => p.id === 'place-du-marche').geo.status).toBe('estimated');
   });
 
   it('has an empty historical archive in this version', () => {
