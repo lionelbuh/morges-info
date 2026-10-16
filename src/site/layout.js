@@ -63,7 +63,7 @@ export function renderFooter() {
       <p>${e(t('site.tagline'))}</p>
       <p class="footer-note">${e(t('footer.about'))}</p>
     </div>
-    <nav aria-label="${e(t('site.navLabel'))}"><ul class="footer-links">${links}</ul></nav>
+    <nav aria-label="${e(t('site.footerNavLabel'))}"><ul class="footer-links">${links}</ul></nav>
   </div>
 </footer>`;
 }

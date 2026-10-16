@@ -13,7 +13,7 @@
   --lake-2: #4f7f92;
   --lake-pale: #d6e6ee;
   --ink: #1f2b2d;
-  --ink-soft: #626c69;
+  --ink-soft: #565f5c;
   --swiss-red: #da291c;
   --radius: 14px;
   --shadow-sm: 0 1px 2px rgba(31, 43, 45, 0.06), 0 1px 1px rgba(31, 43, 45, 0.04);
@@ -137,7 +137,7 @@ body.page-map {
   line-height: 1.1;
 }
 .brand-dot {
-  color: var(--lake-2);
+  color: var(--lake);
   font-weight: 500;
 }
 .brand-tagline {
@@ -512,7 +512,7 @@ body.page-map {
   margin: 0 0 4px;
 }
 .muted {
-  opacity: 0.85;
+  font-style: italic;
 }
 
 /* ---------- map ---------- */

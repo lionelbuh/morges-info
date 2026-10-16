@@ -6,7 +6,7 @@ import { PRACTICAL, OFFICIAL_LINKS, validatePractical } from '../../src/data/pra
 import { STORIES, validateStory, featuredStory } from '../../src/data/stories.js';
 import { MILESTONES, THEN_AND_NOW, validateMilestone } from '../../src/data/history.js';
 import { validatePhoto, validateOpeningHours, validateCommercial, isIsoDate, COMMERCIAL_LISTINGS_ENABLED } from '../../src/data/schema.js';
-import { businessCard } from '../../src/site/components.js';
+import { businessCard, textBlock, frenchOnlyNotice } from '../../src/site/components.js';
 import { setLang } from '../../src/i18n/index.js';
 
 const business = (overrides = {}) => ({
@@ -79,6 +79,13 @@ describe('content model', () => {
     for (const e of EVENTS) expect(validateEvent(e)).toEqual([]);
     for (const p of PRACTICAL) expect(validatePractical(p)).toEqual([]);
     for (const s of STORIES) expect(validateStory(s)).toEqual([]);
+    for (const s of STORIES) {
+      for (const field of ['title', 'summary', 'body']) {
+        for (const lang of ['fr', 'en', 'de', 'it']) expect(s[field][lang], `${s.id}.${field}.${lang}`).toBeTruthy();
+      }
+      // same number of paragraphs in every language
+      expect(new Set(['fr', 'en', 'de', 'it'].map((l) => s.body[l].length)).size).toBe(1);
+    }
     for (const m of MILESTONES) expect(validateMilestone(m)).toEqual([]);
     for (const l of OFFICIAL_LINKS) expect(l.url).toMatch(/^https:\/\//);
   });
@@ -103,6 +110,15 @@ describe('content model', () => {
     expect(upcomingEvents(EVENTS, '2026-12-20')).toHaveLength(1); // last day still listed
     expect(upcomingEvents(EVENTS, '2026-12-21')).toHaveLength(0);
     expect(todayInMorges(new Date('2026-12-20T23:30:00Z'))).toBe('2026-12-21'); // already the 21st in Zurich
+  });
+
+  it('shows French with a notice when a draft story is not translated yet', () => {
+    const draft = { title: { fr: 'Titre' }, body: { fr: ['Texte.'] } };
+    setLang('de', { persist: false });
+    expect(textBlock(draft.title)).toBe('<p lang="fr">Titre</p>');
+    expect(frenchOnlyNotice([draft.title, draft.body])).toContain('nur auf Französisch');
+    setLang('fr', { persist: false });
+    expect(frenchOnlyNotice([draft.title])).toBe('');
   });
 
   it('has a featured story and no unverified "then and now" pairs', () => {

@@ -12,6 +12,7 @@
 
     <main class="layout" id="main" tabindex="-1">
       <aside class="sidebar" id="sidebar" data-i18n-attr="aria-label:results.listLabel">
+        <h1 class="visually-hidden" data-i18n="map.label">Carte interactive de Morges</h1>
         <div class="search">
           <label class="visually-hidden" for="search-input" data-i18n="search.label">Rechercher un lieu</label>
           <span class="search-icon" aria-hidden="true">
@@ -40,7 +41,7 @@
       </aside>
 
       <section class="map-wrap">
-        <div id="map" class="map" role="region" tabindex="-1" data-i18n-attr="aria-label:map.label"></div>
+        <div id="map" class="map"></div>
         <div class="view-toggle" id="view-toggle" role="group" data-i18n-attr="aria-label:view.label">
           <button type="button" data-view="2d" aria-pressed="true" data-i18n-attr="title:view.title2d">2D</button>
           <button type="button" data-view="3d" aria-pressed="false" data-i18n-attr="title:view.title3d">3D</button>

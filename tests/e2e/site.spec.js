@@ -111,12 +111,13 @@ test('language switch translates the page and carries over to other pages', asyn
   await expect(page.locator('main h1')).toHaveText(de.history.title);
 });
 
-test('untranslated story shows the French text with a notice', async ({ page }) => {
-  await page.goto('/recits/?lang=en');
-  await expect(page.locator('.story .notice-lang')).toBeVisible();
-  await expect(page.locator('.story-title')).toHaveAttribute('lang', 'fr');
-  await page.goto('/recits/?lang=fr');
-  await expect(page.locator('.story .notice-lang')).toHaveCount(0);
+test('stories are translated: no French-only notice in any language', async ({ page }) => {
+  for (const [lang, title] of [['en', 'Why Bern built a harbour in Morges'], ['de', 'Warum Bern in Morges einen Hafen baute'], ['it', 'Perché Berna costruì un porto a Morges']]) {
+    await page.goto(`/recits/?lang=${lang}`);
+    await expect(page.locator('.story-title')).toHaveText(title);
+    await expect(page.locator('.story .notice-lang')).toHaveCount(0);
+    await expect(page.locator('.story-title')).not.toHaveAttribute('lang', 'fr');
+  }
 });
 
 test('local life lists upcoming events only', async ({ page }) => {

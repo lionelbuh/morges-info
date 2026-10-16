@@ -67,6 +67,7 @@ export default {
   site: {
     tagline: 'Local life, good addresses and the memory of Morges.',
     skipToContent: 'Skip to content',
+    footerNavLabel: 'Site map',
     navLabel: 'Main navigation',
     menu: 'Menu',
     home: 'Morges.info home',

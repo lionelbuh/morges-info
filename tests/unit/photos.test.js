@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { HERO_PHOTO, validateHeroPhoto } from '../../src/data/photos.js';
-import heroManifest from '../../src/data/hero-manifest.json';
+import heroManifest from '../../src/data/hero-manifest.json' with { type: 'json' };
 import { heroPhoto } from '../../src/site/components.js';
 import { cropBox } from '../../scripts/crop.js';
 import { setLang } from '../../src/i18n/index.js';

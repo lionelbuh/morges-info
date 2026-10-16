@@ -67,6 +67,7 @@ export default {
   site: {
     tagline: 'La vie locale, les bonnes adresses et la mémoire de Morges.',
     skipToContent: 'Aller au contenu',
+    footerNavLabel: 'Plan du site',
     navLabel: 'Navigation principale',
     menu: 'Menu',
     home: 'Accueil Morges.info',

@@ -36,16 +36,20 @@ export function validateText(obj, path, { allLanguages = false } = {}) {
 }
 
 /**
- * Sources: `{ label, url? }`. A URL is required unless the source is an
- * indication from the Morges.info team (allowed with `allowTeam`).
+ * Sources: `{ label, url? }`. `label` is a source title (string) or, for text that
+ * must follow the language, a { fr, en, de, it } object. A URL is required unless
+ * the source is an indication from the Morges.info team.
  */
 export function validateSources(list, path, { min = 1 } = {}) {
   const errors = [];
   if (!Array.isArray(list) || list.length < min) return [`${path} needs at least ${min} source(s)`];
   list.forEach((s, i) => {
-    if (!s || typeof s.label !== 'string' || !s.label.trim()) errors.push(`${path}[${i}].label is required`);
+    const label = s && s.label;
+    const labelOk = typeof label === 'string' ? label.trim() : validateText(label, 'label', { allLanguages: true }).length === 0;
+    if (!labelOk) errors.push(`${path}[${i}].label is required (string, or text in fr, en, de, it)`);
     if (s && s.url !== undefined && !/^https:\/\//.test(s.url)) errors.push(`${path}[${i}].url must be https`);
-    if (s && s.url === undefined && !String(s.label).includes('Morges.info')) errors.push(`${path}[${i}] needs a url`);
+    const labelFr = typeof label === 'string' ? label : label && label.fr;
+    if (s && s.url === undefined && !String(labelFr).includes('Morges.info')) errors.push(`${path}[${i}] needs a url`);
   });
   return errors;
 }

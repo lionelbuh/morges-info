@@ -15,7 +15,7 @@ import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
-import heroManifest from '../data/hero-manifest.json';
+import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, storyHref } from './links.js';
 import {
   placeCard,

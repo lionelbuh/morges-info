@@ -54,9 +54,9 @@ l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emp
 | Musée Bolle | single-source | Morges Région Tourisme (deux pages, rue Louis-de-Savoie 73-75). Point de l'équipe ≈ 450 m plus au nord, non retenu — **à confirmer** |
 | Musée Paderewski | cross-checked | installé au château (museums.ch, État de Vaud) : partage le marqueur du château (`markerOf`). Le point de l'équipe correspond peut-être à l'ancien emplacement (Grenier bernois, 1991–2016) |
 | Maison du Dessin de Presse | cross-checked | OpenStreetMap (Mapcarta) et Wikipédia concordent (rue Louis-de-Savoie 39). Point de l'équipe ≈ 410 m plus au nord-ouest, non retenu — **à confirmer** |
-| Église Saint-François-de-Sales | estimated | aucune coordonnée publiée ; point estimé à ≈ 190 m au sud du temple (Mapcarta), cohérent avec la rue Louis-de-Savoie 31. Point de l'équipe ≈ 390 m plus au nord-ouest — **à confirmer** |
-| Parc de Vertou | single-source | carte search.ch (coordonnées suisses converties), au bord du lac au sud-est de la ville. Point de l'équipe ≈ 1,5 km plus à l'ouest ; Waze indique ≈ 46.516, 6.513 — **à confirmer** |
-| Parc de la Prairie | team | position fournie par l'équipe (46.51400, 6.50300), sans source publiée pour la recouper — **à confirmer** |
+| Église Saint-François-de-Sales | team | coordonnées fournies par l'équipe le 16.10.2026 (46.50924546705738, 6.499955818241464) ; cohérentes avec Mapcarta (≈ 190 m au sud du temple) et l'adresse rue Louis-de-Savoie 31 |
+| Parc de Vertou | cross-checked | coordonnées fournies par l'équipe le 16.10.2026 (46.516258064414394, 6.513974252562291), concordantes avec le skatepark du parc sur Waze |
+| Parc de la Prairie | team | coordonnées fournies par l'équipe le 16.10.2026 (46.510818828775875, 6.489033458014868), ≈ 380 m à l'ouest de la gare ; pas de source publiée pour les recouper |
 
 Les traductions EN/DE/IT des descriptions ont été rédigées à partir du texte français. Une relecture par
 des locuteurs natifs est recommandée.

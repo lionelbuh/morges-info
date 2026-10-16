@@ -58,7 +58,8 @@ describe('places data', () => {
     }
     // position sources may be an indication from the Morges.info team (no URL)
     for (const s of place.geo.sources) {
-      expect(s.label).toBeTruthy();
+      if (typeof s.label === 'string') expect(s.label).toBeTruthy();
+      else for (const lang of LANGUAGES) expect(s.label[lang], `${place.id} source ${lang}`).toBeTruthy();
       if (s.url !== undefined) expect(s.url).toMatch(/^https:\/\//);
     }
   });
@@ -67,7 +68,7 @@ describe('places data', () => {
     for (const place of PLACES.filter((p) => ['estimated', 'confirmed', 'team'].includes(p.geo.status))) {
       expect(place.geo.note, place.id).toBeTruthy();
       if (place.geo.status !== 'estimated') {
-        expect(place.geo.sources.some((s) => s.label.includes('Morges.info')), place.id).toBe(true);
+        expect(place.geo.sources.some((s) => (typeof s.label === 'string' ? s.label : s.label.fr).includes('Morges.info')), place.id).toBe(true);
       }
     }
     expect(PLACES.find((p) => p.id === 'place-du-marche').geo.status).toBe('estimated');
@@ -82,7 +83,7 @@ describe('places data', () => {
   });
 
   it('records the team-supplied point whenever a published position was preferred', () => {
-    for (const id of ['debarcadere-cgn', 'musee-forel', 'musee-bolle', 'musee-paderewski', 'maison-dessin-presse', 'eglise-saint-francois-de-sales', 'parc-vertou']) {
+    for (const id of ['debarcadere-cgn', 'musee-forel', 'musee-bolle', 'musee-paderewski', 'maison-dessin-presse']) {
       expect(PLACES.find((p) => p.id === id).geo.note, id).toMatch(/équipe Morges\.info/);
     }
   });

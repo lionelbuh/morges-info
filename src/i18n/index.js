@@ -33,6 +33,11 @@ export function localized(obj) {
   return obj[current] || obj[DEFAULT_LANG] || '';
 }
 
+/** A plain string (e.g. a source title) or a { fr, en, de, it } object, as text in the current language. */
+export function textOf(value) {
+  return typeof value === 'string' ? value : localized(value);
+}
+
 /**
  * Like localized(), but also says whether French was used as a fallback, so
  * pages can show a "French only" notice for content not yet translated.

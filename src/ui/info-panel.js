@@ -1,5 +1,5 @@
 import { getCategory } from '../data/categories.js';
-import { t, localized, getLang } from '../i18n/index.js';
+import { t, localized, getLang, textOf } from '../i18n/index.js';
 import { formatDate } from '../site/format.js';
 import { photoFigure } from '../site/components.js';
 import { escapeHtml } from './dom.js';
@@ -10,8 +10,8 @@ function sourceList(sources) {
   return sources
     .map((s) =>
       s.url
-        ? `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.label)}</a></li>`
-        : `<li>${escapeHtml(s.label)}</li>`,
+        ? `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(textOf(s.label))}</a></li>`
+        : `<li>${escapeHtml(textOf(s.label))}</li>`,
     )
     .join('');
 }

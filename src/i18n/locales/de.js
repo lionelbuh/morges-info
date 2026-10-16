@@ -67,6 +67,7 @@ export default {
   site: {
     tagline: 'Lokales Leben, gute Adressen und das Gedächtnis von Morges.',
     skipToContent: 'Zum Inhalt springen',
+    footerNavLabel: 'Seitenübersicht',
     navLabel: 'Hauptnavigation',
     menu: 'Menü',
     home: 'Morges.info Startseite',

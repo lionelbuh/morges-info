@@ -2,7 +2,7 @@
  * Small, pure HTML-string components shared by the content pages. They run in
  * the browser and at build time (French prerender), so they must not touch the DOM.
  */
-import { t, localized, localizedWithFallback, getLang } from '../i18n/index.js';
+import { t, localized, localizedWithFallback, getLang, textOf } from '../i18n/index.js';
 import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
@@ -30,8 +30,8 @@ export function sourcesList(sources) {
   const items = sources
     .map((s) =>
       s.url
-        ? `<li><a href="${e(s.url)}" target="_blank" rel="noopener">${e(s.label)}</a></li>`
-        : `<li>${e(s.label)}</li>`,
+        ? `<li><a href="${e(s.url)}" target="_blank" rel="noopener">${e(textOf(s.label))}</a></li>`
+        : `<li>${e(textOf(s.label))}</li>`,
     )
     .join('');
   return `<details class="sources"><summary>${e(t('common.sources'))}</summary><ul>${items}</ul></details>`;

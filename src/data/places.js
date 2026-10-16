@@ -31,8 +31,32 @@
 /** @typedef {'fr'|'en'|'de'|'it'} Lang */
 /** @typedef {Record<Lang, string>} Localized */
 
-/** Indication given by the Morges.info project team (no public URL). */
-const TEAM = (what) => ({ label: `Équipe Morges.info — ${what} (15.10.2026)` });
+/** Indication given by the Morges.info project team (no public URL), labelled in the four languages. */
+const TEAM_WHAT = {
+  location: {
+    fr: 'emplacement indiqué',
+    en: 'location given',
+    de: 'Lage angegeben',
+    it: 'posizione indicata',
+  },
+  checked: {
+    fr: 'position contrôlée sur la carte',
+    en: 'position checked on the map',
+    de: 'Position auf der Karte überprüft',
+    it: 'posizione verificata sulla mappa',
+  },
+  supplied: {
+    fr: 'coordonnées fournies',
+    en: 'coordinates supplied',
+    de: 'Koordinaten angegeben',
+    it: 'coordinate fornite',
+  },
+};
+const TEAM = (kind, date) => ({
+  label: Object.fromEntries(
+    Object.entries(TEAM_WHAT[kind]).map(([lang, what]) => [lang, `Morges.info — ${what} (${date})`]),
+  ),
+});
 
 const HLS_MORGES = {
   label: 'Dictionnaire historique de la Suisse (DHS), article « Morges »',
@@ -88,7 +112,7 @@ export const PLACES = [
     geo: {
       status: 'cross-checked',
       sources: [
-        { label: 'Mapcarta (données OpenStreetMap, way 102523526)', url: 'https://mapcarta.com/W102523526' },
+        { label: 'Mapcarta / OpenStreetMap (way 102523526)', url: 'https://mapcarta.com/W102523526' },
         { label: 'AroundUs — Temple de Morges', url: 'https://aroundus.com/p/6397650-temple-de-morges' },
       ],
     },
@@ -170,7 +194,7 @@ export const PLACES = [
       status: 'cross-checked',
       sources: [
         { label: 'MapQuest — Grand Rue, Morges', url: 'https://www.mapquest.com/ch/grand-rue-522399945' },
-        { label: 'Apple Plans — Grand-Rue 68 (46.5089, 6.4978)', url: 'https://maps.apple.com/place?coordinate=46.5089023%2C6.4978197&name=GRAND-RUE+68%2CMorges' },
+        { label: 'Apple Maps — Grand-Rue 68 (46.5089, 6.4978)', url: 'https://maps.apple.com/place?coordinate=46.5089023%2C6.4978197&name=GRAND-RUE+68%2CMorges' },
       ],
     },
     name: {
@@ -211,9 +235,9 @@ export const PLACES = [
     geo: {
       status: 'estimated',
       sources: [
-        TEAM('emplacement : intersection de la Grand-Rue et de la place de l’Hôtel-de-Ville'),
-        { label: 'Wikimedia Commons — Hôtel de ville, Morges (Place de l’Hôtel-de-Ville 3 / Grand-Rue 81 ; 46.50842, 6.49790)', url: 'https://commons.wikimedia.org/wiki/Category:H%C3%B4tel_de_ville,_Morges' },
-        { label: 'Apple Plans — Grand-Rue 68, en face (46.50890, 6.49782)', url: 'https://maps.apple.com/place?coordinate=46.5089023%2C6.4978197&name=GRAND-RUE+68%2CMorges' },
+        TEAM('location', '15.10.2026'),
+        { label: 'Wikimedia Commons — Hôtel de ville, Morges (46.50842, 6.49790)', url: 'https://commons.wikimedia.org/wiki/Category:H%C3%B4tel_de_ville,_Morges' },
+        { label: 'Apple Maps — Grand-Rue 68 (46.50890, 6.49782)', url: 'https://maps.apple.com/place?coordinate=46.5089023%2C6.4978197&name=GRAND-RUE+68%2CMorges' },
       ],
       note:
         'Location given by the Morges.info team: where the Place de l’Hôtel-de-Ville meets the Grand-Rue. The town hall ' +
@@ -254,7 +278,7 @@ export const PLACES = [
       status: 'confirmed',
       sources: [
         { label: 'Club Nautique Morgien — Parc de l’Indépendance', url: 'https://www.cnmorges.ch/lieu/parc-de-lindependance/' },
-        TEAM('position contrôlée sur la carte'),
+        TEAM('checked', '15.10.2026'),
       ],
       note: 'Position checked on the map by the Morges.info team on 2026-10-15.',
     },
@@ -295,7 +319,7 @@ export const PLACES = [
       status: 'confirmed',
       sources: [
         { label: 'Placegrab — Quai Jean-Louis-Lochmann, Morges', url: 'https://www.placegrab.com/switzerland/article-quai-du-mont-blanc-morges-287157/' },
-        TEAM('position contrôlée sur la carte'),
+        TEAM('checked', '15.10.2026'),
       ],
       note:
         'Representative point on a long lakeside quay; checked on the map by the Morges.info team on 2026-10-15.',
@@ -319,7 +343,7 @@ export const PLACES = [
       it: 'Lungolago costruito tra il 1884 e il 1890 e ufficialmente denominato Quai Jean-Louis-Lochmann, in onore di Jean-Louis Lochmann (1812–1889), insegnante di ginnastica morto a Morges.',
     },
     factSources: [
-      { label: 'Musées de Lausanne (museris) — fiche Jean-Louis Lochmann', url: 'https://museris.lausanne.ch/SGP/getPDFFiche.aspx?id=4217' },
+      { label: 'Musées de Lausanne (museris) — Jean-Louis Lochmann', url: 'https://museris.lausanne.ch/SGP/getPDFFiche.aspx?id=4217' },
       { label: 'Ville de Morges — Histoire : les dates clés', url: 'https://www.morges.ch/vivre-a-morges/administration/administration-communale/historique/histoire-les-dates-cles-de-la-ville-de-morges-9151' },
     ],
     address: null,
@@ -361,7 +385,7 @@ export const PLACES = [
     },
     factSources: [
       HLS_MORGES,
-      { label: 'ADAC Skipper-Portal — Port de Morges (port de plaisance)', url: 'https://skipper.adac.de/en/marinas/port-de-morges-2/' },
+      { label: 'ADAC Skipper-Portal — Port de Morges', url: 'https://skipper.adac.de/en/marinas/port-de-morges-2/' },
     ],
     address: null,
     website: null,
@@ -417,7 +441,7 @@ export const PLACES = [
     geo: {
       status: 'cross-checked',
       sources: [
-        { label: 'Mapcarta (données OpenStreetMap, node 6444731534)', url: 'https://mapcarta.com/fr/N6444731534' },
+        { label: 'Mapcarta / OpenStreetMap (node 6444731534)', url: 'https://mapcarta.com/fr/N6444731534' },
         { label: 'Wikipédia — Théâtre de Beausobre', url: 'https://fr.wikipedia.org/wiki/Th%C3%A9%C3%A2tre_de_Beausobre' },
       ],
     },
@@ -457,7 +481,7 @@ export const PLACES = [
     geo: {
       status: 'single-source',
       sources: [
-        { label: 'Morges Région Tourisme — Débarcadère CGN (données de localisation de la page)', url: 'https://www.morges-tourisme.ch/landmarks/debarcadere-cgn-morges/' },
+        { label: 'Morges Région Tourisme — Débarcadère CGN', url: 'https://www.morges-tourisme.ch/landmarks/debarcadere-cgn-morges/' },
       ],
       note:
         'Point fourni par l’équipe Morges.info : 46.51000, 6.49590 (≈ 400 m plus au nord-ouest, à l’intérieur de la ville). ' +
@@ -542,7 +566,7 @@ export const PLACES = [
     geo: {
       status: 'single-source',
       sources: [
-        { label: 'Morges Région Tourisme — Musée Bolle (données de localisation de la page)', url: 'https://www.morges-tourisme.ch/landmarks/musee-bolle/' },
+        { label: 'Morges Région Tourisme — Musée Bolle', url: 'https://www.morges-tourisme.ch/landmarks/musee-bolle/' },
       ],
       note:
         'Point fourni par l’équipe Morges.info : 46.51130, 6.49510 (≈ 450 m plus au nord, près de la gare). Le musée est rue ' +
@@ -586,8 +610,8 @@ export const PLACES = [
     geo: {
       status: 'cross-checked',
       sources: [
-        { label: 'museums.ch — Musée Paderewski (Le Château, rue du Château)', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-paderewski-2165.html' },
-        { label: 'Position du château : Wikipedia — Morges Castle', url: 'https://en.wikipedia.org/wiki/Morges_Castle' },
+        { label: 'museums.ch — Musée Paderewski', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-paderewski-2165.html' },
+        { label: 'Wikipedia — Morges Castle', url: 'https://en.wikipedia.org/wiki/Morges_Castle' },
       ],
       note:
         'Point fourni par l’équipe Morges.info : 46.51070, 6.49750 (≈ 450 m plus au nord), qui correspond peut-être à l’ancien ' +
@@ -614,7 +638,7 @@ export const PLACES = [
     factSources: [
       { label: 'museums.ch — Musée Paderewski', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-paderewski-2165.html' },
       { label: 'Dictionnaire historique de la Suisse — Ignacy Jan Paderewski', url: 'https://hls-dhs-dss.ch/articles/028488' },
-      { label: 'Morges Région Tourisme — Musée Paderewski (Grenier bernois 1991–2016)', url: 'https://www.morges-tourisme.ch/en/P3915' },
+      { label: 'Morges Région Tourisme — Musée Paderewski', url: 'https://www.morges-tourisme.ch/en/P3915' },
     ],
     address: null,
     website: 'https://paderewski-morges.ch/',
@@ -630,7 +654,7 @@ export const PLACES = [
     geo: {
       status: 'cross-checked',
       sources: [
-        { label: 'Mapcarta (données OpenStreetMap, node 1207861986)', url: 'https://mapcarta.com/fr/N1207861986' },
+        { label: 'Mapcarta / OpenStreetMap (node 1207861986)', url: 'https://mapcarta.com/fr/N1207861986' },
         { label: 'Wikipédia — Maison du dessin de presse', url: 'https://fr.wikipedia.org/wiki/Maison_du_dessin_de_presse' },
       ],
       note:
@@ -669,18 +693,18 @@ export const PLACES = [
   {
     id: 'eglise-saint-francois-de-sales',
     category: 'religious',
-    // Approximate: no published coordinates; see geo.note.
-    coordinates: { lat: 46.50904, lng: 6.50034 },
+    coordinates: { lat: 46.509245, lng: 6.499956 },
     geo: {
-      status: 'estimated',
+      status: 'team',
       sources: [
-        { label: 'Mapcarta — église St-François-de-Sales à ≈ 190 m au sud du temple (données OpenStreetMap)', url: 'https://mapcarta.com/W102523526' },
-        { label: 'Adresse : Morges Région Tourisme — Rue Louis-de-Savoie 31', url: 'https://www.morges-tourisme.ch/fr/P4977' },
+        TEAM('supplied', '16.10.2026'),
+        { label: 'Mapcarta / OpenStreetMap (way 102523526)', url: 'https://mapcarta.com/W102523526' },
+        { label: 'Morges Région Tourisme — L’Église catholique St-François de Sales', url: 'https://www.morges-tourisme.ch/fr/P4977' },
       ],
       note:
-        'Aucune coordonnée publiée trouvée. Point estimé à ≈ 190 m au sud du temple (Mapcarta), cohérent avec l’adresse rue ' +
-        'Louis-de-Savoie 31, voisine de la Maison du Dessin de Presse (n° 39). Point fourni par l’équipe Morges.info : 46.51200, 6.49770 ' +
-        '(≈ 390 m plus au nord-ouest, au nord du temple). À confirmer sur la carte.',
+        'Coordonnées fournies par l’équipe Morges.info le 16.10.2026 (46.50924546705738, 6.499955818241464). Cohérentes avec ' +
+        'Mapcarta (église ≈ 190 m au sud du temple) et avec l’adresse rue Louis-de-Savoie 31 : l’estimation précédente ' +
+        '(46.50904, 6.50034) était à ≈ 35 m.',
     },
     name: {
       fr: 'Église catholique Saint-François-de-Sales',
@@ -714,16 +738,17 @@ export const PLACES = [
   {
     id: 'parc-vertou',
     category: 'lake',
-    coordinates: { lat: 46.51112, lng: 6.51469 },
+    coordinates: { lat: 46.516258, lng: 6.513974 },
     geo: {
-      status: 'single-source',
+      status: 'cross-checked',
       sources: [
-        { label: 'search.ch — carte « Morges, Parc de Vertou » (coordonnées suisses 529089 / 151508, converties)', url: 'https://map.search.ch/Morges,Parc-de-Vertou@529089,151508.fr.html' },
+        TEAM('supplied', '16.10.2026'),
+        { label: 'Waze — Skate Park, Parc de Vertou', url: 'https://www.waze.com/live-map/directions/skate-park-parc-de-vertou-morges?to=place.w.4260305.42668588.6794801' },
       ],
       note:
-        'Point fourni par l’équipe Morges.info : 46.51400, 6.49600 (≈ 1,5 km plus à l’ouest, près du théâtre de Beausobre / avenue de ' +
-        'Vertou). La Ville situe le parc au sud-est de la ville, au bord du lac : le point de la carte search.ch a été retenu. Une autre ' +
-        'source (Waze, skatepark) indique ≈ 46.516, 6.513. À confirmer sur la carte.',
+        'Coordonnées fournies par l’équipe Morges.info le 16.10.2026 (46.516258064414394, 6.513974252562291), concordantes avec ' +
+        'le skatepark du parc sur Waze (≈ 46.516, 6.513). Le point de la carte search.ch utilisé auparavant (46.51112, 6.51469) ' +
+        'était à ≈ 570 m.',
     },
     name: {
       fr: 'Parc de Vertou',
@@ -756,13 +781,14 @@ export const PLACES = [
   {
     id: 'parc-prairie',
     category: 'lake',
-    coordinates: { lat: 46.514, lng: 6.503 },
+    coordinates: { lat: 46.510819, lng: 6.489033 },
     geo: {
       status: 'team',
-      sources: [{ label: 'Équipe Morges.info — position fournie (16.10.2026)' }],
+      sources: [TEAM('supplied', '16.10.2026')],
       note:
-        'Position fournie par l’équipe Morges.info ; aucune coordonnée publiée trouvée pour la recouper. La Ville situe le parc face à la ' +
-        'patinoire des Eaux-Minérales (avenue Warnery 8). À confirmer sur la carte.',
+        'Coordonnées fournies par l’équipe Morges.info le 16.10.2026 (46.510818828775875, 6.489033458014868), à ≈ 380 m à ' +
+        'l’ouest de la gare — cohérent avec « quelques minutes à pied de la gare » (Ville de Morges). Aucune coordonnée publiée ' +
+        'trouvée pour les recouper.',
     },
     name: {
       fr: 'Parc de la Prairie',
