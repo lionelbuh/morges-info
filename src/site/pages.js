@@ -14,6 +14,8 @@ import { upcomingEvents } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
+import { HERO_PHOTO } from '../data/photos.js';
+import heroManifest from '../data/hero-manifest.json';
 import { pageHref, placeHref, storyHref } from './links.js';
 import {
   placeCard,
@@ -24,6 +26,7 @@ import {
   textBlock,
   frenchOnlyNotice,
   sourcesList,
+  heroPhoto,
 } from './components.js';
 
 /** Places highlighted on the home page (all have verified or confirmed positions). */
@@ -57,7 +60,10 @@ function renderHome({ today } = {}) {
       </div>`
     : '';
 
-  return `<section class="hero">
+  const hero = heroPhoto(HERO_PHOTO, heroManifest);
+
+  return `${hero}
+  <section class="hero${hero ? ' hero--after-photo' : ''}">
     <h1>${e(t('site.tagline'))}</h1>
     <p class="lead">${e(t('home.intro'))}</p>
     <p class="hero-actions">

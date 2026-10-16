@@ -76,7 +76,8 @@ src/ui/                     composants de la carte : panneau d'information, list
 src/styles/main.css         styles
 tests/unit/                 tests Vitest (données, traductions, recherche, style, contenus, pages)
 tests/e2e/                  tests Playwright (carte, site, liens internes, SEO) + fixtures
-docs/                       CONTENT.md (contenus), MAP.md (carte), DATA.md (lieux), HISTORICAL_ARCHIVE.md
+docs/                       CONTENT.md (contenus), PHOTOS.md (photos, licences), MAP.md (carte), DATA.md (lieux), HISTORICAL_ARCHIVE.md
+scripts/build-hero.mjs      npm run images : versions AVIF/WebP/JPEG de la photo d'accueil
 ```
 
 ## Déploiement

@@ -148,3 +148,36 @@ export function storyArticle(story) {
     ${sourcesList(story.sources)}
   </article>`;
 }
+
+const MIME = { avif: 'image/avif', webp: 'image/webp', jpg: 'image/jpeg' };
+
+/**
+ * Home hero photograph: <picture> with a wide crop (desktop) and a tall crop
+ * (phones), AVIF → WebP → JPEG, plus the credit required by the licence.
+ * Returns '' until the responsive files exist (see scripts/build-hero.mjs).
+ */
+export function heroPhoto(photo, manifest) {
+  if (!manifest || manifest.id !== photo.id || !manifest.crops || !manifest.crops.wide) return '';
+  const { wide, tall } = manifest.crops;
+  const srcset = (crop, fmt) => crop.files[fmt].map((f) => `${f.src} ${f.width}w`).join(', ');
+  const largest = (crop) => crop.files.jpg[crop.files.jpg.length - 1];
+  const sources = [];
+  if (tall) {
+    const t0 = largest(tall);
+    for (const fmt of ['avif', 'webp', 'jpg']) {
+      sources.push(`<source media="(max-width: 700px)" type="${MIME[fmt]}" srcset="${srcset(tall, fmt)}" sizes="100vw" width="${t0.width}" height="${t0.height}" />`);
+    }
+  }
+  for (const fmt of ['avif', 'webp']) {
+    sources.push(`<source type="${MIME[fmt]}" srcset="${srcset(wide, fmt)}" sizes="(max-width: 1160px) 100vw, 1120px" />`);
+  }
+  const fallback = wide.files.jpg[Math.min(1, wide.files.jpg.length - 1)];
+  const label = e(t('common.photoCredit', { credit: '' })).trim();
+  return `<figure class="hero-photo${photo.overlayTitle ? ' has-overlay' : ''}">
+    <picture>
+      ${sources.join('\n      ')}
+      <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="(max-width: 1160px) 100vw, 1120px" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async" />
+    </picture>
+    <figcaption class="hero-credit">${label} <a href="${e(photo.sourceUrl)}" target="_blank" rel="noopener">${e(photo.creator)}</a>, <a href="${e(photo.licenceUrl)}" target="_blank" rel="noopener license">${e(photo.licence)}</a>, via ${e(photo.sourceName)} (${e(localized(photo.changes))})</figcaption>
+  </figure>`;
+}

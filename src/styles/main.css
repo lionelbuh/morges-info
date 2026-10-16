@@ -1186,6 +1186,45 @@ body.page-map {
   gap: 10px;
   margin: 22px 0 0;
 }
+/* home hero photograph (contained, like the map preview) */
+.hero-photo {
+  position: relative;
+  margin: 0;
+}
+.hero-photo picture,
+.hero-photo img {
+  display: block;
+  width: 100%;
+}
+.hero-photo img {
+  height: auto;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  border-radius: 18px;
+  background: var(--stone);
+}
+.hero-credit {
+  margin-top: 6px;
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  text-align: right;
+}
+.hero-credit a {
+  color: inherit;
+}
+.hero--after-photo {
+  padding-top: 18px;
+}
+@media (max-width: 700px) {
+  .hero-photo img {
+    aspect-ratio: 4 / 5;
+    max-height: 70vh;
+  }
+  .hero-credit {
+    text-align: left;
+  }
+}
+
 .page-intro {
   padding: 12px 0 4px;
 }
