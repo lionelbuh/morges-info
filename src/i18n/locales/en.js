@@ -78,7 +78,8 @@ export default {
     history: 'History',
     life: 'Local life',
     stories: 'Stories',
-    about: 'About',
+    about: 'Editorial charter',
+    us: 'About us',
   },
   pages: {
     home: {
@@ -106,8 +107,12 @@ export default {
       description: 'Stories of Morges written from cited sources.',
     },
     about: {
-      title: 'About and editorial charter — Morges.info',
+      title: 'Editorial charter — Morges.info',
       description: 'Who runs Morges.info, how information is checked and how advertising will be kept separate from editorial content.',
+    },
+    us: {
+      title: 'About us — Morges.info',
+      description: 'Why Morges.info exists: a personal connection with Morges, where we lived until 2012.',
     },
   },
   common: {
@@ -180,7 +185,7 @@ export default {
     intro: 'Stories of Morges, written from cited sources.',
   },
   about: {
-    title: 'About Morges.info',
+    title: 'Editorial charter',
     intro: 'Morges.info is an independent website dedicated to the municipality of Morges. It is not affiliated with the Ville de Morges or with any political party.',
     sourcesTitle: 'Sources and verification',
     sourcesText: 'Every published fact cites its source. Information that can change (opening hours, events) shows the date it was last checked. Map positions show their level of verification.',
@@ -190,5 +195,16 @@ export default {
     adsText: 'The site carries no advertising. If sponsored content is ever offered, it will be clearly labelled and always kept separate from the editorial selection.',
     mapTitle: 'Map',
     mapText: 'Base map: OpenFreeMap, OpenMapTiles and data from OpenStreetMap contributors (ODbL licence).',
+  },
+  us: {
+    title: 'About us',
+    paragraphs: {
+      p1: 'Morges has always had a special place in our hearts.',
+      p2: 'We lived here until 2012, when we moved to California. The distance has never loosened our ties to this town on the shore of Lake Geneva.',
+      p3: 'We made Morges.info to share what we love about it: its places, its history, its stories and its everyday character.',
+      p4: 'Whether you live in Morges, grew up here or are discovering it for the first time, we hope this site brings you a little closer to it.',
+    },
+    motto: 'Morges, toujours dans nos cœurs.',
+    charterLink: 'How we work: our editorial charter',
   },
 };

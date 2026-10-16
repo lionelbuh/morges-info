@@ -78,7 +78,8 @@ export default {
     history: 'Geschichte',
     life: 'Lokales Leben',
     stories: 'Geschichten',
-    about: 'Über uns',
+    about: 'Redaktionelle Grundsätze',
+    us: 'Über uns',
   },
   pages: {
     home: {
@@ -106,8 +107,12 @@ export default {
       description: 'Geschichten aus Morges, verfasst auf Grundlage zitierter Quellen.',
     },
     about: {
-      title: 'Über uns und redaktionelle Grundsätze — Morges.info',
+      title: 'Redaktionelle Grundsätze — Morges.info',
       description: 'Wer hinter Morges.info steht, wie Informationen überprüft werden und wie Werbung vom redaktionellen Inhalt getrennt wird.',
+    },
+    us: {
+      title: 'Über uns — Morges.info',
+      description: 'Warum es Morges.info gibt: eine persönliche Verbindung mit Morges, wo wir bis 2012 gelebt haben.',
     },
   },
   common: {
@@ -180,7 +185,7 @@ export default {
     intro: 'Geschichten aus Morges, verfasst auf Grundlage zitierter Quellen.',
   },
   about: {
-    title: 'Über Morges.info',
+    title: 'Redaktionelle Grundsätze',
     intro: 'Morges.info ist eine unabhängige Website über die Gemeinde Morges. Sie ist weder mit der Stadt Morges noch mit einer politischen Partei verbunden.',
     sourcesTitle: 'Quellen und Überprüfung',
     sourcesText: 'Jede veröffentlichte Tatsache nennt ihre Quelle. Veränderliche Angaben (Öffnungszeiten, Veranstaltungen) zeigen das Datum ihrer Überprüfung. Positionen auf der Karte zeigen ihren Überprüfungsgrad.',
@@ -190,5 +195,16 @@ export default {
     adsText: 'Die Website enthält keine Werbung. Sollten je gesponserte Inhalte angeboten werden, werden sie klar gekennzeichnet und stets von der redaktionellen Auswahl getrennt.',
     mapTitle: 'Karte',
     mapText: 'Kartengrundlage: OpenFreeMap, OpenMapTiles und Daten der OpenStreetMap-Mitwirkenden (Lizenz ODbL).',
+  },
+  us: {
+    title: 'Über uns',
+    paragraphs: {
+      p1: 'Morges hatte schon immer einen besonderen Platz in unseren Herzen.',
+      p2: 'Wir haben hier gelebt, bis wir 2012 nach Kalifornien gezogen sind. Die Entfernung hat unsere Verbundenheit mit dieser Stadt am Ufer des Genfersees nie gelockert.',
+      p3: 'Mit Morges.info möchten wir teilen, was wir an ihr lieben: ihre Orte, ihre Geschichte, ihre Erzählungen und ihren Alltag.',
+      p4: 'Ob Sie in Morges leben, hier aufgewachsen sind oder die Stadt zum ersten Mal entdecken – wir hoffen, dass diese Website Sie ihr ein wenig näherbringt.',
+    },
+    motto: 'Morges, toujours dans nos cœurs.',
+    charterLink: 'Wie wir arbeiten: unsere redaktionellen Grundsätze',
   },
 };

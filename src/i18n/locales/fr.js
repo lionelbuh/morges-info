@@ -78,7 +78,8 @@ export default {
     history: 'Histoire',
     life: 'Vie locale',
     stories: 'Récits',
-    about: 'À propos',
+    about: 'Charte éditoriale',
+    us: 'Qui sommes-nous',
   },
   pages: {
     home: {
@@ -106,8 +107,12 @@ export default {
       description: 'Des histoires de Morges écrites à partir de sources citées.',
     },
     about: {
-      title: 'À propos et charte éditoriale — Morges.info',
+      title: 'Charte éditoriale — Morges.info',
       description: 'Qui fait Morges.info, comment les informations sont vérifiées et comment la publicité sera séparée du contenu éditorial.',
+    },
+    us: {
+      title: 'Qui sommes-nous — Morges.info',
+      description: 'Pourquoi Morges.info existe : un lien personnel avec Morges, où nous avons vécu jusqu’en 2012.',
     },
   },
   common: {
@@ -180,7 +185,7 @@ export default {
     intro: 'Des histoires de Morges, écrites à partir de sources citées.',
   },
   about: {
-    title: 'À propos de Morges.info',
+    title: 'Charte éditoriale',
     intro: 'Morges.info est un site indépendant consacré à la commune de Morges. Il n’est lié ni à la Ville de Morges ni à un parti politique.',
     sourcesTitle: 'Sources et vérification',
     sourcesText: 'Chaque fait publié cite sa source. Les informations susceptibles de changer (horaires, événements) indiquent leur date de vérification. Les positions sur la carte affichent leur niveau de vérification.',
@@ -190,5 +195,16 @@ export default {
     adsText: 'Le site ne contient aucune publicité. Si des contenus sponsorisés sont proposés un jour, ils seront clairement signalés et toujours séparés de la sélection éditoriale.',
     mapTitle: 'Carte',
     mapText: 'Fond de carte : OpenFreeMap, OpenMapTiles et données des contributeurs OpenStreetMap (licence ODbL).',
+  },
+  us: {
+    title: 'Qui sommes-nous',
+    paragraphs: {
+      p1: 'Morges a toujours eu une place à part dans nos cœurs.',
+      p2: 'Nous y avons vécu jusqu’en 2012, avant de partir pour la Californie. La distance n’a jamais relâché les liens qui nous attachent à cette ville au bord du Léman.',
+      p3: 'Nous avons créé Morges.info pour partager ce que nous aimons ici : ses lieux, son histoire, ses récits et son caractère de tous les jours.',
+      p4: 'Que vous habitiez Morges, que vous y ayez grandi ou que vous la découvriez, nous espérons que ce site vous en rapprochera un peu.',
+    },
+    motto: 'Morges, toujours dans nos cœurs.',
+    charterLink: 'Comment nous travaillons : notre charte éditoriale',
   },
 };

@@ -14,6 +14,7 @@ export const PAGES = [
   { id: 'life', path: '/vie-locale/', nav: true },
   { id: 'stories', path: '/recits/', nav: true },
   { id: 'about', path: '/a-propos/', nav: false },
+  { id: 'us', path: '/qui-sommes-nous/', nav: false },
 ];
 
 export function getPage(id) {

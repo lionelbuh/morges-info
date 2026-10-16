@@ -11,7 +11,8 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
 | Histoire | `/histoire/` | repères historiques sourcés, futures archives photographiques |
 | Vie locale | `/vie-locale/` | événements à venir et infos pratiques, sources et dates de vérification |
 | Récits | `/recits/` | récits écrits à partir de sources citées |
-| À propos | `/a-propos/` | charte éditoriale, indépendance, publicité, crédits |
+| Charte éditoriale | `/a-propos/` | indépendance, sources, publicité, crédits (lien en pied de page) |
+| Qui sommes-nous | `/qui-sommes-nous/` | note personnelle des auteurs (lien discret en pied de page) |
 
 - **Langues :** français (par défaut), English, Deutsch, Italiano — `FR | EN | DE | IT` sur toutes les pages
 - **Carte :** [MapLibre GL JS](https://maplibre.org) + tuiles vectorielles [OpenFreeMap](https://openfreemap.org)
@@ -65,7 +66,7 @@ et à chaque pull request.
 ## Structure
 
 ```
-index.html, carte/, commerces/, histoire/, vie-locale/, recits/, a-propos/   une page HTML par section
+index.html, carte/, commerces/, histoire/, vie-locale/, recits/, a-propos/, qui-sommes-nous/   une page HTML par section
 build/site-plugin.js        pré-rendu français des pages, sitemap.xml, robots.txt (plugin Vite, sans dépendance)
 src/site/                   pages de contenu : config (URL), layout (en-tête, pied, <head>), pages, composants, client
 src/main.js                 page carte : état, recherche, sélection, 2D/3D, chargement différé de MapLibre
