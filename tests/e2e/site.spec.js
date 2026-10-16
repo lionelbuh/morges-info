@@ -68,7 +68,7 @@ test('home: map preview with markers, places, practical info and featured story;
   await expect(page.locator('.hero-credit a[href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr"]')).toHaveText('CC BY-SA 4.0');
   await expect(page.locator('.hero-credit')).toContainText('D. Jaquet');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
-  await expect(page.locator('#map-preview .poi-marker')).toHaveCount(10);
+  await expect(page.locator('#map-preview .poi-marker')).toHaveCount(17);
   await expect(page.locator('#map-preview .maplibregl-ctrl-attrib')).toContainText('OpenStreetMap');
   // clicking a preview marker opens it on the map page
   await page.locator('#map-preview .poi-marker[data-place-id="beausobre"]').click();

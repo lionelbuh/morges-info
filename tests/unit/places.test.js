@@ -38,7 +38,7 @@ describe('places data', () => {
 
   it.each(PLACES.map((p) => [p.id, p]))('%s has coordinates consistent with its verification status', (_, place) => {
     const { geo, coordinates } = place;
-    expect(['confirmed', 'cross-checked', 'single-source', 'estimated', 'unverified']).toContain(geo.status);
+    expect(['confirmed', 'cross-checked', 'single-source', 'estimated', 'team', 'unverified']).toContain(geo.status);
     if (geo.status === 'unverified') {
       expect(coordinates).toBeNull();
       return;
@@ -64,11 +64,27 @@ describe('places data', () => {
   });
 
   it('documents how approximate or team-provided positions were obtained', () => {
-    for (const place of PLACES.filter((p) => ['estimated', 'confirmed'].includes(p.geo.status))) {
+    for (const place of PLACES.filter((p) => ['estimated', 'confirmed', 'team'].includes(p.geo.status))) {
       expect(place.geo.note, place.id).toBeTruthy();
-      expect(place.geo.sources.some((s) => s.label.includes('Morges.info')), place.id).toBe(true);
+      if (place.geo.status !== 'estimated') {
+        expect(place.geo.sources.some((s) => s.label.includes('Morges.info')), place.id).toBe(true);
+      }
     }
     expect(PLACES.find((p) => p.id === 'place-du-marche').geo.status).toBe('estimated');
+  });
+
+  it('places sharing a marker point to an existing place at the same position', () => {
+    for (const place of PLACES.filter((p) => p.markerOf)) {
+      const host = PLACES.find((p) => p.id === place.markerOf);
+      expect(host, place.id).toBeTruthy();
+      expect(place.coordinates).toEqual(host.coordinates);
+    }
+  });
+
+  it('records the team-supplied point whenever a published position was preferred', () => {
+    for (const id of ['debarcadere-cgn', 'musee-forel', 'musee-bolle', 'musee-paderewski', 'maison-dessin-presse', 'eglise-saint-francois-de-sales', 'parc-vertou']) {
+      expect(PLACES.find((p) => p.id === id).geo.note, id).toMatch(/équipe Morges\.info/);
+    }
   });
 
   it('has an empty historical archive in this version', () => {

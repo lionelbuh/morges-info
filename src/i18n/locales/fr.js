@@ -36,6 +36,7 @@ export default {
       confirmed: 'Position vérifiée sur la carte par l’équipe Morges.info',
       estimated: 'Position approximative (± 25 m) indiquée par l’équipe Morges.info',
       'cross-checked': 'Position vérifiée par plusieurs sources',
+      team: 'Position fournie par l’équipe Morges.info, non recoupée',
       'single-source': 'Position issue d’une seule source',
       unverified: 'Position non vérifiée',
     },

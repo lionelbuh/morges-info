@@ -162,8 +162,11 @@ function render() {
   const places = visiblePlaces();
   sidebar.renderFilters(state.categories);
   sidebar.renderList(places, state.selectedId);
-  map.setPlaces(places);
-  map.select(state.selectedId);
+  // A place inside another one (markerOf) is shown through that place's marker.
+  const markerTargets = places.filter((p) => p.markerOf).map((p) => getPlace(p.markerOf));
+  map.setPlaces([...new Set([...places, ...markerTargets])]);
+  const selected = state.selectedId && getPlace(state.selectedId);
+  map.select(selected ? selected.markerOf || selected.id : null);
   searchClear.hidden = state.query.length === 0;
   listToggle.textContent = state.listOpen ? t('results.toggleHide') : t('results.toggleShow');
   listToggle.setAttribute('aria-expanded', String(state.listOpen));

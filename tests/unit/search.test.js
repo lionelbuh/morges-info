@@ -21,7 +21,7 @@ describe('search and filters', () => {
 
   it('matches names in any of the four languages', () => {
     expect(ids(filterPlaces(PLACES, { query: 'castle' }))).toContain('chateau');
-    expect(ids(filterPlaces(PLACES, { query: 'Bahnhof' }))).toEqual(['gare']);
+    expect(ids(filterPlaces(PLACES, { query: 'Bahnhof' }))[0]).toBe('gare'); // name match first
     expect(ids(filterPlaces(PLACES, { query: 'municipio' }))).toEqual(['hotel-de-ville']);
   });
 
@@ -38,9 +38,9 @@ describe('search and filters', () => {
 
   it('filters by category', () => {
     const lake = filterPlaces(PLACES, { categories: new Set(['lake']) });
-    expect(ids(lake).sort()).toEqual(['parc-independance', 'port', 'quai-lochmann']);
+    expect(ids(lake).sort()).toEqual(['parc-independance', 'parc-prairie', 'parc-vertou', 'port', 'quai-lochmann']);
     const two = filterPlaces(PLACES, { categories: new Set(['transport', 'culture']) });
-    expect(ids(two).sort()).toEqual(['beausobre', 'gare']);
+    expect(ids(two).sort()).toEqual(['beausobre', 'debarcadere-cgn', 'gare', 'maison-dessin-presse', 'musee-bolle', 'musee-forel', 'musee-paderewski']);
   });
 
   it('combines query and category', () => {

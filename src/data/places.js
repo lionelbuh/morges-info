@@ -12,8 +12,12 @@
  *  - 'confirmed'      : position checked visually on the map by the Morges.info team
  *  - 'cross-checked'  : two or more independent sources agree (within ~30 m)
  *  - 'single-source'  : one published source; should be confirmed on OpenStreetMap
- *  - 'estimated'      : location described by the Morges.info team, coordinates derived from
- *                       neighbouring published points (approximate; confirm on the map)
+ *  - 'estimated'      : coordinates derived from neighbouring published points or descriptions
+ *                       (approximate; confirm on the map)
+ *  - 'team'           : coordinates supplied by the Morges.info team, not cross-checked with a published source
+ *
+ * `markerOf: '<place id>'` = the place lies inside another one (e.g. a museum in the château):
+ * it is listed and searchable, but shares that place's marker on the map.
  *  - 'unverified'     : no reliable position yet (not drawn on the map)
  *
  * Optional fields follow src/data/schema.js: `address`, `website` and `openingHours` stay
@@ -60,14 +64,15 @@ export const PLACES = [
       it: 'Sulla riva del lago, all’estremità sud-occidentale del centro storico',
     },
     description: {
-      fr: 'Château savoyard construit en 1286 par Louis de Savoie, sur plan carré. De 1536 à 1798, il servit de résidence aux baillis bernois. Il abrite aujourd’hui plusieurs musées : le Musée militaire vaudois, le Musée de l’artillerie, le Musée suisse de la figurine historique et le Musée de la Gendarmerie vaudoise.',
-      en: 'Savoyard castle built in 1286 by Louis of Savoy on a square plan. From 1536 to 1798 it was the residence of the Bernese bailiffs. Today it houses several museums: the Vaud Military Museum, the Artillery Museum, the Swiss Museum of Historical Figurines and the Vaud Gendarmerie Museum.',
-      de: 'Savoyer Schloss, 1286 von Ludwig von Savoyen auf quadratischem Grundriss erbaut. Von 1536 bis 1798 diente es den Berner Landvögten als Residenz. Heute beherbergt es mehrere Museen: das Waadtländer Militärmuseum, das Artilleriemuseum, das Schweizerische Museum für historische Figuren und das Museum der Waadtländer Gendarmerie.',
-      it: 'Castello sabaudo costruito nel 1286 da Luigi di Savoia su pianta quadrata. Dal 1536 al 1798 fu la residenza dei balivi bernesi. Oggi ospita diversi musei: il Museo militare vodese, il Museo dell’artiglieria, il Museo svizzero della figurina storica e il Museo della Gendarmeria vodese.',
+      fr: 'Château savoyard construit en 1286 par Louis de Savoie, sur plan carré. De 1536 à 1798, il servit de résidence aux baillis bernois. Il abrite aujourd’hui plusieurs musées : le Musée militaire vaudois, le Musée de l’artillerie, le Musée suisse de la figurine historique et le Musée de la Gendarmerie vaudoise ; le Musée Paderewski s’y est également installé.',
+      en: 'Savoyard castle built in 1286 by Louis of Savoy on a square plan. From 1536 to 1798 it was the residence of the Bernese bailiffs. Today it houses several museums: the Vaud Military Museum, the Artillery Museum, the Swiss Museum of Historical Figurines and the Vaud Gendarmerie Museum; the Paderewski Museum has also moved in.',
+      de: 'Savoyer Schloss, 1286 von Ludwig von Savoyen auf quadratischem Grundriss erbaut. Von 1536 bis 1798 diente es den Berner Landvögten als Residenz. Heute beherbergt es mehrere Museen: das Waadtländer Militärmuseum, das Artilleriemuseum, das Schweizerische Museum für historische Figuren und das Museum der Waadtländer Gendarmerie; auch das Paderewski-Museum ist hier eingezogen.',
+      it: 'Castello sabaudo costruito nel 1286 da Luigi di Savoia su pianta quadrata. Dal 1536 al 1798 fu la residenza dei balivi bernesi. Oggi ospita diversi musei: il Museo militare vodese, il Museo dell’artiglieria, il Museo svizzero della figurina storica e il Museo della Gendarmeria vodese; vi si è insediato anche il Museo Paderewski.',
     },
     factSources: [
       { label: 'museums.ch — Château de Morges et ses musées', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/chateau-de-morges-et-ses-musees-2164.html' },
       { label: 'MySwitzerland — Château de Morges et ses musées', url: 'https://www.myswitzerland.com/en/experiences/chateau-de-morges-et-ses-musees/' },
+      { label: 'État de Vaud — Le château de Morges s’enrichit d’un cinquième musée (Paderewski)', url: 'https://www.vd.ch/actualites/communiques-de-presse-de-letat-de-vaud/detail/communique/le-chateau-de-morges-senrichit-dun-cinquieme-musee-1381336713' },
     ],
     address: null,
     website: null,
@@ -443,6 +448,348 @@ export const PLACES = [
     openingHours: null,
     photos: [],
     lastVerified: '2026-10-15',
+    archive: { photos: [] },
+  },
+  {
+    id: 'debarcadere-cgn',
+    category: 'transport',
+    coordinates: { lat: 46.508355, lng: 6.500553 },
+    geo: {
+      status: 'single-source',
+      sources: [
+        { label: 'Morges Région Tourisme — Débarcadère CGN (données de localisation de la page)', url: 'https://www.morges-tourisme.ch/landmarks/debarcadere-cgn-morges/' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51000, 6.49590 (≈ 400 m plus au nord-ouest, à l’intérieur de la ville). ' +
+        'Le débarcadère se trouve quai Igor-Stravinski, au bord du lac : le point publié par Morges Région Tourisme a été retenu. À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Débarcadère CGN',
+      en: 'CGN boat pier',
+      de: 'CGN-Schiffsanlegestelle',
+      it: 'Imbarcadero CGN',
+    },
+    location: {
+      fr: 'Quai Igor-Stravinski, au bord du lac',
+      en: 'Quai Igor-Stravinski, on the lakeshore',
+      de: 'Quai Igor-Stravinski, am Seeufer',
+      it: 'Quai Igor-Stravinski, sulla riva del lago',
+    },
+    description: {
+      fr: 'Débarcadère de la Compagnie générale de navigation sur le lac Léman (CGN). Les bateaux n’y font pas escale tous les jours : la desserte varie selon la saison, et des croisières à thème en partent aussi en hiver. Les billets peuvent notamment être achetés à bord.',
+      en: 'Pier of the Lake Geneva navigation company (CGN). Boats do not call every day: service varies with the season, and themed cruises also leave from here in winter. Tickets can be bought on board, among other options.',
+      de: 'Anlegestelle der Genfersee-Schifffahrtsgesellschaft CGN. Die Schiffe legen nicht täglich an: Das Angebot ändert sich je nach Saison, und im Winter starten hier auch Themenfahrten. Fahrkarten sind unter anderem an Bord erhältlich.',
+      it: 'Imbarcadero della Compagnia generale di navigazione sul Lago Lemano (CGN). I battelli non vi fanno scalo tutti i giorni: il servizio varia secondo la stagione e d’inverno partono da qui anche crociere a tema. I biglietti si possono acquistare anche a bordo.',
+    },
+    factSources: [
+      { label: 'Ville de Morges — CGN', url: 'https://www.morges.ch/vivre-a-morges/en-transports-publics/cgn--compagnie-generale-de-navigation-10486' },
+      { label: 'Morges Région Tourisme — Débarcadère CGN', url: 'https://www.morges-tourisme.ch/en/P968/cgn-pier-morges' },
+    ],
+    address: null,
+    website: 'https://www.cgn.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'musee-forel',
+    category: 'culture',
+    coordinates: { lat: 46.509167, lng: 6.498333 },
+    geo: {
+      status: 'cross-checked',
+      sources: [
+        { label: 'Wikidata Q3329046 — Musée Forel', url: 'https://www.wikidata.org/wiki/Q3329046' },
+        { label: 'Wikipédia — Musée Alexis-Forel', url: 'https://fr.wikipedia.org/wiki/Mus%C3%A9e_Alexis-Forel' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51090, 6.49590 (≈ 270 m plus au nord-ouest). Wikidata et Wikipédia concordent sur la ' +
+        'Grand-Rue 54 : leur position a été retenue. À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Musée Alexis Forel',
+      en: 'Alexis Forel Museum',
+      de: 'Musée Alexis Forel',
+      it: 'Museo Alexis Forel',
+    },
+    location: {
+      fr: 'Grand-Rue 54, dans la vieille ville',
+      en: 'Grand-Rue 54, in the old town',
+      de: 'Grand-Rue 54, in der Altstadt',
+      it: 'Grand-Rue 54, nel centro storico',
+    },
+    description: {
+      fr: 'Musée installé dans une maison historique de la Grand-Rue, achetée en 1918 par le graveur Alexis Forel et son épouse Emmeline, qui y installèrent leurs collections. On y découvre des poupées du XVIIIe siècle, des jeux et jouets anciens, du mobilier et des arts décoratifs, ainsi que, depuis 2010, des icônes russes des XVIe et XVIIe siècles.',
+      en: 'Museum in a historic house on the Grand-Rue, bought in 1918 by the engraver Alexis Forel and his wife Emmeline, who installed their collections there. It shows 18th-century dolls, old games and toys, furniture and decorative arts and, since 2010, Russian icons from the 16th and 17th centuries.',
+      de: 'Museum in einem historischen Haus an der Grand-Rue, das der Kupferstecher Alexis Forel und seine Frau Emmeline 1918 kauften und in dem sie ihre Sammlungen einrichteten. Zu sehen sind Puppen aus dem 18. Jahrhundert, alte Spiele und Spielzeug, Möbel und Kunsthandwerk sowie seit 2010 russische Ikonen aus dem 16. und 17. Jahrhundert.',
+      it: 'Museo ospitato in una casa storica della Grand-Rue, acquistata nel 1918 dall’incisore Alexis Forel e da sua moglie Emmeline, che vi sistemarono le loro collezioni. Vi si trovano bambole del Settecento, giochi e giocattoli antichi, mobili e arti decorative e, dal 2010, icone russe del XVI e XVII secolo.',
+    },
+    factSources: [
+      { label: 'museums.ch — Musée Alexis Forel', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-alexis-forel-2163.html' },
+      { label: 'MySwitzerland — Musée Alexis Forel', url: 'https://www.myswitzerland.com/en-id/experiences/musee-alexis-forel/' },
+    ],
+    address: 'Grand-Rue 54, 1110 Morges',
+    website: 'https://museeforel.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'musee-bolle',
+    category: 'culture',
+    coordinates: { lat: 46.507686, lng: 6.497765 },
+    geo: {
+      status: 'single-source',
+      sources: [
+        { label: 'Morges Région Tourisme — Musée Bolle (données de localisation de la page)', url: 'https://www.morges-tourisme.ch/landmarks/musee-bolle/' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51130, 6.49510 (≈ 450 m plus au nord, près de la gare). Le musée est rue ' +
+        'Louis-de-Savoie 73-75 : le point publié par Morges Région Tourisme (deux pages concordantes) a été retenu. À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Musée Bolle',
+      en: 'Bolle Museum',
+      de: 'Musée Bolle',
+      it: 'Museo Bolle',
+    },
+    location: {
+      fr: 'Rue Louis-de-Savoie 73-75, dans la vieille ville',
+      en: 'Rue Louis-de-Savoie 73-75, in the old town',
+      de: 'Rue Louis-de-Savoie 73-75, in der Altstadt',
+      it: 'Rue Louis-de-Savoie 73-75, nel centro storico',
+    },
+    description: {
+      fr: 'Musée installé dans une demeure du XVIIIe siècle de la vieille ville. Il conserve une collection de gravures, de cartes postales et de photographies anciennes consacrées au patrimoine de Morges et de la région lémanique, et présente des expositions temporaires. Anciennement Expo Fondation Bolle, il porte le nom de Musée Bolle depuis 2022.',
+      en: 'Museum in an 18th-century house in the old town. It holds a collection of engravings, postcards and old photographs recording the heritage of Morges and the Lake Geneva region, and presents temporary exhibitions. Formerly Expo Fondation Bolle, it has been called Musée Bolle since 2022.',
+      de: 'Museum in einem Haus aus dem 18. Jahrhundert in der Altstadt. Es bewahrt eine Sammlung von Stichen, Postkarten und alten Fotografien zum Erbe von Morges und der Genferseeregion und zeigt Wechselausstellungen. Früher Expo Fondation Bolle, heisst es seit 2022 Musée Bolle.',
+      it: 'Museo ospitato in una dimora settecentesca del centro storico. Conserva una collezione di incisioni, cartoline e fotografie d’epoca dedicate al patrimonio di Morges e della regione del Lemano e propone mostre temporanee. Già Expo Fondation Bolle, dal 2022 si chiama Musée Bolle.',
+    },
+    factSources: [
+      { label: 'museums.ch — Musée Bolle', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-bolle-2932.html' },
+      { label: 'Vaud Promotion — Retrospective 2008–2025 (Musée Bolle)', url: 'https://www.vaud.ch/en/tourism/events/morges-retrospective-2008-2025' },
+    ],
+    address: 'Rue Louis-de-Savoie 73-75, 1110 Morges',
+    website: 'https://museebolle.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'musee-paderewski',
+    category: 'culture',
+    // Inside the château: shares its marker on the map instead of stacking a second one.
+    coordinates: { lat: 46.506692, lng: 6.496704 },
+    markerOf: 'chateau',
+    geo: {
+      status: 'cross-checked',
+      sources: [
+        { label: 'museums.ch — Musée Paderewski (Le Château, rue du Château)', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-paderewski-2165.html' },
+        { label: 'Position du château : Wikipedia — Morges Castle', url: 'https://en.wikipedia.org/wiki/Morges_Castle' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51070, 6.49750 (≈ 450 m plus au nord), qui correspond peut-être à l’ancien ' +
+        'emplacement du musée (Grenier bernois, place du Casino, 1991–2016). Le musée étant aujourd’hui au château, il partage le marqueur du château.',
+    },
+    name: {
+      fr: 'Musée Paderewski',
+      en: 'Paderewski Museum',
+      de: 'Paderewski-Museum',
+      it: 'Museo Paderewski',
+    },
+    location: {
+      fr: 'Au château de Morges, rue du Château',
+      en: 'In Morges Castle, Rue du Château',
+      de: 'Im Schloss Morges, Rue du Château',
+      it: 'Nel castello di Morges, Rue du Château',
+    },
+    description: {
+      fr: 'Musée consacré à Ignacy Jan Paderewski (1860–1941), pianiste, compositeur et homme politique polonais, qui vécut au domaine de Riond-Bosson, à Morges, de 1897 à 1940 ; en 1919, il fut Premier ministre de Pologne. Photos, lettres, partitions et objets personnels sont présentés au château, où le musée s’est installé après avoir occupé le Grenier bernois de 1991 à 2016.',
+      en: 'Museum devoted to Ignacy Jan Paderewski (1860–1941), the Polish pianist, composer and statesman who lived at the Riond-Bosson estate in Morges from 1897 to 1940; in 1919 he was Prime Minister of Poland. Photographs, letters, scores and personal belongings are shown at the castle, where the museum moved after occupying the Grenier bernois from 1991 to 2016.',
+      de: 'Museum über Ignacy Jan Paderewski (1860–1941), polnischer Pianist, Komponist und Politiker, der von 1897 bis 1940 auf dem Gut Riond-Bosson in Morges lebte; 1919 war er polnischer Ministerpräsident. Fotos, Briefe, Partituren und persönliche Gegenstände werden im Schloss gezeigt, wohin das Museum zog, nachdem es von 1991 bis 2016 im Grenier bernois untergebracht war.',
+      it: 'Museo dedicato a Ignacy Jan Paderewski (1860–1941), pianista, compositore e uomo politico polacco che visse nella tenuta di Riond-Bosson a Morges dal 1897 al 1940; nel 1919 fu primo ministro della Polonia. Foto, lettere, spartiti e oggetti personali sono esposti al castello, dove il museo si è trasferito dopo aver occupato il Grenier bernois dal 1991 al 2016.',
+    },
+    factSources: [
+      { label: 'museums.ch — Musée Paderewski', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/musee-paderewski-2165.html' },
+      { label: 'Dictionnaire historique de la Suisse — Ignacy Jan Paderewski', url: 'https://hls-dhs-dss.ch/articles/028488' },
+      { label: 'Morges Région Tourisme — Musée Paderewski (Grenier bernois 1991–2016)', url: 'https://www.morges-tourisme.ch/en/P3915' },
+    ],
+    address: null,
+    website: 'https://paderewski-morges.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'maison-dessin-presse',
+    category: 'culture',
+    coordinates: { lat: 46.50876, lng: 6.49924 },
+    geo: {
+      status: 'cross-checked',
+      sources: [
+        { label: 'Mapcarta (données OpenStreetMap, node 1207861986)', url: 'https://mapcarta.com/fr/N1207861986' },
+        { label: 'Wikipédia — Maison du dessin de presse', url: 'https://fr.wikipedia.org/wiki/Maison_du_dessin_de_presse' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51120, 6.49530 (≈ 410 m plus au nord-ouest). OpenStreetMap et Wikipédia concordent ' +
+        'sur la rue Louis-de-Savoie 39 : leur position a été retenue. À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Maison du Dessin de Presse',
+      en: 'House of Press Cartooning',
+      de: 'Haus der Pressezeichnung',
+      it: 'Casa del disegno di stampa',
+    },
+    location: {
+      fr: 'Rue Louis-de-Savoie 39, dans la vieille ville',
+      en: 'Rue Louis-de-Savoie 39, in the old town',
+      de: 'Rue Louis-de-Savoie 39, in der Altstadt',
+      it: 'Rue Louis-de-Savoie 39, nel centro storico',
+    },
+    description: {
+      fr: 'Lieu d’exposition consacré au dessin de presse, ouvert en 2009. Il présente des expositions temporaires consacrées à des dessinatrices et dessinateurs de presse ; la première était dédiée à André Paul.',
+      en: 'Exhibition venue devoted to press cartooning, opened in 2009. It presents temporary exhibitions about press cartoonists; the first was devoted to André Paul.',
+      de: 'Ausstellungsort für Pressezeichnungen, 2009 eröffnet. Er zeigt Wechselausstellungen über Pressezeichnerinnen und Pressezeichner; die erste war André Paul gewidmet.',
+      it: 'Spazio espositivo dedicato al disegno di stampa, aperto nel 2009. Presenta mostre temporanee dedicate a disegnatrici e disegnatori di stampa; la prima era dedicata ad André Paul.',
+    },
+    factSources: [
+      { label: 'museums.ch — Maison du dessin de presse', url: 'https://www.museums.ch/fr/visite-au-musee/musees/musees/maison-du-dessin-de-presse-2733.html' },
+      { label: 'Le Temps — « André Paul levait le verre »', url: 'https://www.letemps.ch/culture/andre-paul-levait-verre' },
+    ],
+    address: 'Rue Louis-de-Savoie 39, 1110 Morges',
+    website: 'https://mddp.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'eglise-saint-francois-de-sales',
+    category: 'religious',
+    // Approximate: no published coordinates; see geo.note.
+    coordinates: { lat: 46.50904, lng: 6.50034 },
+    geo: {
+      status: 'estimated',
+      sources: [
+        { label: 'Mapcarta — église St-François-de-Sales à ≈ 190 m au sud du temple (données OpenStreetMap)', url: 'https://mapcarta.com/W102523526' },
+        { label: 'Adresse : Morges Région Tourisme — Rue Louis-de-Savoie 31', url: 'https://www.morges-tourisme.ch/fr/P4977' },
+      ],
+      note:
+        'Aucune coordonnée publiée trouvée. Point estimé à ≈ 190 m au sud du temple (Mapcarta), cohérent avec l’adresse rue ' +
+        'Louis-de-Savoie 31, voisine de la Maison du Dessin de Presse (n° 39). Point fourni par l’équipe Morges.info : 46.51200, 6.49770 ' +
+        '(≈ 390 m plus au nord-ouest, au nord du temple). À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Église catholique Saint-François-de-Sales',
+      en: 'St Francis de Sales Catholic Church',
+      de: 'Katholische Kirche Saint-François-de-Sales',
+      it: 'Chiesa cattolica di San Francesco di Sales',
+    },
+    location: {
+      fr: 'Rue Louis-de-Savoie 31, dans la vieille ville',
+      en: 'Rue Louis-de-Savoie 31, in the old town',
+      de: 'Rue Louis-de-Savoie 31, in der Altstadt',
+      it: 'Rue Louis-de-Savoie 31, nel centro storico',
+    },
+    description: {
+      fr: 'Église catholique de style néogothique, construite en 1842 d’après les plans de l’architecte Henri Perregaux et consacrée le 6 octobre 1844.',
+      en: 'Neo-Gothic Catholic church, built in 1842 to plans by the architect Henri Perregaux and consecrated on 6 October 1844.',
+      de: 'Neugotische katholische Kirche, 1842 nach Plänen des Architekten Henri Perregaux erbaut und am 6. Oktober 1844 geweiht.',
+      it: 'Chiesa cattolica in stile neogotico, costruita nel 1842 su progetto dell’architetto Henri Perregaux e consacrata il 6 ottobre 1844.',
+    },
+    factSources: [
+      { label: 'Morges Région Tourisme — L’Église catholique St-François de Sales', url: 'https://www.morges-tourisme.ch/fr/P4977' },
+      { label: 'theodia — Église Saint-François de Sales, Morges', url: 'https://theodia.org/fr?place=657' },
+    ],
+    address: 'Rue Louis-de-Savoie 31, 1110 Morges',
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'parc-vertou',
+    category: 'lake',
+    coordinates: { lat: 46.51112, lng: 6.51469 },
+    geo: {
+      status: 'single-source',
+      sources: [
+        { label: 'search.ch — carte « Morges, Parc de Vertou » (coordonnées suisses 529089 / 151508, converties)', url: 'https://map.search.ch/Morges,Parc-de-Vertou@529089,151508.fr.html' },
+      ],
+      note:
+        'Point fourni par l’équipe Morges.info : 46.51400, 6.49600 (≈ 1,5 km plus à l’ouest, près du théâtre de Beausobre / avenue de ' +
+        'Vertou). La Ville situe le parc au sud-est de la ville, au bord du lac : le point de la carte search.ch a été retenu. Une autre ' +
+        'source (Waze, skatepark) indique ≈ 46.516, 6.513. À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Parc de Vertou',
+      en: 'Parc de Vertou',
+      de: 'Parc de Vertou',
+      it: 'Parco di Vertou',
+    },
+    location: {
+      fr: 'Au sud-est de la ville, au bord du lac',
+      en: 'South-east of the town, on the lakeshore',
+      de: 'Im Südosten der Stadt, am Seeufer',
+      it: 'A sud-est della città, sulla riva del lago',
+    },
+    description: {
+      fr: 'Parc au bord du Léman qui associe espaces de détente et installations sportives : aire de jeux, skatepark rénové en 2017 et parcours de street workout. Il porte le nom de Vertou, ville voisine de Nantes jumelée avec Morges depuis 1957.',
+      en: 'Lakeside park combining relaxation areas and sports facilities: a playground, a skatepark renovated in 2017 and a street-workout course. It is named after Vertou, a town near Nantes twinned with Morges since 1957.',
+      de: 'Park am Genfersee, der Erholungsflächen und Sportanlagen verbindet: Spielplatz, 2017 erneuerter Skatepark und Street-Workout-Parcours. Er ist nach Vertou benannt, einer Stadt bei Nantes, die seit 1957 Partnerstadt von Morges ist.',
+      it: 'Parco sulla riva del Lemano che unisce spazi di relax e impianti sportivi: parco giochi, skatepark rinnovato nel 2017 e percorso di street workout. Porta il nome di Vertou, città vicino a Nantes gemellata con Morges dal 1957.',
+    },
+    factSources: [
+      { label: 'Ville de Morges — Parc de Vertou', url: 'https://www.morges.ch/vivre-a-morges/sites/parc-de-vertou-200609' },
+    ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
+    archive: { photos: [] },
+  },
+  {
+    id: 'parc-prairie',
+    category: 'lake',
+    coordinates: { lat: 46.514, lng: 6.503 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Équipe Morges.info — position fournie (16.10.2026)' }],
+      note:
+        'Position fournie par l’équipe Morges.info ; aucune coordonnée publiée trouvée pour la recouper. La Ville situe le parc face à la ' +
+        'patinoire des Eaux-Minérales (avenue Warnery 8). À confirmer sur la carte.',
+    },
+    name: {
+      fr: 'Parc de la Prairie',
+      en: 'Parc de la Prairie',
+      de: 'Parc de la Prairie',
+      it: 'Parco della Prairie',
+    },
+    location: {
+      fr: 'Face à la patinoire des Eaux-Minérales, à quelques minutes à pied de la gare',
+      en: 'Opposite the Eaux-Minérales ice rink, a few minutes’ walk from the station',
+      de: 'Gegenüber der Eisbahn Eaux-Minérales, wenige Gehminuten vom Bahnhof',
+      it: 'Di fronte alla pista di pattinaggio delle Eaux-Minérales, a pochi minuti a piedi dalla stazione',
+    },
+    description: {
+      fr: 'Parc public de la Ville de Morges, situé face à la patinoire des Eaux-Minérales, à quelques minutes à pied de la gare.',
+      en: 'Public park of the Ville de Morges, opposite the Eaux-Minérales ice rink, a few minutes’ walk from the station.',
+      de: 'Öffentlicher Park der Stadt Morges, gegenüber der Eisbahn Eaux-Minérales, wenige Gehminuten vom Bahnhof entfernt.',
+      it: 'Parco pubblico della Città di Morges, di fronte alla pista di pattinaggio delle Eaux-Minérales, a pochi minuti a piedi dalla stazione.',
+    },
+    factSources: [
+      { label: 'Ville de Morges — Parc de la Prairie', url: 'https://www.morges.ch/vivre-a-morges/sites/parc-de-la-prairie-200610' },
+    ],
+    address: null,
+    website: null,
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-16',
     archive: { photos: [] },
   },
 ];

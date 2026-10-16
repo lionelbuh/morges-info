@@ -168,7 +168,7 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
     setPlaces(places) {
       const wanted = new Set();
       places.forEach((place) => {
-        if (!place.coordinates) return;
+        if (!place.coordinates || place.markerOf) return;
         wanted.add(place.id);
         if (!markers.has(place.id)) {
           const elMarker = markerElement(place);

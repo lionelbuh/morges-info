@@ -880,6 +880,7 @@ body.page-map {
   background: var(--sage-pale);
   color: #3f5634;
 }
+.panel-geo--team,
 .panel-geo--estimated {
   background: #f4ead6;
   color: #7a5414;

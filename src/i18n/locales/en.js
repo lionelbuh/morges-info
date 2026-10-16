@@ -36,6 +36,7 @@ export default {
       confirmed: 'Position checked on the map by the Morges.info team',
       estimated: 'Approximate position (± 25 m) given by the Morges.info team',
       'cross-checked': 'Position confirmed by several sources',
+      team: 'Position supplied by the Morges.info team, not cross-checked',
       'single-source': 'Position from a single source',
       unverified: 'Position not verified',
     },

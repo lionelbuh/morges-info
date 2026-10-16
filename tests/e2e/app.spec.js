@@ -48,6 +48,16 @@ async function waitForIdle(page) {
 }
 
 /** Screen position of each marker's tip (bottom centre of the marker element). */
+/** Centre the map on a place at street level, where neighbouring markers no longer overlap. */
+async function zoomTo(page, id, zoom = 17.5) {
+  const place = PLACES.find((p) => p.id === id);
+  await page.evaluate(({ lng, lat, zoom }) => document.getElementById('map').__maplibre.jumpTo({ center: [lng, lat], zoom }), {
+    ...place.coordinates,
+    zoom,
+  });
+  await waitForIdle(page);
+}
+
 async function markerOffsets(page) {
   return page.evaluate(() => {
     const container = document.getElementById('map').getBoundingClientRect();
@@ -79,8 +89,8 @@ test('loads in French by default with MapLibre map, 10 markers and attribution',
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   await expect(page).toHaveTitle(/Carte interactive de Morges/);
   await expect(page.locator('.lang-btn[data-lang="fr"]')).toHaveAttribute('aria-current', 'true');
-  await expect(markers(page)).toHaveCount(10);
-  await expect(page.locator('#results-count')).toHaveText('10 lieux');
+  await expect(markers(page)).toHaveCount(17);
+  await expect(page.locator('#results-count')).toHaveText('18 lieux');
   const attribution = page.locator('.maplibregl-ctrl-attrib');
   await expect(attribution).toBeVisible();
   await expect(attribution).toContainText('OpenStreetMap');
@@ -109,6 +119,7 @@ test('clicking a marker opens the matching information panel', async ({ page }) 
     await page.goto('/carte/');
     await mapReady(page);
     await waitForIdle(page);
+    await zoomTo(page, id);
     await marker(page, id).click();
     await expect(panel(page)).toBeVisible();
     await expect(panel(page).locator('.panel-title')).toHaveText(place.name.fr);
@@ -135,6 +146,7 @@ test('2D / 3D switch tilts the map, shows extruded buildings and the height note
   expect(await gestures()).toEqual([true, true]); // rotate / tilt only in 3D
 
   // markers, search and panel keep working in 3D
+  await zoomTo(page, 'temple');
   await marker(page, 'temple').click();
   await expect(panel(page).locator('.panel-title')).toHaveText('Temple de Morges');
   await page.locator('#search-input').fill('port');
@@ -216,9 +228,12 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await page.locator('#search-input').fill('chateau');
   await openList(page);
   await expect(page.locator('.place-item').first()).toHaveAttribute('data-place-id', 'chateau');
-  await expect(markers(page)).not.toHaveCount(10);
+  await expect(markers(page)).not.toHaveCount(17);
   await page.locator('#search-input').fill('Bahnhof'); // German name works in the French UI
-  await expect(markers(page)).toHaveCount(1);
+  await expect(marker(page, 'gare')).toHaveCount(1);
+  await expect(markers(page)).not.toHaveCount(17);
+  await openList(page);
+  await expect(page.locator('.place-item').first()).toHaveAttribute('data-place-id', 'gare');
   await page.locator('#search-input').press('Enter');
   await expect(panel(page).locator('.panel-title')).toHaveText('Gare de Morges');
 
@@ -227,18 +242,18 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await expect(page.locator('.place-list .empty')).toBeVisible();
   await expect(markers(page)).toHaveCount(0);
   await page.locator('#search-clear').click();
-  await expect(markers(page)).toHaveCount(10);
+  await expect(markers(page)).toHaveCount(17);
 });
 
 test('category filters work and can be reset', async ({ page }) => {
   await page.goto('/carte/');
   await mapReady(page);
   await page.locator('.chip[data-category="lake"]').click();
-  await expect(markers(page)).toHaveCount(3);
+  await expect(markers(page)).toHaveCount(5);
   await page.locator('.chip[data-category="culture"]').click();
-  await expect(markers(page)).toHaveCount(4);
+  await expect(markers(page)).toHaveCount(10); // 5 lake + 4 museums/theatre + the château hosting the Paderewski museum
   await page.locator('.chip[data-category=""]').click();
-  await expect(markers(page)).toHaveCount(10);
+  await expect(markers(page)).toHaveCount(17);
 });
 
 test('selecting from the list opens the panel; Place du Marché is mapped as an approximate position', async ({ page }) => {

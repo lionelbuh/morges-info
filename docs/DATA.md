@@ -28,7 +28,7 @@ non vérifiés), `photos` (photos actuelles avec auteur et licence), `lastVerifi
 4. Lancer `npm run check` et `npm run test:e2e` (les tests e2e comptent les marqueurs : mettre à jour les
    nombres attendus).
 
-## État actuel (revérifié le 15 octobre 2026)
+## État actuel (revérifié le 15 octobre 2026 ; 8 lieux ajoutés le 16 octobre 2026)
 
 Les positions ont été vérifiées par recherche web (Wikipedia, Wikidata, Mapcarta/OSM, annuaires nautiques,
 annuaires de rues, etc.). **L'accès direct à OpenStreetMap, Nominatim, Overpass, Wikidata et au géoportail
@@ -49,6 +49,14 @@ l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emp
 | Port de Morges | cross-checked | trois annuaires nautiques concordent |
 | Gare de Morges | cross-checked | Wikipedia et Structurae concordent |
 | Théâtre de Beausobre | cross-checked | Mapcarta (OSM node 6444731534) et Wikipédia concordent |
+| Débarcadère CGN | single-source | point de Morges Région Tourisme (quai Igor-Stravinski, bord du lac). Point fourni par l'équipe (46.51000, 6.49590) ≈ 400 m plus au nord-ouest, non retenu — **à confirmer** |
+| Musée Alexis Forel | cross-checked | Wikidata et Wikipédia concordent (Grand-Rue 54). Point de l'équipe ≈ 270 m plus au nord-ouest, non retenu — **à confirmer** |
+| Musée Bolle | single-source | Morges Région Tourisme (deux pages, rue Louis-de-Savoie 73-75). Point de l'équipe ≈ 450 m plus au nord, non retenu — **à confirmer** |
+| Musée Paderewski | cross-checked | installé au château (museums.ch, État de Vaud) : partage le marqueur du château (`markerOf`). Le point de l'équipe correspond peut-être à l'ancien emplacement (Grenier bernois, 1991–2016) |
+| Maison du Dessin de Presse | cross-checked | OpenStreetMap (Mapcarta) et Wikipédia concordent (rue Louis-de-Savoie 39). Point de l'équipe ≈ 410 m plus au nord-ouest, non retenu — **à confirmer** |
+| Église Saint-François-de-Sales | estimated | aucune coordonnée publiée ; point estimé à ≈ 190 m au sud du temple (Mapcarta), cohérent avec la rue Louis-de-Savoie 31. Point de l'équipe ≈ 390 m plus au nord-ouest — **à confirmer** |
+| Parc de Vertou | single-source | carte search.ch (coordonnées suisses converties), au bord du lac au sud-est de la ville. Point de l'équipe ≈ 1,5 km plus à l'ouest ; Waze indique ≈ 46.516, 6.513 — **à confirmer** |
+| Parc de la Prairie | team | position fournie par l'équipe (46.51400, 6.50300), sans source publiée pour la recouper — **à confirmer** |
 
 Les traductions EN/DE/IT des descriptions ont été rédigées à partir du texte français. Une relecture par
 des locuteurs natifs est recommandée.
