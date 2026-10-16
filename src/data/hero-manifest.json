@@ -1,1 +1,133 @@
-{}
+{
+  "id": "chateau-morges-aerien-jaquet-2016",
+  "original": {
+    "width": 2000,
+    "height": 1125
+  },
+  "crops": {
+    "wide": {
+      "aspect": 2,
+      "box": {
+        "left": 0,
+        "top": 63,
+        "width": 2000,
+        "height": 1000
+      },
+      "files": {
+        "avif": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-960.avif",
+            "width": 960,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1440.avif",
+            "width": 1440,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1920.avif",
+            "width": 1920,
+            "height": 960
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-960.webp",
+            "width": 960,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1440.webp",
+            "width": 1440,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1920.webp",
+            "width": 1920,
+            "height": 960
+          }
+        ],
+        "jpg": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-960.jpg",
+            "width": 960,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1440.jpg",
+            "width": 1440,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-wide-1920.jpg",
+            "width": 1920,
+            "height": 960
+          }
+        ]
+      }
+    },
+    "tall": {
+      "aspect": 1,
+      "box": {
+        "left": 678,
+        "top": 0,
+        "width": 1125,
+        "height": 1125
+      },
+      "files": {
+        "avif": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-480.avif",
+            "width": 480,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-720.avif",
+            "width": 720,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-1080.avif",
+            "width": 1080,
+            "height": 1080
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-480.webp",
+            "width": 480,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-720.webp",
+            "width": 720,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-1080.webp",
+            "width": 1080,
+            "height": 1080
+          }
+        ],
+        "jpg": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-480.jpg",
+            "width": 480,
+            "height": 480
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-720.jpg",
+            "width": 720,
+            "height": 720
+          },
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-tall-1080.jpg",
+            "width": 1080,
+            "height": 1080
+          }
+        ]
+      }
+    }
+  }
+}

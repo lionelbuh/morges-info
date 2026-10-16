@@ -178,6 +178,8 @@ export function heroPhoto(photo, manifest) {
       ${sources.join('\n      ')}
       <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="(max-width: 1160px) 100vw, 1120px" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async" />
     </picture>
-    <figcaption class="hero-credit">${label} <a href="${e(photo.sourceUrl)}" target="_blank" rel="noopener">${e(photo.creator)}</a>, <a href="${e(photo.licenceUrl)}" target="_blank" rel="noopener license">${e(photo.licence)}</a>, via ${e(photo.sourceName)} (${e(localized(photo.changes))})</figcaption>
+    <figcaption class="hero-credit">${label} ${e(photo.creator)}${photo.creatorDetail ? ` – ${e(photo.creatorDetail)}` : ''}${
+      photo.creatorUrl ? ` (<a href="${e(photo.creatorUrl)}" target="_blank" rel="noopener">${e(photo.creatorUrlLabel || photo.creatorUrl)}</a>)` : ''
+    }, <a href="${e(photo.licenceUrl)}" target="_blank" rel="noopener license">${e(photo.licence)}</a>, <a href="${e(photo.sourceUrl)}" target="_blank" rel="noopener">${e(photo.sourceName)}</a> (${e(localized(photo.changes))})</figcaption>
   </figure>`;
 }

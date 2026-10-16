@@ -60,6 +60,13 @@ test('home: map preview with markers, places, practical info and featured story;
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
   await expect(page.locator('.feature-story')).toBeVisible();
   await expect(page.locator('#home-businesses')).toHaveCount(0); // no verified business yet
+  // hero photograph: loaded, described, credited with its licence
+  const hero = page.locator('.hero-photo img');
+  await expect(hero).toHaveAttribute('alt', /château de Morges/);
+  await expect.poll(() => hero.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+  expect(await hero.evaluate((img) => img.currentSrc)).toMatch(/\.avif$/);
+  await expect(page.locator('.hero-credit a[href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr"]')).toHaveText('CC BY-SA 4.0');
+  await expect(page.locator('.hero-credit')).toContainText('D. Jaquet');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker')).toHaveCount(10);
   await expect(page.locator('#map-preview .maplibregl-ctrl-attrib')).toContainText('OpenStreetMap');

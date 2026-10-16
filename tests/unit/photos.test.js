@@ -18,8 +18,9 @@ describe('hero photograph', () => {
 
   it('records author, source, licence, changes and alt text in four languages', () => {
     expect(validateHeroPhoto(HERO_PHOTO)).toEqual([]);
-    expect(HERO_PHOTO.creator).toBe('Pierre Bona');
-    expect(HERO_PHOTO.licence).toBe('CC BY-SA 3.0');
+    expect(HERO_PHOTO.creator).toBe('D. Jaquet');
+    expect(HERO_PHOTO.licence).toBe('CC BY-SA 4.0');
+    expect(HERO_PHOTO.attribution).toContain('curid=61175456');
   });
 
   it('is not shown until the responsive files have been generated', () => {
@@ -27,21 +28,26 @@ describe('hero photograph', () => {
     expect(heroPhoto(HERO_PHOTO, { id: 'other', crops: fakeManifest.crops })).toBe('');
   });
 
-  it('matches the committed manifest (empty, or generated for this photo)', () => {
-    if (Object.keys(heroManifest).length) expect(heroManifest.id).toBe(HERO_PHOTO.id);
+  it('ships generated files for this photo (wide 2:1 and square crops)', () => {
+    expect(heroManifest.id).toBe(HERO_PHOTO.id);
+    expect(heroManifest.crops.wide.box.width / heroManifest.crops.wide.box.height).toBe(2);
+    expect(heroManifest.crops.tall.box.width).toBe(heroManifest.crops.tall.box.height);
+    for (const fmt of ['avif', 'webp', 'jpg']) expect(heroManifest.crops.wide.files[fmt].length).toBeGreaterThan(0);
   });
 
   it('renders AVIF → WebP → JPEG, a tall crop for phones, alt text and the licence credit', () => {
     const html = heroPhoto(HERO_PHOTO, fakeManifest);
     expect(html.indexOf('image/avif')).toBeLessThan(html.indexOf('image/webp'));
     expect(html).toContain('media="(max-width: 700px)"');
-    expect(html).toContain('alt="Le château de Morges, vu du côté nord-est."');
-    expect(html).toContain('href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr"');
-    expect(html).toContain('Pierre Bona');
+    expect(html).toContain('alt="Vue aérienne du château de Morges');
+    expect(html).toContain('href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr"');
+    expect(html).toContain('D. Jaquet – Archéodom 2016');
+    expect(html).toContain('href="https://www.chateau-morges.ch"');
+    expect(html).toContain('href="https://commons.wikimedia.org/w/index.php?curid=61175456"');
     expect(html).toContain('(recadrée)');
     expect(html).toContain('fetchpriority="high"');
     setLang('de', { persist: false });
-    expect(heroPhoto(HERO_PHOTO, fakeManifest)).toContain('alt="Das Schloss Morges, von Nordosten gesehen."');
+    expect(heroPhoto(HERO_PHOTO, fakeManifest)).toContain('alt="Luftaufnahme des Schlosses Morges');
   });
 
   it('crops around the focal point without leaving the image', () => {

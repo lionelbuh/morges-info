@@ -10,16 +10,21 @@ import { validateText } from './schema.js';
  * text-only introduction.
  */
 export const HERO_PHOTO = {
-  id: 'chateau-morges-bona-2009',
-  /** Original file, downloaded unchanged from the source page. */
-  source: 'assets/photos/Morges_chateau_Pierre_Bona_2009.jpg',
-  title: 'Morges château.jpg',
-  creator: 'Pierre Bona',
-  date: '2009-04',
-  sourceUrl: 'https://commons.wikimedia.org/wiki/File:Morges_ch%C3%A2teau.jpg',
+  id: 'chateau-morges-aerien-jaquet-2016',
+  /** Original file as received (2000 × 1125 px), kept unchanged. */
+  source: 'assets/photos/Chateau_de_Morges_aerien_D_Jaquet_Archeodom_2016.jpg',
+  creator: 'D. Jaquet',
+  creatorDetail: 'Archéodom 2016',
+  creatorUrl: 'https://www.chateau-morges.ch',
+  creatorUrlLabel: 'www.chateau-morges.ch',
+  date: '2016',
+  sourceUrl: 'https://commons.wikimedia.org/w/index.php?curid=61175456',
   sourceName: 'Wikimedia Commons',
-  licence: 'CC BY-SA 3.0',
-  licenceUrl: 'https://creativecommons.org/licenses/by-sa/3.0/deed.fr',
+  licence: 'CC BY-SA 4.0',
+  licenceUrl: 'https://creativecommons.org/licenses/by-sa/4.0/deed.fr',
+  /** Attribution exactly as given on the Commons page (supplied by the Morges.info team). */
+  attribution:
+    'By D. Jaquet - Template:Archéodom2016 www.chateau-morges.ch, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=61175456',
   /** Our adaptation (crops, resizing) is shared under the same licence. */
   changes: {
     fr: 'recadrée',
@@ -28,28 +33,32 @@ export const HERO_PHOTO = {
     it: 'ritagliata',
   },
   alt: {
-    fr: 'Le château de Morges, vu du côté nord-est.',
-    en: 'Morges Castle, seen from the north-east.',
-    de: 'Das Schloss Morges, von Nordosten gesehen.',
-    it: 'Il castello di Morges, visto da nord-est.',
+    fr: 'Vue aérienne du château de Morges et de ses quatre tours d’angle, avec le port, ses voiliers et le lac Léman en arrière-plan.',
+    en: 'Aerial view of Morges Castle and its four corner towers, with the harbour, its sailing boats and Lake Geneva behind.',
+    de: 'Luftaufnahme des Schlosses Morges mit seinen vier Ecktürmen, dahinter der Hafen mit Segelbooten und der Genfersee.',
+    it: 'Veduta aerea del castello di Morges con le sue quattro torri angolari, il porto con le barche a vela e, sullo sfondo, il Lago Lemano.',
   },
   /**
-   * Crops: aspect ratio and focal point (0–1 from the left / top). To be tuned
-   * after viewing the photo so that the château and its towers stay in frame.
+   * Crops: aspect ratio and focal point (0–1 from the left / top).
+   * wide (desktop, 2:1): full width, keeps the harbour towers and the whole château.
+   * square (phones, 1:1): centred on the château so that all four towers stay in frame.
    */
   crops: {
-    wide: { aspect: 21 / 9, focusX: 0.5, focusY: 0.5, widths: [960, 1440, 1920, 2560] },
-    tall: { aspect: 4 / 5, focusX: 0.5, focusY: 0.5, widths: [480, 720, 960] },
+    wide: { aspect: 2, focusX: 0.5, focusY: 0.5, widths: [960, 1440, 1920] },
+    tall: { aspect: 1, focusX: 0.62, focusY: 0.5, widths: [480, 720, 1080] },
   },
-  /** Title over the photo only if it does not hide the château (decided after review). */
+  /** No title over the photo: the sky-free aerial view would put text on the château or the harbour. */
   overlayTitle: false,
-  /** Licence checked on the source page by the Morges.info team (date), or null. */
-  licenceVerified: null,
+  /**
+   * Licence status: attribution and CC BY-SA 4.0 provided by the Morges.info team from the
+   * Commons page on 2026-10-16 (not re-checked from the development environment, which cannot reach Commons).
+   */
+  licenceVerified: '2026-10-16',
 };
 
 export function validateHeroPhoto(photo) {
   const errors = [];
-  for (const key of ['id', 'source', 'creator', 'sourceUrl', 'sourceName', 'licence', 'licenceUrl']) {
+  for (const key of ['id', 'source', 'creator', 'sourceUrl', 'sourceName', 'licence', 'licenceUrl', 'attribution']) {
     if (typeof photo[key] !== 'string' || !photo[key].trim()) errors.push(`hero.${key} is required`);
   }
   if (!/^https:\/\//.test(photo.sourceUrl || '')) errors.push('hero.sourceUrl must be https');
