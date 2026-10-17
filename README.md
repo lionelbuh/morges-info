@@ -27,6 +27,9 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
   « Contribuer », « Qui sommes-nous » et les mentions légales ; l'adresse est écrite en entités HTML dans le code
   source pour gêner les robots collecteurs. Les contributions arrivent par e-mail : **aucun envoi public**, rien
   n'est publié sans vérification ni accord (voir [`docs/PHOTOS.md`](docs/PHOTOS.md))
+- **Mesure d'audience :** Cloudflare Web Analytics, sans cookies, seulement sur le domaine en ligne, désactivable
+  (Do Not Track, Global Privacy Control, bouton sur les mentions légales). Active dès que `ANALYTICS_TOKEN` est
+  renseigné dans `src/site/config.js` — voir [`docs/ANALYTICS.md`](docs/ANALYTICS.md)
 - **Partage :** image d'aperçu 1200 × 630 (`og:image`) générée par `npm run images` à partir de la photo d'accueil
 - **Fiche d'un lieu :** elle s'ouvre en plein écran (ordinateur, tablette et téléphone), le texte dans une colonne
   de lecture ; « Retour à la carte », ×, Échap ou le bouton Retour du navigateur la referment, et la carte est

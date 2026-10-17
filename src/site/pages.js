@@ -33,7 +33,7 @@ import { CONTACT_EMAIL } from './config.js';
 import { formatDate } from './format.js';
 
 /** Date shown at the bottom of the legal notice; change it when the text changes. */
-const LEGAL_UPDATED = '2026-10-17';
+const LEGAL_UPDATED = '2026-10-17'; // audience statistics section added
 
 /** Places highlighted on the home page (all have verified or confirmed positions). */
 export const HOME_PLACE_IDS = ['chateau', 'port', 'parc-independance', 'temple'];
@@ -279,7 +279,17 @@ function renderLegal() {
   return `${pageIntro(t('legal.title'), t('legal.intro'))}
   ${block('publisher')}
   ${block('contact', ` ${emailLink()}`)}
-  ${['data', 'photos', 'storage', 'services', 'rights'].map((k) => block(k)).join('')}
+  ${['data', 'photos', 'storage'].map((k) => block(k)).join('')}
+  <section class="section prose" id="mesure-audience">
+    <h2>${e(t('legal.analyticsTitle'))}</h2>
+    <p>${e(t('legal.analyticsText'))}</p>
+    <p>${e(t('legal.analyticsOptOut'))}</p>
+    <p class="analytics-control">
+      <button type="button" class="btn btn-ghost" data-analytics-toggle hidden></button>
+      <span class="analytics-status" role="status"></span>
+    </p>
+  </section>
+  ${['services', 'rights'].map((k) => block(k)).join('')}
   ${block('credits', ` <a href="${pageHref('about', lang)}">${e(t('nav.about'))}</a>`)}
   <p class="verified legal-updated">${e(t('legal.updated', { date: formatDate(LEGAL_UPDATED, lang) }))}</p>`;
 }
