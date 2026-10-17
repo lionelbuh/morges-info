@@ -101,6 +101,18 @@ test('shared links show a preview image', async ({ page, request }) => {
   expect(res.headers()['content-type']).toContain('image/jpeg');
 });
 
+test('404 page: translated, not indexed, links back to the site', async ({ page }) => {
+  await page.goto('/404.html');
+  await expect(page.locator('main h1')).toHaveText(fr.notfound.title);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+  await expect(page.locator('.site-footer a[href^="/404"]')).toHaveCount(0);
+  await page.locator('.lang-btn[data-lang="de"]').click();
+  await expect(page.locator('main h1')).toHaveText(de.notfound.title);
+  await page.locator('.not-found .btn').first().click();
+  await expect(page).toHaveURL(/\/\?lang=de$/);
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
@@ -245,7 +257,7 @@ test('all internal links resolve (no 404)', async ({ page, request }) => {
 
 test('SEO files: sitemap lists every page, robots points to it', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
-  for (const p of PAGES) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
+  for (const p of PAGES.filter((x) => x.listed !== false)) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
   const robots = await (await request.get('/robots.txt')).text();
   expect(robots).toContain('Sitemap: https://morges.info/sitemap.xml');
 });

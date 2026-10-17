@@ -9,17 +9,25 @@ export const PRACTICAL = [
     id: 'marche',
     title: { fr: 'Marché hebdomadaire', en: 'Weekly market', de: 'Wochenmarkt', it: 'Mercato settimanale' },
     text: {
-      fr: 'Toute l’année sur la Grand-Rue piétonne, le mercredi et le samedi matin. Horaires indiqués par la Ville de Morges : mercredi de 8 h à 13 h 30, samedi de 8 h à 14 h ; du 1er novembre au 31 mars, ouverture à 8 h 30.',
-      en: 'All year round on the pedestrian Grand-Rue, on Wednesday and Saturday mornings. Hours given by the Ville de Morges: Wednesday 8 am to 1.30 pm, Saturday 8 am to 2 pm; from 1 November to 31 March, opening at 8.30 am.',
-      de: 'Das ganze Jahr in der Fussgängerzone Grand-Rue, am Mittwoch- und Samstagvormittag. Zeiten laut Stadt Morges: Mittwoch 8 bis 13.30 Uhr, Samstag 8 bis 14 Uhr; vom 1. November bis 31. März Beginn um 8.30 Uhr.',
-      it: 'Tutto l’anno nella Grand-Rue pedonale, il mercoledì e il sabato mattina. Orari indicati dalla Città di Morges: mercoledì dalle 8 alle 13.30, sabato dalle 8 alle 14; dal 1° novembre al 31 marzo apertura alle 8.30.',
+      fr: 'Toute l’année sur la Grand-Rue piétonne, le mercredi et le samedi matin. Mercredi de 8 h 30 à 13 h (ou de 8 h à 13 h 30 selon les périodes de l’année) ; samedi de 8 h 30 à 14 h (ou de 8 h à 14 h selon les périodes de l’année).',
+      en: 'All year round on the pedestrian Grand-Rue, on Wednesday and Saturday mornings. Wednesday 8.30 am to 1 pm (or 8 am to 1.30 pm, depending on the time of year); Saturday 8.30 am to 2 pm (or 8 am to 2 pm, depending on the time of year).',
+      de: 'Das ganze Jahr in der Fussgängerzone Grand-Rue, am Mittwoch- und Samstagvormittag. Mittwoch 8.30 bis 13 Uhr (je nach Jahreszeit 8 bis 13.30 Uhr); Samstag 8.30 bis 14 Uhr (je nach Jahreszeit 8 bis 14 Uhr).',
+      it: 'Tutto l’anno nella Grand-Rue pedonale, il mercoledì e il sabato mattina. Mercoledì dalle 8.30 alle 13 (o dalle 8 alle 13.30, secondo il periodo dell’anno); sabato dalle 8.30 alle 14 (o dalle 8 alle 14, secondo il periodo dell’anno).',
     },
     placeId: 'grand-rue',
     sources: [
       { label: 'Ville de Morges — Inscription aux marchés', url: 'https://www.morges.ch/vivre-a-morges/police-secours-et-securite/police-du-commerce/activites-soumises-a-autorisation/inscription-aux-marches-9070' },
       { label: 'Morges Région Tourisme — Marché de Morges', url: 'https://www.morges-tourisme.ch/en/P7222/morges-market' },
+      {
+        label: {
+          fr: 'Morges.info — horaires confirmés par l’équipe (17.10.2026)',
+          en: 'Morges.info — hours confirmed by the team (17.10.2026)',
+          de: 'Morges.info — Zeiten vom Team bestätigt (17.10.2026)',
+          it: 'Morges.info — orari confermati dalla redazione (17.10.2026)',
+        },
+      },
     ],
-    lastVerified: '2026-10-15',
+    lastVerified: '2026-10-17',
   },
   {
     id: 'gare',

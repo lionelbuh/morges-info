@@ -284,6 +284,20 @@ function renderLegal() {
   <p class="verified legal-updated">${e(t('legal.updated', { date: formatDate(LEGAL_UPDATED, lang) }))}</p>`;
 }
 
+/** Shown by the host for any unknown address. */
+function renderNotFound() {
+  const lang = getLang();
+  return `<section class="not-found">
+    <p class="not-found-code" aria-hidden="true">404</p>
+    <h1>${e(t('notfound.title'))}</h1>
+    <p class="lead">${e(t('notfound.text'))}</p>
+    <p class="hero-actions">
+      <a class="btn" href="${pageHref('home', lang)}">${e(t('notfound.home'))}</a>
+      <a class="btn btn-ghost" href="${pageHref('map', lang)}">${e(t('notfound.map'))}</a>
+    </p>
+  </section>`;
+}
+
 const RENDERERS = {
   home: renderHome,
   businesses: renderBusinesses,
@@ -294,6 +308,7 @@ const RENDERERS = {
   us: renderUs,
   contribute: renderContribute,
   legal: renderLegal,
+  notfound: renderNotFound,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

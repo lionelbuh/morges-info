@@ -88,6 +88,10 @@ export default {
     us: 'Über uns',
   },
   pages: {
+    notfound: {
+      title: 'Seite nicht gefunden — Morges.info',
+      description: 'Diese Adresse entspricht keiner Seite von Morges.info. Vielleicht hat sie sich geändert oder enthält einen Tippfehler.',
+    },
     contribute: {
       title: 'Mitmachen — Morges.info',
       description: 'Senden Sie Morges.info Ihre alten Fotos, Neuigkeiten und Erinnerungen an Morges: wie es geht und was wir damit machen.',
@@ -283,5 +287,11 @@ export default {
     creditsTitle: 'Quellen und Nachweise',
     creditsText: 'Quellen, Bildlizenzen und die Kartenattribution sind in den redaktionellen Grundsätzen aufgeführt.',
     updated: 'Zuletzt aktualisiert: {date}',
+  },
+  notfound: {
+    title: 'Seite nicht gefunden',
+    text: 'Diese Adresse entspricht keiner Seite von Morges.info. Vielleicht hat sie sich geändert oder enthält einen Tippfehler.',
+    home: 'Zur Startseite',
+    map: 'Karte öffnen',
   },
 };

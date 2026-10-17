@@ -93,22 +93,40 @@ docs/                       CONTENT.md (contenus), PHOTOS.md (photos, licences),
 scripts/build-hero.mjs      npm run images : versions AVIF/WebP/JPEG de la photo d'accueil
 ```
 
-## Déploiement
+## Déploiement : GitHub Pages + domaine chez Spaceship
 
-`npm run build` produit un dossier `dist/` statique (chemins relatifs) qui peut être servi par n'importe quel
-hébergeur statique. Exemples (non configurés — à faire par le propriétaire du compte) :
+Le site est publié par **GitHub Pages** (gratuit, dépôt public) à chaque modification de `main`, par le workflow
+`.github/workflows/deploy.yml` (lint, tests unitaires, build, puis publication de `dist/`). Le domaine
+`morges.info` reste chez **Spaceship**, qui garde aussi la messagerie `hello@morges.info`.
 
-Le site utilise des URL absolues (`/carte/`, `/histoire/` …) : il doit être servi **à la racine** d'un domaine
-ou d'un sous-domaine (les prévisualisations Netlify / Cloudflare Pages le sont).
+Réglages à faire une fois (propriétaire du dépôt et du domaine) :
 
-- **Netlify / Cloudflare Pages :** commande de build `npm run build`, dossier de publication `dist`.
-  Les deux proposent des prévisualisations automatiques par branche.
-- **GitHub Pages :** possible avec un domaine personnalisé (site servi à la racine) ; une adresse de projet
-  `utilisateur.github.io/morges-info/` nécessiterait d'adapter `base` dans `vite.config.js`.
-- **Serveur classique (Apache/Nginx) :** copier le contenu de `dist/` à la racine du site.
+1. GitHub → dépôt → **Settings → Pages** → *Build and deployment* → Source : **GitHub Actions**.
+2. Après la première publication : **Custom domain** `morges.info` → *Save*, puis cocher **Enforce HTTPS** dès
+   que GitHub l'autorise (certificat automatique, quelques minutes à 24 h).
+3. Spaceship → DNS de `morges.info` :
 
-Le nom de domaine `morges.info` (DNS) doit être configuré chez l'hébergeur et le registraire par le
-propriétaire du domaine.
+   | Type | Hôte | Valeur |
+   | --- | --- | --- |
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+   | AAAA | `@` | `2606:50c0:8000::153` |
+   | AAAA | `@` | `2606:50c0:8001::153` |
+   | AAAA | `@` | `2606:50c0:8002::153` |
+   | AAAA | `@` | `2606:50c0:8003::153` |
+   | CNAME | `www` | `lionelbuh.github.io` |
+
+   Supprimer d'éventuels anciens enregistrements A/AAAA/CNAME de `@` et `www` (page de parking) ; **ne pas toucher**
+   aux enregistrements MX et TXT de la messagerie.
+4. Recommandé : GitHub → *Settings* (du compte) → **Pages → Verified domains** → ajouter `morges.info` et créer chez
+   Spaceship l'enregistrement TXT `_github-pages-challenge-lionelbuh` indiqué par GitHub (empêche un tiers
+   d'utiliser le domaine sur GitHub).
+
+Le site utilise des URL absolues (`/carte/`, `/histoire/` …) : il doit être servi à la racine du domaine, ce qui est
+le cas avec un domaine personnalisé. Une adresse `utilisateur.github.io/morges-info/` nécessiterait d'adapter `base`
+dans `vite.config.js`. GitHub Pages sert `404.html` pour toute adresse inconnue.
 
 ## Attribution et conditions d'utilisation de la carte
 

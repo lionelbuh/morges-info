@@ -24,7 +24,7 @@ export function renderMarkers(html) {
 }
 
 export function sitemapXml() {
-  const urls = PAGES.map((p) => {
+  const urls = PAGES.filter((p) => p.listed !== false).map((p) => {
     const alternates = LANGUAGES.map(
       (l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${absoluteUrl(p.id, l).replace(/&/g, '&amp;')}"/>`,
     ).join('\n');
@@ -41,9 +41,9 @@ export function robotsTxt() {
   return `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
 }
 
-/** HTML entry points, one per page (clean URLs: /carte/ → carte/index.html). */
+/** HTML entry points, one per page (clean URLs: /carte/ → carte/index.html; /404.html stays a file). */
 export function htmlInputs(root) {
-  return Object.fromEntries(PAGES.map((p) => [p.id, `${root}${p.path}index.html`]));
+  return Object.fromEntries(PAGES.map((p) => [p.id, `${root}${p.path}${p.path.endsWith('/') ? 'index.html' : ''}`]));
 }
 
 export function morgesSite() {

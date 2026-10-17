@@ -155,6 +155,9 @@ export const PLACES = [
         { label: 'Wikidata Q3146164', url: 'https://www.wikidata.org/wiki/Q3146164' },
         { label: 'Wikipédia — Hôtel de ville de Morges', url: 'https://fr.wikipedia.org/wiki/H%C3%B4tel_de_ville_de_Morges' },
       ],
+      note:
+        'Adresse « Place de l’Hôtel-de-Ville 1 » confirmée par l’équipe Morges.info le 17.10.2026 (une autre source ' +
+        'indiquait « Place de l’Hôtel-de-Ville 3 / Grand-Rue 81 »).',
     },
     name: {
       fr: 'Hôtel de Ville',
@@ -179,7 +182,7 @@ export const PLACES = [
       { label: 'world-architects — Ferrari Architectes, Hôtel de Ville de Morges (2012–2014)', url: 'https://world-architects.com/en/projects/view/hotel-de-ville-de-morges' },
       { label: 'Wikidata Q3146164', url: 'https://www.wikidata.org/wiki/Q3146164' },
     ],
-    address: null,
+    address: 'Place de l’Hôtel-de-Ville 1, 1110 Morges',
     website: 'https://www.morges.ch/',
     openingHours: null,
     photos: [],

@@ -88,6 +88,10 @@ export default {
     us: 'Qui sommes-nous',
   },
   pages: {
+    notfound: {
+      title: 'Page introuvable — Morges.info',
+      description: 'Cette adresse ne correspond à aucune page de Morges.info. Elle a peut-être changé, ou contient une faute de frappe.',
+    },
     contribute: {
       title: 'Contribuer — Morges.info',
       description: 'Envoyez à Morges.info vos photos anciennes, nouvelles et souvenirs de Morges : comment faire, et ce que nous en faisons.',
@@ -283,5 +287,11 @@ export default {
     creditsTitle: 'Crédits',
     creditsText: 'Les sources, les licences des photos et l’attribution de la carte sont détaillées dans la charte éditoriale.',
     updated: 'Dernière mise à jour : {date}',
+  },
+  notfound: {
+    title: 'Page introuvable',
+    text: 'Cette adresse ne correspond à aucune page de Morges.info. Elle a peut-être changé, ou contient une faute de frappe.',
+    home: 'Retour à l’accueil',
+    map: 'Ouvrir la carte',
   },
 };

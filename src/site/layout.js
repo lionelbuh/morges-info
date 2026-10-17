@@ -74,7 +74,7 @@ export function renderHeader(pageId) {
 
 export function renderFooter() {
   const lang = getLang();
-  const links = PAGES.filter((p) => p.id !== 'home')
+  const links = PAGES.filter((p) => p.id !== 'home' && p.listed !== false)
     .map((p) => `<li><a href="${pageHref(p.id, lang)}">${e(t(`nav.${p.id}`))}</a></li>`)
     .join('');
   return `<footer class="site-footer">
@@ -107,6 +107,12 @@ export function renderHeadTags(pageId) {
   const lang = getLang();
   const title = t(`pages.${pageId}.title`);
   const description = t(`pages.${pageId}.description`);
+  if (getPage(pageId).listed === false) {
+    // not a real page: kept out of search results, no canonical address
+    return `<title>${e(title)}</title>
+    <meta name="description" content="${e(description)}" />
+    <meta name="robots" content="noindex" />`;
+  }
   const alternates = LANGUAGES.map(
     (l) => `<link rel="alternate" hreflang="${l}" href="${absoluteUrl(pageId, l)}" />`,
   ).join('\n    ');

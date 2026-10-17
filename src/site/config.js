@@ -8,7 +8,10 @@ export const SITE_URL = 'https://morges.info';
 /** Address for readers' messages, news and photos (shown in the footer and on the contribute page). */
 export const CONTACT_EMAIL = 'hello@morges.info';
 
-/** Pages and their clean French URLs. `nav` = shown in the main navigation. */
+/**
+ * Pages and their clean French URLs. `nav` = shown in the main navigation;
+ * `listed: false` = left out of the footer and the sitemap (the 404 page, served by the host for unknown addresses).
+ */
 export const PAGES = [
   { id: 'home', path: '/', nav: false },
   { id: 'map', path: '/carte/', nav: true },
@@ -20,6 +23,7 @@ export const PAGES = [
   { id: 'about', path: '/a-propos/', nav: false },
   { id: 'us', path: '/qui-sommes-nous/', nav: false },
   { id: 'legal', path: '/mentions-legales/', nav: false },
+  { id: 'notfound', path: '/404.html', nav: false, listed: false },
 ];
 
 export function getPage(id) {

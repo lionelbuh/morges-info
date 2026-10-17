@@ -93,7 +93,8 @@ describe('site pages', () => {
     expect(html).not.toContain('<!--@');
     expect(html).toContain('<h1>');
     const sitemap = sitemapXml();
-    for (const p of PAGES) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
+    for (const p of PAGES.filter((x) => x.listed !== false)) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
+    expect(sitemap).not.toContain('404');
     expect(robotsTxt()).toContain('Sitemap: https://morges.info/sitemap.xml');
   });
 });

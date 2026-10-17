@@ -88,6 +88,10 @@ export default {
     us: 'Chi siamo',
   },
   pages: {
+    notfound: {
+      title: 'Pagina non trovata — Morges.info',
+      description: 'Questo indirizzo non corrisponde a nessuna pagina di Morges.info. Forse è cambiato o contiene un errore di battitura.',
+    },
     contribute: {
       title: 'Contribuire — Morges.info',
       description: 'Inviate a Morges.info le vostre foto d’epoca, notizie e ricordi di Morges: come fare e cosa ne facciamo.',
@@ -283,5 +287,11 @@ export default {
     creditsTitle: 'Crediti',
     creditsText: 'Le fonti, le licenze delle foto e l’attribuzione della mappa sono descritte nella carta redazionale.',
     updated: 'Ultimo aggiornamento: {date}',
+  },
+  notfound: {
+    title: 'Pagina non trovata',
+    text: 'Questo indirizzo non corrisponde a nessuna pagina di Morges.info. Forse è cambiato o contiene un errore di battitura.',
+    home: 'Torna alla pagina iniziale',
+    map: 'Apri la mappa',
   },
 };

@@ -88,6 +88,10 @@ export default {
     us: 'About us',
   },
   pages: {
+    notfound: {
+      title: 'Page not found — Morges.info',
+      description: 'This address does not match any page on Morges.info. It may have changed, or contain a typo.',
+    },
     contribute: {
       title: 'Contribute — Morges.info',
       description: 'Send Morges.info your old photos, news and memories of Morges: how to do it, and what we do with them.',
@@ -283,5 +287,11 @@ export default {
     creditsTitle: 'Credits',
     creditsText: 'Sources, photo licences and the map attribution are detailed in the editorial charter.',
     updated: 'Last updated: {date}',
+  },
+  notfound: {
+    title: 'Page not found',
+    text: 'This address does not match any page on Morges.info. It may have changed, or contain a typo.',
+    home: 'Back to the home page',
+    map: 'Open the map',
   },
 };
