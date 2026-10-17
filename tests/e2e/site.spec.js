@@ -50,11 +50,10 @@ test('discreet "About us" page: reached from the footer only, in four languages'
   await page.locator('.site-footer a[href="/qui-sommes-nous/"]').click();
   await expect(page).toHaveURL(/\/qui-sommes-nous\/$/);
   await expect(page.locator('main h1')).toHaveText('Qui sommes-nous');
-  await expect(page.locator('.us-motto')).toHaveAttribute('lang', 'fr');
   for (const [lang, h1] of [['en', 'About us'], ['de', 'Über uns'], ['it', 'Chi siamo']]) {
     await page.locator(`.lang-btn[data-lang="${lang}"]`).click();
     await expect(page.locator('main h1')).toHaveText(h1);
-    await expect(page.locator('.us-motto')).toHaveText('Morges, toujours dans nos cœurs.');
+    await expect(page.locator('.us-contact a')).toHaveAttribute('href', 'mailto:hello@morges.info');
   }
   await page.locator('.us-charter a').click();
   await expect(page).toHaveURL(/\/a-propos\/\?lang=it$/);

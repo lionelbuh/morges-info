@@ -220,14 +220,13 @@ function renderAbout() {
   ${['sources', 'photos', 'ads', 'map'].map(block).join('')}`;
 }
 
-/** "About us": a short personal note. The motto stays in French in every language. */
+/** "About us": a short personal note. */
 function renderUs() {
   const lang = getLang();
   const paragraphs = ['p1', 'p2', 'p3', 'p4', 'p5'].map((k) => `<p>${e(t(`us.paragraphs.${k}`))}</p>`).join('');
   return `<article class="us-note">
     <h1>${e(t('us.title'))}</h1>
     <div class="us-text">${paragraphs}</div>
-    <p class="us-motto" lang="fr">${e(t('us.motto'))}</p>
     <p class="us-contact">${e(t('us.contactLabel'))} ${emailLink()}</p>
     <p class="us-charter"><a href="${pageHref('about', lang)}">${e(t('us.charterLink'))}<span aria-hidden="true"> →</span></a></p>
   </article>`;

@@ -224,7 +224,6 @@ export default {
       p4: 'Independent and driven by our attachment to Morges, this site is for those who live here, who grew up here, or who would like to discover the town in a different way.',
       p5: 'We hope Morges.info will bring you a little closer to a town that still means so much to us.',
     },
-    motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'How we work: our editorial charter',
   },
   contribute: {

@@ -224,7 +224,6 @@ export default {
       p4: 'Unabhängig und getragen von unserer Verbundenheit mit Morges richtet sich diese Website an alle, die hier leben, hier aufgewachsen sind oder die Stadt auf andere Weise entdecken möchten.',
       p5: 'Wir hoffen, dass Morges.info Sie dieser Stadt, die uns noch immer viel bedeutet, ein wenig näherbringt.',
     },
-    motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'Wie wir arbeiten: unsere redaktionellen Grundsätze',
   },
   contribute: {

@@ -224,7 +224,6 @@ export default {
       p4: 'Indépendant et animé par notre attachement à Morges, ce site s’adresse à celles et ceux qui y vivent, qui y ont grandi ou qui souhaitent la découvrir autrement.',
       p5: 'Nous espérons que Morges.info vous rapprochera un peu de cette ville qui compte toujours pour nous.',
     },
-    motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'Comment nous travaillons : notre charte éditoriale',
   },
   contribute: {
