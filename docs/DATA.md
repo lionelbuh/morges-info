@@ -28,7 +28,7 @@ non vérifiés), `photos` (photos actuelles avec auteur et licence), `lastVerifi
 4. Lancer `npm run check` et `npm run test:e2e` (les tests e2e comptent les marqueurs : mettre à jour les
    nombres attendus).
 
-## État actuel (revérifié le 15 octobre 2026 ; 8 lieux ajoutés le 16 octobre 2026)
+## État actuel (revérifié le 15 octobre 2026 ; 8 lieux ajoutés le 16 octobre 2026, 2 le 17 octobre 2026)
 
 Les positions ont été vérifiées par recherche web (Wikipedia, Wikidata, Mapcarta/OSM, annuaires nautiques,
 annuaires de rues, etc.). **L'accès direct à OpenStreetMap, Nominatim, Overpass, Wikidata et au géoportail
@@ -57,6 +57,8 @@ l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emp
 | Église Saint-François-de-Sales | team | coordonnées fournies par l'équipe le 16.10.2026 (46.50924546705738, 6.499955818241464) ; cohérentes avec Mapcarta (≈ 190 m au sud du temple) et l'adresse rue Louis-de-Savoie 31 |
 | Parc de Vertou | cross-checked | coordonnées fournies par l'équipe le 16.10.2026 (46.516258064414394, 6.513974252562291), concordantes avec le skatepark du parc sur Waze |
 | Parc de la Prairie | team | coordonnées fournies par l'équipe le 16.10.2026 (46.510818828775875, 6.489033458014868), ≈ 380 m à l'ouest de la gare ; pas de source publiée pour les recouper |
+| Patinoire des Eaux-Minérales | cross-checked | local.ch (46.512104, 6.488004) et L'Agenda (46.511967, 6.487935) concordent (≈ 15 m) ; cohérent avec l'adresse (av. Henry-Warnery 8) et le parc de la Prairie « face à la patinoire » |
+| Piscine du Parc | single-source | Nageurs.com (46.506645, 6.49249), seule source avec coordonnées ; cohérent avec l'adresse (promenade Général-Guisan 11) et la passerelle du Parc des Sports voisin (≈ 200 m à l'est) — **à confirmer** |
 
 Les traductions EN/DE/IT des descriptions ont été rédigées à partir du texte français. Une relecture par
 des locuteurs natifs est recommandée.

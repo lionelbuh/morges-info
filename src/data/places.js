@@ -818,6 +818,98 @@ export const PLACES = [
     lastVerified: '2026-10-16',
     archive: { photos: [] },
   },
+  {
+    id: 'patinoire-eaux-minerales',
+    category: 'sport',
+    coordinates: { lat: 46.512104, lng: 6.488004 },
+    geo: {
+      status: 'cross-checked',
+      sources: [
+        { label: 'local.ch — Patinoire des Eaux Minérales', url: 'https://www.local.ch/fr/d/morges/1110/patinoire/patinoire-des-eaux-minerales-gqaTfjOHZVp9cfwfrwCuzQ' },
+        { label: 'L’Agenda — Patinoire des Eaux Minérales', url: 'https://www.l-agenda.online/lieux/patinoire-des-eaux-minerales/' },
+      ],
+      note:
+        'local.ch : 46.512104, 6.488004 ; L’Agenda : 46.511967, 6.487935 (≈ 15 m d’écart). Cohérent avec l’adresse ' +
+        '(avenue Henry-Warnery 8, ≈ 400 m de la gare selon Suisse Tourisme) et avec le parc de la Prairie, « face à la ' +
+        'patinoire » (Ville de Morges), à ≈ 160 m.',
+    },
+    name: {
+      fr: 'Patinoire des Eaux-Minérales',
+      en: 'Eaux-Minérales Ice Rink',
+      de: 'Eisbahn Eaux-Minérales',
+      it: 'Pista di pattinaggio delle Eaux-Minérales',
+    },
+    location: {
+      fr: 'Avenue Henry-Warnery, à l’ouest de la gare, face au parc de la Prairie',
+      en: 'Avenue Henry-Warnery, west of the station, opposite the Parc de la Prairie',
+      de: 'Avenue Henry-Warnery, westlich des Bahnhofs, gegenüber dem Parc de la Prairie',
+      it: 'Avenue Henry-Warnery, a ovest della stazione, di fronte al Parc de la Prairie',
+    },
+    description: {
+      fr: 'Patinoire régionale de Morges, ouverte au public pendant la saison d’hiver, en général de fin octobre à fin mars. Elle comprend aussi une halle de curling de trois pistes et accueille le club de hockey Forward Morges, les Patineurs de Morges et le Curling Club de Morges. En 2025, le Conseil communal a approuvé sa rénovation et sa transformation en complexe sportif « quatre saisons » ; le référendum lancé contre ce projet n’a pas abouti.',
+      en: 'Morges’s regional ice rink, open to the public during the winter season, usually from late October to late March. It also has a three-sheet curling hall and is home to the Forward Morges ice hockey club, the Patineurs de Morges skating club and the Morges Curling Club. In 2025 the town council approved its renovation and conversion into a year-round “four seasons” sports complex; the referendum launched against the project did not gather enough signatures.',
+      de: 'Regionale Eisbahn von Morges, während der Wintersaison für die Öffentlichkeit geöffnet, in der Regel von Ende Oktober bis Ende März. Dazu gehört eine Curlinghalle mit drei Rinks; hier spielen der Eishockeyclub Forward Morges, der Eislaufclub Patineurs de Morges und der Curling Club Morges. 2025 genehmigte der Gemeinderat die Sanierung und den Umbau zu einem Ganzjahres-Sportzentrum („quatre saisons“); das Referendum gegen das Projekt kam nicht zustande.',
+      it: 'Pista di pattinaggio regionale di Morges, aperta al pubblico durante la stagione invernale, di solito da fine ottobre a fine marzo. Comprende anche una sala da curling con tre piste e ospita il club di hockey Forward Morges, i Patineurs de Morges e il Curling Club di Morges. Nel 2025 il Consiglio comunale ha approvato la sua ristrutturazione e trasformazione in un centro sportivo «quattro stagioni»; il referendum lanciato contro il progetto non è riuscito.',
+    },
+    factSources: [
+      { label: 'Ville de Morges — Patinoire des Eaux-Minérales', url: 'https://www.morges.ch/vivre-a-morges/patinoire/patinoire-des-eaux-minerales-1911' },
+      { label: 'Suisse Tourisme — La patinoire des Eaux-Minérales, Morges', url: 'https://www.myswitzerland.com/fr-ch/experiences/la-patinoire-des-eaux-minerales-morges/' },
+      { label: 'loisirs.ch — Patinoire des Eaux-Minérales', url: 'https://www.loisirs.ch/loisirs/30659/patinoire-des-eaux-minerales' },
+      { label: 'Vaud Tourisme — Patinoire des Eaux-Minérales (saison 2026-2027)', url: 'https://www.vaud.ch/en/tourism/activites/skating-rink-eaux-minerales' },
+      { label: 'Wikipedia — Forward-Morges HC', url: 'https://en.wikipedia.org/wiki/Forward-Morges_HC' },
+      { label: 'Ville de Morges — Le projet de rénovation-transformation de la patinoire peut aller de l’avant', url: 'https://www.morges.ch/actualites/le-projet-de-renovation-transformation-de-la-patinoire-peut-aller-de-lavant-209500' },
+      { label: 'RTS — La patinoire de Morges va se muer en complexe sportif « quatre saisons » (2025)', url: 'https://www.rts.ch/info/regions/vaud/2025/article/morges-un-complexe-sportif-remplacera-la-vieille-patinoire-des-eaux-minerales-28813578.html' },
+    ],
+    address: 'Avenue Henry-Warnery 8, 1110 Morges',
+    website: 'https://www.morges.ch/vivre-a-morges/patinoire/patinoire-des-eaux-minerales-1911',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-17',
+    archive: { photos: [] },
+  },
+  {
+    id: 'piscine-du-parc',
+    category: 'sport',
+    coordinates: { lat: 46.506645, lng: 6.49249 },
+    geo: {
+      status: 'single-source',
+      sources: [{ label: 'Nageurs.com — Piscine communale de Morges', url: 'https://www.nageurs.com/fiches/piscine-morges.html' }],
+      note:
+        'Une seule source avec des coordonnées (Nageurs.com : 46.506645, 6.49249). Cohérent avec l’adresse (promenade ' +
+        'Général-Guisan 11, au bord du lac) et avec la passerelle du Parc des Sports voisin (avis d’enquête Ville de Morges, ' +
+        'coordonnées suisses 2 527 580 / 1 151 080, à ≈ 200 m à l’est). À confirmer sur la carte réelle.',
+    },
+    name: {
+      fr: 'Piscine du Parc',
+      en: 'Parc Swimming Pool',
+      de: 'Freibad Piscine du Parc',
+      it: 'Piscina del Parco',
+    },
+    location: {
+      fr: 'Promenade Général-Guisan, au bord du lac, à l’ouest du château',
+      en: 'Promenade Général-Guisan, on the lakeshore, west of the castle',
+      de: 'Promenade Général-Guisan, am Seeufer, westlich des Schlosses',
+      it: 'Promenade Général-Guisan, in riva al lago, a ovest del castello',
+    },
+    description: {
+      fr: 'Piscine municipale en plein air de la Ville de Morges, au bord du Léman. Elle compte un bassin olympique de 50 m à huit couloirs, un bassin non-nageurs avec deux toboggans, une pataugeoire, un terrain de beach-volley et un restaurant. Elle est ouverte chaque année de mi-mai à mi-septembre ; en 2026, du 14 mai au 21 septembre.',
+      en: 'The Ville de Morges’s municipal open-air swimming pool, on the shore of Lake Geneva. It has an eight-lane, 50-metre Olympic pool, a non-swimmers’ pool with two slides, a paddling pool, a beach-volleyball court and a restaurant. It opens every year from mid-May to mid-September; in 2026, from 14 May to 21 September.',
+      de: 'Städtisches Freibad der Stadt Morges am Ufer des Genfersees. Es bietet ein olympisches 50-Meter-Becken mit acht Bahnen, ein Nichtschwimmerbecken mit zwei Rutschbahnen, ein Planschbecken, ein Beachvolleyballfeld und ein Restaurant. Geöffnet ist es jedes Jahr von Mitte Mai bis Mitte September; 2026 vom 14. Mai bis 21. September.',
+      it: 'Piscina comunale all’aperto della Città di Morges, sulla riva del Lemano. Dispone di una vasca olimpionica di 50 m a otto corsie, di una vasca per non nuotatori con due scivoli, di una piscina per bambini, di un campo da beach volley e di un ristorante. È aperta ogni anno da metà maggio a metà settembre; nel 2026, dal 14 maggio al 21 settembre.',
+    },
+    factSources: [
+      { label: 'Ville de Morges — Piscine du Parc', url: 'https://www.morges.ch/vivre-a-morges/loisirs/liste-des-loisirs/activites-diverses/piscine-du-parc-5961' },
+      { label: 'Ville de Morges — Ouverture de la piscine du Parc le 14 mai (2026)', url: 'https://www.morges.ch/actualites/ouverture-de-la-piscine-du-parc-le-14-mai-209387' },
+      { label: 'Vaud Tourisme — Piscine de Morges', url: 'https://www.vaud.ch/tourisme/activites/piscine-de-morges/' },
+      { label: 'Piscine du Parc — site officiel', url: 'https://piscinemorges.ch/' },
+    ],
+    address: 'Promenade Général-Guisan 11, 1110 Morges',
+    website: 'https://piscinemorges.ch/',
+    openingHours: null,
+    photos: [],
+    lastVerified: '2026-10-17',
+    archive: { photos: [] },
+  },
 ];
 
 export function getPlace(id) {

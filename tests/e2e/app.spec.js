@@ -96,8 +96,8 @@ test('loads in French by default with MapLibre map, 10 markers and attribution',
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   await expect(page).toHaveTitle(/Carte interactive de Morges/);
   await expect(page.locator('.lang-btn[data-lang="fr"]')).toHaveAttribute('aria-current', 'true');
-  await expect(markers(page)).toHaveCount(17);
-  await expect(page.locator('#results-count')).toHaveText('18 lieux');
+  await expect(markers(page)).toHaveCount(19);
+  await expect(page.locator('#results-count')).toHaveText('20 lieux');
   const attribution = page.locator('.maplibregl-ctrl-attrib');
   await expect(attribution).toBeVisible();
   await expect(attribution).toContainText('OpenStreetMap');
@@ -238,10 +238,10 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await page.locator('#search-input').fill('chateau');
   await openList(page);
   await expect(page.locator('.place-item').first()).toHaveAttribute('data-place-id', 'chateau');
-  await expect(markers(page)).not.toHaveCount(17);
+  await expect(markers(page)).not.toHaveCount(19);
   await page.locator('#search-input').fill('Bahnhof'); // German name works in the French UI
   await expect(marker(page, 'gare')).toHaveCount(1);
-  await expect(markers(page)).not.toHaveCount(17);
+  await expect(markers(page)).not.toHaveCount(19);
   await openList(page);
   await expect(page.locator('.place-item').first()).toHaveAttribute('data-place-id', 'gare');
   await page.locator('#search-input').press('Enter');
@@ -252,7 +252,7 @@ test('search narrows the list and the map, Enter opens the first result', async 
   await expect(page.locator('.place-list .empty')).toBeVisible();
   await expect(markers(page)).toHaveCount(0);
   await page.locator('#search-clear').click();
-  await expect(markers(page)).toHaveCount(17);
+  await expect(markers(page)).toHaveCount(19);
 });
 
 test('category filters work and can be reset', async ({ page }) => {
@@ -263,7 +263,7 @@ test('category filters work and can be reset', async ({ page }) => {
   await page.locator('.chip[data-category="culture"]').click();
   await expect(markers(page)).toHaveCount(10); // 5 lake + 4 museums/theatre + the château hosting the Paderewski museum
   await page.locator('.chip[data-category=""]').click();
-  await expect(markers(page)).toHaveCount(17);
+  await expect(markers(page)).toHaveCount(19);
 });
 
 test('selecting from the list opens the panel; Place du Marché is mapped as an approximate position', async ({ page }) => {

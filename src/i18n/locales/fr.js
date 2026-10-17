@@ -21,6 +21,7 @@ export default {
     lake: 'Lac et parcs',
     culture: 'Culture',
     transport: 'Transports',
+    sport: 'Sports et loisirs',
   },
   panel: {
     officialName: 'Nom officiel\u00a0:',
