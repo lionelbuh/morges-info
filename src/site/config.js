@@ -13,7 +13,7 @@ export const PRODUCTION_HOSTS = ['morges.info', 'www.morges.info'];
  * the "token" value of the JS snippet). Empty = statistics off. The token is public by design: it
  * appears in the page of every site that uses the service.
  */
-export const ANALYTICS_TOKEN = '';
+export const ANALYTICS_TOKEN = 'ac0500bf08be48bda435dfb5a0a81ae5';
 
 /** Address for readers' messages, news and photos (shown in the footer and on the contribute page). */
 export const CONTACT_EMAIL = 'hello@morges.info';

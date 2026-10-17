@@ -17,7 +17,7 @@ describe('audience statistics (Cloudflare Web Analytics)', () => {
 
   it('is configured for the live domains only', () => {
     expect(PRODUCTION_HOSTS).toEqual(['morges.info', 'www.morges.info']);
-    expect(typeof ANALYTICS_TOKEN).toBe('string');
+    expect(ANALYTICS_TOKEN).toMatch(/^[0-9a-f]{32}$/);
   });
 
   it('loads nothing without a token or outside the live domain', () => {
@@ -27,11 +27,11 @@ describe('audience statistics (Cloudflare Web Analytics)', () => {
     expect(beacon()).toBeNull();
   });
 
-  it('adds one deferred beacon, without SPA tracking, on the live domain', () => {
+  it('adds one beacon, without SPA tracking, on the live domain', () => {
     expect(startAnalytics({ token: 'abc', host: 'morges.info' })).toBe(true);
     expect(startAnalytics({ token: 'abc', host: 'morges.info' })).toBe(true);
     expect(document.querySelectorAll('script[src*="cloudflareinsights"]')).toHaveLength(1);
-    expect(beacon().defer).toBe(true);
+    expect(beacon().type).toBe('module');
     expect(JSON.parse(beacon().getAttribute('data-cf-beacon'))).toEqual({ token: 'abc', spa: false });
   });
 

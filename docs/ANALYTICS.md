@@ -40,6 +40,7 @@ l'installation manuelle (script JS), sans passer le domaine par Cloudflare.
 2. **Analytics & Logs → Web Analytics → Add a site** → nom d'hôte `morges.info` → *Done*.
 3. **Manage site** : dans le code proposé, copier la valeur de `"token"` (une suite de lettres et de chiffres).
 4. La coller dans `ANALYTICS_TOKEN` (`src/site/config.js`), puis fusionner la modification dans `main`.
+   Fait le 17 octobre 2026 (site `morges.info`).
 
 Le script n'est chargé que sur `morges.info` / `www.morges.info` (jamais en local, dans les tests ou les
 prévisualisations), avec `spa: false` (seuls les vrais chargements de page comptent), et pas du tout si le visiteur

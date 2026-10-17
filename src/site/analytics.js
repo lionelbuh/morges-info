@@ -43,7 +43,7 @@ export function startAnalytics({ token = ANALYTICS_TOKEN, host = window.location
   if (!token || !PRODUCTION_HOSTS.includes(host) || browserRefusesTracking() || analyticsOptedOut()) return false;
   if (document.querySelector(`script[src="${BEACON_SRC}"]`)) return true; // one beacon per page
   const script = document.createElement('script');
-  script.defer = true;
+  script.type = 'module'; // as in Cloudflare's current snippet (module scripts are deferred)
   script.src = BEACON_SRC;
   // spa: false — only real page loads count (the map adds history entries when a place opens)
   script.dataset.cfBeacon = JSON.stringify({ token, spa: false });
