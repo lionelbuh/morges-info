@@ -156,7 +156,8 @@ const MIME = { avif: 'image/avif', webp: 'image/webp', jpg: 'image/jpeg' };
  * (phones), AVIF → WebP → JPEG, plus the credit required by the licence.
  * Returns '' until the responsive files exist (see scripts/build-hero.mjs).
  */
-export function heroPhoto(photo, manifest) {
+/** @param {{ sizes?: string }} [opts] sizes = the image's displayed width on wide screens */
+export function heroPhoto(photo, manifest, { sizes = '(max-width: 1160px) 100vw, 1120px' } = {}) {
   if (!manifest || manifest.id !== photo.id || !manifest.crops || !manifest.crops.wide) return '';
   const { wide, tall } = manifest.crops;
   const srcset = (crop, fmt) => crop.files[fmt].map((f) => `${f.src} ${f.width}w`).join(', ');
@@ -169,14 +170,14 @@ export function heroPhoto(photo, manifest) {
     }
   }
   for (const fmt of ['avif', 'webp']) {
-    sources.push(`<source type="${MIME[fmt]}" srcset="${srcset(wide, fmt)}" sizes="(max-width: 1160px) 100vw, 1120px" />`);
+    sources.push(`<source type="${MIME[fmt]}" srcset="${srcset(wide, fmt)}" sizes="${sizes}" />`);
   }
   const fallback = wide.files.jpg[Math.min(1, wide.files.jpg.length - 1)];
   const label = e(t('common.photoCredit', { credit: '' })).trim();
   return `<figure class="hero-photo${photo.overlayTitle ? ' has-overlay' : ''}">
     <picture>
       ${sources.join('\n      ')}
-      <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="(max-width: 1160px) 100vw, 1120px" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async" />
+      <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="${sizes}" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async" />
     </picture>
     <figcaption class="hero-credit">${label} ${e(photo.creator)}${photo.creatorDetail ? ` – ${e(photo.creatorDetail)}` : ''}${
       photo.creatorUrl ? ` (<a href="${e(photo.creatorUrl)}" target="_blank" rel="noopener">${e(photo.creatorUrlLabel || photo.creatorUrl)}</a>)` : ''

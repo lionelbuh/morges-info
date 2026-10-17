@@ -25,6 +25,7 @@ export default {
   panel: {
     officialName: 'Nom officiel\u00a0:',
     close: 'Fermer',
+    backToMap: 'Retour à la carte',
     category: 'Catégorie',
     location: 'Emplacement',
     coordinates: 'Coordonnées',
@@ -70,6 +71,8 @@ export default {
     footerNavLabel: 'Plan du site',
     navLabel: 'Navigation principale',
     menu: 'Menu',
+    place: 'Morges · Vaud · Suisse',
+    founded: 'Fondée vers 1286',
     home: 'Accueil Morges.info',
   },
   nav: {
@@ -131,8 +134,9 @@ export default {
   },
   home: {
     intro: 'Un guide indépendant consacré à la seule commune de Morges : des lieux à découvrir sur la carte, des commerces indépendants, l’histoire de la ville et les informations utiles du quotidien. Chaque information indique sa source.',
+    kicker: 'À la une',
     mapTitle: 'Explorer la carte',
-    mapText: 'Dix lieux pour commencer, du château savoyard au théâtre de Beausobre, en 2D ou en 3D.',
+    mapText: 'Musées, parcs, quais et monuments, du château savoyard au théâtre de Beausobre, en 2D ou en 3D.',
     mapCta: 'Ouvrir la carte',
     placesTitle: 'Lieux à découvrir',
     placesCta: 'Tous les lieux sur la carte',

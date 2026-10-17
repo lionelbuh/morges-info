@@ -4,6 +4,7 @@ import { PAGES } from '../../src/site/config.js';
 import { renderMain, CONTENT_PAGE_IDS } from '../../src/site/pages.js';
 import { renderHeader, renderHeadTags } from '../../src/site/layout.js';
 import { pageHref, placeHref } from '../../src/site/links.js';
+import { formatToday } from '../../src/site/format.js';
 import { renderMarkers, sitemapXml, robotsTxt } from '../../build/site-plugin.js';
 
 describe('site pages', () => {
@@ -51,6 +52,24 @@ describe('site pages', () => {
     const html = renderHeader('history');
     expect(html).toContain('href="/histoire/" aria-current="page"');
     for (const lang of LANGUAGES) expect(html).toContain(`data-lang="${lang}"`);
+  });
+
+  it('content pages get the newspaper masthead, the map page a compact bar', () => {
+    const page = renderHeader('history');
+    expect(page).toContain('site-header--masthead');
+    expect(page).toContain('Fondée vers 1286');
+    const map = renderHeader('map');
+    expect(map).toContain('site-header--compact');
+    expect(map).not.toContain('masthead-dateline');
+  });
+
+  it('dateline: today in Morges, in each language', () => {
+    const day = new Date('2026-10-17T10:00:00Z');
+    expect(formatToday('fr', day)).toBe('samedi 17 octobre 2026');
+    expect(formatToday('de', day)).toBe('Samstag, 17. Oktober 2026');
+    expect(formatToday('it', day)).toBe('sabato 17 ottobre 2026');
+    expect(formatToday('en', day)).toMatch(/^Saturday,? 17 October 2026$/);
+    expect(formatToday('fr', new Date('2026-10-17T22:30:00Z'))).toBe('dimanche 18 octobre 2026'); // Swiss time
   });
 
   it('head tags include canonical, language alternates and x-default', () => {

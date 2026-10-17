@@ -6,6 +6,7 @@ import { t, getLang, LANGUAGES } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PAGES, SITE_URL, getPage } from './config.js';
 import { pageHref } from './links.js';
+import { formatToday } from './format.js';
 
 const NATIVE_NAMES = { fr: 'Français', en: 'English', de: 'Deutsch', it: 'Italiano' };
 const OG_LOCALES = { fr: 'fr_CH', en: 'en_GB', de: 'de_CH', it: 'it_CH' };
@@ -32,13 +33,24 @@ export function renderHeader(pageId) {
     return `<a class="lang-btn" href="${pageHref(pageId, l)}" data-lang="${l}" hreflang="${l}" lang="${l}" title="${NATIVE_NAMES[l]}" aria-label="${NATIVE_NAMES[l]}"${current}>${l.toUpperCase()}</a>`;
   }).join('');
 
+  // Content pages get a newspaper masthead; the map page keeps a compact bar.
+  const masthead = pageId !== 'map';
+  // The date is filled in the browser only, so the prerendered page never shows a stale one.
+  const today = typeof window === 'undefined' ? '' : formatToday(lang);
+  const dateline = masthead
+    ? `<p class="masthead-dateline"><span>${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span>${e(t('site.founded'))}</span></p>`
+    : '';
+  // On the home page the tagline is already the page title.
+  const tagline = pageId === 'home' ? '' : `<span class="brand-tagline">${e(t('site.tagline'))}</span>`;
+
   return `<a class="skip-link" href="#main">${e(t('site.skipToContent'))}</a>
-<header class="site-header" id="site-header">
+<header class="site-header site-header--${masthead ? 'masthead' : 'compact'}" id="site-header">
+  ${dateline}
   <a class="brand" href="${pageHref('home', lang)}" aria-label="${e(t('site.home'))}">
     ${BRAND_MARK}
     <span class="brand-text">
       <span class="brand-name">Morges<span class="brand-dot">.info</span></span>
-      <span class="brand-tagline">${e(t('site.tagline'))}</span>
+      ${tagline}
     </span>
   </a>
   <nav class="site-nav" aria-label="${e(t('site.navLabel'))}">

@@ -25,6 +25,7 @@ export default {
   panel: {
     officialName: 'Offizieller Name:',
     close: 'Schliessen',
+    backToMap: 'Zurück zur Karte',
     category: 'Kategorie',
     location: 'Lage',
     coordinates: 'Koordinaten',
@@ -70,6 +71,8 @@ export default {
     footerNavLabel: 'Seitenübersicht',
     navLabel: 'Hauptnavigation',
     menu: 'Menü',
+    place: 'Morges · Waadt · Schweiz',
+    founded: 'Gegründet um 1286',
     home: 'Morges.info Startseite',
   },
   nav: {
@@ -131,8 +134,9 @@ export default {
   },
   home: {
     intro: 'Ein unabhängiger Führer, der ausschliesslich der Gemeinde Morges gewidmet ist: Orte auf der Karte, unabhängige Geschäfte, die Geschichte der Stadt und nützliche Alltagsinformationen. Jede Angabe nennt ihre Quelle.',
+    kicker: 'Titelseite',
     mapTitle: 'Die Karte erkunden',
-    mapText: 'Zehn Orte für den Anfang, vom savoyischen Schloss bis zum Théâtre de Beausobre, in 2D oder 3D.',
+    mapText: 'Museen, Parks, Quais und Sehenswürdigkeiten, vom savoyischen Schloss bis zum Théâtre de Beausobre, in 2D oder 3D.',
     mapCta: 'Karte öffnen',
     placesTitle: 'Orte entdecken',
     placesCta: 'Alle Orte auf der Karte',

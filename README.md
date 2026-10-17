@@ -19,6 +19,10 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
   (données [OpenStreetMap](https://www.openstreetmap.org/copyright)), **sans clé d'API**
 - **Contenus vérifiables :** chaque fait cite sa source ; les informations changeantes indiquent leur date de
   vérification ; rien n'est inventé pour remplir un champ (voir [`docs/CONTENT.md`](docs/CONTENT.md))
+- **Apparence « Gazette » :** titres en Fraunces (police libre, licence SIL OFL, paquet `@fontsource-variable/fraunces`
+  servi par le site lui-même : aucun appel à Google Fonts ni à un service externe), texte en police système
+- **Carte sur mobile :** la fiche d'un lieu s'ouvre en plein écran ; « Retour à la carte », × ou le bouton Retour
+  du téléphone la referment
 - Site statique multipage, pré-rendu en français pour le référencement ; aucune dépendance payante
 
 > Les archives historiques (photos anciennes) sont une phase future : le modèle de données est prêt

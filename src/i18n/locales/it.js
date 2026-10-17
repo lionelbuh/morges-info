@@ -25,6 +25,7 @@ export default {
   panel: {
     officialName: 'Nome ufficiale:',
     close: 'Chiudi',
+    backToMap: 'Torna alla mappa',
     category: 'Categoria',
     location: 'Posizione',
     coordinates: 'Coordinate',
@@ -70,6 +71,8 @@ export default {
     footerNavLabel: 'Mappa del sito',
     navLabel: 'Navigazione principale',
     menu: 'Menu',
+    place: 'Morges · Vaud · Svizzera',
+    founded: 'Fondata intorno al 1286',
     home: 'Pagina iniziale di Morges.info',
   },
   nav: {
@@ -131,8 +134,9 @@ export default {
   },
   home: {
     intro: 'Una guida indipendente dedicata esclusivamente al comune di Morges: luoghi da scoprire sulla mappa, negozi indipendenti, la storia della città e informazioni utili per la vita quotidiana. Ogni informazione indica la sua fonte.',
+    kicker: 'In primo piano',
     mapTitle: 'Esplora la mappa',
-    mapText: 'Dieci luoghi per cominciare, dal castello sabaudo al teatro di Beausobre, in 2D o in 3D.',
+    mapText: 'Musei, parchi, lungolaghi e monumenti, dal castello sabaudo al teatro di Beausobre, in 2D o in 3D.',
     mapCta: 'Apri la mappa',
     placesTitle: 'Luoghi da scoprire',
     placesCta: 'Tutti i luoghi sulla mappa',

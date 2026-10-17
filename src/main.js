@@ -123,16 +123,19 @@ async function initMap() {
   if (place) map.focus(place, { padding: panelPadding() });
 }
 
+/** Small screens: the info panel covers the whole map (see main.css). */
+const fullScreenPanel = window.matchMedia('(max-width: 900px)');
+
 /** Room to leave for the info panel so the selected marker stays visible. */
 function panelPadding() {
-  if (panelEl.hidden) return {};
+  if (panelEl.hidden || fullScreenPanel.matches) return {}; // centred, ready for when the panel closes
   const mapBox = mapEl.getBoundingClientRect();
   const box = panelEl.getBoundingClientRect();
-  const isSheet = box.width >= mapBox.width - 2; // mobile bottom sheet
-  return isSheet
-    ? { bottom: Math.min(box.height, mapBox.height * 0.7) }
-    : { right: Math.max(0, mapBox.right - box.left) + 8 };
+  return { right: Math.max(0, mapBox.right - box.left) + 8 };
 }
+
+// On mobile, opening a place adds a history entry, so the phone's Back button closes the panel.
+let panelHistoryEntry = false;
 
 const panel = createInfoPanel(panelEl, {
   onClose: () => selectPlace(null),
@@ -193,16 +196,27 @@ function selectPlace(id, { fromList = false } = {}) {
   state.selectedId = place ? place.id : null;
 
   if (place) {
-    panel.open(place, { focusPanel: fromList });
+    panel.open(place, { focusPanel: fromList || fullScreenPanel.matches });
     map.focus(place, { padding: panelPadding() });
-    if (fromList) state.listOpen = false; // on mobile, reveal the map
+    if (fromList) state.listOpen = false; // on mobile, the map is there when the panel closes
     if (window.location.hash !== `#${place.id}`) {
-      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${place.id}`);
+      const url = `${window.location.pathname}${window.location.search}#${place.id}`;
+      if (fullScreenPanel.matches && !panelHistoryEntry) {
+        window.history.pushState(null, '', url);
+        panelHistoryEntry = true;
+      } else {
+        window.history.replaceState(null, '', url);
+      }
     }
   } else {
     panel.close();
     map.clearPadding();
-    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    if (panelHistoryEntry) {
+      panelHistoryEntry = false;
+      window.history.back(); // leaves the address without the place, like the page before
+    } else if (window.location.hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
   }
   render();
 }
@@ -234,7 +248,8 @@ listToggle.addEventListener('click', () => {
 
 window.addEventListener('hashchange', () => {
   const id = window.location.hash.slice(1);
-  if (id !== state.selectedId) selectPlace(getPlace(id) ? id : null);
+  if (!id) panelHistoryEntry = false; // Back button: the entry is already gone
+  if (id !== (state.selectedId || '')) selectPlace(getPlace(id) ? id : null);
 });
 
 onLangChange(() => {

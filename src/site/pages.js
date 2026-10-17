@@ -60,10 +60,12 @@ function renderHome({ today } = {}) {
       </div>`
     : '';
 
-  const hero = heroPhoto(HERO_PHOTO, heroManifest);
+  const hero = heroPhoto(HERO_PHOTO, heroManifest, { sizes: '(max-width: 860px) 100vw, 680px' });
 
-  return `${hero}
-  <section class="hero${hero ? ' hero--after-photo' : ''}">
+  return `<div class="lead-story${hero ? ' lead-story--photo' : ''}">
+  ${hero}
+  <section class="hero">
+    <p class="kicker">${e(t('home.kicker'))}</p>
     <h1>${e(t('site.tagline'))}</h1>
     <p class="lead">${e(t('home.intro'))}</p>
     <p class="hero-actions">
@@ -71,6 +73,7 @@ function renderHome({ today } = {}) {
       <a class="btn btn-ghost" href="${pageHref('history', lang)}">${e(t('nav.history'))}</a>
     </p>
   </section>
+  </div>
 
   <section class="section" aria-labelledby="home-map">
     ${sectionHead('home-map', t('home.mapTitle'), { href: pageHref('map', lang), label: t('home.mapCta') })}

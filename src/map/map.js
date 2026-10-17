@@ -103,6 +103,14 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
     map.fitBounds(bounds, { padding: preview ? 40 : 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
   }
 
+  // Style changes must wait for the first 'load'. isStyleLoaded() is not enough: it is briefly
+  // false again while the style updates, and waiting for 'load' then would wait forever.
+  let styleReady = false;
+  map.once('load', () => {
+    styleReady = true;
+  });
+  const whenStyleReady = (fn) => (styleReady ? fn() : map.once('load', fn));
+
   /** @type {Map<string, {marker: Marker, el: HTMLButtonElement, place: object}>} */
   const markers = new Map();
   let selectedId = null;
@@ -134,8 +142,7 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
       map.setLayoutProperty('building', 'visibility', enabled ? 'none' : 'visible');
       el.dataset.buildings = enabled ? '3d' : '2d';
     };
-    if (map.isStyleLoaded()) apply();
-    else map.once('load', apply);
+    whenStyleReady(apply);
 
     // Rotation and tilt gestures only in 3D, so the 2D map stays simple to use.
     if (enabled) {
@@ -235,8 +242,7 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
           if (map.getLayer(layerId)) map.setLayoutProperty(layerId, 'text-field', nameExpression(nextLang));
         });
       };
-      if (map.isStyleLoaded()) apply();
-      else map.once('load', apply);
+      whenStyleReady(apply);
 
       const s = uiStrings();
       const setLabel = (selector, text) => {

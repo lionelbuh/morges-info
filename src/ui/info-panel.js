@@ -21,12 +21,14 @@ function formatCoord(value) {
 }
 
 /**
- * Slide-in panel (desktop) / bottom sheet (mobile) showing one place.
+ * Slide-in panel (desktop) / full-screen sheet (mobile) showing one place.
+ * On mobile it covers the map; "Back to the map" (or ×, Escape) closes it.
  * @param {HTMLElement} el
  * @param {{ onClose: ()=>void, onFocus: (place)=>void }} opts
  */
 export function createInfoPanel(el, { onClose, onFocus }) {
   let current = null;
+  let returnFocus = null; // element to focus again when the panel closes
 
   el.addEventListener('click', (event) => {
     if (event.target.closest('[data-action="close"]')) onClose();
@@ -93,6 +95,9 @@ export function createInfoPanel(el, { onClose, onFocus }) {
           </details>
           <p class="panel-attribution">${ATTRIBUTION}</p>
         </div>
+        <div class="panel-back">
+          <button type="button" class="btn panel-back-btn" data-action="close"><span aria-hidden="true">←</span> ${escapeHtml(t('panel.backToMap'))}</button>
+        </div>
       </div>`;
   }
 
@@ -104,13 +109,19 @@ export function createInfoPanel(el, { onClose, onFocus }) {
       el.dataset.placeId = place.id;
       // next frame so the CSS transition runs
       requestAnimationFrame(() => el.classList.add('is-open'));
-      if (focusPanel) el.querySelector('.panel-close')?.focus({ preventScroll: true });
+      if (focusPanel) {
+        if (!el.contains(document.activeElement)) returnFocus = document.activeElement;
+        el.querySelector('.panel-close')?.focus({ preventScroll: true });
+      }
     },
     close() {
+      const hadFocus = el.contains(document.activeElement);
       current = null;
       el.classList.remove('is-open');
       el.hidden = true;
       delete el.dataset.placeId;
+      if (hadFocus && returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      returnFocus = null;
     },
     refresh() {
       render();

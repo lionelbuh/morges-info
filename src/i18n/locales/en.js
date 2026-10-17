@@ -25,6 +25,7 @@ export default {
   panel: {
     officialName: 'Official name:',
     close: 'Close',
+    backToMap: 'Back to the map',
     category: 'Category',
     location: 'Location',
     coordinates: 'Coordinates',
@@ -70,6 +71,8 @@ export default {
     footerNavLabel: 'Site map',
     navLabel: 'Main navigation',
     menu: 'Menu',
+    place: 'Morges · Vaud · Switzerland',
+    founded: 'Founded c. 1286',
     home: 'Morges.info home',
   },
   nav: {
@@ -131,8 +134,9 @@ export default {
   },
   home: {
     intro: 'An independent guide dedicated solely to the municipality of Morges: places to discover on the map, independent businesses, the town’s history and useful everyday information. Every piece of information shows its source.',
+    kicker: 'Front page',
     mapTitle: 'Explore the map',
-    mapText: 'Ten places to start with, from the Savoyard castle to the Beausobre theatre, in 2D or 3D.',
+    mapText: 'Museums, parks, quays and landmarks, from the Savoyard castle to the Beausobre theatre, in 2D or 3D.',
     mapCta: 'Open the map',
     placesTitle: 'Places to discover',
     placesCta: 'All places on the map',
