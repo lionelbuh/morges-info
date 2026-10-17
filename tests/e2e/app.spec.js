@@ -36,12 +36,9 @@ async function openList(page) {
   if ((await toggle.isVisible()) && (await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
 }
 
-/** Small screens: the info panel covers the whole screen (map, search, header). */
-const isFullScreenPanel = (page) => page.evaluate(() => window.matchMedia('(max-width: 900px)').matches);
-
-/** Back to the map: closes the full-screen panel on small screens; nothing to do on wide screens. */
+/** The place panel covers the whole screen (map, search, header): "Back to the map" closes it. */
 async function backToMap(page) {
-  if (!(await isFullScreenPanel(page)) || (await panel(page).isHidden())) return;
+  if (await panel(page).isHidden()) return;
   await panel(page).locator('.panel-back-btn').click();
   await expect(panel(page)).toBeHidden();
 }
@@ -203,7 +200,7 @@ test('all four languages translate the interface, map controls, markers and the 
   await mapReady(page);
   await expect(panel(page)).toBeVisible();
   for (const [lang, exp] of Object.entries(EXPECTED)) {
-    await backToMap(page); // on small screens the panel covers the language switch
+    await backToMap(page); // the panel covers the language switch
     await page.locator(`.lang-btn[data-lang="${lang}"]`).click();
     if (await panel(page).isHidden()) await page.evaluate(() => (window.location.hash = 'gare'));
     await expect(page.locator('html')).toHaveAttribute('lang', lang);
@@ -298,41 +295,19 @@ test('layout: no horizontal overflow, panel fits, controls and attribution stay 
     })
     .toBe(true);
 
-  const intersects = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-  if (await isFullScreenPanel(page)) {
-    // small screens: the place fills the screen, with the attribution and a way back to the map
-    await expect.poll(async () => (await panel(page).boundingBox()).height).toBeGreaterThanOrEqual(vp.height - 1);
-    await expect(panel(page).locator('.panel-attribution')).toContainText('OpenStreetMap');
-    await expect(panel(page).locator('.panel-back-btn')).toBeInViewport();
-    await backToMap(page);
-    for (const sel of ['#view-toggle', '.maplibregl-ctrl-zoom-in', '.maplibregl-ctrl-attrib', '#search-input']) {
-      await expect(page.locator(sel)).toBeInViewport();
-    }
-    await expect(marker(page, 'port')).toBeInViewport();
-    expect((await page.locator('#map').boundingBox()).height).toBeGreaterThan(200);
-    return;
+  // the place fills the screen, with the attribution and a way back to the map
+  await expect.poll(async () => (await panel(page).boundingBox()).height).toBeGreaterThanOrEqual(vp.height - 1);
+  await expect(panel(page).locator('.panel-attribution')).toContainText('OpenStreetMap');
+  await expect(panel(page).locator('.panel-back-btn')).toBeInViewport();
+  await backToMap(page);
+  for (const sel of ['#view-toggle', '.maplibregl-ctrl-zoom-in', '.maplibregl-ctrl-attrib', '#search-input']) {
+    await expect(page.locator(sel)).toBeInViewport();
   }
-  const panelBox = await panel(page).boundingBox();
-  for (const sel of ['#view-toggle', '.maplibregl-ctrl-zoom-in', '.maplibregl-ctrl-zoom-out']) {
-    const box = await page.locator(sel).boundingBox();
-    expect(intersects(box, panelBox), `${sel} hidden by panel`).toBe(false);
-  }
-  // the selected marker remains visible next to the panel
-  const markerBox = await marker(page, 'port').boundingBox();
-  expect(intersects(markerBox, panelBox), 'selected marker hidden by panel').toBe(false);
-
-  const attribBox = await page.locator('.maplibregl-ctrl-attrib').boundingBox();
-  if (intersects(attribBox, panelBox)) {
-    // mobile bottom sheet: attribution is repeated inside the panel
-    await expect(panel(page).locator('.panel-attribution')).toBeVisible();
-    await expect(panel(page).locator('.panel-attribution')).toContainText('OpenStreetMap');
-  }
-  const mapBox = await page.locator('#map').boundingBox();
-  expect(mapBox.height).toBeGreaterThan(200);
+  await expect(marker(page, 'port')).toBeInViewport();
+  expect((await page.locator('#map').boundingBox()).height).toBeGreaterThan(200);
 });
 
-test('small screens: a place opens full screen; "Back to the map", × and the Back button close it', async ({ page }, testInfo) => {
-  test.skip(!['mobile', 'tablet'].includes(testInfo.project.name), 'small screens only');
+test('a place opens full screen; "Back to the map", × and the Back button close it', async ({ page }) => {
   await page.goto('/carte/');
   await mapReady(page);
   await zoomTo(page, 'chateau');
@@ -347,6 +322,8 @@ test('small screens: a place opens full screen; "Back to the map", × and the Ba
     .toEqual([0, 0, true, true]);
   await expect(panel(page).locator('.panel-close')).toBeFocused();
   await expect(page).toHaveURL(/#chateau$/);
+  // on wide screens the text keeps a comfortable reading width
+  expect((await panel(page).locator('.panel-description').boundingBox()).width).toBeLessThanOrEqual(760);
 
   // "Back to the map": the map shows the place again
   await panel(page).locator('.panel-back-btn').click();
@@ -354,7 +331,7 @@ test('small screens: a place opens full screen; "Back to the map", × and the Ba
   await expect(page).not.toHaveURL(/#/);
   await expect(marker(page, 'chateau')).toBeInViewport();
 
-  // the phone's Back button closes the panel and stays on the map page
+  // the browser's (or phone's) Back button closes the panel and stays on the map page
   await marker(page, 'chateau').click();
   await expect(panel(page)).toBeVisible();
   await page.goBack();

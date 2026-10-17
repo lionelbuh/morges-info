@@ -120,26 +120,15 @@ async function initMap() {
   if (state.view === '3d') map.setView('3d', { animate: false });
   render();
   const place = state.selectedId && getPlace(state.selectedId);
-  if (place) map.focus(place, { padding: panelPadding() });
+  if (place) map.focus(place);
 }
 
-/** Small screens: the info panel covers the whole map (see main.css). */
-const fullScreenPanel = window.matchMedia('(max-width: 900px)');
-
-/** Room to leave for the info panel so the selected marker stays visible. */
-function panelPadding() {
-  if (panelEl.hidden || fullScreenPanel.matches) return {}; // centred, ready for when the panel closes
-  const mapBox = mapEl.getBoundingClientRect();
-  const box = panelEl.getBoundingClientRect();
-  return { right: Math.max(0, mapBox.right - box.left) + 8 };
-}
-
-// On mobile, opening a place adds a history entry, so the phone's Back button closes the panel.
+// The place opens full screen over the map (see main.css). Opening it adds a history entry,
+// so the browser's or phone's Back button closes it.
 let panelHistoryEntry = false;
 
 const panel = createInfoPanel(panelEl, {
   onClose: () => selectPlace(null),
-  onFocus: (place) => map.focus(place, { padding: panelPadding() }),
 });
 
 const sidebar = createSidebar({
@@ -196,12 +185,12 @@ function selectPlace(id, { fromList = false } = {}) {
   state.selectedId = place ? place.id : null;
 
   if (place) {
-    panel.open(place, { focusPanel: fromList || fullScreenPanel.matches });
-    map.focus(place, { padding: panelPadding() });
+    panel.open(place, { focusPanel: true });
+    map.focus(place); // centred under the panel, ready for when it closes
     if (fromList) state.listOpen = false; // on mobile, the map is there when the panel closes
     if (window.location.hash !== `#${place.id}`) {
       const url = `${window.location.pathname}${window.location.search}#${place.id}`;
-      if (fullScreenPanel.matches && !panelHistoryEntry) {
+      if (!panelHistoryEntry) {
         window.history.pushState(null, '', url);
         panelHistoryEntry = true;
       } else {

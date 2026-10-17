@@ -21,18 +21,17 @@ function formatCoord(value) {
 }
 
 /**
- * Slide-in panel (desktop) / full-screen sheet (mobile) showing one place.
- * On mobile it covers the map; "Back to the map" (or ×, Escape) closes it.
+ * Full-screen page showing one place, over the map (text in a reading column on wide screens).
+ * "Back to the map", × or Escape close it.
  * @param {HTMLElement} el
- * @param {{ onClose: ()=>void, onFocus: (place)=>void }} opts
+ * @param {{ onClose: ()=>void }} opts
  */
-export function createInfoPanel(el, { onClose, onFocus }) {
+export function createInfoPanel(el, { onClose }) {
   let current = null;
   let returnFocus = null; // element to focus again when the panel closes
 
   el.addEventListener('click', (event) => {
     if (event.target.closest('[data-action="close"]')) onClose();
-    if (event.target.closest('[data-action="focus"]') && current) onFocus(current);
   });
   el.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') onClose();
@@ -76,7 +75,6 @@ export function createInfoPanel(el, { onClose, onFocus }) {
           ${
             c
               ? `<div class="panel-actions">
-                  <button type="button" class="btn" data-action="focus">${escapeHtml(t('panel.zoom'))}</button>
                   <a class="btn btn-ghost" href="${osmUrl}" target="_blank" rel="noopener">${escapeHtml(t('panel.osm'))}</a>
                 </div>`
               : ''

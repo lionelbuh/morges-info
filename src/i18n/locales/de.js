@@ -42,7 +42,6 @@ export default {
       unverified: 'Position nicht überprüft',
     },
     notOnMap: 'Dieser Ort wird noch nicht auf der Karte angezeigt: Seine genaue Lage muss noch überprüft werden.',
-    zoom: 'Auf der Karte zentrieren',
     osm: 'Auf OpenStreetMap ansehen',
     archiveTitle: 'Historisches Archiv',
     archiveText: 'Authentische historische Fotografien mit Datum, Quelle und Genehmigung werden in einer späteren Phase hinzugefügt.',

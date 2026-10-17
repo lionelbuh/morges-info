@@ -42,7 +42,6 @@ export default {
       unverified: 'Position not verified',
     },
     notOnMap: 'This place is not shown on the map yet: its exact position still needs to be verified.',
-    zoom: 'Centre on map',
     osm: 'View on OpenStreetMap',
     archiveTitle: 'Historical archive',
     archiveText: 'Authentic historical photographs, with date, source and permission, will be added in a later phase.',

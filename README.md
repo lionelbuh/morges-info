@@ -28,8 +28,9 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
   source pour gêner les robots collecteurs. Les contributions arrivent par e-mail : **aucun envoi public**, rien
   n'est publié sans vérification ni accord (voir [`docs/PHOTOS.md`](docs/PHOTOS.md))
 - **Partage :** image d'aperçu 1200 × 630 (`og:image`) générée par `npm run images` à partir de la photo d'accueil
-- **Carte sur mobile :** la fiche d'un lieu s'ouvre en plein écran ; « Retour à la carte », × ou le bouton Retour
-  du téléphone la referment
+- **Fiche d'un lieu :** elle s'ouvre en plein écran (ordinateur, tablette et téléphone), le texte dans une colonne
+  de lecture ; « Retour à la carte », ×, Échap ou le bouton Retour du navigateur la referment, et la carte est
+  centrée sur le lieu
 - Site statique multipage, pré-rendu en français pour le référencement ; aucune dépendance payante
 
 > Les archives historiques (photos anciennes) sont une phase future : le modèle de données est prêt
