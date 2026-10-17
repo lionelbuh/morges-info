@@ -220,8 +220,9 @@ export default {
     paragraphs: {
       p1: 'Morges ha sempre avuto un posto speciale nei nostri cuori.',
       p2: 'Ci abbiamo vissuto fino al 2012, quando ci siamo trasferiti in California. La distanza non ha mai allentato il legame con questa città sulle rive del Lemano.',
-      p3: 'Abbiamo creato Morges.info per condividere ciò che amiamo di lei: i suoi luoghi, la sua storia, i suoi racconti e il suo carattere di tutti i giorni.',
-      p4: 'Che viviate a Morges, che ci siate cresciuti o che la stiate scoprendo per la prima volta, speriamo che questo sito vi faccia sentire un po’ più vicini a lei.',
+      p3: 'Abbiamo creato Morges.info per condividere ciò che amiamo di lei: i suoi luoghi, la sua storia, i suoi buoni indirizzi e il suo carattere quotidiano.',
+      p4: 'Indipendente e animato dal nostro legame con Morges, questo sito si rivolge a chi ci vive, a chi ci è cresciuto o a chi desidera scoprirla in un modo diverso.',
+      p5: 'Speriamo che Morges.info vi avvicini un po’ a questa città che conta ancora tanto per noi.',
     },
     motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'Come lavoriamo: la nostra carta redazionale',

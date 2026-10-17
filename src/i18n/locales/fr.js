@@ -220,8 +220,9 @@ export default {
     paragraphs: {
       p1: 'Morges a toujours eu une place à part dans nos cœurs.',
       p2: 'Nous y avons vécu jusqu’en 2012, avant de partir pour la Californie. La distance n’a jamais relâché les liens qui nous attachent à cette ville au bord du Léman.',
-      p3: 'Nous avons créé Morges.info pour partager ce que nous aimons ici : ses lieux, son histoire, ses récits et son caractère de tous les jours.',
-      p4: 'Que vous habitiez Morges, que vous y ayez grandi ou que vous la découvriez, nous espérons que ce site vous en rapprochera un peu.',
+      p3: 'Nous avons créé Morges.info pour partager ce que nous aimons ici : ses lieux, son histoire, ses bonnes adresses et son caractère au quotidien.',
+      p4: 'Indépendant et animé par notre attachement à Morges, ce site s’adresse à celles et ceux qui y vivent, qui y ont grandi ou qui souhaitent la découvrir autrement.',
+      p5: 'Nous espérons que Morges.info vous rapprochera un peu de cette ville qui compte toujours pour nous.',
     },
     motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'Comment nous travaillons : notre charte éditoriale',

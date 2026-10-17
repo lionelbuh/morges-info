@@ -220,8 +220,9 @@ export default {
     paragraphs: {
       p1: 'Morges hatte schon immer einen besonderen Platz in unseren Herzen.',
       p2: 'Wir haben hier gelebt, bis wir 2012 nach Kalifornien gezogen sind. Die Entfernung hat unsere Verbundenheit mit dieser Stadt am Ufer des Genfersees nie gelockert.',
-      p3: 'Mit Morges.info möchten wir teilen, was wir an ihr lieben: ihre Orte, ihre Geschichte, ihre Erzählungen und ihren Alltag.',
-      p4: 'Ob Sie in Morges leben, hier aufgewachsen sind oder die Stadt zum ersten Mal entdecken – wir hoffen, dass diese Website Sie ihr ein wenig näherbringt.',
+      p3: 'Mit Morges.info möchten wir teilen, was wir an ihr lieben: ihre Orte, ihre Geschichte, ihre guten Adressen und ihren Charakter im Alltag.',
+      p4: 'Unabhängig und getragen von unserer Verbundenheit mit Morges richtet sich diese Website an alle, die hier leben, hier aufgewachsen sind oder die Stadt auf andere Weise entdecken möchten.',
+      p5: 'Wir hoffen, dass Morges.info Sie dieser Stadt, die uns noch immer viel bedeutet, ein wenig näherbringt.',
     },
     motto: 'Morges, toujours dans nos cœurs.',
     charterLink: 'Wie wir arbeiten: unsere redaktionellen Grundsätze',

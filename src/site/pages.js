@@ -223,7 +223,7 @@ function renderAbout() {
 /** "About us": a short personal note. The motto stays in French in every language. */
 function renderUs() {
   const lang = getLang();
-  const paragraphs = ['p1', 'p2', 'p3', 'p4'].map((k) => `<p>${e(t(`us.paragraphs.${k}`))}</p>`).join('');
+  const paragraphs = ['p1', 'p2', 'p3', 'p4', 'p5'].map((k) => `<p>${e(t(`us.paragraphs.${k}`))}</p>`).join('');
   return `<article class="us-note">
     <h1>${e(t('us.title'))}</h1>
     <div class="us-text">${paragraphs}</div>
