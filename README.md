@@ -6,7 +6,7 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
 | Page | URL | Contenu |
 | --- | --- | --- |
 | Accueil | `/` | présentation, aperçu de la carte, lieux, vie locale, récit à la une |
-| Carte | `/carte/` | carte interactive 2D / 3D, recherche, filtres, fiches des lieux |
+| Carte | `/carte/` | carte interactive en 3D par défaut (2D au choix, mémorisée), recherche, filtres, fiches des lieux |
 | Commerces | `/commerces/` | sélection éditoriale de commerces indépendants (en préparation) |
 | Histoire | `/histoire/` | repères historiques sourcés, futures archives photographiques |
 | Vie locale | `/vie-locale/` | événements à venir et infos pratiques, sources et dates de vérification |

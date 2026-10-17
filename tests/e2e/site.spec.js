@@ -133,6 +133,19 @@ test('home: map preview with markers, places, practical info and featured story;
   await expect(page.locator('#info-panel .panel-title')).toHaveText('Théâtre de Beausobre');
 });
 
+test('the map opens in 3D by default, and a switch to 2D is remembered', async ({ page }) => {
+  await page.goto('/carte/');
+  await expect(page.locator('#map')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('#map')).toHaveAttribute('data-view', '3d');
+  await expect(page.locator('#map')).toHaveAttribute('data-pitch', '55');
+  await expect(page.locator('#view-toggle [data-view="3d"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#view-toggle [data-view="2d"]').click();
+  await expect(page.locator('#map')).toHaveAttribute('data-pitch', '0');
+  await page.reload();
+  await expect(page.locator('#map')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('#map')).toHaveAttribute('data-view', '2d');
+});
+
 test('old map links (/#place) redirect to the map page', async ({ page }) => {
   await page.goto('/#temple');
   await expect(page).toHaveURL(/\/carte\/#temple$/);

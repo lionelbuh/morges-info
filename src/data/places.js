@@ -870,14 +870,14 @@ export const PLACES = [
   {
     id: 'piscine-du-parc',
     category: 'sport',
-    coordinates: { lat: 46.506645, lng: 6.49249 },
+    coordinates: { lat: 46.504666, lng: 6.493514 },
     geo: {
-      status: 'single-source',
-      sources: [{ label: 'Nageurs.com — Piscine communale de Morges', url: 'https://www.nageurs.com/fiches/piscine-morges.html' }],
+      status: 'team',
+      sources: [TEAM('supplied', '17.10.2026')],
       note:
-        'Une seule source avec des coordonnées (Nageurs.com : 46.506645, 6.49249). Cohérent avec l’adresse (promenade ' +
-        'Général-Guisan 11, au bord du lac) et avec la passerelle du Parc des Sports voisin (avis d’enquête Ville de Morges, ' +
-        'coordonnées suisses 2 527 580 / 1 151 080, à ≈ 200 m à l’est). À confirmer sur la carte réelle.',
+        'Coordonnées fournies par l’équipe Morges.info le 17.10.2026 (46.50466558571261, 6.493513869312793). La seule ' +
+        'source publiée trouvée (Nageurs.com, fiche de 2009 : 46.506645, 6.49249) place la piscine ≈ 230 m plus au ' +
+        'nord-ouest ; le point de l’équipe est retenu.',
     },
     name: {
       fr: 'Piscine du Parc',

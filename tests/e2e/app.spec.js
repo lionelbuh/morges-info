@@ -16,6 +16,11 @@ let externalRequests;
 let errors;
 
 test.beforeEach(async ({ page }) => {
+  // The map opens in 3D by default (tested in site.spec.js); these tests start from the 2D view
+  // unless the test itself has chosen a view (the choice is kept across reloads).
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('morges-info:view')) localStorage.setItem('morges-info:view', '2d');
+  });
   errors = collectErrors(page);
   externalRequests = await mockMapServices(page);
 });

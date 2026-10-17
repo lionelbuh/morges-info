@@ -8,11 +8,12 @@ import { initChrome, renderChrome } from './site/chrome.js';
 
 const VIEW_KEY = 'morges-info:view';
 
+/** 3D by default; a visitor who switched to 2D keeps 2D on their next visits. */
 function savedView() {
   try {
-    return localStorage.getItem(VIEW_KEY) === '3d' ? '3d' : '2d';
+    return localStorage.getItem(VIEW_KEY) === '2d' ? '2d' : '3d';
   } catch {
-    return '2d';
+    return '3d';
   }
 }
 

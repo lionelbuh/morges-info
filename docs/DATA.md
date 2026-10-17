@@ -58,7 +58,7 @@ l'équipe Morges.info a contrôlé deux positions sur la carte et indiqué l'emp
 | Parc de Vertou | cross-checked | coordonnées fournies par l'équipe le 16.10.2026 (46.516258064414394, 6.513974252562291), concordantes avec le skatepark du parc sur Waze |
 | Parc de la Prairie | team | coordonnées fournies par l'équipe le 16.10.2026 (46.510818828775875, 6.489033458014868), ≈ 380 m à l'ouest de la gare ; pas de source publiée pour les recouper |
 | Patinoire des Eaux-Minérales | cross-checked | local.ch (46.512104, 6.488004) et L'Agenda (46.511967, 6.487935) concordent (≈ 15 m) ; cohérent avec l'adresse (av. Henry-Warnery 8) et le parc de la Prairie « face à la patinoire » |
-| Piscine du Parc | single-source | Nageurs.com (46.506645, 6.49249), seule source avec coordonnées ; cohérent avec l'adresse (promenade Général-Guisan 11) et la passerelle du Parc des Sports voisin (≈ 200 m à l'est) — **à confirmer** |
+| Piscine du Parc | team | coordonnées fournies par l'équipe le 17.10.2026 (46.50466558571261, 6.493513869312793) ; la seule source publiée (Nageurs.com, 2009 : 46.506645, 6.49249) est ≈ 230 m plus au nord-ouest |
 
 Les traductions EN/DE/IT des descriptions ont été rédigées à partir du texte français. Une relecture par
 des locuteurs natifs est recommandée.
