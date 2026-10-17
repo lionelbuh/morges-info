@@ -63,6 +63,15 @@ describe('site pages', () => {
     expect(map).not.toContain('masthead-dateline');
   });
 
+  it('the brand mark is the flag of Morges, not the Swiss cross', () => {
+    for (const page of ['home', 'map']) {
+      const html = renderHeader(page);
+      expect(html).toContain('class="brand-mark"');
+      expect(html).toContain('#d52b1e');
+      expect(html).not.toContain('M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z'); // the Swiss cross
+    }
+  });
+
   it('dateline: today in Morges, in each language', () => {
     const day = new Date('2026-10-17T10:00:00Z');
     expect(formatToday('fr', day)).toBe('samedi 17 octobre 2026');

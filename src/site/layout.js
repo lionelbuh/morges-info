@@ -14,9 +14,15 @@ import { formatToday } from './format.js';
 const NATIVE_NAMES = { fr: 'Français', en: 'English', de: 'Deutsch', it: 'Italiano' };
 const OG_LOCALES = { fr: 'fr_CH', en: 'en_GB', de: 'de_CH', it: 'it_CH' };
 
+/** Flag of Morges (white over red, two counterchanged wavy bands: the Morges and the Bief rivers).
+ * Flags of communes may be used by anyone when the use is not misleading (LPAP art. 10);
+ * the coat of arms in a shield is reserved for the commune (art. 8), so the flag form is used. */
 const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-  <rect x="1" y="1" width="38" height="38" rx="9" fill="#da291c" />
-  <path d="M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z" fill="#fff" />
+  <path d="M0 0h40v20H0z" fill="#fff"/>
+  <path d="M0 20h40v20H0z" fill="#d52b1e"/>
+  <path d="M0 7.2Q5 5 10 7.2T20 7.2T30 7.2T40 7.2V12.8Q35 15 30 12.8T20 12.8T10 12.8T0 12.8Z" fill="#d52b1e"/>
+  <path d="M0 27.2Q5 25 10 27.2T20 27.2T30 27.2T40 27.2V32.8Q35 35 30 32.8T20 32.8T10 32.8T0 32.8Z" fill="#fff"/>
+  <path d="M.5.5h39v39H.5z" fill="none" stroke="#1c1b19" stroke-opacity=".35"/>
 </svg>`;
 
 export function absoluteUrl(pageId, lang = 'fr') {
