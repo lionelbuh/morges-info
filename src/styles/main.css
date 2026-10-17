@@ -1776,11 +1776,17 @@ body.page-map {
   font-family: var(--serif);
   font-style: italic;
 }
-.us-contact {
+.us-closing {
   margin: 30px 0 0;
   padding-top: 18px;
   border-top: 2px solid var(--red);
   width: fit-content;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-style: italic;
+}
+.us-contact {
+  margin: 28px 0 0;
 }
 .legal-updated {
   margin-top: 36px;

@@ -227,6 +227,7 @@ function renderUs() {
   return `<article class="us-note">
     <h1>${e(t('us.title'))}</h1>
     <div class="us-text">${paragraphs}</div>
+    <p class="us-closing">${e(t('us.closing'))}</p>
     <p class="us-contact">${e(t('us.contactLabel'))} ${emailLink()}</p>
     <p class="us-charter"><a href="${pageHref('about', lang)}">${e(t('us.charterLink'))}<span aria-hidden="true"> →</span></a></p>
   </article>`;

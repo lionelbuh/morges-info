@@ -50,6 +50,7 @@ test('discreet "About us" page: reached from the footer only, in four languages'
   await page.locator('.site-footer a[href="/qui-sommes-nous/"]').click();
   await expect(page).toHaveURL(/\/qui-sommes-nous\/$/);
   await expect(page.locator('main h1')).toHaveText('Qui sommes-nous');
+  await expect(page.locator('.us-closing')).toHaveText('De la Californie et sa côte Pacifique aux rives du Léman.');
   for (const [lang, h1] of [['en', 'About us'], ['de', 'Über uns'], ['it', 'Chi siamo']]) {
     await page.locator(`.lang-btn[data-lang="${lang}"]`).click();
     await expect(page.locator('main h1')).toHaveText(h1);

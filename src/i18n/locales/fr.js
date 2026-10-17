@@ -224,6 +224,7 @@ export default {
       p4: 'Indépendant et animé par notre attachement à Morges, ce site s’adresse à celles et ceux qui y vivent, qui y ont grandi ou qui souhaitent la découvrir autrement.',
       p5: 'Nous espérons que Morges.info vous rapprochera un peu de cette ville qui compte toujours pour nous.',
     },
+    closing: 'De la Californie et sa côte Pacifique aux rives du Léman.',
     charterLink: 'Comment nous travaillons : notre charte éditoriale',
   },
   contribute: {
