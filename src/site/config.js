@@ -5,6 +5,9 @@
  */
 export const SITE_URL = 'https://morges.info';
 
+/** Address for readers' messages, news and photos (shown in the footer and on the contribute page). */
+export const CONTACT_EMAIL = 'hello@morges.info';
+
 /** Pages and their clean French URLs. `nav` = shown in the main navigation. */
 export const PAGES = [
   { id: 'home', path: '/', nav: false },
@@ -13,8 +16,10 @@ export const PAGES = [
   { id: 'history', path: '/histoire/', nav: true },
   { id: 'life', path: '/vie-locale/', nav: true },
   { id: 'stories', path: '/recits/', nav: true },
+  { id: 'contribute', path: '/contribuer/', nav: true },
   { id: 'about', path: '/a-propos/', nav: false },
   { id: 'us', path: '/qui-sommes-nous/', nav: false },
+  { id: 'legal', path: '/mentions-legales/', nav: false },
 ];
 
 export function getPage(id) {

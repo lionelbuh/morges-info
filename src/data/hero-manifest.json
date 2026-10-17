@@ -128,6 +128,24 @@
           }
         ]
       }
+    },
+    "og": {
+      "aspect": 1.9047619047619047,
+      "box": {
+        "left": 0,
+        "top": 38,
+        "width": 2000,
+        "height": 1050
+      },
+      "files": {
+        "jpg": [
+          {
+            "src": "/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg",
+            "width": 1200,
+            "height": 630
+          }
+        ]
+      }
     }
   }
 }

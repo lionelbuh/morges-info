@@ -8,6 +8,7 @@ import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
 import { placeHref } from './links.js';
+import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
 
@@ -147,6 +148,20 @@ export function storyArticle(story) {
     ${places ? `<p class="story-places"><span class="story-places-label">${e(t('common.viewOnMap'))}</span> ${places}</p>` : ''}
     ${sourcesList(story.sources)}
   </article>`;
+}
+
+/** Every character as an HTML entity: browsers show the address, simple spam harvesters miss it. */
+const entities = (text) => [...text].map((c) => `&#${c.codePointAt(0)};`).join('');
+
+/**
+ * Link to write to Morges.info. `label` is plain text (escaped); without it the address is shown.
+ * `subject` / `body` prefill the email.
+ */
+export function emailLink({ label, subject, body, className = '' } = {}) {
+  const query = [subject && `subject=${encodeURIComponent(subject)}`, body && `body=${encodeURIComponent(body)}`].filter(Boolean).join('&');
+  const href = entities(`mailto:${CONTACT_EMAIL}`) + (query ? `?${query}` : '');
+  const text = label ? escapeHtml(label).replace(CONTACT_EMAIL, entities(CONTACT_EMAIL)) : entities(CONTACT_EMAIL);
+  return `<a${className ? ` class="${className}"` : ''} href="${href}">${text}</a>`;
 }
 
 const MIME = { avif: 'image/avif', webp: 'image/webp', jpg: 'image/jpeg' };

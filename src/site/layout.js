@@ -2,9 +2,12 @@
  * Shared header, footer and <head> tags. Pure string functions (used for the
  * French prerender at build time) plus applyHead() for the browser.
  */
-import { t, getLang, LANGUAGES } from '../i18n/index.js';
+import { t, getLang, LANGUAGES, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PAGES, SITE_URL, getPage } from './config.js';
+import { emailLink } from './components.js';
+import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
+import { HERO_PHOTO } from '../data/photos.js';
 import { pageHref } from './links.js';
 import { formatToday } from './format.js';
 
@@ -74,10 +77,23 @@ export function renderFooter() {
       <p class="footer-name">Morges<span class="brand-dot">.info</span></p>
       <p>${e(t('site.tagline'))}</p>
       <p class="footer-note">${e(t('footer.about'))}</p>
+      <p class="footer-contact">${e(t('site.contactLabel'))} ${emailLink()}</p>
     </div>
     <nav aria-label="${e(t('site.footerNavLabel'))}"><ul class="footer-links">${links}</ul></nav>
   </div>
 </footer>`;
+}
+
+/** Preview image for links shared on social networks and messaging apps. */
+function shareImageTags() {
+  const image = heroManifest.crops?.og?.files.jpg[0];
+  if (!image) return '';
+  return `
+    <meta property="og:image" content="${SITE_URL}${image.src}" />
+    <meta property="og:image:width" content="${image.width}" />
+    <meta property="og:image:height" content="${image.height}" />
+    <meta property="og:image:alt" content="${e(localized(HERO_PHOTO.alt))}" />
+    <meta name="twitter:card" content="summary_large_image" />`;
 }
 
 /** <head> tags for a page (prerendered in French; updated by applyHead in the browser). */
@@ -98,7 +114,7 @@ export function renderHeadTags(pageId) {
     <meta property="og:title" content="${e(title)}" />
     <meta property="og:description" content="${e(description)}" />
     <meta property="og:url" content="${absoluteUrl(pageId, lang)}" />
-    <meta property="og:locale" content="${OG_LOCALES[lang]}" />`;
+    <meta property="og:locale" content="${OG_LOCALES[lang]}" />${shareImageTags()}`;
 }
 
 /** Browser: sync <html lang>, title, description, canonical and Open Graph with the language. */
@@ -114,4 +130,5 @@ export function applyHead(pageId) {
   set('meta[property="og:description"]', 'content', t(`pages.${pageId}.description`));
   set('meta[property="og:url"]', 'content', absoluteUrl(pageId, lang));
   set('meta[property="og:locale"]', 'content', OG_LOCALES[lang]);
+  set('meta[property="og:image:alt"]', 'content', localized(HERO_PHOTO.alt));
 }

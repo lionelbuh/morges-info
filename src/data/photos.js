@@ -46,6 +46,8 @@ export const HERO_PHOTO = {
   crops: {
     wide: { aspect: 2, focusX: 0.5, focusY: 0.5, widths: [960, 1440, 1920] },
     tall: { aspect: 1, focusX: 0.62, focusY: 0.5, widths: [480, 720, 1080] },
+    /** Preview image when a page is shared (Facebook, WhatsApp…): 1200 × 630, JPEG only. */
+    og: { aspect: 1200 / 630, focusX: 0.5, focusY: 0.5, widths: [1200], formats: ['jpg'] },
   },
   /** No title over the photo: the sky-free aerial view would put text on the château or the harbour. */
   overlayTitle: false,

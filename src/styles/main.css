@@ -1759,6 +1759,77 @@ body.page-map {
   line-height: 1.65;
 }
 
+/* call for contributions (home) and the contribute page */
+.contribute-band {
+  margin-top: 56px;
+  padding: 26px 0 4px;
+  border-top: 3px double var(--ink);
+  text-align: center;
+}
+.contribute-band h2 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-style: italic;
+}
+.contribute-band p {
+  max-width: 56ch;
+  margin: 0 auto 16px;
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: #34312c;
+}
+.contribute-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 28px 48px;
+  align-items: start;
+}
+.contribute-grid h2 {
+  margin: 0 0 10px;
+  font-size: 1.45rem;
+}
+.contribute-how {
+  padding: 22px 24px;
+  margin-right: 8px; /* room for the offset shadow */
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.contribute-how h3 {
+  margin: 20px 0 6px;
+  font-size: 1.1rem;
+}
+.btn-mail {
+  min-height: 46px;
+  font-size: 0.95rem;
+  white-space: normal;
+  text-align: center;
+}
+.plain-list {
+  margin: 0;
+  padding-left: 18px;
+}
+.plain-list li {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+.callout-link {
+  margin-top: 10px !important;
+}
+.callout-link a,
+.contribute-grid a:not(.btn) {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-style: italic;
+}
+.us-contact {
+  margin: 28px 0 0;
+}
+.legal-updated {
+  margin-top: 36px;
+}
+
 /* history */
 .milestones {
   margin: 0;
@@ -1915,6 +1986,12 @@ body.page-map {
 }
 .footer-note {
   font-size: 0.8rem;
+}
+.footer-contact {
+  margin-top: 10px !important;
+}
+.footer-contact a {
+  color: #fff;
 }
 .footer-links {
   display: grid;

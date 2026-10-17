@@ -13,6 +13,8 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
 | Récits | `/recits/` | récits écrits à partir de sources citées |
 | Charte éditoriale | `/a-propos/` | indépendance, sources, publicité, crédits (lien en pied de page) |
 | Qui sommes-nous | `/qui-sommes-nous/` | note personnelle des auteurs (lien discret en pied de page) |
+| Contribuer | `/contribuer/` | appel aux lecteurs : photos anciennes, nouvelles, corrections, par e-mail à hello@morges.info |
+| Mentions légales | `/mentions-legales/` | éditeur, contact, protection des données (lien en pied de page) |
 
 - **Langues :** français (par défaut), English, Deutsch, Italiano — `FR | EN | DE | IT` sur toutes les pages
 - **Carte :** [MapLibre GL JS](https://maplibre.org) + tuiles vectorielles [OpenFreeMap](https://openfreemap.org)
@@ -21,6 +23,11 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
   vérification ; rien n'est inventé pour remplir un champ (voir [`docs/CONTENT.md`](docs/CONTENT.md))
 - **Apparence « Gazette » :** titres en Fraunces (police libre, licence SIL OFL, paquet `@fontsource-variable/fraunces`
   servi par le site lui-même : aucun appel à Google Fonts ni à un service externe), texte en police système
+- **Contact :** `hello@morges.info` (constante `CONTACT_EMAIL` dans `src/site/config.js`), en pied de page, sur
+  « Contribuer », « Qui sommes-nous » et les mentions légales ; l'adresse est écrite en entités HTML dans le code
+  source pour gêner les robots collecteurs. Les contributions arrivent par e-mail : **aucun envoi public**, rien
+  n'est publié sans vérification ni accord (voir [`docs/PHOTOS.md`](docs/PHOTOS.md))
+- **Partage :** image d'aperçu 1200 × 630 (`og:image`) générée par `npm run images` à partir de la photo d'accueil
 - **Carte sur mobile :** la fiche d'un lieu s'ouvre en plein écran ; « Retour à la carte », × ou le bouton Retour
   du téléphone la referment
 - Site statique multipage, pré-rendu en français pour le référencement ; aucune dépendance payante

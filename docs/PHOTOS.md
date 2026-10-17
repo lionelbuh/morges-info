@@ -60,3 +60,20 @@ ci-dessous).
 > [nom], Morges.info
 
 Conserver la réponse écrite (capture ou courriel) et la référencer dans ce registre avant toute publication.
+
+## Photos envoyées par les lecteurs (page « Contribuer »)
+
+Les lecteurs écrivent à `hello@morges.info`, photos en pièce jointe. Le courriel prérempli leur demande : l'auteur,
+la date (même approximative), le lieu, s'ils possèdent la photo ou ont l'accord de son propriétaire, le crédit
+souhaité et leur accord pour la publication.
+
+Avant de publier une photo reçue :
+
+1. **Droits :** l'expéditeur est l'auteur, ou il a l'accord écrit de l'auteur ou du propriétaire. Une photo publiée
+   dans un groupe Facebook ou trouvée sur Internet n'est **pas** libre pour autant. En Suisse, une photographie
+   ordinaire est protégée 50 ans après sa prise, une œuvre photographique 70 ans après la mort de son auteur ; une
+   carte postale ancienne a souvent un éditeur ou un photographe identifiable.
+2. **Accord de publication :** l'accord écrit (le courriel suffit) est conservé avec la photo.
+3. **Métadonnées :** date, lieu, auteur, crédit et source sont remplis dans `src/data/archive.js`, comme pour toute
+   archive (voir `docs/HISTORICAL_ARCHIVE.md`).
+4. **Retrait :** toute demande de retrait ou de correction de crédit est traitée sans discussion.

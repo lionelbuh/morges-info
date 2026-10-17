@@ -60,6 +60,47 @@ test('discreet "About us" page: reached from the footer only, in four languages'
   await expect(page).toHaveURL(/\/a-propos\/\?lang=it$/);
 });
 
+test('contribute: reachable from the menu, the home page and the footer; writes to hello@morges.info', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.site-footer .footer-contact a')).toHaveAttribute('href', 'mailto:hello@morges.info');
+  await page.locator('.contribute-band a').click();
+  await expect(page).toHaveURL(/\/contribuer\/$/);
+  await expect(page.locator('main h1')).toHaveText(fr.contribute.title);
+  const mail = page.locator('.btn-mail');
+  await expect(mail).toHaveText('Écrire à hello@morges.info');
+  const href = await mail.getAttribute('href');
+  expect(href.startsWith('mailto:hello@morges.info?subject=')).toBe(true);
+  const url = new URL(href);
+  expect(url.searchParams.get('subject')).toBe(fr.contribute.mailSubject);
+  expect(url.searchParams.get('body')).toContain('Auteur');
+  // in German, the prefilled email is German too
+  await page.locator('.lang-btn[data-lang="de"]').click();
+  await expect(mail).toHaveText(de.contribute.button.replace('{email}', 'hello@morges.info'));
+  expect(new URL(await mail.getAttribute('href')).searchParams.get('subject')).toBe(de.contribute.mailSubject);
+  // the privacy page explains what happens to messages and photos
+  await page.locator('a[href^="/mentions-legales/"]').first().click();
+  await expect(page.locator('main h1')).toHaveText(de.legal.title);
+  await expect(page.locator('main a[href="mailto:hello@morges.info"]')).toHaveCount(1);
+});
+
+test('the address is not written in plain text in the page source (spam harvesters)', async ({ request }) => {
+  for (const path of ['/', '/contribuer/', '/mentions-legales/', '/qui-sommes-nous/']) {
+    const html = await (await request.get(path)).text();
+    expect(html, path).not.toContain('hello@morges.info');
+    expect(html, path).toContain('&#104;&#101;&#108;&#108;&#111;&#64;'); // "hello@" as entities
+  }
+});
+
+test('shared links show a preview image', async ({ page, request }) => {
+  await page.goto('/histoire/');
+  const image = await page.locator('meta[property="og:image"]').getAttribute('content');
+  expect(image).toMatch(/^https:\/\/morges\.info\/images\/hero\/.+-og-1200\.jpg$/);
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+  const res = await request.get(new URL(image).pathname);
+  expect(res.status()).toBe(200);
+  expect(res.headers()['content-type']).toContain('image/jpeg');
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
@@ -156,7 +197,7 @@ test('mobile menu opens, closes with Escape and lists all sections', async ({ pa
   await expect(page.locator('.site-nav-list')).toBeHidden();
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('.site-nav-list a')).toHaveCount(5);
+  await expect(page.locator('.site-nav-list a')).toHaveCount(PAGES.filter((p) => p.nav).length);
   await page.keyboard.press('Escape');
   await expect(page.locator('.site-nav-list')).toBeHidden();
   const brand = await page.locator('.brand-name').evaluate((el) => el.scrollWidth <= el.clientWidth + 1);

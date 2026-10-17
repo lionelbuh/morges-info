@@ -27,7 +27,13 @@ import {
   frenchOnlyNotice,
   sourcesList,
   heroPhoto,
+  emailLink,
 } from './components.js';
+import { CONTACT_EMAIL } from './config.js';
+import { formatDate } from './format.js';
+
+/** Date shown at the bottom of the legal notice; change it when the text changes. */
+const LEGAL_UPDATED = '2026-10-17';
 
 /** Places highlighted on the home page (all have verified or confirmed positions). */
 export const HOME_PLACE_IDS = ['chateau', 'port', 'parc-independance', 'temple'];
@@ -113,6 +119,12 @@ function renderHome({ today } = {}) {
       : ''
   }
 
+  <section class="contribute-band" aria-labelledby="home-contribute">
+    <h2 id="home-contribute">${e(t('home.contributeTitle'))}</h2>
+    <p>${e(t('home.contributeText'))}</p>
+    <a class="btn" href="${pageHref('contribute', lang)}">${e(t('home.contributeCta'))}</a>
+  </section>
+
   ${
     businesses.length
       ? `<section class="section" aria-labelledby="home-businesses">
@@ -171,6 +183,7 @@ function renderHistory() {
     <div class="callout">
       <h2 id="history-archive">${e(t('history.archiveTitle'))}</h2>
       <p>${e(t('history.archiveText'))}</p>
+      <p class="callout-link"><a href="${pageHref('contribute', lang)}">${e(t('history.archiveCta'))}<span aria-hidden="true"> →</span></a></p>
     </div>
   </section>`;
 }
@@ -215,8 +228,60 @@ function renderUs() {
     <h1>${e(t('us.title'))}</h1>
     <div class="us-text">${paragraphs}</div>
     <p class="us-motto" lang="fr">${e(t('us.motto'))}</p>
+    <p class="us-contact">${e(t('us.contactLabel'))} ${emailLink()}</p>
     <p class="us-charter"><a href="${pageHref('about', lang)}">${e(t('us.charterLink'))}<span aria-hidden="true"> →</span></a></p>
   </article>`;
+}
+
+/** How readers can send news, corrections and photos (by email, checked before anything is published). */
+function renderContribute() {
+  const lang = getLang();
+  const list = (group, keys) => keys.map((k) => `<li>${e(t(`contribute.${group}.${k}`))}</li>`).join('');
+  return `${pageIntro(t('contribute.title'), t('contribute.intro'))}
+  <section class="section contribute-grid">
+    <div>
+      <h2>${e(t('contribute.lookingTitle'))}</h2>
+      <ul class="checklist">${list('looking', ['photos', 'news', 'corrections', 'memories'])}</ul>
+    </div>
+    <div class="contribute-how">
+      <h2>${e(t('contribute.howTitle'))}</h2>
+      <p>${e(t('contribute.howText'))}</p>
+      <p>${emailLink({
+        label: t('contribute.button', { email: CONTACT_EMAIL }),
+        subject: t('contribute.mailSubject'),
+        body: t('contribute.mailBody'),
+        className: 'btn btn-mail',
+      })}</p>
+      <h3>${e(t('contribute.photoTitle'))}</h3>
+      <ul class="plain-list">${list('photo', ['author', 'date', 'place', 'rights', 'credit'])}</ul>
+    </div>
+  </section>
+  <section class="section two-col">
+    <div>
+      <h2>${e(t('contribute.nextTitle'))}</h2>
+      <ul class="checklist">${list('next', ['read', 'check', 'consent', 'credit', 'removal'])}</ul>
+    </div>
+    <div>
+      <h2>${e(t('contribute.rightsTitle'))}</h2>
+      <p>${e(t('contribute.rightsText'))}</p>
+      <p><a href="${pageHref('legal', lang)}">${e(t('contribute.privacyLink'))}<span aria-hidden="true"> →</span></a></p>
+    </div>
+  </section>`;
+}
+
+/** Publisher, contact and data protection. */
+function renderLegal() {
+  const lang = getLang();
+  const block = (key, extra = '') => `<section class="section prose">
+    <h2>${e(t(`legal.${key}Title`))}</h2>
+    <p>${e(t(`legal.${key}Text`))}${extra}</p>
+  </section>`;
+  return `${pageIntro(t('legal.title'), t('legal.intro'))}
+  ${block('publisher')}
+  ${block('contact', ` ${emailLink()}`)}
+  ${['data', 'photos', 'storage', 'services', 'rights'].map((k) => block(k)).join('')}
+  ${block('credits', ` <a href="${pageHref('about', lang)}">${e(t('nav.about'))}</a>`)}
+  <p class="verified legal-updated">${e(t('legal.updated', { date: formatDate(LEGAL_UPDATED, lang) }))}</p>`;
 }
 
 const RENDERERS = {
@@ -227,6 +292,8 @@ const RENDERERS = {
   stories: renderStories,
   about: renderAbout,
   us: renderUs,
+  contribute: renderContribute,
+  legal: renderLegal,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

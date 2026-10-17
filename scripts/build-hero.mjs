@@ -38,10 +38,11 @@ for (const [name, crop] of Object.entries(HERO_PHOTO.crops)) {
     const h = Math.round(w / (box.width / box.height));
     const base = sharp(input).rotate().extract(box).resize(w, h); // metadata (EXIF, GPS) is stripped by default
     const stem = `${HERO_PHOTO.id}-${name}-${w}`;
-    await base.clone().avif({ quality: 52, effort: 6 }).toFile(path.join(outDir, `${stem}.avif`));
-    await base.clone().webp({ quality: 74, effort: 6 }).toFile(path.join(outDir, `${stem}.webp`));
+    const formats = crop.formats || ['avif', 'webp', 'jpg'];
+    if (formats.includes('avif')) await base.clone().avif({ quality: 52, effort: 6 }).toFile(path.join(outDir, `${stem}.avif`));
+    if (formats.includes('webp')) await base.clone().webp({ quality: 74, effort: 6 }).toFile(path.join(outDir, `${stem}.webp`));
     await base.clone().jpeg({ quality: 78, progressive: true, mozjpeg: true }).toFile(path.join(outDir, `${stem}.jpg`));
-    for (const fmt of ['avif', 'webp', 'jpg']) {
+    for (const fmt of formats) {
       (entry.files[fmt] ||= []).push({ src: `/images/hero/${stem}.${fmt}`, width: w, height: h });
     }
   }
