@@ -1,10 +1,11 @@
 /** Entry point of the content pages (home, businesses, history, local life, stories, about). */
 import '../styles/main.css';
-import { detectInitialLang, setLang, onLangChange, getLang, localized } from '../i18n/index.js';
+import { detectInitialLang, setLang, onLangChange, getLang, localized, t } from '../i18n/index.js';
 import { PLACES, getPlace, MORGES_CENTER } from '../data/places.js';
 import { initChrome, renderChrome } from './chrome.js';
 import { renderMain } from './pages.js';
 import { placeHref } from './links.js';
+import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
 
@@ -68,6 +69,28 @@ function mountMapPreview() {
   previewObserver.observe(el);
 }
 
+/** Legal page: the visitor can turn audience statistics off (or on again) on this device. */
+function syncAnalyticsControl() {
+  const button = document.querySelector('[data-analytics-toggle]');
+  const status = document.querySelector('.analytics-status');
+  if (!button || !status) return;
+  if (browserRefusesTracking()) {
+    button.hidden = true;
+    status.textContent = t('legal.analyticsStatusBrowser');
+    return;
+  }
+  const off = analyticsOptedOut();
+  button.hidden = false;
+  button.textContent = t(off ? 'legal.analyticsTurnOn' : 'legal.analyticsTurnOff');
+  status.textContent = t(off ? 'legal.analyticsStatusOff' : 'legal.analyticsStatusOn');
+}
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('[data-analytics-toggle]')) return;
+  setAnalyticsOptOut(!analyticsOptedOut());
+  syncAnalyticsControl();
+});
+
 function render() {
   if (previewObserver) previewObserver.disconnect();
   if (preview) {
@@ -77,10 +100,12 @@ function render() {
   renderChrome(pageId);
   document.getElementById('main').innerHTML = renderMain(pageId);
   if (pageId === 'home') mountMapPreview();
+  if (pageId === 'legal') syncAnalyticsControl();
 }
 
 onLangChange(render);
 render();
+startAnalytics();
 
 // Content is re-rendered after load: honour #anchors (e.g. a story) once it is in place.
 const anchor = window.location.hash.slice(1);

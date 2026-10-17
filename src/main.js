@@ -5,6 +5,7 @@ import { filterPlaces } from './ui/search.js';
 import { createSidebar } from './ui/sidebar.js';
 import { createInfoPanel } from './ui/info-panel.js';
 import { initChrome, renderChrome } from './site/chrome.js';
+import { startAnalytics } from './site/analytics.js';
 
 const VIEW_KEY = 'morges-info:view';
 
@@ -255,4 +256,5 @@ render();
 const initialId = window.location.hash.slice(1);
 if (initialId && getPlace(initialId)) selectPlace(initialId);
 initMap();
+startAnalytics();
 

@@ -113,6 +113,23 @@ test('404 page: translated, not indexed, links back to the site', async ({ page 
   await expect(page).toHaveURL(/\/\?lang=de$/);
 });
 
+test('legal page: audience statistics are explained and can be turned off on this device', async ({ page }) => {
+  await page.goto('/mentions-legales/');
+  await expect(page.locator('#mesure-audience h2')).toHaveText(fr.legal.analyticsTitle);
+  await expect(page.locator('#mesure-audience')).toContainText('Cloudflare Web Analytics');
+  const button = page.locator('[data-analytics-toggle]');
+  await expect(page.locator('.analytics-status')).toHaveText(fr.legal.analyticsStatusOn);
+  await button.click();
+  await expect(page.locator('.analytics-status')).toHaveText(fr.legal.analyticsStatusOff);
+  await expect(button).toHaveText(fr.legal.analyticsTurnOn);
+  await page.reload();
+  await expect(page.locator('.analytics-status')).toHaveText(fr.legal.analyticsStatusOff);
+  await button.click();
+  await expect(page.locator('.analytics-status')).toHaveText(fr.legal.analyticsStatusOn);
+  // the beacon never loads outside the live domain (afterEach also checks that no external request was made)
+  await expect(page.locator('script[src*="cloudflareinsights"]')).toHaveCount(0);
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
