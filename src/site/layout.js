@@ -50,8 +50,8 @@ export function renderHeader(pageId) {
   const dateline = masthead
     ? `<p class="masthead-dateline"><span>${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span>${e(t('site.founded'))}</span></p>`
     : '';
-  // On the home page the tagline is already the page title.
-  const tagline = pageId === 'home' ? '' : `<span class="brand-tagline">${e(t('site.tagline'))}</span>`;
+  // On the home page the tagline is already the page title; the map page's compact bar shows only the motto line.
+  const tagline = masthead && pageId !== 'home' ? `<span class="brand-tagline">${e(t('site.tagline'))}</span>` : '';
 
   return `<a class="skip-link" href="#main">${e(t('site.skipToContent'))}</a>
 <header class="site-header site-header--${masthead ? 'masthead' : 'compact'}" id="site-header">
@@ -60,6 +60,7 @@ export function renderHeader(pageId) {
     ${BRAND_MARK}
     <span class="brand-text">
       <span class="brand-name">Morges<span class="brand-dot">.info</span></span>
+      <span class="brand-motto">${e(t('site.motto'))}</span>
       ${tagline}
     </span>
   </a>

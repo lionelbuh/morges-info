@@ -67,6 +67,7 @@ export default {
     archive: 'Archives historiques : prochainement.',
   },
   site: {
+    motto: 'La gazette indépendante de Morges',
     contactLabel: 'Nous écrire :',
     tagline: 'La vie locale, les bonnes adresses et la mémoire de Morges.',
     skipToContent: 'Aller au contenu',

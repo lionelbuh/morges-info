@@ -145,6 +145,16 @@ body.page-map {
   font-style: italic;
   font-weight: 400;
 }
+/* "La gazette indépendante de Morges": small capitals under the name, secondary to the logo */
+.brand-motto {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
 .brand-tagline {
   font-size: 0.78rem;
   color: var(--ink-soft);
@@ -260,8 +270,9 @@ body.page-map {
 }
 
 @media (max-width: 1240px) {
-  .brand-tagline {
-    display: none;
+  .brand-tagline,
+  .site-header--compact .brand-motto {
+    display: none; /* the compact bar (map page) needs the room for the menu */
   }
 }
 
@@ -323,6 +334,11 @@ body.page-map {
   font-variation-settings: 'opsz' 144;
   letter-spacing: -0.035em;
   line-height: 0.95;
+}
+.site-header--masthead .brand-motto {
+  margin-top: 16px; /* clear of the descender of the g */
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
 }
 .site-header--masthead .brand-tagline {
   display: block;
@@ -395,6 +411,11 @@ body.page-map {
   }
 }
 @media (max-width: 420px) {
+  .site-header--masthead .brand-motto {
+    margin-top: 8px;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+  }
   .masthead-dateline {
     justify-content: center;
   }

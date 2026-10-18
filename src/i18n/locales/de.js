@@ -67,6 +67,7 @@ export default {
     archive: 'Historisches Archiv: demnächst.',
   },
   site: {
+    motto: 'Das unabhängige Lokalblatt von Morges',
     contactLabel: 'Schreiben Sie uns:',
     tagline: 'Lokales Leben, gute Adressen und das Gedächtnis von Morges.',
     skipToContent: 'Zum Inhalt springen',
