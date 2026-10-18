@@ -4,7 +4,8 @@
  */
 import { t, getLang, LANGUAGES, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
-import { PAGES, SITE_URL, getPage } from './config.js';
+import { PAGES, SITE_URL, SEARCH_VERIFICATION, getPage } from './config.js';
+import { getPlace } from '../data/places.js';
 import { emailLink } from './components.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { HERO_PHOTO } from '../data/photos.js';
@@ -102,11 +103,41 @@ function shareImageTags() {
     <meta name="twitter:card" content="summary_large_image" />`;
 }
 
+/** Ownership checks for Google / Bing, on the home page only. */
+function verificationTags(pageId) {
+  if (pageId !== 'home') return '';
+  const { google, bing } = SEARCH_VERIFICATION;
+  return (
+    (google ? `\n    <meta name="google-site-verification" content="${e(google)}" />` : '') +
+    (bing ? `\n    <meta name="msvalidate.01" content="${e(bing)}" />` : '')
+  );
+}
+
+/** Short description for search results: whole words, about 155 characters at most. */
+export function summarize(text, max = 155) {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,;:.–—-]+$/u, '')}…`;
+}
+
+/** Title and description of a page, in the current language (place pages: from the place data). */
+export function pageMeta(pageId) {
+  const page = getPage(pageId);
+  if (page.placeId) {
+    const place = getPlace(page.placeId);
+    const name = localized(place.name);
+    return {
+      title: `${name}${name.includes('Morges') ? '' : ', Morges'} — Morges.info`,
+      description: summarize(localized(place.description)),
+    };
+  }
+  return { title: t(`pages.${pageId}.title`), description: t(`pages.${pageId}.description`) };
+}
+
 /** <head> tags for a page (prerendered in French; updated by applyHead in the browser). */
 export function renderHeadTags(pageId) {
   const lang = getLang();
-  const title = t(`pages.${pageId}.title`);
-  const description = t(`pages.${pageId}.description`);
+  const { title, description } = pageMeta(pageId);
   if (getPage(pageId).listed === false) {
     // not a real page: kept out of search results, no canonical address
     return `<title>${e(title)}</title>
@@ -121,6 +152,7 @@ export function renderHeadTags(pageId) {
     <link rel="canonical" href="${absoluteUrl(pageId, lang)}" />
     ${alternates}
     <link rel="alternate" hreflang="x-default" href="${absoluteUrl(pageId, 'fr')}" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />${verificationTags(pageId)}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Morges.info" />
     <meta property="og:title" content="${e(title)}" />
@@ -132,14 +164,14 @@ export function renderHeadTags(pageId) {
 /** Browser: sync <html lang>, title, description, canonical and Open Graph with the language. */
 export function applyHead(pageId) {
   const lang = getLang();
-  getPage(pageId);
+  const { title, description } = pageMeta(pageId);
   document.documentElement.lang = lang;
-  document.title = t(`pages.${pageId}.title`);
+  document.title = title;
   const set = (selector, attr, value) => document.querySelector(selector)?.setAttribute(attr, value);
-  set('meta[name="description"]', 'content', t(`pages.${pageId}.description`));
+  set('meta[name="description"]', 'content', description);
   set('link[rel="canonical"]', 'href', absoluteUrl(pageId, lang));
-  set('meta[property="og:title"]', 'content', t(`pages.${pageId}.title`));
-  set('meta[property="og:description"]', 'content', t(`pages.${pageId}.description`));
+  set('meta[property="og:title"]', 'content', title);
+  set('meta[property="og:description"]', 'content', description);
   set('meta[property="og:url"]', 'content', absoluteUrl(pageId, lang));
   set('meta[property="og:locale"]', 'content', OG_LOCALES[lang]);
   set('meta[property="og:image:alt"]', 'content', localized(HERO_PHOTO.alt));

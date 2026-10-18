@@ -2,6 +2,7 @@ import { getCategory } from '../data/categories.js';
 import { t, localized, getLang, textOf } from '../i18n/index.js';
 import { formatDate } from '../site/format.js';
 import { photoFigure } from '../site/components.js';
+import { placePageHref } from '../site/links.js';
 import { escapeHtml } from './dom.js';
 import { ATTRIBUTION } from '../map/style.js';
 
@@ -75,6 +76,7 @@ export function createInfoPanel(el, { onClose }) {
           ${
             c
               ? `<div class="panel-actions">
+                  <a class="btn" href="${placePageHref(place.id, getLang())}" data-field="permalink">${escapeHtml(t('panel.permalink'))}</a>
                   <a class="btn btn-ghost" href="${osmUrl}" target="_blank" rel="noopener">${escapeHtml(t('panel.osm'))}</a>
                 </div>`
               : ''

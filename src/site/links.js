@@ -1,4 +1,4 @@
-import { getPage } from './config.js';
+import { getPage, placePageId } from './config.js';
 
 const langQuery = (lang) => (lang && lang !== 'fr' ? `?lang=${lang}` : '');
 
@@ -10,6 +10,11 @@ export function pageHref(id, lang) {
 /** Link to a place on the map page. */
 export function placeHref(placeId, lang) {
   return `${getPage('map').path}${langQuery(lang)}#${placeId}`;
+}
+
+/** Link to the page of a place (/lieux/<id>/). */
+export function placePageHref(placeId, lang) {
+  return pageHref(placePageId(placeId), lang);
 }
 
 /** Link to a story (anchor on the stories page). */
