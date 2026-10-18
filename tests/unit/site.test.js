@@ -80,6 +80,18 @@ describe('site pages', () => {
     }
   });
 
+  it('header: the gazette motto sits under the logo, on every page and in every language', () => {
+    const mottos = { fr: 'La gazette indépendante de Morges', en: 'The independent gazette of Morges', de: 'Das unabhängige Lokalblatt von Morges', it: 'La gazzetta indipendente di Morges' };
+    for (const lang of LANGUAGES) {
+      setLang(lang);
+      for (const page of ['home', 'map', 'history', 'place:chateau']) {
+        expect(renderHeader(page)).toMatch(new RegExp(`brand-dot">\\.info</span></span>\\s*<span class="brand-motto">${mottos[lang]}</span>`));
+      }
+    }
+    setLang('fr');
+    expect(renderHeader('home')).not.toContain('brand-tagline'); // the home page title already says it
+  });
+
   it('dateline: today in Morges, in each language', () => {
     const day = new Date('2026-10-17T10:00:00Z');
     expect(formatToday('fr', day)).toBe('samedi 17 octobre 2026');

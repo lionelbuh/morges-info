@@ -67,6 +67,7 @@ export default {
     archive: 'Historical archive: coming soon.',
   },
   site: {
+    motto: 'The independent gazette of Morges',
     contactLabel: 'Write to us:',
     tagline: 'Local life, good addresses and the memory of Morges.',
     skipToContent: 'Skip to content',
