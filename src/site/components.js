@@ -7,7 +7,7 @@ import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
-import { placeHref } from './links.js';
+import { placeHref, placePageHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
@@ -65,7 +65,7 @@ export function placeCard(place) {
     ${place.photos[0] ? photoFigure(place.photos[0]) : ''}
     <div class="card-body">
       ${categoryBadge(place.category)}
-      <h3 class="card-title">${e(localized(place.name))}</h3>
+      <h3 class="card-title"><a href="${placePageHref(place.id, lang)}">${e(localized(place.name))}</a></h3>
       <p class="card-meta">${e(localized(place.location))}</p>
       <a class="card-link" href="${placeHref(place.id, lang)}">${e(t('common.viewOnMap'))}<span aria-hidden="true"> →</span></a>
     </div>

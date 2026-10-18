@@ -24,6 +24,7 @@ export default {
     sport: 'Sport und Freizeit',
   },
   panel: {
+    permalink: 'Seite dieses Ortes',
     officialName: 'Offizieller Name:',
     close: 'Schliessen',
     backToMap: 'Zurück zur Karte',
@@ -77,6 +78,7 @@ export default {
     home: 'Morges.info Startseite',
   },
   nav: {
+    places: 'Orte',
     contribute: 'Mitmachen',
     legal: 'Impressum',
     map: 'Karte',
@@ -88,6 +90,10 @@ export default {
     us: 'Über uns',
   },
   pages: {
+    places: {
+      title: 'Orte in Morges entdecken — Morges.info',
+      description: 'Alle Orte auf Morges.info: Schloss, Museen, Parks, Quais, Hafen, Kirchen, Eisbahn und Schwimmbad, mit Beschreibung, Adresse und Quellen.',
+    },
     notfound: {
       title: 'Seite nicht gefunden — Morges.info',
       description: 'Diese Adresse entspricht keiner Seite von Morges.info. Vielleicht hat sie sich geändert oder enthält einen Tippfehler.',
@@ -301,5 +307,13 @@ export default {
     text: 'Diese Adresse entspricht keiner Seite von Morges.info. Vielleicht hat sie sich geändert oder enthält einen Tippfehler.',
     home: 'Zur Startseite',
     map: 'Karte öffnen',
+  },
+  places: {
+    title: 'Orte entdecken',
+    intro: 'Alle Orte der Karte von Morges.info, nach Kategorien geordnet. Jeder hat eine eigene Seite mit Beschreibung, Adresse und Quellen.',
+    home: 'Startseite',
+    breadcrumb: 'Brotkrümelnavigation',
+    others: 'Weitere Orte: {category}',
+    all: 'Alle Orte',
   },
 };

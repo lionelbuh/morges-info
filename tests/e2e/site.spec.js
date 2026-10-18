@@ -130,6 +130,53 @@ test('legal page: audience statistics are explained and can be turned off on thi
   await expect(page.locator('script[src*="cloudflareinsights"]')).toHaveCount(0);
 });
 
+test('each place has its own indexable page, linked from the places index and the map', async ({ page }) => {
+  await page.goto('/lieux/');
+  await expect(page.locator('main h1')).toHaveText(fr.places.title);
+  await expect(page.locator('.places-list a[href="/lieux/piscine-du-parc/"]')).toHaveText('Piscine du Parc');
+  await page.locator('.places-list a[href="/lieux/piscine-du-parc/"]').click();
+  await expect(page).toHaveURL(/\/lieux\/piscine-du-parc\/$/);
+  await expect(page).toHaveTitle('Piscine du Parc, Morges — Morges.info');
+  await expect(page.locator('main h1')).toHaveText('Piscine du Parc');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://morges.info/lieux/piscine-du-parc/');
+  await expect(page.locator('.breadcrumb li')).toHaveCount(3);
+  // structured data: valid JSON describing the place and the breadcrumb
+  const data = await page.locator('script[type="application/ld+json"]').evaluateAll((els) => els.map((el) => JSON.parse(el.textContent)));
+  expect(data.map((d) => d['@type'])).toEqual(['SportsActivityLocation', 'BreadcrumbList']);
+  expect(data[0].geo).toEqual({ '@type': 'GeoCoordinates', latitude: 46.504666, longitude: 6.493514 });
+  expect(data[0].address.streetAddress).toBe('Promenade Général-Guisan 11');
+  // translated like every page
+  await page.locator('.lang-btn[data-lang="it"]').click();
+  await expect(page.locator('main h1')).toHaveText('Piscina del Parco');
+  await expect(page).toHaveURL(/\/lieux\/piscine-du-parc\/\?lang=it$/);
+  // "View on the map" opens the place on the map, whose panel links back to this page
+  await page.locator('.place-page .hero-actions .btn').first().click();
+  await expect(page).toHaveURL(/\/carte\/\?lang=it#piscine-du-parc$/);
+  await expect(page.locator('#info-panel [data-field="permalink"]')).toHaveAttribute('href', '/lieux/piscine-du-parc/?lang=it');
+});
+
+test('structured data: site, events and stories are described for search engines', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-01T10:00:00+01:00'));
+  const types = async (path) => {
+    await page.goto(path);
+    return page.locator('script[type="application/ld+json"]').evaluateAll((els) => els.map((el) => JSON.parse(el.textContent)));
+  };
+  const home = await types('/');
+  expect(home[0]['@graph'].map((n) => n['@type'])).toEqual(['Organization', 'WebSite']);
+  const life = await types('/vie-locale/');
+  expect(life[0]).toMatchObject({ '@type': 'Event', startDate: '2026-12-02', endDate: '2026-12-20' });
+  expect(life[0].location.name).toBe('Château de Morges');
+  const stories = await types('/recits/?lang=en');
+  expect(stories[0]).toMatchObject({ '@type': 'Article', headline: 'Why Bern built a harbour in Morges', inLanguage: 'en' });
+});
+
+test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
+  expect(sitemap.match(/<loc>/g)).toHaveLength(31);
+  expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

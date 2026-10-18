@@ -24,6 +24,7 @@ export default {
     sport: 'Sport e tempo libero',
   },
   panel: {
+    permalink: 'Pagina del luogo',
     officialName: 'Nome ufficiale:',
     close: 'Chiudi',
     backToMap: 'Torna alla mappa',
@@ -77,6 +78,7 @@ export default {
     home: 'Pagina iniziale di Morges.info',
   },
   nav: {
+    places: 'Luoghi',
     contribute: 'Contribuire',
     legal: 'Note legali',
     map: 'Mappa',
@@ -88,6 +90,10 @@ export default {
     us: 'Chi siamo',
   },
   pages: {
+    places: {
+      title: 'Luoghi da scoprire a Morges — Morges.info',
+      description: 'Tutti i luoghi di Morges.info: castello, musei, parchi, lungolaghi, porto, chiese, pista di pattinaggio e piscina, con descrizione, indirizzo e fonti.',
+    },
     notfound: {
       title: 'Pagina non trovata — Morges.info',
       description: 'Questo indirizzo non corrisponde a nessuna pagina di Morges.info. Forse è cambiato o contiene un errore di battitura.',
@@ -301,5 +307,13 @@ export default {
     text: 'Questo indirizzo non corrisponde a nessuna pagina di Morges.info. Forse è cambiato o contiene un errore di battitura.',
     home: 'Torna alla pagina iniziale',
     map: 'Apri la mappa',
+  },
+  places: {
+    title: 'Luoghi da scoprire',
+    intro: 'Tutti i luoghi presentati sulla mappa di Morges.info, suddivisi per categoria. Ognuno ha la sua pagina, con descrizione, indirizzo e fonti.',
+    home: 'Pagina iniziale',
+    breadcrumb: 'Percorso di navigazione',
+    others: 'Altri luoghi: {category}',
+    all: 'Tutti i luoghi',
   },
 };

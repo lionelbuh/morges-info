@@ -19,6 +19,14 @@ describe('site pages', () => {
     }
   });
 
+  it('every listed page has a navigation label (footer) in all four languages', () => {
+    for (const lang of LANGUAGES) {
+      for (const p of PAGES.filter((x) => x.id !== 'home' && x.listed !== false)) {
+        expect(MESSAGES[lang].nav[p.id], `${lang}.nav.${p.id}`).toBeTruthy();
+      }
+    }
+  });
+
   it('page titles are unique', () => {
     const titles = PAGES.map((p) => MESSAGES.fr.pages[p.id].title);
     expect(new Set(titles).size).toBe(titles.length);

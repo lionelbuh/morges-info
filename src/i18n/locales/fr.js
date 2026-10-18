@@ -24,6 +24,7 @@ export default {
     sport: 'Sports et loisirs',
   },
   panel: {
+    permalink: 'Page du lieu',
     officialName: 'Nom officiel\u00a0:',
     close: 'Fermer',
     backToMap: 'Retour à la carte',
@@ -77,6 +78,7 @@ export default {
     home: 'Accueil Morges.info',
   },
   nav: {
+    places: 'Lieux',
     contribute: 'Contribuer',
     legal: 'Mentions légales',
     map: 'Carte',
@@ -88,6 +90,10 @@ export default {
     us: 'Qui sommes-nous',
   },
   pages: {
+    places: {
+      title: 'Lieux à découvrir à Morges — Morges.info',
+      description: 'Tous les lieux de Morges.info : château, musées, parcs, quais, port, églises, patinoire et piscine, avec leur description, leur adresse et leurs sources.',
+    },
     notfound: {
       title: 'Page introuvable — Morges.info',
       description: 'Cette adresse ne correspond à aucune page de Morges.info. Elle a peut-être changé, ou contient une faute de frappe.',
@@ -301,5 +307,13 @@ export default {
     text: 'Cette adresse ne correspond à aucune page de Morges.info. Elle a peut-être changé, ou contient une faute de frappe.',
     home: 'Retour à l’accueil',
     map: 'Ouvrir la carte',
+  },
+  places: {
+    title: 'Lieux à découvrir',
+    intro: 'Tous les lieux présentés sur la carte de Morges.info, classés par catégorie. Chacun a sa page, avec sa description, son adresse et ses sources.',
+    home: 'Accueil',
+    breadcrumb: 'Fil d’Ariane',
+    others: 'Autres lieux : {category}',
+    all: 'Tous les lieux',
   },
 };

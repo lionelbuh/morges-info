@@ -6,9 +6,10 @@
  * placeholders (e.g. the businesses block on the home page stays hidden
  * until a verified business exists).
  */
-import { t, getLang } from '../i18n/index.js';
+import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
-import { getPlace } from '../data/places.js';
+import { PLACES, getPlace } from '../data/places.js';
+import { CATEGORIES } from '../data/categories.js';
 import { editorialSelection } from '../data/businesses.js';
 import { upcomingEvents } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
@@ -16,7 +17,8 @@ import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
-import { pageHref, placeHref, storyHref } from './links.js';
+import { pageHref, placeHref, placePageHref, storyHref } from './links.js';
+import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema } from './structured-data.js';
 import {
   placeCard,
   eventCard,
@@ -26,6 +28,9 @@ import {
   textBlock,
   frenchOnlyNotice,
   sourcesList,
+  verifiedLine,
+  photoFigure,
+  categoryBadge,
   heroPhoto,
   emailLink,
 } from './components.js';
@@ -68,7 +73,8 @@ function renderHome({ today } = {}) {
 
   const hero = heroPhoto(HERO_PHOTO, heroManifest, { sizes: '(max-width: 860px) 100vw, 680px' });
 
-  return `<div class="lead-story${hero ? ' lead-story--photo' : ''}">
+  return `${jsonLd(websiteSchema(t('pages.home.description')))}
+  <div class="lead-story${hero ? ' lead-story--photo' : ''}">
   ${hero}
   <section class="hero">
     <p class="kicker">${e(t('home.kicker'))}</p>
@@ -191,7 +197,8 @@ function renderHistory() {
 function renderLife({ today } = {}) {
   const events = upcomingEvents(undefined, today);
   const links = OFFICIAL_LINKS.map((l) => `<li><a href="${e(l.url)}" target="_blank" rel="noopener">${e(l.label)}</a></li>`).join('');
-  return `${pageIntro(t('life.title'), t('life.intro'))}
+  return `${events.map((ev) => jsonLd(eventSchema(ev))).join('')}
+  ${pageIntro(t('life.title'), t('life.intro'))}
   <section class="section" aria-labelledby="life-agenda">
     ${sectionHead('life-agenda', t('life.agendaTitle'))}
     ${events.length ? `<div class="grid grid-2">${events.map(eventCard).join('')}</div>` : `<p class="empty-note">${e(t('life.agendaEmpty'))}</p>`}
@@ -207,7 +214,8 @@ function renderLife({ today } = {}) {
 }
 
 function renderStories() {
-  return `${pageIntro(t('stories.title'), t('stories.intro'))}
+  return `${STORIES.map((s) => jsonLd(storySchema(s))).join('')}
+  ${pageIntro(t('stories.title'), t('stories.intro'))}
   <div class="stories">${STORIES.map(storyArticle).join('')}</div>`;
 }
 
@@ -294,6 +302,78 @@ function renderLegal() {
   <p class="verified legal-updated">${e(t('legal.updated', { date: formatDate(LEGAL_UPDATED, lang) }))}</p>`;
 }
 
+/** All places, grouped by category: a crawlable index of the place pages. */
+function renderPlaces() {
+  const lang = getLang();
+  const groups = CATEGORIES.map((cat) => {
+    const places = PLACES.filter((p) => p.category === cat.id);
+    if (!places.length) return '';
+    const items = places
+      .map((p) => `<li><a href="${placePageHref(p.id, lang)}">${e(localized(p.name))}</a><span class="places-location"> — ${e(localized(p.location))}</span></li>`)
+      .join('');
+    return `<section class="section places-group" aria-labelledby="cat-${cat.id}">
+      ${sectionHead(`cat-${cat.id}`, t(`categories.${cat.id}`))}
+      <ul class="places-list">${items}</ul>
+    </section>`;
+  }).join('');
+  return `${jsonLd(breadcrumbSchema([
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('places.title'), href: pageHref('places', lang) },
+  ]))}
+  ${pageIntro(t('places.title'), t('places.intro'))}
+  <p class="places-map-link"><a class="btn" href="${pageHref('map', lang)}">${e(t('home.mapCta'))}</a></p>
+  ${groups}`;
+}
+
+/** The page of one place: what the map panel shows, as an indexable page with its own address. */
+function renderPlace(placeId) {
+  const lang = getLang();
+  const place = getPlace(placeId);
+  const name = localized(place.name);
+  const c = place.coordinates;
+  const crumbs = [
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('places.title'), href: pageHref('places', lang) },
+    { name, href: placePageHref(place.id, lang) },
+  ];
+  const fact = (label, value) => (value ? `<div><dt>${e(label)}</dt><dd>${value}</dd></div>` : '');
+  const others = PLACES.filter((p) => p.category === place.category && p.id !== place.id);
+  return `${jsonLd(placeSchema(place))}${jsonLd(breadcrumbSchema(crumbs))}
+  <nav class="breadcrumb" aria-label="${e(t('places.breadcrumb'))}">
+    <ol>${crumbs.map((cr, i) => (i < crumbs.length - 1 ? `<li><a href="${cr.href}">${e(cr.name)}</a></li>` : `<li aria-current="page">${e(cr.name)}</li>`)).join('')}</ol>
+  </nav>
+  <article class="place-page">
+    <header class="page-intro">
+      ${categoryBadge(place.category)}
+      <h1>${e(name)}</h1>
+      ${name.includes(place.name.fr) ? '' : `<p class="place-official">${e(t('panel.officialName'))} <span lang="fr">${e(place.name.fr)}</span></p>`}
+    </header>
+    ${place.photos[0] ? photoFigure(place.photos[0]) : ''}
+    <p class="place-description">${e(localized(place.description))}</p>
+    <dl class="facts place-facts">
+      ${fact(t('panel.location'), e(localized(place.location)))}
+      ${fact(t('common.address'), place.address ? e(place.address) : '')}
+      ${fact(t('common.website'), place.website ? `<a href="${e(place.website)}" target="_blank" rel="noopener">${e(place.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>` : '')}
+      ${fact(t('panel.coordinates'), c ? `${c.lat.toFixed(5)}° N, ${c.lng.toFixed(5)}° E` : '')}
+    </dl>
+    <p class="panel-geo panel-geo--${place.geo.status}">${e(t(`panel.geoStatus.${place.geo.status}`))}</p>
+    <p class="hero-actions">
+      ${c ? `<a class="btn" href="${placeHref(place.id, lang)}">${e(t('common.viewOnMap'))}</a>` : ''}
+      ${c ? `<a class="btn btn-ghost" href="https://www.openstreetmap.org/?mlat=${c.lat}&amp;mlon=${c.lng}#map=18/${c.lat}/${c.lng}" target="_blank" rel="noopener">${e(t('panel.osm'))}</a>` : ''}
+    </p>
+    ${verifiedLine(place.lastVerified)}
+    ${sourcesList([...place.factSources, ...place.geo.sources])}
+  </article>
+  ${
+    others.length
+      ? `<section class="section" aria-labelledby="place-others">
+    ${sectionHead('place-others', t('places.others', { category: t(`categories.${place.category}`) }), { href: pageHref('places', lang), label: t('places.all') })}
+    <ul class="places-list">${others.map((p) => `<li><a href="${placePageHref(p.id, lang)}">${e(localized(p.name))}</a></li>`).join('')}</ul>
+  </section>`
+      : ''
+  }`;
+}
+
 /** Shown by the host for any unknown address. */
 function renderNotFound() {
   const lang = getLang();
@@ -319,12 +399,14 @@ const RENDERERS = {
   contribute: renderContribute,
   legal: renderLegal,
   notfound: renderNotFound,
+  places: renderPlaces,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);
 
 /** @param {string} pageId @param {{ today?: string }} [opts] today = YYYY-MM-DD (defaults to now in Morges) */
 export function renderMain(pageId, opts) {
+  if (pageId.startsWith('place:')) return renderPlace(pageId.slice('place:'.length));
   const render = RENDERERS[pageId];
   if (!render) throw new Error(`No renderer for page ${pageId}`);
   return render(opts);

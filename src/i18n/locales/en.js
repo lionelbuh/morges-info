@@ -24,6 +24,7 @@ export default {
     sport: 'Sport and leisure',
   },
   panel: {
+    permalink: 'Page for this place',
     officialName: 'Official name:',
     close: 'Close',
     backToMap: 'Back to the map',
@@ -77,6 +78,7 @@ export default {
     home: 'Morges.info home',
   },
   nav: {
+    places: 'Places',
     contribute: 'Contribute',
     legal: 'Legal notice',
     map: 'Map',
@@ -88,6 +90,10 @@ export default {
     us: 'About us',
   },
   pages: {
+    places: {
+      title: 'Places to discover in Morges — Morges.info',
+      description: 'All the places on Morges.info: castle, museums, parks, quays, harbour, churches, ice rink and swimming pool, with their description, address and sources.',
+    },
     notfound: {
       title: 'Page not found — Morges.info',
       description: 'This address does not match any page on Morges.info. It may have changed, or contain a typo.',
@@ -301,5 +307,13 @@ export default {
     text: 'This address does not match any page on Morges.info. It may have changed, or contain a typo.',
     home: 'Back to the home page',
     map: 'Open the map',
+  },
+  places: {
+    title: 'Places to discover',
+    intro: 'All the places shown on the Morges.info map, grouped by category. Each has its own page, with its description, address and sources.',
+    home: 'Home',
+    breadcrumb: 'Breadcrumb',
+    others: 'More places: {category}',
+    all: 'All places',
   },
 };

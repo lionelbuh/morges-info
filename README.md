@@ -14,6 +14,7 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
 | Charte éditoriale | `/a-propos/` | indépendance, sources, publicité, crédits (lien en pied de page) |
 | Qui sommes-nous | `/qui-sommes-nous/` | note personnelle des auteurs (lien discret en pied de page) |
 | Contribuer | `/contribuer/` | appel aux lecteurs : photos anciennes, nouvelles, corrections, par e-mail à hello@morges.info |
+| Lieux | `/lieux/`, `/lieux/<id>/` | index des lieux et une page par lieu (générées depuis les données) |
 | Mentions légales | `/mentions-legales/` | éditeur, contact, protection des données (lien en pied de page) |
 
 - **Langues :** français (par défaut), English, Deutsch, Italiano — `FR | EN | DE | IT` sur toutes les pages
@@ -27,6 +28,8 @@ Guide local indépendant consacré à la commune de Morges (VD, Suisse).
   « Contribuer », « Qui sommes-nous » et les mentions légales ; l'adresse est écrite en entités HTML dans le code
   source pour gêner les robots collecteurs. Les contributions arrivent par e-mail : **aucun envoi public**, rien
   n'est publié sans vérification ni accord (voir [`docs/PHOTOS.md`](docs/PHOTOS.md))
+- **Référencement :** une page par lieu (`/lieux/<id>/`), données structurées schema.org, sitemap, IndexNow ;
+  démarches Google / Bing dans [`docs/SEO.md`](docs/SEO.md)
 - **Mesure d'audience :** Cloudflare Web Analytics, sans cookies, seulement sur le domaine en ligne, désactivable
   (Do Not Track, Global Privacy Control, bouton sur les mentions légales). Active dès que `ANALYTICS_TOKEN` est
   renseigné dans `src/site/config.js` — voir [`docs/ANALYTICS.md`](docs/ANALYTICS.md)
