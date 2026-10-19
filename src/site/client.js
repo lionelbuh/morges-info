@@ -5,6 +5,7 @@ import { PLACES, getPlace, MORGES_CENTER } from '../data/places.js';
 import { initChrome, renderChrome } from './chrome.js';
 import { renderMain } from './pages.js';
 import { placeHref } from './links.js';
+import { initCompare } from './photos.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
@@ -105,6 +106,7 @@ function render() {
 
 onLangChange(render);
 render();
+initCompare();
 startAnalytics();
 
 // Content is re-rendered after load: honour #anchors (e.g. a story) once it is in place.

@@ -6,6 +6,8 @@ import { t, getLang, LANGUAGES, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PAGES, SITE_URL, SEARCH_VERIFICATION, getPage } from './config.js';
 import { getPlace } from '../data/places.js';
+import { getViewpoint, shownPhotos } from '../data/viewpoints.js';
+import { formatPhotoDate } from './photos.js';
 import { emailLink } from './components.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { HERO_PHOTO } from '../data/photos.js';
@@ -130,6 +132,16 @@ export function pageMeta(pageId) {
     return {
       title: `${name}${name.includes('Morges') ? '' : ', Morges'} — Morges.info`,
       description: summarize(localized(place.description)),
+    };
+  }
+  if (page.viewpointId) {
+    const vp = getViewpoint(page.viewpointId);
+    const { then, now } = shownPhotos(vp);
+    const dates = [then, now].filter(Boolean).map((photo) => formatPhotoDate(photo.date)).join(' / ');
+    const caption = (then || now).caption;
+    return {
+      title: `${localized(vp.title)} (${dates}) — Morges.info`,
+      description: summarize(caption ? localized(caption) : t('photos.metaDescription', { title: localized(vp.title), location: localized(vp.location), dates })),
     };
   }
   return { title: t(`pages.${pageId}.title`), description: t(`pages.${pageId}.description`) };

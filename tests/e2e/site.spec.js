@@ -173,8 +173,35 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(31);
+  expect(sitemap.match(/<loc>/g)).toHaveLength(32); // 12 listed pages + 20 places (no photo page yet)
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
+});
+
+test('photo map: the map switches between places and photos; the gallery invites the first photos', async ({ page }) => {
+  await page.goto('/carte/');
+  await expect(page.locator('#map')).toHaveAttribute('data-ready', 'true');
+  await page.locator('#mode-toggle [data-mode="photos"]').click();
+  await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page).toHaveURL(/\/carte\/#photos$/);
+  await expect(page.locator('.filters-block')).toBeHidden();
+  await expect(page.locator('#search-input')).toHaveAttribute('placeholder', fr.photos.searchPlaceholder);
+  // no photo published yet: no marker, an invitation to send photos instead
+  await expect(page.locator('.poi-marker')).toHaveCount(0);
+  const list = page.locator('#place-list');
+  if (await list.isHidden()) await page.locator('#list-toggle').click();
+  await expect(page.locator('.photos-empty-note')).toContainText(fr.photos.emptyMap);
+  await expect(page.locator('.photos-empty-note a')).toHaveAttribute('href', '/contribuer/');
+  // the mode survives a reload (shareable address), and the places come back
+  await page.reload();
+  await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#mode-toggle [data-mode="places"]').click();
+  await expect(page).toHaveURL(/\/carte\/$/);
+  await expect(page.locator('.poi-marker')).toHaveCount(19);
+
+  await page.goto('/photos/');
+  await expect(page.locator('main h1')).toHaveText(fr.photos.title);
+  await expect(page.locator('.photos-empty')).toContainText(fr.photos.callTitle);
+  await expect(page.locator('.site-footer a[href="/photos/"]')).toHaveText(fr.nav.photos);
 });
 
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {

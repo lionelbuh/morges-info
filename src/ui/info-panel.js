@@ -2,7 +2,8 @@ import { getCategory } from '../data/categories.js';
 import { t, localized, getLang, textOf } from '../i18n/index.js';
 import { formatDate } from '../site/format.js';
 import { photoFigure } from '../site/components.js';
-import { placePageHref } from '../site/links.js';
+import { placePageHref, photoPageHref } from '../site/links.js';
+import { viewpointBody, viewpointKind } from '../site/photos.js';
 import { escapeHtml } from './dom.js';
 import { ATTRIBUTION } from '../map/style.js';
 
@@ -38,8 +39,36 @@ export function createInfoPanel(el, { onClose }) {
     if (event.key === 'Escape') onClose();
   });
 
+  /** A viewpoint of the photo map: photo(s), comparison or call for the missing photo. */
+  function renderViewpoint(vp) {
+    const kind = viewpointKind(vp);
+    el.innerHTML = `
+      <div class="panel-inner">
+        <header class="panel-header panel-header--photo">
+          <span class="panel-badge"><span aria-hidden="true">◉</span> ${escapeHtml(t(`photos.kind.${kind}`))}</span>
+          <h2 id="panel-title" class="panel-title">${escapeHtml(localized(vp.title))}</h2>
+          <p class="panel-official">${escapeHtml(localized(vp.location))}</p>
+          <button type="button" class="panel-close" data-action="close" aria-label="${escapeHtml(t('panel.close'))}">×</button>
+        </header>
+        <div class="panel-body">
+          ${viewpointBody(vp)}
+          <div class="panel-actions">
+            <a class="btn btn-ghost" href="${photoPageHref(vp.id, getLang())}" data-field="permalink">${escapeHtml(t('photos.page'))}</a>
+          </div>
+          <p class="panel-attribution">${ATTRIBUTION}</p>
+        </div>
+        <div class="panel-back">
+          <button type="button" class="btn panel-back-btn" data-action="close"><span aria-hidden="true">←</span> ${escapeHtml(t('panel.backToMap'))}</button>
+        </div>
+      </div>`;
+  }
+
   function render() {
     if (!current) return;
+    if (current.id.startsWith('vue-')) {
+      renderViewpoint(current);
+      return;
+    }
     const place = current;
     const cat = getCategory(place.category);
     const c = place.coordinates;

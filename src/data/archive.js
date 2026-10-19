@@ -1,12 +1,9 @@
 /**
- * Historical photo archive — data model for a FUTURE phase.
+ * Photo records: the shape every photograph must follow, so that each image carries its date, source,
+ * rights and verification status. See docs/HISTORICAL_ARCHIVE.md.
  *
- * Nothing in this version displays or accepts historical images. This module
- * defines the shape each archive record must follow so that, when authentic
- * photographs are added later, every image carries its date, source, rights
- * and verification status. See docs/HISTORICAL_ARCHIVE.md.
- *
- * A record is attached to a place via `place.archive.photos[]`.
+ * Used by the photo map (viewpoints.js: an old and/or a current photo taken from the same spot) and,
+ * later, by `place.archive.photos[]`. Images are only shown once rights are cleared and verified.
  */
 
 /** Public uploads are deliberately disabled. Do not change without a moderation workflow. */
@@ -49,8 +46,9 @@ const LANGS = ['fr', 'en', 'de', 'it'];
 /**
  * Validates one archive record. Returns a list of error strings (empty = valid).
  * @param {ArchivePhoto} photo
+ * @param {{ requirePlace?: boolean }} [opts] photos of the photo map (viewpoints.js) need no placeId
  */
-export function validateArchivePhoto(photo) {
+export function validateArchivePhoto(photo, { requirePlace = true } = {}) {
   const errors = [];
   const req = (cond, msg) => {
     if (!cond) errors.push(msg);
@@ -60,7 +58,7 @@ export function validateArchivePhoto(photo) {
   if (errors.length) return errors;
 
   req(typeof photo.id === 'string' && photo.id.length > 0, 'id is required');
-  req(typeof photo.placeId === 'string' && photo.placeId.length > 0, 'placeId is required');
+  if (requirePlace) req(typeof photo.placeId === 'string' && photo.placeId.length > 0, 'placeId is required');
   req(photo.title && LANGS.every((l) => typeof photo.title[l] === 'string' && photo.title[l]), 'title needs fr, en, de, it');
 
   req(photo.date && /^\d{4}(-\d{2}(-\d{2})?)?$/.test(photo.date.value || ''), 'date.value must be YYYY, YYYY-MM or YYYY-MM-DD');
@@ -77,6 +75,8 @@ export function validateArchivePhoto(photo) {
   req(photo.verification && VERIFICATION_STATUSES.includes(photo.verification.status), 'verification.status is invalid');
 
   if (photo.image) {
+    req(typeof photo.image.src === 'string' && /^\/images\//.test(photo.image.src), 'image.src must be a local /images/… path');
+    req(Number.isInteger(photo.image.width) && Number.isInteger(photo.image.height), 'image.width and image.height are required');
     const cleared = photo.rights && ['granted', 'public-domain', 'open-licence'].includes(photo.rights.status);
     const verified = photo.verification && photo.verification.status === 'verified';
     req(cleared && verified, 'image may only be set once rights are cleared and verification is "verified"');
@@ -85,7 +85,7 @@ export function validateArchivePhoto(photo) {
   return errors;
 }
 
-/** Only photos that may be shown publicly. */
-export function publishablePhotos(photos = []) {
-  return photos.filter((p) => p.image && validateArchivePhoto(p).length === 0);
+/** Only photos that may be shown publicly. @param {{ requirePlace?: boolean }} [opts] as validateArchivePhoto */
+export function publishablePhotos(photos = [], opts) {
+  return photos.filter((p) => p.image && validateArchivePhoto(p, opts).length === 0);
 }

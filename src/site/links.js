@@ -1,4 +1,4 @@
-import { getPage, placePageId } from './config.js';
+import { getPage, placePageId, photoPageId } from './config.js';
 
 const langQuery = (lang) => (lang && lang !== 'fr' ? `?lang=${lang}` : '');
 
@@ -15,6 +15,16 @@ export function placeHref(placeId, lang) {
 /** Link to the page of a place (/lieux/<id>/). */
 export function placePageHref(placeId, lang) {
   return pageHref(placePageId(placeId), lang);
+}
+
+/** Link to the page of a photo-map viewpoint (/photos/<id>/). */
+export function photoPageHref(viewpointId, lang) {
+  return pageHref(photoPageId(viewpointId), lang);
+}
+
+/** A viewpoint opened on the map (photo mode). */
+export function photoMapHref(viewpointId, lang) {
+  return `${getPage('map').path}${langQuery(lang)}#${viewpointId}`;
 }
 
 /** Link to a story (anchor on the stories page). */

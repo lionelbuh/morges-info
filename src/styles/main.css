@@ -2121,3 +2121,215 @@ body.page-map {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- photo map (viewpoints) ---------- */
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--ink);
+}
+.mode-toggle button {
+  min-height: 40px;
+  border: 0;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+}
+.mode-toggle button + button {
+  border-left: 1px solid var(--ink);
+}
+.mode-toggle button[aria-pressed='true'] {
+  background: var(--ink);
+  color: #fff;
+}
+.filters-block[hidden] {
+  display: none;
+}
+.place-icon--photo {
+  background: var(--ink);
+}
+.photos-empty-note {
+  line-height: 1.5;
+}
+.photos-empty-note a {
+  font-weight: 600;
+}
+.panel-header--photo {
+  --cat: var(--ink);
+}
+
+/* one photo with its credit */
+.vp-photo {
+  margin: 0 0 18px;
+}
+.vp-photo img,
+.vp-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--stone);
+}
+.vp-photo figcaption,
+.vp-compare-credits {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.vp-compare-credits p {
+  margin: 0 0 4px;
+}
+.vp-role {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.vp-caption {
+  display: block;
+  margin: 2px 0;
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+}
+.vp-credit {
+  display: block;
+}
+
+/* before / after: the old photo over the current one, cut at the slider position */
+.vp-compare {
+  position: relative;
+  margin: 0;
+  background: var(--stone);
+  overflow: hidden;
+}
+.vp-compare-stage,
+.vp-compare-stage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.vp-compare-then {
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.vp-compare-stage::after {
+  /* the dividing line */
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 3px;
+  margin-left: -1.5px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.vp-compare-handle {
+  position: absolute;
+  top: 50%;
+  left: var(--pos);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+.vp-compare-label {
+  position: absolute;
+  top: 10px;
+  padding: 3px 8px;
+  background: rgba(28, 27, 25, 0.8);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+.vp-compare-label--then {
+  left: 10px;
+}
+.vp-compare-label--now {
+  right: 10px;
+}
+/* the slider covers the whole photo: drag anywhere, or use the arrow keys */
+.vp-compare-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+.vp-compare:has(.vp-compare-range:focus-visible) {
+  outline: 3px solid var(--lake);
+  outline-offset: 2px;
+}
+
+/* "photo wanted" */
+.vp-wanted {
+  margin: 18px 0;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px dashed var(--ink);
+}
+.vp-wanted h3 {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.vp-wanted p {
+  margin: 0 0 12px;
+}
+.vp-wanted p:last-child {
+  margin: 0;
+}
+.vp-place {
+  font-size: 0.95rem;
+}
+
+/* badges and gallery cards */
+.vp-badge {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.vp-badge--pair {
+  color: var(--red);
+}
+.vp-card-image img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.vp-page {
+  max-width: 900px;
+}
+.photos-empty {
+  max-width: 60ch;
+}

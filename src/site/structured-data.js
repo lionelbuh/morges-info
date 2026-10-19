@@ -6,7 +6,8 @@
 import { getLang, localized, textOf } from '../i18n/index.js';
 import { getPlace } from '../data/places.js';
 import { SITE_URL } from './config.js';
-import { pageHref, placePageHref, storyHref } from './links.js';
+import { pageHref, placePageHref, storyHref, photoPageHref } from './links.js';
+import { shownPhotos } from '../data/viewpoints.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 
 const ORG_ID = `${SITE_URL}/#organization`;
@@ -146,5 +147,38 @@ export function storySchema(story) {
     author: { '@type': 'Organization', name: 'Morges.info', url: `${SITE_URL}/` },
     publisher: { '@type': 'Organization', name: 'Morges.info', logo: { '@type': 'ImageObject', url: abs('/icon-512.png') } },
     about: MORGES,
+  };
+}
+
+const RIGHTS_URL = { 'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0/', 'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0/', CC0: 'https://creativecommons.org/publicdomain/zero/1.0/' };
+
+/** The photos of a viewpoint (ImageObject: where and when it was taken, author, credit, licence). */
+export function viewpointSchema(vp) {
+  const lang = getLang();
+  const url = abs(photoPageHref(vp.id, lang));
+  const { then, now } = shownPhotos(vp);
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [then, now].filter(Boolean).map((photo) => ({
+      '@type': 'ImageObject',
+      name: localized(photo.title),
+      ...(photo.caption && { description: localized(photo.caption) }),
+      contentUrl: abs(photo.image.src),
+      width: photo.image.width,
+      height: photo.image.height,
+      url,
+      dateCreated: photo.date.value,
+      ...(photo.creator && { creator: { '@type': 'Person', name: photo.creator } }),
+      creditText: photo.rights.credit,
+      copyrightNotice: photo.rights.credit,
+      ...(RIGHTS_URL[photo.rights.licence] && { license: RIGHTS_URL[photo.rights.licence] }),
+      acquireLicensePage: abs(pageHref('contribute', lang)),
+      contentLocation: {
+        '@type': 'Place',
+        name: localized(vp.location),
+        geo: { '@type': 'GeoCoordinates', latitude: vp.coordinates.lat, longitude: vp.coordinates.lng },
+        containedInPlace: MORGES,
+      },
+    })),
   };
 }

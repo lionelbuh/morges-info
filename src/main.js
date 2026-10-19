@@ -1,7 +1,10 @@
 import './styles/main.css';
 import { PLACES, MORGES_CENTER, getPlace } from './data/places.js';
 import { detectInitialLang, setLang, getLang, onLangChange, t, localized, translateDom } from './i18n/index.js';
-import { filterPlaces } from './ui/search.js';
+import { filterPlaces, filterViewpoints } from './ui/search.js';
+import { publishedViewpoints, getViewpoint } from './data/viewpoints.js';
+import { initCompare } from './site/photos.js';
+import { pageHref } from './site/links.js';
 import { createSidebar } from './ui/sidebar.js';
 import { createInfoPanel } from './ui/info-panel.js';
 import { initChrome, renderChrome } from './site/chrome.js';
@@ -18,7 +21,14 @@ function savedView() {
   }
 }
 
+// Two modes on the same map: the places (default) and the photo map (viewpoints, "#photos" / "#vue-…").
+const VIEWPOINTS = publishedViewpoints();
+const isViewpointId = (id) => id.startsWith('vue-');
+const getItem = (id) => (isViewpointId(id) ? getViewpoint(id, VIEWPOINTS) : getPlace(id));
+const initialHash = window.location.hash.slice(1);
+
 const state = {
+  mode: initialHash === 'photos' || isViewpointId(initialHash) ? 'photos' : 'places',
   query: '',
   categories: new Set(),
   selectedId: null,
@@ -34,6 +44,7 @@ const sidebarEl = $('sidebar');
 const panelEl = $('info-panel');
 const mapEl = $('map');
 const viewToggle = $('view-toggle');
+const modeToggle = $('mode-toggle');
 
 // ---------- language ----------
 setLang(detectInitialLang(window.location.search), { persist: false });
@@ -110,7 +121,7 @@ async function initMap() {
       lang: getLang(),
       bounds: placesBounds(),
       onSelect: (id) => selectPlace(id, { fromMap: true }),
-      getLabel: (place) => localized(place.name),
+      getLabel: (item) => localized(item.name || item.title),
       uiStrings: mapUiStrings,
     });
   } catch (error) {
@@ -121,7 +132,7 @@ async function initMap() {
   mapEl.dataset.ready = 'true';
   if (state.view === '3d') map.setView('3d', { animate: false });
   render();
-  const place = state.selectedId && getPlace(state.selectedId);
+  const place = state.selectedId && getItem(state.selectedId);
   if (place) map.focus(place);
 }
 
@@ -149,18 +160,35 @@ const sidebar = createSidebar({
 
 // ---------- behaviour ----------
 function visiblePlaces() {
+  if (state.mode === 'photos') return filterViewpoints(VIEWPOINTS, state.query);
   return filterPlaces(PLACES, { query: state.query, categories: state.categories });
 }
 
+/** Photo points on the map: red when old and current photos can be compared, ink otherwise. */
+const PHOTO_MARKER = { pair: { color: '#b3121a', icon: '◉' }, single: { color: '#1c1b19', icon: '◉' } };
+const photoMarker = (vp) => ({ ...vp, marker: vp.then && vp.now ? PHOTO_MARKER.pair : PHOTO_MARKER.single });
+
 function render() {
-  const places = visiblePlaces();
-  sidebar.renderFilters(state.categories);
-  sidebar.renderList(places, state.selectedId);
-  // A place inside another one (markerOf) is shown through that place's marker.
-  const markerTargets = places.filter((p) => p.markerOf).map((p) => getPlace(p.markerOf));
-  map.setPlaces([...new Set([...places, ...markerTargets])]);
-  const selected = state.selectedId && getPlace(state.selectedId);
-  map.select(selected ? selected.markerOf || selected.id : null);
+  const photos = state.mode === 'photos';
+  const items = visiblePlaces();
+  modeToggle.querySelectorAll('[data-mode]').forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.mode === state.mode)));
+  document.body.classList.toggle('map-mode-photos', photos);
+  $('filters').closest('.filters-block').hidden = photos;
+  searchInput.placeholder = t(photos ? 'photos.searchPlaceholder' : 'search.placeholder');
+  $('results-label').textContent = t(photos ? 'photos.listLabel' : 'results.listLabel');
+  if (photos) {
+    sidebar.renderPhotoList(items, state.selectedId, { total: VIEWPOINTS.length, contributeHref: pageHref('contribute', getLang()) });
+    map.setPlaces(items.map(photoMarker));
+    map.select(state.selectedId);
+  } else {
+    sidebar.renderFilters(state.categories);
+    sidebar.renderList(items, state.selectedId);
+    // A place inside another one (markerOf) is shown through that place's marker.
+    const markerTargets = items.filter((p) => p.markerOf).map((p) => getPlace(p.markerOf));
+    map.setPlaces([...new Set([...items, ...markerTargets])]);
+    const selected = state.selectedId && getPlace(state.selectedId);
+    map.select(selected ? selected.markerOf || selected.id : null);
+  }
   searchClear.hidden = state.query.length === 0;
   listToggle.textContent = state.listOpen ? t('results.toggleHide') : t('results.toggleShow');
   listToggle.setAttribute('aria-expanded', String(state.listOpen));
@@ -182,9 +210,22 @@ function setView(view, opts) {
   render();
 }
 
+/** Places ↔ photos. The address keeps the mode ("#photos") so it can be shared and survives a reload. */
+function setMode(mode) {
+  if (mode === state.mode) return;
+  if (state.selectedId) selectPlace(null);
+  state.mode = mode;
+  state.query = '';
+  searchInput.value = '';
+  const hash = mode === 'photos' ? '#photos' : '';
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+  render();
+}
+
 function selectPlace(id, { fromList = false } = {}) {
-  const place = id ? getPlace(id) : null;
+  const place = id ? getItem(id) : null;
   state.selectedId = place ? place.id : null;
+  if (place) state.mode = isViewpointId(place.id) ? 'photos' : 'places';
 
   if (place) {
     panel.open(place, { focusPanel: true });
@@ -205,8 +246,9 @@ function selectPlace(id, { fromList = false } = {}) {
     if (panelHistoryEntry) {
       panelHistoryEntry = false;
       window.history.back(); // leaves the address without the place, like the page before
-    } else if (window.location.hash) {
-      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    } else if (window.location.hash !== (state.mode === 'photos' ? '#photos' : '')) {
+      const hash = state.mode === 'photos' ? '#photos' : '';
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
     }
   }
   render();
@@ -228,6 +270,10 @@ searchClear.addEventListener('click', () => {
   render();
   searchInput.focus();
 });
+modeToggle.addEventListener('click', (event) => {
+  const btn = event.target.closest('[data-mode]');
+  if (btn) setMode(btn.dataset.mode);
+});
 viewToggle.addEventListener('click', (event) => {
   const btn = event.target.closest('[data-view]');
   if (btn && btn.dataset.view !== state.view) setView(btn.dataset.view);
@@ -239,8 +285,14 @@ listToggle.addEventListener('click', () => {
 
 window.addEventListener('hashchange', () => {
   const id = window.location.hash.slice(1);
-  if (!id) panelHistoryEntry = false; // Back button: the entry is already gone
-  if (id !== (state.selectedId || '')) selectPlace(getPlace(id) ? id : null);
+  if (!id || id === 'photos') panelHistoryEntry = false; // Back button: the entry is already gone
+  if (id === 'photos') {
+    if (state.selectedId) selectPlace(null);
+    state.mode = 'photos';
+    render();
+    return;
+  }
+  if (id !== (state.selectedId || '')) selectPlace(getItem(id) ? id : null);
 });
 
 onLangChange(() => {
@@ -253,8 +305,8 @@ onLangChange(() => {
 // ---------- start ----------
 applyDocumentLanguage();
 render();
-const initialId = window.location.hash.slice(1);
-if (initialId && getPlace(initialId)) selectPlace(initialId);
+initCompare();
+if (initialHash && initialHash !== 'photos' && getItem(initialHash)) selectPlace(initialHash);
 initMap();
 startAnalytics();
 

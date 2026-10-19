@@ -17,8 +17,10 @@ import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
-import { pageHref, placeHref, placePageHref, storyHref } from './links.js';
-import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema } from './structured-data.js';
+import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref } from './links.js';
+import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema } from './structured-data.js';
+import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
+import { viewpointBody, viewpointCard, viewpointKind } from './photos.js';
 import {
   placeCard,
   eventCard,
@@ -374,6 +376,54 @@ function renderPlace(placeId) {
   }`;
 }
 
+/** Gallery of the photo map: every published viewpoint (or a call for the first photos). */
+function renderPhotos() {
+  const lang = getLang();
+  const viewpoints = publishedViewpoints();
+  const call = `<div class="callout photos-call">
+      <h2>${e(t('photos.callTitle'))}</h2>
+      <p>${e(t('photos.callText'))}</p>
+      <p><a class="btn" href="${pageHref('contribute', lang)}">${e(t('photos.send'))}</a></p>
+    </div>`;
+  return `${jsonLd(breadcrumbSchema([
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('photos.title'), href: pageHref('photos', lang) },
+  ]))}
+  ${pageIntro(t('photos.title'), t('photos.intro'))}
+  <p class="places-map-link"><a class="btn" href="${pageHref('map', lang)}#photos">${e(t('photos.openMap'))}</a></p>
+  ${
+    viewpoints.length
+      ? `<section class="section"><div class="grid grid-3">${viewpoints.map((vp) => viewpointCard(vp, photoPageHref(vp.id, lang))).join('')}</div></section>
+  <section class="section">${call}</section>`
+      : `<section class="section">${call.replace('photos-call', 'photos-call photos-empty')}</section>`
+  }`;
+}
+
+/** The page of one viewpoint: its photo(s), the comparison or the call for the missing photo. */
+function renderPhoto(viewpointId) {
+  const lang = getLang();
+  const vp = getViewpoint(viewpointId);
+  const title = localized(vp.title);
+  const crumbs = [
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('photos.title'), href: pageHref('photos', lang) },
+    { name: title, href: photoPageHref(vp.id, lang) },
+  ];
+  return `${jsonLd(viewpointSchema(vp))}${jsonLd(breadcrumbSchema(crumbs))}
+  <nav class="breadcrumb" aria-label="${e(t('places.breadcrumb'))}">
+    <ol>${crumbs.map((cr, i) => (i < crumbs.length - 1 ? `<li><a href="${cr.href}">${e(cr.name)}</a></li>` : `<li aria-current="page">${e(cr.name)}</li>`)).join('')}</ol>
+  </nav>
+  <article class="vp-page">
+    <header class="page-intro">
+      <span class="vp-badge vp-badge--${viewpointKind(vp)}">${e(t(`photos.kind.${viewpointKind(vp)}`))}</span>
+      <h1>${e(title)}</h1>
+      <p class="place-official">${e(localized(vp.location))}</p>
+    </header>
+    ${viewpointBody(vp)}
+    <p class="hero-actions"><a class="btn btn-ghost" href="${photoMapHref(vp.id, lang)}">${e(t('common.viewOnMap'))}</a></p>
+  </article>`;
+}
+
 /** Shown by the host for any unknown address. */
 function renderNotFound() {
   const lang = getLang();
@@ -400,6 +450,7 @@ const RENDERERS = {
   legal: renderLegal,
   notfound: renderNotFound,
   places: renderPlaces,
+  photos: renderPhotos,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);
@@ -407,6 +458,7 @@ export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);
 /** @param {string} pageId @param {{ today?: string }} [opts] today = YYYY-MM-DD (defaults to now in Morges) */
 export function renderMain(pageId, opts) {
   if (pageId.startsWith('place:')) return renderPlace(pageId.slice('place:'.length));
+  if (pageId.startsWith('photo:')) return renderPhoto(pageId.slice('photo:'.length));
   const render = RENDERERS[pageId];
   if (!render) throw new Error(`No renderer for page ${pageId}`);
   return render(opts);

@@ -1,6 +1,7 @@
 import { CATEGORIES } from '../data/categories.js';
 import { t, localized } from '../i18n/index.js';
 import { escapeHtml } from './dom.js';
+import { viewpointKind as vpKind } from '../site/photos.js';
 
 /**
  * Category filter chips + result list.
@@ -20,6 +21,34 @@ export function createSidebar({ filtersEl, listEl, countEl, onToggleCategory, on
   });
 
   return {
+    /** Photo map: the viewpoints, or an invitation to send the first photos. */
+    renderPhotoList(viewpoints, selectedId, { total, contributeHref }) {
+      countEl.textContent = t(viewpoints.length === 1 ? 'photos.countOne' : 'photos.countOther', { n: viewpoints.length });
+      if (total === 0) {
+        listEl.innerHTML = `<li class="empty photos-empty-note"><strong>${escapeHtml(t('photos.emptyMap'))}</strong> ${escapeHtml(t('photos.callText'))} <a href="${contributeHref}">${escapeHtml(t('photos.send'))}</a></li>`;
+        return;
+      }
+      if (viewpoints.length === 0) {
+        listEl.innerHTML = `<li class="empty">${escapeHtml(t('results.none'))}</li>`;
+        return;
+      }
+      listEl.innerHTML = viewpoints
+        .map((vp) => {
+          const selected = vp.id === selectedId;
+          const kind = vpKind(vp);
+          return `<li>
+            <button type="button" class="place-item place-item--photo${selected ? ' is-selected' : ''}" data-place-id="${vp.id}" aria-current="${selected}">
+              <span class="place-icon place-icon--photo" aria-hidden="true">◉</span>
+              <span class="place-text">
+                <span class="place-name">${escapeHtml(localized(vp.title))}</span>
+                <span class="place-meta">${escapeHtml(t(`photos.kind.${kind}`))}</span>
+              </span>
+            </button>
+          </li>`;
+        })
+        .join('');
+    },
+
     renderFilters(active) {
       const all = `<button type="button" class="chip${active.size === 0 ? ' is-active' : ''}" data-category="" aria-pressed="${active.size === 0}">${escapeHtml(t('filters.all'))}</button>`;
       const chips = CATEGORIES.map((cat) => {
