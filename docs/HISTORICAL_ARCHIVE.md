@@ -1,7 +1,8 @@
-# Archives historiques — conception (phase future)
+# Archives historiques — modèle des photos
 
-**Statut : non activé.** Aucune photographie historique n'est affichée, et l'envoi public d'images est
-désactivé (`PUBLIC_UPLOADS_ENABLED = false` dans `src/data/archive.js`, vérifié par un test).
+**Statut :** le modèle est utilisé par la **carte des photos** (`src/data/viewpoints.js`, voir `docs/PHOTO_MAP.md`).
+L'envoi public d'images reste désactivé (`PUBLIC_UPLOADS_ENABLED = false` dans `src/data/archive.js`, vérifié par un
+test) : les photos arrivent par e-mail et sont ajoutées après vérification.
 
 ## Principes
 

@@ -4,7 +4,8 @@
  *    in each HTML page with the French prerender, so search engines and
  *    visitors without JavaScript get real content;
  *  - emits sitemap.xml and robots.txt at build time;
- *  - generates one HTML entry per place (lieux/<id>/index.html, from lieux/index.html; git-ignored).
+ *  - generates one HTML entry per place (lieux/<id>/index.html, from lieux/index.html) and per published
+ *    photo viewpoint (photos/<id>/index.html, from photos/index.html); both git-ignored.
  * In the browser, src/site/client.js re-renders the same markup (language, dates).
  */
 import { setLang, LANGUAGES } from '../src/i18n/index.js';
@@ -12,8 +13,9 @@ import { renderHeader, renderFooter, renderHeadTags, absoluteUrl } from '../src/
 import { renderMain } from '../src/site/pages.js';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { ALL_PAGES, SITE_URL, placePageId } from '../src/site/config.js';
+import { ALL_PAGES, SITE_URL, placePageId, photoPageId } from '../src/site/config.js';
 import { PLACES, getPlace } from '../src/data/places.js';
+import { publishedViewpoints } from '../src/data/viewpoints.js';
 
 const MARKER = /<!--@(head|header|main|footer):([a-z]+(?::[a-z0-9-]+)?)-->/g;
 
@@ -48,24 +50,29 @@ export function robotsTxt() {
 }
 
 /**
- * Writes lieux/<id>/index.html for every place (a copy of lieux/index.html pointed at the place) and
- * removes folders of places that no longer exist. Run before each build and dev server start.
+ * Writes <folder>/<id>/index.html for each item (a copy of <folder>/index.html pointed at the item) and
+ * removes folders of items that no longer exist.
  */
-export function writePlacePages(root) {
-  const dir = path.join(root, 'lieux');
+function writeItemPages(root, folder, indexId, items) {
+  const dir = path.join(root, folder);
   const template = readFileSync(path.join(dir, 'index.html'), 'utf8');
-  for (const place of PLACES) {
-    const id = placePageId(place.id);
-    const html = template.replaceAll(':places-->', `:${id}-->`).replace('data-page="places"', `data-page="${id}"`);
-    const file = path.join(dir, place.id, 'index.html');
+  for (const { id, pageId } of items) {
+    const html = template.replaceAll(`:${indexId}-->`, `:${pageId}-->`).replace(`data-page="${indexId}"`, `data-page="${pageId}"`);
+    const file = path.join(dir, id, 'index.html');
     if (existsSync(file) && readFileSync(file, 'utf8') === html) continue;
     mkdirSync(path.dirname(file), { recursive: true });
     writeFileSync(file, html);
   }
-  const ids = new Set(PLACES.map((p) => p.id));
+  const ids = new Set(items.map((item) => item.id));
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory() && !ids.has(entry.name)) rmSync(path.join(dir, entry.name), { recursive: true });
   }
+}
+
+/** Place pages (lieux/<id>/) and photo pages (photos/<id>/). Run before each build and dev server start. */
+export function writePlacePages(root) {
+  writeItemPages(root, 'lieux', 'places', PLACES.map((p) => ({ id: p.id, pageId: placePageId(p.id) })));
+  writeItemPages(root, 'photos', 'photos', publishedViewpoints().map((vp) => ({ id: vp.id, pageId: photoPageId(vp.id) })));
 }
 
 /** HTML entry points, one per page (clean URLs: /carte/ → carte/index.html; /404.html stays a file). */

@@ -27,10 +27,11 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function markerElement(place) {
-  const cat = getCategory(place.category);
+  // Photo-map viewpoints bring their own look ({ color, icon }); places use their category.
+  const cat = place.marker || getCategory(place.category);
   const el = document.createElement('button');
   el.type = 'button';
-  el.className = 'poi-marker';
+  el.className = place.marker ? 'poi-marker poi-marker--photo' : 'poi-marker';
   el.dataset.placeId = place.id;
   el.style.setProperty('--pin', cat.color);
   el.innerHTML = `

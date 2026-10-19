@@ -31,7 +31,7 @@ describe('historical archive model', () => {
   });
 
   it('forbids an image before rights are cleared and verified', () => {
-    const p = { ...base(), image: { src: 'x.jpg' } };
+    const p = { ...base(), image: { src: '/images/photos/x.webp', width: 1600, height: 1067 } };
     expect(validateArchivePhoto(p).join()).toMatch(/image may only be set/);
     expect(publishablePhotos([p])).toHaveLength(0);
 
@@ -42,6 +42,12 @@ describe('historical archive model', () => {
     };
     expect(validateArchivePhoto(ok)).toEqual([]);
     expect(publishablePhotos([ok])).toHaveLength(1);
+  });
+
+  it('requires a local image with its size', () => {
+    const cleared = { ...base(), rights: { status: 'granted', credit: 'X' }, verification: { status: 'verified' } };
+    expect(validateArchivePhoto({ ...cleared, image: { src: 'https://example.com/a.jpg', width: 10, height: 10 } }).join()).toMatch(/local/);
+    expect(validateArchivePhoto({ ...cleared, image: { src: '/images/photos/a.webp' } }).join()).toMatch(/width/);
   });
 
   it('requires a licence name for open licences', () => {

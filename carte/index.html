@@ -15,6 +15,10 @@
     <main class="layout" id="main" tabindex="-1">
       <aside class="sidebar" id="sidebar" data-i18n-attr="aria-label:results.listLabel">
         <h1 class="visually-hidden" data-i18n="map.label">Carte interactive de Morges</h1>
+        <div class="mode-toggle" id="mode-toggle" role="group" data-i18n-attr="aria-label:mode.label">
+          <button type="button" data-mode="places" aria-pressed="true" data-i18n="mode.places">Lieux</button>
+          <button type="button" data-mode="photos" aria-pressed="false" data-i18n="mode.photos">Photos</button>
+        </div>
         <div class="search">
           <label class="visually-hidden" for="search-input" data-i18n="search.label">Rechercher un lieu</label>
           <span class="search-icon" aria-hidden="true">
@@ -30,7 +34,7 @@
         </div>
 
         <div class="results-head">
-          <h2 class="section-label" data-i18n="results.listLabel">Liste des lieux</h2>
+          <h2 class="section-label" id="results-label" data-i18n="results.listLabel">Liste des lieux</h2>
           <span class="results-count" id="results-count" aria-live="polite"></span>
           <button type="button" class="list-toggle" id="list-toggle" aria-expanded="false" aria-controls="place-list"></button>
         </div>

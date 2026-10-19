@@ -46,3 +46,13 @@ export function filterPlaces(places, { query = '', categories = new Set() } = {}
   // Array.prototype.sort is stable, so the original order is kept within each group.
   return matches.sort((a, b) => Number(nameHit(b)) - Number(nameHit(a)));
 }
+
+/** Photo map: viewpoints whose title or location matches the query (all four languages). */
+export function filterViewpoints(viewpoints, query = '') {
+  const terms = normalize(query).split(/\s+/).filter(Boolean);
+  if (terms.length === 0) return viewpoints;
+  return viewpoints.filter((vp) => {
+    const text = normalize(LANGUAGES.flatMap((lang) => [vp.title[lang], vp.location[lang]]).join(' '));
+    return terms.every((term) => text.includes(term));
+  });
+}
