@@ -18,7 +18,7 @@ import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref } from './links.js';
-import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema } from './structured-data.js';
+import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock } from './photos.js';
 import {
@@ -109,6 +109,7 @@ function renderHome({ today } = {}) {
       <div class="col">
         <h3 class="col-title">${e(t('home.practicalTitle'))}</h3>
         ${PRACTICAL.slice(0, 2).map(practicalCard).join('')}
+        <p class="callout-link"><a href="${pageHref('visit', lang)}">${e(t('visit.homeLink'))}<span aria-hidden="true"> →</span></a></p>
       </div>
     </div>
   </section>
@@ -327,6 +328,59 @@ function renderPlaces() {
   ${groups}`;
 }
 
+/**
+ * Visiting Morges: the questions visitors ask (and search for), answered from the site's own data —
+ * places, practical information, photos — so every answer stays sourced and in step with the rest of the site.
+ */
+function renderVisit() {
+  const lang = getLang();
+  const practical = (id) => PRACTICAL.find((item) => item.id === id);
+  const more = (href, label) => `<p class="callout-link"><a href="${href}">${e(label)}<span aria-hidden="true"> →</span></a></p>`;
+  const placeGroups = CATEGORIES.map((cat) => {
+    const places = PLACES.filter((p) => p.category === cat.id);
+    if (!places.length) return '';
+    return `<li><strong>${e(t(`categories.${cat.id}`))}</strong> — ${places.map((p) => `<a href="${placePageHref(p.id, lang)}">${e(localized(p.name))}</a>`).join(', ')}</li>`;
+  }).join('');
+  const photoCount = publishedViewpoints().length;
+  // text: the plain answer (also used in the structured data); html: what follows it on the page
+  const questions = [
+    { id: 'see', text: t('visit.q.see.a'), html: `<ul class="visit-places">${placeGroups}</ul>` },
+    { id: 'map', text: t('visit.q.map.a'), html: more(pageHref('map', lang), t('visit.links.map')) },
+    { id: 'come', text: [practical('gare'), practical('bateau')].map((item) => localized(item.text)).join(' '), html: '' },
+    { id: 'market', text: localized(practical('marche').text), html: '' },
+    {
+      id: 'photos',
+      text: t('visit.q.photos.a'),
+      html: more(pageHref('photos', lang), `${t('visit.links.photos')} (${t(photoCount === 1 ? 'photos.countOne' : 'photos.countOther', { n: photoCount })})`),
+    },
+    { id: 'events', text: t('visit.q.events.a'), html: more(pageHref('life', lang), t('visit.links.life')) },
+    { id: 'history', text: t('visit.q.history.a'), html: `${more(pageHref('history', lang), t('visit.links.history'))}${more(pageHref('stories', lang), t('visit.links.stories'))}` },
+    {
+      id: 'official',
+      text: t('visit.q.official.a'),
+      html: `<ul class="visit-links">${OFFICIAL_LINKS.map((l) => `<li><a href="${e(l.url)}" target="_blank" rel="noopener">${e(l.label)}</a></li>`).join('')}</ul>`,
+    },
+    { id: 'contribute', text: t('visit.q.contribute.a'), html: more(pageHref('contribute', lang), t('visit.links.contribute')) },
+  ].map((q) => ({ ...q, question: t(`visit.q.${q.id}.q`) }));
+  return `${jsonLd(faqSchema(questions.map((q) => ({ question: q.question, answer: q.text }))))}
+  ${jsonLd(breadcrumbSchema([
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('visit.title'), href: pageHref('visit', lang) },
+  ]))}
+  ${pageIntro(t('visit.title'), t('visit.intro'))}
+  <div class="visit-faq">
+    ${questions
+      .map(
+        (q) => `<section class="visit-question" aria-labelledby="visit-${q.id}">
+      <h2 id="visit-${q.id}">${e(q.question)}</h2>
+      <p>${e(q.text)}</p>
+      ${q.html}
+    </section>`,
+      )
+      .join('')}
+  </div>`;
+}
+
 /** The page of one place: what the map panel shows, as an indexable page with its own address. */
 function renderPlace(placeId) {
   const lang = getLang();
@@ -452,6 +506,7 @@ const RENDERERS = {
   notfound: renderNotFound,
   places: renderPlaces,
   photos: renderPhotos,
+  visit: renderVisit,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

@@ -79,6 +79,7 @@ export default {
     home: 'Pagina iniziale di Morges.info',
   },
   nav: {
+    visit: 'Visitare Morges',
     photos: 'Foto',
     places: 'Luoghi',
     contribute: 'Contribuire',
@@ -92,6 +93,10 @@ export default {
     us: 'Chi siamo',
   },
   pages: {
+    visit: {
+      title: 'Visitare Morges: mappa, luoghi, foto e informazioni pratiche — Morges.info',
+      description: 'Cosa vedere a Morges, come arrivarci, dove trovare una mappa della città, quando c’è il mercato, dove vedere foto d’epoca: le risposte alle domande frequenti, con link e fonti.',
+    },
     photos: {
       title: 'Foto di Morges, ieri e oggi — Morges.info',
       description: 'Morges in foto, da ieri a oggi: ogni foto è collocata sulla mappa nel punto da cui è stata scattata, con la veduta attuale per il confronto quando l’abbiamo.',
@@ -326,6 +331,30 @@ export default {
     label: 'Mostra sulla mappa',
     places: 'Luoghi',
     photos: 'Foto',
+  },
+  visit: {
+    title: 'Visitare Morges',
+    intro: 'Le domande che ci si pone prima di venire a Morges o passeggiando per la città, con le risposte e i link utili.',
+    homeLink: 'Visitare Morges: domande frequenti',
+    q: {
+      see: { q: 'Cosa vedere a Morges?', a: 'Il castello, il centro storico e la Grand-Rue, i lungolago e i parchi sul Lemano, i musei e le chiese. I luoghi presentati su Morges.info, ciascuno con la sua pagina:' },
+      map: { q: 'Esiste una mappa di Morges?', a: 'Sì: la mappa interattiva di Morges.info mostra tutti questi luoghi, in 2D o in 3D, con una scheda per ciascuno. Funziona sul telefono come sul computer.' },
+      come: { q: 'Come arrivare a Morges?' },
+      market: { q: 'Quando c’è il mercato di Morges?' },
+      photos: { q: 'Dove vedere foto d’epoca di Morges?', a: 'Sulla mappa delle foto e nella galleria «Ieri e oggi»: ogni foto è collocata nel punto in cui è stata scattata, con data, fonte e credito.' },
+      events: { q: 'Cosa succede a Morges in questo momento?', a: 'La pagina Vita locale presenta i prossimi eventi, ciascuno con la sua fonte, e le informazioni pratiche.' },
+      history: { q: 'Qual è la storia di Morges?', a: 'La pagina Storia ripercorre le grandi tappe della città, dalle origini a oggi; i Racconti narrano momenti della sua vita.' },
+      official: { q: 'Morges.info è il sito ufficiale della città?', a: 'No. Morges.info è un sito indipendente, senza legami con il Comune. I siti ufficiali:' },
+      contribute: { q: 'Come proporre una foto o un’informazione?', a: 'Scriveteci: foto d’epoca o attuali, notizie, ricordi e correzioni sono benvenuti. Tutto viene verificato prima della pubblicazione.' },
+    },
+    links: {
+      map: 'Apri la mappa',
+      photos: 'Vedi le foto',
+      life: 'Vita locale',
+      history: 'Storia',
+      stories: 'Racconti',
+      contribute: 'Contribuire',
+    },
   },
   photos: {
     listLabel: 'Elenco delle foto',

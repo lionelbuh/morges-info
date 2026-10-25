@@ -42,6 +42,7 @@ export const PAGES = [
   { id: 'contribute', path: '/contribuer/', nav: true },
   { id: 'places', path: '/lieux/', nav: false },
   { id: 'photos', path: '/photos/', nav: false },
+  { id: 'visit', path: '/visiter/', nav: false },
   { id: 'about', path: '/a-propos/', nav: false },
   { id: 'us', path: '/qui-sommes-nous/', nav: false },
   { id: 'legal', path: '/mentions-legales/', nav: false },

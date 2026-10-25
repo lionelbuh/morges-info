@@ -37,6 +37,20 @@ function postalAddress(address) {
   return { '@type': 'PostalAddress', streetAddress: match[1], postalCode: match[2], addressLocality: match[3], addressCountry: 'CH' };
 }
 
+/** Questions and answers of the visit page (only the text shown on the page). */
+export function faqSchema(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: getLang(),
+    mainEntity: items.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  };
+}
+
 /** Home page: the site and its publisher. */
 export function websiteSchema(description) {
   return {

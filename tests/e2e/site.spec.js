@@ -3,6 +3,7 @@ import { mockMapServices } from './fixtures/routes.js';
 import { PAGES } from '../../src/site/config.js';
 import fr from '../../src/i18n/locales/fr.js';
 import de from '../../src/i18n/locales/de.js';
+import en from '../../src/i18n/locales/en.js';
 
 let errors;
 let externalRequests;
@@ -173,7 +174,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(36); // 12 listed pages + 20 places + 4 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(37); // 13 listed pages + 20 places + 4 photo pages
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
@@ -219,6 +220,23 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await page.locator('#info-panel .vp-mini').click();
   await expect(page).toHaveURL(/#vue-parc-independance-kiosque$/);
   await expect(page.locator('#info-panel .vp-photo--then img')).toBeVisible();
+});
+
+test('visiting Morges: frequent questions answered from the site’s data, described for search engines', async ({ page }) => {
+  await page.goto('/');
+  await page.locator(`a[href="/visiter/"]:has-text("${fr.visit.homeLink}")`).click();
+  await expect(page).toHaveURL(/\/visiter\/$/);
+  await expect(page.locator('main h1')).toHaveText(fr.visit.title);
+  await expect(page.locator('.visit-question h2')).toHaveCount(9);
+  await expect(page.locator('.visit-places a[href="/lieux/chateau/"]')).toHaveCount(1);
+  await expect(page.locator('.site-footer a[href="/visiter/"]')).toHaveText(fr.nav.visit);
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((s) => JSON.parse(s));
+  const faq = ld.find((d) => d['@type'] === 'FAQPage');
+  expect(faq.mainEntity).toHaveLength(9);
+  expect(faq.mainEntity[0].name).toBe(fr.visit.q.see.q);
+  await page.goto('/visiter/?lang=en');
+  await expect(page.locator('main h1')).toHaveText(en.visit.title);
+  await expect(page.locator('#visit-market')).toHaveText(en.visit.q.market.q);
 });
 
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {

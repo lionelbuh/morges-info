@@ -79,6 +79,7 @@ export default {
     home: 'Accueil Morges.info',
   },
   nav: {
+    visit: 'Visiter Morges',
     photos: 'Photos',
     places: 'Lieux',
     contribute: 'Contribuer',
@@ -92,6 +93,10 @@ export default {
     us: 'Qui sommes-nous',
   },
   pages: {
+    visit: {
+      title: 'Visiter Morges : carte, lieux, photos et infos pratiques — Morges.info',
+      description: 'Que voir à Morges, comment venir, où trouver une carte de la ville, quand a lieu le marché, où voir des photos anciennes : les réponses aux questions fréquentes, avec liens et sources.',
+    },
     photos: {
       title: 'Photos de Morges, hier et aujourd’hui — Morges.info',
       description: 'Morges en photos, d’hier à aujourd’hui : chaque photo est placée sur la carte à l’endroit d’où elle a été prise, avec la vue actuelle pour comparer quand nous l’avons.',
@@ -326,6 +331,30 @@ export default {
     label: 'Afficher sur la carte',
     places: 'Lieux',
     photos: 'Photos',
+  },
+  visit: {
+    title: 'Visiter Morges',
+    intro: 'Les questions que l’on se pose avant de venir à Morges ou en s’y promenant, avec les réponses et les liens utiles.',
+    homeLink: 'Visiter Morges : questions fréquentes',
+    q: {
+      see: { q: 'Que voir à Morges ?', a: 'Le château, la vieille ville et sa Grand-Rue, les quais et les parcs au bord du Léman, les musées et les églises. Les lieux présentés sur Morges.info, chacun avec sa page :' },
+      map: { q: 'Existe-t-il une carte de Morges ?', a: 'Oui : la carte interactive de Morges.info montre tous ces lieux, en 2D ou en 3D, avec une fiche pour chacun. Elle fonctionne sur téléphone comme sur ordinateur.' },
+      come: { q: 'Comment venir à Morges ?' },
+      market: { q: 'Quand a lieu le marché de Morges ?' },
+      photos: { q: 'Où voir des photos anciennes de Morges ?', a: 'Sur la carte des photos et dans la galerie « Hier et aujourd’hui » : chaque photo est placée à l’endroit d’où elle a été prise, avec sa date, sa source et son crédit.' },
+      events: { q: 'Que se passe-t-il à Morges en ce moment ?', a: 'La page Vie locale présente les prochains événements, chacun avec sa source, ainsi que les infos pratiques.' },
+      history: { q: 'Quelle est l’histoire de Morges ?', a: 'La page Histoire retrace les grandes étapes de la ville, des origines à aujourd’hui ; les Récits racontent des moments de sa vie.' },
+      official: { q: 'Morges.info est-il le site officiel de la ville ?', a: 'Non. Morges.info est un site indépendant, sans lien avec la Commune. Les sites officiels :' },
+      contribute: { q: 'Comment proposer une photo ou une information ?', a: 'Écrivez-nous : photos anciennes ou actuelles, nouvelles, souvenirs et corrections sont les bienvenus. Tout est vérifié avant publication.' },
+    },
+    links: {
+      map: 'Ouvrir la carte',
+      photos: 'Voir les photos',
+      life: 'Vie locale',
+      history: 'Histoire',
+      stories: 'Récits',
+      contribute: 'Contribuer',
+    },
   },
   photos: {
     listLabel: 'Liste des photos',

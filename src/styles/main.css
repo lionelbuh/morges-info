@@ -2369,3 +2369,25 @@ body.page-map {
 .photos-empty {
   max-width: 60ch;
 }
+
+/* visiting Morges: questions and answers */
+.visit-faq {
+  max-width: 760px;
+}
+.visit-question {
+  padding: 22px 0;
+  border-top: 1px solid var(--stone-2);
+}
+.visit-question h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+}
+.visit-question p {
+  margin: 0 0 8px;
+}
+.visit-places,
+.visit-links {
+  margin: 8px 0 0;
+  padding-left: 1.1em;
+  line-height: 1.7;
+}
