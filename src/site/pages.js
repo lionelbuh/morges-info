@@ -20,7 +20,7 @@ import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
-import { viewpointBody, viewpointCard, viewpointKind } from './photos.js';
+import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock } from './photos.js';
 import {
   placeCard,
   eventCard,
@@ -363,6 +363,7 @@ function renderPlace(placeId) {
       ${c ? `<a class="btn" href="${placeHref(place.id, lang)}">${e(t('common.viewOnMap'))}</a>` : ''}
       ${c ? `<a class="btn btn-ghost" href="https://www.openstreetmap.org/?mlat=${c.lat}&amp;mlon=${c.lng}#map=18/${c.lat}/${c.lng}" target="_blank" rel="noopener">${e(t('panel.osm'))}</a>` : ''}
     </p>
+    ${placePhotosBlock(place.id, { href: (vp) => photoPageHref(vp.id, lang), level: 2 })}
     ${verifiedLine(place.lastVerified)}
     ${sourcesList([...place.factSources, ...place.geo.sources])}
   </article>

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { existsSync } from 'node:fs';
 import { setLang } from '../../src/i18n/index.js';
 import { VIEWPOINTS, validateViewpoint, shownPhotos, publishedViewpoints } from '../../src/data/viewpoints.js';
-import { viewpointBody, viewpointKind, formatPhotoDate, viewpointCard } from '../../src/site/photos.js';
+import { viewpointBody, viewpointKind, formatPhotoDate, viewpointCard, placePhotosBlock } from '../../src/site/photos.js';
 
 const texts = (s) => ({ fr: s, en: s, de: s, it: s });
 const photo = (id, date, extra = {}) => ({
@@ -101,6 +101,15 @@ describe('photo map display', () => {
     expect(viewpointBody(cc)).toContain(
       'Coll. Y (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr" target="_blank" rel="noopener license">CC BY-NC-ND 4.0</a>)',
     );
+  });
+
+  it('a place lists its old photos, or asks for one', () => {
+    const withPhoto = placePhotosBlock('parc-independance', { href: (vp) => `#${vp.id}` });
+    expect(withPhoto).toContain('href="#vue-parc-independance-kiosque"');
+    expect(withPhoto).toContain('Photos anciennes');
+    const without = placePhotosBlock('gare', { href: (vp) => `#${vp.id}` });
+    expect(without).toContain('Pas encore de photo ancienne de ce lieu.');
+    expect(without).toContain('href="/contribuer/"');
   });
 
   it('gallery card links to the photo page', () => {

@@ -45,8 +45,8 @@ export default {
     },
     notOnMap: 'This place is not shown on the map yet: its exact position still needs to be verified.',
     osm: 'View on OpenStreetMap',
-    archiveTitle: 'Historical archive',
-    archiveText: 'Authentic historical photographs, with date, source and permission, will be added in a later phase.',
+    archiveTitle: 'Old photos',
+    archiveNone: 'No old photo of this place yet. Do you have one?',
   },
   map: {
     label: 'Interactive map of Morges',

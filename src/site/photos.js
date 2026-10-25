@@ -5,11 +5,11 @@
  */
 import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
-import { shownPhotos } from '../data/viewpoints.js';
+import { shownPhotos, publishedViewpoints } from '../data/viewpoints.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
 import { emailLink } from './components.js';
-import { placePageHref } from './links.js';
+import { pageHref, placePageHref } from './links.js';
 
 const LOCALES = { fr: 'fr-CH', en: 'en-GB', de: 'de-CH', it: 'it-CH' };
 
@@ -133,6 +133,30 @@ export function viewpointCard(vp, href) {
       <p class="card-meta">${e(localized(vp.location))} · ${e([then, now].filter(Boolean).map(shortDate).join(' / '))}</p>
     </div>
   </article>`;
+}
+
+/**
+ * Old photos taken at a place (viewpoints whose placeId is this place), for the place panel and page;
+ * without any, an invitation to send one. `href(vp)` is where each photo leads.
+ */
+export function placePhotosBlock(placeId, { href, level = 3 }) {
+  const viewpoints = publishedViewpoints().filter((vp) => vp.placeId === placeId);
+  const h = `h${level}`;
+  const items = viewpoints
+    .map((vp) => {
+      const { then, now } = shownPhotos(vp);
+      const photo = then || now;
+      return `<li><a class="vp-mini" href="${href(vp)}">${img(photo)}<span class="vp-mini-text"><strong>${e(localized(vp.title))}</strong><span>${e(t(`photos.kind.${viewpointKind(vp)}`))} · ${e([then, now].filter(Boolean).map(shortDate).join(' / '))}</span></span></a></li>`;
+    })
+    .join('');
+  return `<section class="panel-archive" aria-labelledby="archive-title-${placeId}">
+    <${h} id="archive-title-${placeId}">${e(t('panel.archiveTitle'))}</${h}>
+    ${
+      items
+        ? `<ul class="vp-mini-list">${items}</ul>`
+        : `<p>${e(t('panel.archiveNone'))} <a href="${pageHref('contribute', getLang())}">${e(t('photos.send'))}</a></p>`
+    }
+  </section>`;
 }
 
 /** Before/after sliders: one listener for the whole document (panel and pages are re-rendered). */

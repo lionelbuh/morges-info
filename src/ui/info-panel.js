@@ -2,8 +2,8 @@ import { getCategory } from '../data/categories.js';
 import { t, localized, getLang, textOf } from '../i18n/index.js';
 import { formatDate } from '../site/format.js';
 import { photoFigure } from '../site/components.js';
-import { placePageHref, photoPageHref } from '../site/links.js';
-import { viewpointBody, viewpointKind } from '../site/photos.js';
+import { placePageHref, photoPageHref, photoMapHref } from '../site/links.js';
+import { viewpointBody, viewpointKind, placePhotosBlock } from '../site/photos.js';
 import { escapeHtml } from './dom.js';
 import { ATTRIBUTION } from '../map/style.js';
 
@@ -110,10 +110,7 @@ export function createInfoPanel(el, { onClose }) {
                 </div>`
               : ''
           }
-          <section class="panel-archive" aria-labelledby="archive-title">
-            <h3 id="archive-title">${escapeHtml(t('panel.archiveTitle'))}</h3>
-            <p>${escapeHtml(t('panel.archiveText'))}</p>
-          </section>
+          ${placePhotosBlock(place.id, { href: (vp) => photoMapHref(vp.id, getLang()) })}
           ${place.lastVerified ? `<p class="panel-verified" data-field="last-verified">${escapeHtml(t('common.lastVerified', { date: formatDate(place.lastVerified, getLang()) }))}</p>` : ''}
           <details class="panel-sources">
             <summary>${escapeHtml(t('panel.sources'))}</summary>
