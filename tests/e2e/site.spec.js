@@ -173,7 +173,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(35); // 12 listed pages + 20 places + 3 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(36); // 12 listed pages + 20 places + 4 photo pages
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
@@ -185,7 +185,7 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await expect(page).toHaveURL(/\/carte\/#photos$/);
   await expect(page.locator('.filters-block')).toBeHidden();
   await expect(page.locator('#search-input')).toHaveAttribute('placeholder', fr.photos.searchPlaceholder);
-  await expect(page.locator('.poi-marker--photo')).toHaveCount(3);
+  await expect(page.locator('.poi-marker--photo')).toHaveCount(4);
   // the mode survives a reload (shareable address)
   await page.reload();
   await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
@@ -204,7 +204,7 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
 
   await page.goto('/photos/');
   await expect(page.locator('main h1')).toHaveText(fr.photos.title);
-  await expect(page.locator('.vp-card')).toHaveCount(3);
+  await expect(page.locator('.vp-card')).toHaveCount(4);
   await expect(page.locator('.site-footer a[href="/photos/"]')).toHaveText(fr.nav.photos);
   await page.locator('.vp-card .card-title a[href="/photos/vue-parc-independance-kiosque/"]').click();
   await expect(page).toHaveURL(/\/photos\/vue-parc-independance-kiosque\/$/);
