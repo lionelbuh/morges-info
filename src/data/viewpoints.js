@@ -81,6 +81,64 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-garage-sama',
+    title: {
+      fr: 'Le garage SAMA et sa station Total',
+      en: 'The SAMA garage and its Total petrol station',
+      de: 'Die Garage SAMA mit ihrer Total-Tankstelle',
+      it: 'Il garage SAMA e il suo distributore Total',
+    },
+    location: {
+      fr: 'Au nord-est de la vieille ville',
+      en: 'North-east of the old town',
+      de: 'Nordöstlich der Altstadt',
+      it: 'A nord-est del centro storico',
+    },
+    coordinates: { lat: 46.51311987466832, lng: 6.50113758073046 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 25.10.2026' }],
+      note: 'Approximate spot where the photographer stood, facing the garage.',
+    },
+    then: {
+      id: 'garage-sama-total-1960s',
+      title: {
+        fr: 'Morges, le garage SAMA, agence Fiat et station-service Total',
+        en: 'Morges, the SAMA garage, Fiat dealer and Total petrol station',
+        de: 'Morges, die Garage SAMA, Fiat-Vertretung und Total-Tankstelle',
+        it: 'Morges, il garage SAMA, concessionaria Fiat e distributore Total',
+      },
+      caption: {
+        fr: 'Agence Fiat et station-service Total, avec ses pompes sous un large auvent. Les voitures visibles, des modèles Fiat de la seconde moitié des années 1960, situent la photo à la fin de cette décennie ; notreHistoire.ch indique 1949.',
+        en: 'Fiat dealer and Total petrol station, its pumps under a wide canopy. The cars in view, Fiat models from the second half of the 1960s, date the photo to the end of that decade; notreHistoire.ch gives 1949.',
+        de: 'Fiat-Vertretung und Total-Tankstelle mit Zapfsäulen unter einem breiten Vordach. Die sichtbaren Autos, Fiat-Modelle aus der zweiten Hälfte der 1960er-Jahre, datieren das Foto auf das Ende dieses Jahrzehnts; notreHistoire.ch nennt 1949.',
+        it: 'Concessionaria Fiat e distributore Total, con le pompe sotto un’ampia pensilina. Le auto visibili, modelli Fiat della seconda metà degli anni Sessanta, datano la foto alla fine di quel decennio; notreHistoire.ch indica il 1949.',
+      },
+      // notreHistoire.ch gives 1949, but the cars (Fiat models launched from 1965–66) show the late 1960s.
+      date: {
+        value: '1968',
+        precision: 'circa',
+        display: { fr: 'fin des années 1960', en: 'late 1960s', de: 'Ende der 1960er-Jahre', it: 'fine degli anni Sessanta' },
+      },
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/@mickymorges' },
+      rights: {
+        status: 'public-domain',
+        licence: 'Public Domain Mark 1.0',
+        licenceUrl: 'https://creativecommons.org/publicdomain/mark/1.0/deed.fr',
+        credit: 'Michel Bezençon',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-25',
+        notes:
+          'Marked public domain by Michel Bezençon on notreHistoire.ch; photographer unknown. Date corrected from the cars (late 1960s). Swiss law: a photo without individual character is protected 50 years after it was taken, so the mark holds; remove at once if a rights holder comes forward. Scanner edge trimmed at the bottom (8 px).',
+      },
+      image: { src: '/images/photos/garage-sama-total-1960s.webp', width: 1600, height: 944 },
+    },
+    now: null,
+  },
 ];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
