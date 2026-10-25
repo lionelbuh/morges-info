@@ -173,7 +173,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(34); // 12 listed pages + 20 places + 2 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(35); // 12 listed pages + 20 places + 3 photo pages
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
@@ -185,7 +185,7 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await expect(page).toHaveURL(/\/carte\/#photos$/);
   await expect(page.locator('.filters-block')).toBeHidden();
   await expect(page.locator('#search-input')).toHaveAttribute('placeholder', fr.photos.searchPlaceholder);
-  await expect(page.locator('.poi-marker--photo')).toHaveCount(2);
+  await expect(page.locator('.poi-marker--photo')).toHaveCount(3);
   // the mode survives a reload (shareable address)
   await page.reload();
   await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
@@ -204,13 +204,21 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
 
   await page.goto('/photos/');
   await expect(page.locator('main h1')).toHaveText(fr.photos.title);
-  await expect(page.locator('.vp-card')).toHaveCount(2);
+  await expect(page.locator('.vp-card')).toHaveCount(3);
   await expect(page.locator('.site-footer a[href="/photos/"]')).toHaveText(fr.nav.photos);
   await page.locator('.vp-card .card-title a[href="/photos/vue-parc-independance-kiosque/"]').click();
   await expect(page).toHaveURL(/\/photos\/vue-parc-independance-kiosque\/$/);
   await expect(page.locator('main h1')).toHaveText(/kiosque à musique/);
   const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
   expect(ld.join()).toContain('"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr"');
+
+  // the place shows its old photo, on its page and in the map panel
+  await page.goto('/lieux/parc-independance/');
+  await expect(page.locator('.vp-mini')).toHaveAttribute('href', '/photos/vue-parc-independance-kiosque/');
+  await page.goto('/carte/#parc-independance');
+  await page.locator('#info-panel .vp-mini').click();
+  await expect(page).toHaveURL(/#vue-parc-independance-kiosque$/);
+  await expect(page.locator('#info-panel .vp-photo--then img')).toBeVisible();
 });
 
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {

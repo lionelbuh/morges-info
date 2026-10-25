@@ -99,7 +99,7 @@ export const VIEWPOINTS = [
     geo: {
       status: 'team',
       sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 25.10.2026' }],
-      note: 'Approximate spot where the photographer stood, facing the garage.',
+      note: 'Spot where the photographer stood, facing the garage; position confirmed by the site owner on 2026-10-25.',
     },
     then: {
       id: 'garage-sama-total-1960s',
@@ -110,18 +110,14 @@ export const VIEWPOINTS = [
         it: 'Morges, il garage SAMA, concessionaria Fiat e distributore Total',
       },
       caption: {
-        fr: 'Agence Fiat et station-service Total, avec ses pompes sous un large auvent. Les voitures visibles, des modèles Fiat de la seconde moitié des années 1960, situent la photo à la fin de cette décennie ; notreHistoire.ch indique 1949.',
-        en: 'Fiat dealer and Total petrol station, its pumps under a wide canopy. The cars in view, Fiat models from the second half of the 1960s, date the photo to the end of that decade; notreHistoire.ch gives 1949.',
-        de: 'Fiat-Vertretung und Total-Tankstelle mit Zapfsäulen unter einem breiten Vordach. Die sichtbaren Autos, Fiat-Modelle aus der zweiten Hälfte der 1960er-Jahre, datieren das Foto auf das Ende dieses Jahrzehnts; notreHistoire.ch nennt 1949.',
-        it: 'Concessionaria Fiat e distributore Total, con le pompe sotto un’ampia pensilina. Le auto visibili, modelli Fiat della seconda metà degli anni Sessanta, datano la foto alla fine di quel decennio; notreHistoire.ch indica il 1949.',
+        fr: 'Agence Fiat et station-service Total en 1969, avec ses pompes sous un large auvent.',
+        en: 'Fiat dealer and Total petrol station in 1969, its pumps under a wide canopy.',
+        de: 'Fiat-Vertretung und Total-Tankstelle im Jahr 1969, mit Zapfsäulen unter einem breiten Vordach.',
+        it: 'Concessionaria Fiat e distributore Total nel 1969, con le pompe sotto un’ampia pensilina.',
       },
-      // notreHistoire.ch gives 1949, but the cars (Fiat models launched from 1965–66) show the late 1960s.
-      date: {
-        value: '1968',
-        precision: 'circa',
-        display: { fr: 'fin des années 1960', en: 'late 1960s', de: 'Ende der 1960er-Jahre', it: 'fine degli anni Sessanta' },
-      },
-      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/@mickymorges' },
+      // notreHistoire.ch first gave 1949; the cars (Fiat models launched in 1965–66) and the site owner give 1969.
+      date: { value: '1969', precision: 'year' },
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81d2650eryfj41q33fq98qt' },
       rights: {
         status: 'public-domain',
         licence: 'Public Domain Mark 1.0',
@@ -133,9 +129,64 @@ export const VIEWPOINTS = [
         verifiedBy: 'Morges.info',
         verifiedAt: '2026-10-25',
         notes:
-          'Marked public domain by Michel Bezençon on notreHistoire.ch; photographer unknown. Date corrected from the cars (late 1960s). Swiss law: a photo without individual character is protected 50 years after it was taken, so the mark holds; remove at once if a rights holder comes forward. Scanner edge trimmed at the bottom (8 px).',
+          'Marked public domain by Michel Bezençon on notreHistoire.ch; photographer unknown. Date 1969 (cars, and confirmed by the site owner) instead of 1949. Swiss law: a photo without individual character is protected 50 years after it was taken, so the mark holds; remove at once if a rights holder comes forward. Scanner edge trimmed at the bottom (8 px).',
       },
       image: { src: '/images/photos/garage-sama-total-1960s.webp', width: 1600, height: 944 },
+    },
+    now: null,
+  },
+  {
+    id: 'vue-rue-des-charpentiers',
+    title: {
+      fr: 'La rue des Charpentiers',
+      en: 'Rue des Charpentiers',
+      de: 'Die Rue des Charpentiers',
+      it: 'La Rue des Charpentiers',
+    },
+    location: {
+      fr: 'Rue des Charpentiers',
+      en: 'Rue des Charpentiers',
+      de: 'Rue des Charpentiers',
+      it: 'Rue des Charpentiers',
+    },
+    coordinates: { lat: 46.509095, lng: 6.49622 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 25.10.2026' }],
+      note: 'Spot where the photographer stood, looking along the street.',
+    },
+    then: {
+      id: 'rue-des-charpentiers-briquet',
+      title: {
+        fr: 'Morges, la rue des Charpentiers, carte postale Briquet & Fils',
+        en: 'Morges, Rue des Charpentiers, Briquet & Fils postcard',
+        de: 'Morges, Rue des Charpentiers, Postkarte von Briquet & Fils',
+        it: 'Morges, Rue des Charpentiers, cartolina Briquet & Fils',
+      },
+      caption: {
+        fr: 'Passants et cycliste dans la rue des Charpentiers, bordée à gauche d’un immeuble à balcons en fer forgé. Carte postale n° 1591 des éditeurs Briquet & Fils.',
+        en: 'Passers-by and a cyclist in the Rue des Charpentiers, lined on the left by a building with wrought-iron balconies. Postcard no. 1591 by the publishers Briquet & Fils.',
+        de: 'Passanten und ein Radfahrer in der Rue des Charpentiers, links ein Wohnhaus mit schmiedeeisernen Balkonen. Postkarte Nr. 1591 des Verlags Briquet & Fils.',
+        it: 'Passanti e un ciclista nella Rue des Charpentiers, fiancheggiata a sinistra da un edificio con balconi in ferro battuto. Cartolina n. 1591 degli editori Briquet & Fils.',
+      },
+      date: { value: '1935', precision: 'circa' },
+      creator: 'Briquet & Fils, éditeurs',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81d124s8yemenfbj2qf7beb' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'Philippe Chappuis (collection personnelle)',
+        credit: 'Collection Philippe Chappuis',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-25',
+        notes:
+          'Licence read on the notreHistoire.ch page; date 1935 as given there. Non-commercial (NC): no advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped, only resized.',
+      },
+      image: { src: '/images/photos/rue-des-charpentiers-briquet.webp', width: 1600, height: 1005 },
     },
     now: null,
   },

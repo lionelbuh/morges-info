@@ -45,8 +45,8 @@ export default {
     },
     notOnMap: 'Dieser Ort wird noch nicht auf der Karte angezeigt: Seine genaue Lage muss noch überprüft werden.',
     osm: 'Auf OpenStreetMap ansehen',
-    archiveTitle: 'Historisches Archiv',
-    archiveText: 'Authentische historische Fotografien mit Datum, Quelle und Genehmigung werden in einer späteren Phase hinzugefügt.',
+    archiveTitle: 'Alte Fotos',
+    archiveNone: 'Noch kein altes Foto von diesem Ort. Haben Sie eines?',
   },
   map: {
     label: 'Interaktive Karte von Morges',
