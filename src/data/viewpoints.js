@@ -190,6 +190,61 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-port-jetee',
+    title: {
+      fr: 'Le port et le château, depuis la jetée',
+      en: 'The harbour and the castle, from the pier',
+      de: 'Hafen und Schloss, von der Mole aus',
+      it: 'Il porto e il castello, dal molo',
+    },
+    location: {
+      fr: 'Port de Morges, sur la passerelle de la jetée',
+      en: 'Morges harbour, on the pier footbridge',
+      de: 'Hafen von Morges, auf dem Steg zur Mole',
+      it: 'Porto di Morges, sulla passerella del molo',
+    },
+    coordinates: { lat: 46.50767235877045, lng: 6.499264780043314 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 25.10.2026' }],
+      note: 'Spot where the photographer stood on the pier footbridge, looking towards the castle.',
+    },
+    placeId: 'port',
+    then: {
+      id: 'port-jetee-1898',
+      title: {
+        fr: 'Morges, le port et le château depuis la jetée, carte postale de 1898',
+        en: 'Morges, the harbour and the castle from the pier, postcard from 1898',
+        de: 'Morges, Hafen und Schloss von der Mole aus, Postkarte von 1898',
+        it: 'Morges, il porto e il castello dal molo, cartolina del 1898',
+      },
+      caption: {
+        fr: 'Carte de vœux envoyée pour la fin de l’année 1898. À gauche le château, à droite l’Hôtel du Mont-Blanc.',
+        en: 'New Year greetings card sent at the end of 1898. The castle on the left, the Hôtel du Mont-Blanc on the right.',
+        de: 'Neujahrskarte, Ende 1898 verschickt. Links das Schloss, rechts das Hôtel du Mont-Blanc.',
+        it: 'Cartolina d’auguri spedita alla fine del 1898. A sinistra il castello, a destra l’Hôtel du Mont-Blanc.',
+      },
+      // The card was sent in December 1898; the photograph itself is from that year or earlier.
+      date: { value: '1898', precision: 'circa' },
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81dgfjk2ntm2y14ym9g9q69' },
+      rights: {
+        status: 'public-domain',
+        licence: 'Public Domain Mark 1.0',
+        licenceUrl: 'https://creativecommons.org/publicdomain/mark/1.0/deed.fr',
+        credit: 'Albin Salamin',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-25',
+        notes:
+          'Marked public domain by Albin Salamin on notreHistoire.ch; photographer unknown. Published in 1898: for an unknown author, Swiss protection ended 70 years after publication.',
+      },
+      image: { src: '/images/photos/port-jetee-1898.webp', width: 1600, height: 1028 },
+    },
+    now: null,
+  },
 ];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
