@@ -211,15 +211,15 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
       if (id) syncMarker(id);
     },
 
-    /** Centre a place, leaving room for the info panel (`padding` in px). */
-    focus(place, { padding = {} } = {}) {
+    /** Centre a place, leaving room for the info panel (`padding` in px); `animate: false` jumps there. */
+    focus(place, { padding = {}, animate = true } = {}) {
       if (!place || !place.coordinates) return;
       const camera = {
         center: [place.coordinates.lng, place.coordinates.lat],
         zoom: Math.max(map.getZoom(), FOCUS_ZOOM),
         padding: { top: 0, right: 0, bottom: 0, left: 0, ...padding },
       };
-      if (prefersReducedMotion()) map.jumpTo(camera);
+      if (!animate || prefersReducedMotion()) map.jumpTo(camera);
       else map.easeTo({ ...camera, duration: 700 });
     },
 

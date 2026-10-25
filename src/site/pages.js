@@ -17,7 +17,7 @@ import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
-import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref } from './links.js';
+import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock } from './photos.js';
@@ -415,7 +415,12 @@ function renderPlace(placeId) {
     <p class="panel-geo panel-geo--${place.geo.status}">${e(t(`panel.geoStatus.${place.geo.status}`))}</p>
     <p class="hero-actions">
       ${c ? `<a class="btn" href="${placeHref(place.id, lang)}">${e(t('common.viewOnMap'))}</a>` : ''}
-      ${c ? `<a class="btn btn-ghost" href="https://www.openstreetmap.org/?mlat=${c.lat}&amp;mlon=${c.lng}#map=18/${c.lat}/${c.lng}" target="_blank" rel="noopener">${e(t('panel.osm'))}</a>` : ''}
+      ${
+        c
+          ? `<a class="btn btn-ghost" href="${e(directionsLinks(c, name).google)}" target="_blank" rel="noopener">${e(t('panel.directionsGoogle'))}</a>
+      <a class="btn btn-ghost" href="${e(directionsLinks(c, name).apple)}" target="_blank" rel="noopener">${e(t('panel.directionsApple'))}</a>`
+          : ''
+      }
     </p>
     ${placePhotosBlock(place.id, { href: (vp) => photoPageHref(vp.id, lang), level: 2 })}
     ${verifiedLine(place.lastVerified)}

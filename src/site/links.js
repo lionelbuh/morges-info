@@ -31,3 +31,15 @@ export function photoMapHref(viewpointId, lang) {
 export function storyHref(storyId, lang) {
   return `${getPage('stories').path}${langQuery(lang)}#${storyId}`;
 }
+
+/**
+ * Directions to a place in Google Maps and Apple Plans (plain links: nothing is loaded from Google
+ * or Apple until the visitor clicks). `name` helps Apple show the destination.
+ */
+export function directionsLinks(coordinates, name) {
+  const { lat, lng } = coordinates;
+  return {
+    google: `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+    apple: `https://maps.apple.com/?daddr=${lat},${lng}&q=${encodeURIComponent(name)}`,
+  };
+}

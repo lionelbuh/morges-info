@@ -76,6 +76,15 @@ function placesBounds() {
 
 const noop = () => {};
 
+/**
+ * Runs `fn` once the browser has painted the response to the current click or key press.
+ * Work that is not visible straight away (moving the map, re-rendering the list) goes here, so the
+ * page reacts at once — what the "Interaction to Next Paint" measure (INP) rewards.
+ */
+function afterNextPaint(fn) {
+  requestAnimationFrame(() => setTimeout(fn, 0));
+}
+
 /** Placeholder until the map code has loaded; also used if WebGL2 is unavailable. */
 function createInactiveMap({ supported }) {
   return {
@@ -96,6 +105,7 @@ function showMapUnavailable() {
   viewToggle.hidden = true;
   $('map-fallback').hidden = false;
   map = createInactiveMap({ supported: false });
+  shownKey = '';
   render();
 }
 
@@ -130,6 +140,7 @@ async function initMap() {
     return;
   }
   mapEl.dataset.ready = 'true';
+  shownKey = '';
   if (state.view === '3d') map.setView('3d', { animate: false });
   render();
   const place = state.selectedId && getItem(state.selectedId);
@@ -168,6 +179,15 @@ function visiblePlaces() {
 const PHOTO_MARKER = { pair: { color: '#b3121a', icon: '◉' }, single: { color: '#1c1b19', icon: '◉' } };
 const photoMarker = (vp) => ({ ...vp, marker: vp.then && vp.now ? PHOTO_MARKER.pair : PHOTO_MARKER.single });
 
+let shownKey = '';
+/** Give the map these items, unless they are the ones it already shows (selection changes go through select()). */
+function showOnMap(items) {
+  const key = `${state.mode}|${map.supported}|${items.map((p) => p.id).join(',')}`;
+  if (key === shownKey) return;
+  shownKey = key;
+  map.setPlaces(items);
+}
+
 function render() {
   const photos = state.mode === 'photos';
   const items = visiblePlaces();
@@ -178,14 +198,14 @@ function render() {
   $('results-label').textContent = t(photos ? 'photos.listLabel' : 'results.listLabel');
   if (photos) {
     sidebar.renderPhotoList(items, state.selectedId, { total: VIEWPOINTS.length, contributeHref: pageHref('contribute', getLang()) });
-    map.setPlaces(items.map(photoMarker));
+    showOnMap(items.map(photoMarker));
     map.select(state.selectedId);
   } else {
     sidebar.renderFilters(state.categories);
     sidebar.renderList(items, state.selectedId);
     // A place inside another one (markerOf) is shown through that place's marker.
     const markerTargets = items.filter((p) => p.markerOf).map((p) => getPlace(p.markerOf));
-    map.setPlaces([...new Set([...items, ...markerTargets])]);
+    showOnMap([...new Set([...items, ...markerTargets])]);
     const selected = state.selectedId && getPlace(state.selectedId);
     map.select(selected ? selected.markerOf || selected.id : null);
   }
@@ -213,13 +233,17 @@ function setView(view, opts) {
 /** Places ↔ photos. The address keeps the mode ("#photos") so it can be shared and survives a reload. */
 function setMode(mode) {
   if (mode === state.mode) return;
-  if (state.selectedId) selectPlace(null);
-  state.mode = mode;
-  state.query = '';
-  searchInput.value = '';
-  const hash = mode === 'photos' ? '#photos' : '';
-  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
-  render();
+  modeToggle.querySelectorAll('[data-mode]').forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
+  afterNextPaint(() => {
+    if (mode === state.mode) return;
+    if (state.selectedId) selectPlace(null);
+    state.mode = mode;
+    state.query = '';
+    searchInput.value = '';
+    const hash = mode === 'photos' ? '#photos' : '';
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+    render();
+  });
 }
 
 function selectPlace(id, { fromList = false } = {}) {
@@ -229,7 +253,10 @@ function selectPlace(id, { fromList = false } = {}) {
 
   if (place) {
     panel.open(place, { focusPanel: true });
-    map.focus(place); // centred under the panel, ready for when it closes
+    // centred under the full-screen panel, ready for when it closes: no need to animate what nobody sees
+    afterNextPaint(() => {
+      if (state.selectedId === place.id) map.focus(place, { animate: false });
+    });
     if (fromList) state.listOpen = false; // on mobile, the map is there when the panel closes
     if (window.location.hash !== `#${place.id}`) {
       const url = `${window.location.pathname}${window.location.search}#${place.id}`;
@@ -251,7 +278,9 @@ function selectPlace(id, { fromList = false } = {}) {
       window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
     }
   }
-  render();
+  // the list and markers sit under the full-screen panel: they can follow once it is painted
+  if (place) afterNextPaint(render);
+  else render();
 }
 
 searchInput.addEventListener('input', () => {
