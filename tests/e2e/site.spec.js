@@ -146,6 +146,9 @@ test('each place has its own indexable page, linked from the places index and th
   expect(data.map((d) => d['@type'])).toEqual(['SportsActivityLocation', 'BreadcrumbList']);
   expect(data[0].geo).toEqual({ '@type': 'GeoCoordinates', latitude: 46.504666, longitude: 6.493514 });
   expect(data[0].address.streetAddress).toBe('Promenade Général-Guisan 11');
+  // directions in Google Maps and Apple Plans (plain links)
+  await expect(page.locator('.place-page a[href^="https://www.google.com/maps/dir/?api=1&destination=46.504666,6.493514"]')).toHaveText(fr.panel.directionsGoogle);
+  await expect(page.locator('.place-page a[href^="https://maps.apple.com/?daddr=46.504666,6.493514&q=Piscine%20du%20Parc"]')).toHaveText(fr.panel.directionsApple);
   // translated like every page
   await page.locator('.lang-btn[data-lang="it"]').click();
   await expect(page.locator('main h1')).toHaveText('Piscina del Parco');
@@ -154,6 +157,8 @@ test('each place has its own indexable page, linked from the places index and th
   await page.locator('.place-page .hero-actions .btn').first().click();
   await expect(page).toHaveURL(/\/carte\/\?lang=it#piscine-du-parc$/);
   await expect(page.locator('#info-panel [data-field="permalink"]')).toHaveAttribute('href', '/lieux/piscine-du-parc/?lang=it');
+  await expect(page.locator('#info-panel [data-field="directions-google"]')).toHaveText('Itinerario (Google Maps)');
+  await expect(page.locator('#info-panel [data-field="directions-apple"]')).toHaveAttribute('href', /^https:\/\/maps\.apple\.com\/\?daddr=46\.504666,6\.493514&q=Piscina%20del%20Parco$/);
 });
 
 test('structured data: site, events and stories are described for search engines', async ({ page }) => {

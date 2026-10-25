@@ -2,7 +2,7 @@ import { getCategory } from '../data/categories.js';
 import { t, localized, getLang, textOf } from '../i18n/index.js';
 import { formatDate } from '../site/format.js';
 import { photoFigure } from '../site/components.js';
-import { placePageHref, photoPageHref, photoMapHref } from '../site/links.js';
+import { placePageHref, photoPageHref, photoMapHref, directionsLinks } from '../site/links.js';
 import { viewpointBody, viewpointKind, placePhotosBlock } from '../site/photos.js';
 import { escapeHtml } from './dom.js';
 import { ATTRIBUTION } from '../map/style.js';
@@ -72,8 +72,8 @@ export function createInfoPanel(el, { onClose }) {
     const place = current;
     const cat = getCategory(place.category);
     const c = place.coordinates;
-    const osmUrl = c
-      ? `https://www.openstreetmap.org/?mlat=${c.lat}&mlon=${c.lng}#map=18/${c.lat}/${c.lng}`
+    const directions = c
+      ? directionsLinks(c, localized(place.name))
       : null;
 
     el.innerHTML = `
@@ -106,7 +106,8 @@ export function createInfoPanel(el, { onClose }) {
             c
               ? `<div class="panel-actions">
                   <a class="btn" href="${placePageHref(place.id, getLang())}" data-field="permalink">${escapeHtml(t('panel.permalink'))}</a>
-                  <a class="btn btn-ghost" href="${osmUrl}" target="_blank" rel="noopener">${escapeHtml(t('panel.osm'))}</a>
+                  <a class="btn btn-ghost" href="${escapeHtml(directions.google)}" target="_blank" rel="noopener" data-field="directions-google">${escapeHtml(t('panel.directionsGoogle'))}</a>
+                  <a class="btn btn-ghost" href="${escapeHtml(directions.apple)}" target="_blank" rel="noopener" data-field="directions-apple">${escapeHtml(t('panel.directionsApple'))}</a>
                 </div>`
               : ''
           }

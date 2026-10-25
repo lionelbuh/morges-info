@@ -343,7 +343,8 @@ test('a place opens full screen; "Back to the map", × and the Back button close
   await expect(panel(page)).toBeHidden();
   await expect(page).toHaveURL(/\/carte\/$/);
 
-  // × closes it too, and another place can be chosen
+  // × closes it too, and another place can be chosen (the map is centred on the castle: bring the port into view)
+  await zoomTo(page, 'port');
   await marker(page, 'port').click();
   await expect(panel(page).locator('.panel-title')).toHaveText('Port de Morges');
   await panel(page).locator('.panel-close').click();
