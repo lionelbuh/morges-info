@@ -23,7 +23,65 @@ import { validateArchivePhoto, publishablePhotos } from './archive.js';
 import { validateText, validateSources } from './schema.js';
 
 /** @type {Viewpoint[]} */
-export const VIEWPOINTS = [];
+export const VIEWPOINTS = [
+  {
+    id: 'vue-parc-independance-kiosque',
+    title: {
+      fr: 'Le kiosque à musique du parc de l’Indépendance',
+      en: 'The bandstand in the Parc de l’Indépendance',
+      de: 'Der Musikpavillon im Parc de l’Indépendance',
+      it: 'Il chiosco della musica nel Parc de l’Indépendance',
+    },
+    location: {
+      fr: 'Parc de l’Indépendance, au bord du lac',
+      en: 'Parc de l’Indépendance, on the lakeshore',
+      de: 'Parc de l’Indépendance, am Seeufer',
+      it: 'Parc de l’Indépendance, sulla riva del lago',
+    },
+    coordinates: { lat: 46.50569818581667, lng: 6.495344864861067 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 25.10.2026' }],
+      note: 'Approximate spot where the photographer stood, facing the bandstand.',
+    },
+    placeId: 'parc-independance',
+    then: {
+      id: 'parc-independance-kiosque-1902',
+      title: {
+        fr: 'Morges, parc de l’Indépendance : le kiosque à musique, carte postale de 1902',
+        en: 'Morges, Parc de l’Indépendance: the bandstand, postcard from 1902',
+        de: 'Morges, Parc de l’Indépendance: der Musikpavillon, Postkarte von 1902',
+        it: 'Morges, Parc de l’Indépendance: il chiosco della musica, cartolina del 1902',
+      },
+      caption: {
+        fr: 'Le kiosque, élevé en 1897 d’après les plans du serrurier morgien Auguste Badan. Seul son socle fut conservé en 1961 ; il a été reconstruit en 1986. Carte postale envoyée de Morges le 3 septembre 1902.',
+        en: 'The bandstand, built in 1897 to plans by the Morges locksmith Auguste Badan. Only its base was kept in 1961; it was rebuilt in 1986. Postcard sent from Morges on 3 September 1902.',
+        de: 'Der Pavillon wurde 1897 nach Plänen des Morger Schlossers Auguste Badan errichtet. 1961 blieb nur der Sockel erhalten; 1986 wurde er wieder aufgebaut. Postkarte, am 3. September 1902 in Morges abgeschickt.',
+        it: 'Il chiosco, eretto nel 1897 su progetto del fabbro morgiense Auguste Badan. Nel 1961 se ne conservò solo lo zoccolo; è stato ricostruito nel 1986. Cartolina spedita da Morges il 3 settembre 1902.',
+      },
+      // The card was posted on 3 September 1902; the photograph itself was taken between 1897 and then.
+      date: { value: '1902', precision: 'circa' },
+      creator: 'Edouard Staub, éditeur, Morges',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81dkz4re35har48smt9rdxp' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'Philippe Chappuis (collection personnelle)',
+        credit: 'Collection Philippe Chappuis',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-25',
+        notes:
+          'Licence read on the notreHistoire.ch page. Non-commercial (NC): remove or ask permission before any advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped, only resized.',
+      },
+      image: { src: '/images/photos/parc-independance-kiosque-1902.webp', width: 1600, height: 1044 },
+    },
+    now: null,
+  },
+];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
 export function shownPhotos(vp) {

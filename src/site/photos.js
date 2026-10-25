@@ -37,6 +37,9 @@ export function formatPhotoDate(date, lang = getLang()) {
 /** Year shown on the comparison labels (decades as "1920s"…). */
 const shortDate = (photo) => formatPhotoDate(photo.date);
 
+const licence = ({ licence: name, licenceUrl }) =>
+  licenceUrl ? `<a href="${e(licenceUrl)}" target="_blank" rel="noopener license">${e(name)}</a>` : e(name);
+
 /** Credit line under a photo: date · author · source · rights. */
 function credit(photo) {
   const source = photo.source.url
@@ -46,7 +49,7 @@ function credit(photo) {
     `<strong>${e(formatPhotoDate(photo.date))}</strong>`,
     photo.creator ? e(photo.creator) : '',
     `${source}${photo.source.reference ? `, ${e(photo.source.reference)}` : ''}`,
-    e(photo.rights.credit) + (photo.rights.licence ? ` (${e(photo.rights.licence)})` : ''),
+    e(photo.rights.credit) + (photo.rights.licence ? ` (${licence(photo.rights)})` : ''),
   ].filter(Boolean);
   return parts.join(' · ');
 }

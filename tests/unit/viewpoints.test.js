@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { existsSync } from 'node:fs';
 import { setLang } from '../../src/i18n/index.js';
 import { VIEWPOINTS, validateViewpoint, shownPhotos, publishedViewpoints } from '../../src/data/viewpoints.js';
 import { viewpointBody, viewpointKind, formatPhotoDate, viewpointCard } from '../../src/site/photos.js';
@@ -33,6 +34,12 @@ describe('photo map data', () => {
   it('published viewpoints are valid, with unique ids', () => {
     for (const vp of VIEWPOINTS) expect(validateViewpoint(vp), vp.id).toEqual([]);
     expect(new Set(VIEWPOINTS.map((vp) => vp.id)).size).toBe(VIEWPOINTS.length);
+  });
+
+  it('every published image is in public/', () => {
+    for (const vp of publishedViewpoints()) {
+      for (const p of Object.values(shownPhotos(vp)).filter(Boolean)) expect(existsSync(`public${p.image.src}`), p.image.src).toBe(true);
+    }
   });
 
   it('accepts an old photo alone, or old and current together', () => {
@@ -85,6 +92,15 @@ describe('photo map display', () => {
     expect(formatPhotoDate({ value: '1930', precision: 'decade' })).toBe('1930er-Jahre');
     setLang('en');
     expect(formatPhotoDate({ value: '1930', precision: 'decade' })).toBe('1930s');
+  });
+
+  it('links the licence when its address is known', () => {
+    const rights = { status: 'open-licence', licence: 'CC BY-NC-ND 4.0', licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr', credit: 'Coll. Y' };
+    const cc = viewpoint('vue-test-cc', photo('d', { value: '1902', precision: 'circa' }, { rights }), null);
+    expect(validateViewpoint(cc)).toEqual([]);
+    expect(viewpointBody(cc)).toContain(
+      'Coll. Y (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr" target="_blank" rel="noopener license">CC BY-NC-ND 4.0</a>)',
+    );
   });
 
   it('gallery card links to the photo page', () => {
