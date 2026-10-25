@@ -171,8 +171,8 @@ export function viewpointSchema(vp) {
       ...(photo.creator && { creator: { '@type': 'Person', name: photo.creator } }),
       creditText: photo.rights.credit,
       copyrightNotice: photo.rights.credit,
-      ...(RIGHTS_URL[photo.rights.licence] && { license: RIGHTS_URL[photo.rights.licence] }),
-      acquireLicensePage: abs(pageHref('contribute', lang)),
+      ...((photo.rights.licenceUrl || RIGHTS_URL[photo.rights.licence]) && { license: photo.rights.licenceUrl || RIGHTS_URL[photo.rights.licence] }),
+      acquireLicensePage: photo.source.url || abs(pageHref('contribute', lang)),
       contentLocation: {
         '@type': 'Place',
         name: localized(vp.location),

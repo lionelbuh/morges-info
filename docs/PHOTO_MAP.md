@@ -39,6 +39,10 @@ Quand un lecteur envoie la photo manquante, l'objet de l'e-mail contient l'ident
 - Uniquement des photos **authentiques**, avec l'accord de leur auteur ou propriétaire (voir `docs/PHOTOS.md`).
   Jamais d'image générée ni copiée au hasard sur Internet.
 - Le crédit demandé par la personne est affiché sous chaque photo.
+- Photo sous licence Creative Commons (`rights.status: 'open-licence'`) : indiquer `licence` (ex. `CC BY-NC-ND 4.0`)
+  et `licenceUrl`, le lien vers le texte de la licence, affiché sous la photo. Avec **ND** (pas de modification), la
+  photo est montrée entière, sans recadrage ; pour la comparer avec la photo actuelle, demander l'accord de la personne
+  qui l'a publiée. Avec **NC** (pas d'usage commercial), aucune publicité ni sponsor sur la page de cette photo.
 - Un retrait ou une correction de crédit est fait sans discussion.
 
 ## Évolutions prévues quand les photos seront nombreuses

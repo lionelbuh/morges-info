@@ -173,11 +173,11 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(32); // 12 listed pages + 20 places (no photo page yet)
+  expect(sitemap.match(/<loc>/g)).toHaveLength(33); // 12 listed pages + 20 places + 1 photo page
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
-test('photo map: the map switches between places and photos; the gallery invites the first photos', async ({ page }) => {
+test('photo map: the map switches between places and photos; a viewpoint shows its photo and asks for today’s view', async ({ page }) => {
   await page.goto('/carte/');
   await expect(page.locator('#map')).toHaveAttribute('data-ready', 'true');
   await page.locator('#mode-toggle [data-mode="photos"]').click();
@@ -185,23 +185,32 @@ test('photo map: the map switches between places and photos; the gallery invites
   await expect(page).toHaveURL(/\/carte\/#photos$/);
   await expect(page.locator('.filters-block')).toBeHidden();
   await expect(page.locator('#search-input')).toHaveAttribute('placeholder', fr.photos.searchPlaceholder);
-  // no photo published yet: no marker, an invitation to send photos instead
-  await expect(page.locator('.poi-marker')).toHaveCount(0);
-  const list = page.locator('#place-list');
-  if (await list.isHidden()) await page.locator('#list-toggle').click();
-  await expect(page.locator('.photos-empty-note')).toContainText(fr.photos.emptyMap);
-  await expect(page.locator('.photos-empty-note a')).toHaveAttribute('href', '/contribuer/');
-  // the mode survives a reload (shareable address), and the places come back
+  await expect(page.locator('.poi-marker--photo')).toHaveCount(1);
+  // the mode survives a reload (shareable address)
   await page.reload();
   await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
+  // the old photo alone: shown whole with its credit and licence, and today's view is asked for
+  if (await page.locator('#place-list').isHidden()) await page.locator('#list-toggle').click();
+  await page.locator('#place-list [data-place-id="vue-parc-independance-kiosque"]').click();
+  await expect(page).toHaveURL(/#vue-parc-independance-kiosque$/);
+  const panel = page.locator('#info-panel');
+  await expect(panel.locator('.vp-photo--then img')).toHaveAttribute('src', '/images/photos/parc-independance-kiosque-1902.webp');
+  await expect(panel.locator('.vp-credit a[rel~="license"]')).toHaveAttribute('href', /creativecommons\.org\/licenses\/by-nc-nd\/4\.0/);
+  await expect(panel.locator('.vp-wanted h3')).toHaveText(fr.photos.wantedNowTitle);
+  await panel.locator('[data-action="close"]').first().click();
   await page.locator('#mode-toggle [data-mode="places"]').click();
   await expect(page).toHaveURL(/\/carte\/$/);
   await expect(page.locator('.poi-marker')).toHaveCount(19);
 
   await page.goto('/photos/');
   await expect(page.locator('main h1')).toHaveText(fr.photos.title);
-  await expect(page.locator('.photos-empty')).toContainText(fr.photos.callTitle);
+  await expect(page.locator('.vp-card')).toHaveCount(1);
   await expect(page.locator('.site-footer a[href="/photos/"]')).toHaveText(fr.nav.photos);
+  await page.locator('.vp-card .card-title a').click();
+  await expect(page).toHaveURL(/\/photos\/vue-parc-independance-kiosque\/$/);
+  await expect(page.locator('main h1')).toHaveText(/kiosque à musique/);
+  const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(ld.join()).toContain('"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr"');
 });
 
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {

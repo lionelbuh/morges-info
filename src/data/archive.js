@@ -33,8 +33,9 @@ export const DATE_PRECISIONS = ['day', 'month', 'year', 'decade', 'circa'];
  * @property {string=} creator              Photographer / studio, if known
  * @property {{ institution: string, reference?: string, url?: string }} source
  *           Archive or collection the image comes from, with its inventory reference
- * @property {{ status: string, licence?: string, holder?: string, credit: string, evidence?: string }} rights
- *           status from PERMISSION_STATUSES; `evidence` points to the permission document (kept offline)
+ * @property {{ status: string, licence?: string, licenceUrl?: string, holder?: string, credit: string, evidence?: string }} rights
+ *           status from PERMISSION_STATUSES; `licenceUrl` links the licence text (Creative Commons asks for it);
+ *           `evidence` points to the permission document (kept offline)
  * @property {{ status: string, verifiedBy?: string, verifiedAt?: string, notes?: string }} verification
  *           status from VERIFICATION_STATUSES
  * @property {{ src: string, width?: number, height?: number }|null} image
@@ -70,6 +71,7 @@ export function validateArchivePhoto(photo, { requirePlace = true } = {}) {
   req(photo.rights && typeof photo.rights.credit === 'string' && photo.rights.credit, 'rights.credit is required');
   if (photo.rights && photo.rights.status === 'open-licence') {
     req(typeof photo.rights.licence === 'string' && photo.rights.licence, 'rights.licence is required for open-licence');
+    req(photo.rights.licenceUrl === undefined || /^https:\/\//.test(photo.rights.licenceUrl), 'rights.licenceUrl must be https');
   }
 
   req(photo.verification && VERIFICATION_STATUSES.includes(photo.verification.status), 'verification.status is invalid');
