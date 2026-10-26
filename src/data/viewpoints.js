@@ -302,6 +302,62 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-college-couvaloup',
+    title: {
+      fr: 'Le collège de Couvaloup',
+      en: 'The Couvaloup school',
+      de: 'Das Collège de Couvaloup',
+      it: 'Il collegio di Couvaloup',
+    },
+    location: {
+      fr: 'Collège de Couvaloup',
+      en: 'Collège de Couvaloup',
+      de: 'Collège de Couvaloup',
+      it: 'Collège de Couvaloup',
+    },
+    coordinates: { lat: 46.510494418457206, lng: 6.498732714088409 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 26.10.2026' }],
+      note: 'Spot where the photographer stood, facing the school.',
+    },
+    then: {
+      id: 'college-couvaloup-1904',
+      title: {
+        fr: 'Morges, le collège de Couvaloup, carte postale de 1904',
+        en: 'Morges, the Couvaloup school, postcard from 1904',
+        de: 'Morges, das Collège de Couvaloup, Postkarte von 1904',
+        it: 'Morges, il collegio di Couvaloup, cartolina del 1904',
+      },
+      caption: {
+        fr: 'Le collège, reconstruit et agrandi en 1882, date inscrite sous l’horloge. Carte postale envoyée le 12 avril 1904.',
+        en: 'The school, rebuilt and enlarged in 1882, the date carved below the clock. Postcard sent on 12 April 1904.',
+        de: 'Das Schulhaus, 1882 neu gebaut und vergrössert, das Jahr steht unter der Uhr. Postkarte, am 12. April 1904 verschickt.',
+        it: 'Il collegio, ricostruito e ampliato nel 1882, data incisa sotto l’orologio. Cartolina spedita il 12 aprile 1904.',
+      },
+      // The card was posted on 12 April 1904; the photograph itself is from then or earlier.
+      date: { value: '1904', precision: 'circa' },
+      creator: 'E. Staub, éditeur',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81d08pw81fg9gsqf0sdzr4q' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'Philippe Chappuis (collection personnelle)',
+        credit: 'Collection Philippe Chappuis',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-26',
+        notes:
+          'Licence read on the notreHistoire.ch page; author unknown there, publisher E. Staub printed on the card. Non-commercial (NC): no advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped, only resized.',
+      },
+      image: { src: '/images/photos/college-couvaloup-1904.webp', width: 1600, height: 999 },
+    },
+    now: null,
+  },
 ];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
