@@ -3,9 +3,9 @@ import '../styles/main.css';
 import { detectInitialLang, setLang, onLangChange, getLang, localized, t } from '../i18n/index.js';
 import { PLACES, getPlace, MORGES_CENTER } from '../data/places.js';
 import { initChrome, renderChrome } from './chrome.js';
-import { renderMain } from './pages.js';
-import { placeHref } from './links.js';
-import { initCompare } from './photos.js';
+import { renderMain, homePhotoViewpoints } from './pages.js';
+import { placeHref, photoMapHref } from './links.js';
+import { initCompare, photoMarker, homePhotoCard } from './photos.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
@@ -20,6 +20,41 @@ initChrome();
 
 let preview = null;
 let previewObserver = null;
+let photoTimer = null;
+
+/**
+ * Home: the old photos take turns next to the map (every 6 s), each one highlighted on the map.
+ * Stops while the pointer or keyboard focus is on it, with the pause button, and never moves for
+ * visitors who ask for reduced motion.
+ */
+function startHomePhotos() {
+  const box = document.getElementById('home-photos');
+  const viewpoints = homePhotoViewpoints();
+  if (!box || viewpoints.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const button = box.querySelector('.home-photos-pause');
+  let index = 0;
+  let paused = false;
+  let hovered = false;
+  button.hidden = false;
+  const show = (i) => {
+    index = (i + viewpoints.length) % viewpoints.length;
+    const vp = viewpoints[index];
+    box.querySelector('.home-photo').outerHTML = homePhotoCard(vp, photoMapHref(vp.id, getLang()));
+    if (preview) preview.select(vp.id);
+  };
+  photoTimer = setInterval(() => {
+    if (!paused && !hovered && document.visibilityState === 'visible') show(index + 1);
+  }, 6000);
+  box.addEventListener('mouseenter', () => (hovered = true));
+  box.addEventListener('mouseleave', () => (hovered = false));
+  box.addEventListener('focusin', () => (hovered = true));
+  box.addEventListener('focusout', () => (hovered = false));
+  button.addEventListener('click', () => {
+    paused = !paused;
+    button.setAttribute('aria-pressed', String(paused));
+    button.textContent = t(paused ? 'home.photosPlay' : 'home.photosPause');
+  });
+}
 
 /** Home: a small, non-interactive map, loaded only when it scrolls into view. */
 function mountMapPreview() {
@@ -37,7 +72,10 @@ function mountMapPreview() {
     const canvas = document.createElement('div');
     canvas.className = 'map-preview-canvas';
     el.prepend(canvas);
-    const coords = PLACES.filter((p) => p.coordinates).map((p) => p.coordinates);
+    // the photo map when there are photos, otherwise the places
+    const viewpoints = homePhotoViewpoints();
+    const items = viewpoints.length ? viewpoints.map(photoMarker) : PLACES;
+    const coords = items.filter((p) => p.coordinates).map((p) => p.coordinates);
     preview = mod.createMap(canvas, {
       center: MORGES_CENTER,
       lang: getLang(),
@@ -46,11 +84,13 @@ function mountMapPreview() {
         [Math.min(...coords.map((c) => c.lng)), Math.min(...coords.map((c) => c.lat))],
         [Math.max(...coords.map((c) => c.lng)), Math.max(...coords.map((c) => c.lat))],
       ],
-      onSelect: (id) => window.location.assign(placeHref(id, getLang())),
-      getLabel: (place) => localized(place.name),
+      onSelect: (id) => window.location.assign(viewpoints.length ? photoMapHref(id, getLang()) : placeHref(id, getLang())),
+      getLabel: (item) => localized(item.name || item.title),
       uiStrings: () => ({}),
     });
-    preview.setPlaces(PLACES);
+    preview.setPlaces(items);
+    const shown = document.querySelector('#home-photos .home-photo');
+    if (shown) preview.select(shown.dataset.vpId);
     el.classList.add('is-live');
     canvas.dataset.ready = 'true';
   };
@@ -94,13 +134,17 @@ document.addEventListener('click', (event) => {
 
 function render() {
   if (previewObserver) previewObserver.disconnect();
+  clearInterval(photoTimer);
   if (preview) {
     preview.destroy();
     preview = null;
   }
   renderChrome(pageId);
   document.getElementById('main').innerHTML = renderMain(pageId);
-  if (pageId === 'home') mountMapPreview();
+  if (pageId === 'home') {
+    mountMapPreview();
+    startHomePhotos();
+  }
   if (pageId === 'legal') syncAnalyticsControl();
 }
 

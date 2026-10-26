@@ -20,7 +20,7 @@ import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
-import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock } from './photos.js';
+import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
   placeCard,
   eventCard,
@@ -59,6 +59,12 @@ function pageIntro(title, intro) {
   </header>`;
 }
 
+/** Viewpoints shown on the home page, those with an old photo first. */
+export function homePhotoViewpoints() {
+  const viewpoints = publishedViewpoints();
+  return [...viewpoints.filter((vp) => vp.then), ...viewpoints.filter((vp) => !vp.then)];
+}
+
 function renderHome({ today } = {}) {
   const lang = getLang();
   const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
@@ -74,6 +80,9 @@ function renderHome({ today } = {}) {
     : '';
 
   const hero = heroPhoto(HERO_PHOTO, heroManifest, { sizes: '(max-width: 860px) 100vw, 680px' });
+  // "Explorer la carte" opens the photo map: Morges then (and now), the places are one click away
+  const oldPhotos = homePhotoViewpoints();
+  const photosMap = oldPhotos.length ? photoMapHref('photos', lang) : pageHref('map', lang);
 
   return `${jsonLd(websiteSchema(t('pages.home.description')))}
   <div class="lead-story${hero ? ' lead-story--photo' : ''}">
@@ -83,17 +92,27 @@ function renderHome({ today } = {}) {
     <h1>${e(t('site.tagline'))}</h1>
     <p class="lead">${e(t('home.intro'))}</p>
     <p class="hero-actions">
-      <a class="btn" href="${pageHref('map', lang)}">${e(t('home.mapCta'))}</a>
+      <a class="btn" href="${photosMap}">${e(t('home.mapCta'))}</a>
       <a class="btn btn-ghost" href="${pageHref('history', lang)}">${e(t('nav.history'))}</a>
     </p>
   </section>
   </div>
 
   <section class="section" aria-labelledby="home-map">
-    ${sectionHead('home-map', t('home.mapTitle'), { href: pageHref('map', lang), label: t('home.mapCta') })}
+    ${sectionHead('home-map', t('home.mapTitle'), { href: photosMap, label: t('home.mapCta') })}
     <p class="section-text">${e(t('home.mapText'))}</p>
-    <div class="map-preview" id="map-preview">
-      <a class="map-preview-fallback" href="${pageHref('map', lang)}">${e(t('home.mapCta'))}</a>
+    <div class="home-map${oldPhotos.length ? ' home-map--photos' : ''}">
+      <div class="map-preview" id="map-preview">
+        <a class="map-preview-fallback" href="${photosMap}">${e(t('home.mapCta'))}</a>
+      </div>
+      ${
+        oldPhotos.length
+          ? `<div class="home-photos" id="home-photos">
+        ${homePhotoCard(oldPhotos[0], photoMapHref(oldPhotos[0].id, lang))}
+        ${oldPhotos.length > 1 ? `<button type="button" class="home-photos-pause" aria-pressed="false" hidden>${e(t('home.photosPause'))}</button>` : ''}
+      </div>`
+          : ''
+      }
     </div>
   </section>
 
