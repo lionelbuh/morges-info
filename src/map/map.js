@@ -101,7 +101,8 @@ export function createMap(el, { center, lang, bounds, onSelect, getLabel, uiStri
   map.addControl(new AttributionControl({ compact: false }), 'bottom-right');
 
   if (bounds) {
-    map.fitBounds(bounds, { padding: preview ? 40 : 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
+    // preview: room above for the pins (anchored at their tip) and the "open the map" button
+    map.fitBounds(bounds, { padding: preview ? { top: 90, bottom: 30, left: 40, right: 40 } : 60, maxZoom: DEFAULT_ZOOM, duration: 0 });
   }
 
   // Style changes must wait for the first 'load'. isStyleLoaded() is not enough: it is briefly

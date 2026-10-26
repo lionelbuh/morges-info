@@ -159,6 +159,23 @@ export function placePhotosBlock(placeId, { href, level = 3 }) {
   </section>`;
 }
 
+/** Photo points on a map: red when old and current photos can be compared, ink otherwise. */
+const PHOTO_MARKER = { pair: { color: '#b3121a', icon: '◉' }, single: { color: '#1c1b19', icon: '◉' } };
+export const photoMarker = (vp) => ({ ...vp, marker: vp.then && vp.now ? PHOTO_MARKER.pair : PHOTO_MARKER.single });
+
+/** Home page: one old photo (shown whole) with its title and date, leading to it on the map. */
+export function homePhotoCard(vp, href) {
+  const { then, now } = shownPhotos(vp);
+  const photo = then || now;
+  return `<a class="home-photo" href="${href}" data-vp-id="${e(vp.id)}">
+    ${img(photo)}
+    <span class="home-photo-text">
+      <span class="vp-role">${e(t(`photos.${then ? 'then' : 'now'}`))} · ${e(shortDate(photo))}</span>
+      <strong>${e(localized(vp.title))}</strong>
+    </span>
+  </a>`;
+}
+
 /** Before/after sliders: one listener for the whole document (panel and pages are re-rendered). */
 let compareReady = false;
 export function initCompare() {

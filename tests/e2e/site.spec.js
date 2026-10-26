@@ -267,13 +267,26 @@ test('home: map preview with markers, places, practical info and featured story;
   expect(await hero.evaluate((img) => img.currentSrc)).toMatch(/\.avif$/);
   await expect(page.locator('.hero-credit a[href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr"]')).toHaveText('CC BY-SA 4.0');
   await expect(page.locator('.hero-credit')).toContainText('D. Jaquet');
+  // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
+  await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
+  await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
-  await expect(page.locator('#map-preview .poi-marker')).toHaveCount(19);
+  await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(4);
   await expect(page.locator('#map-preview .maplibregl-ctrl-attrib')).toContainText('OpenStreetMap');
-  // clicking a preview marker opens it on the map page
-  await page.locator('#map-preview .poi-marker[data-place-id="beausobre"]').click();
-  await expect(page).toHaveURL(/\/carte\/#beausobre$/);
-  await expect(page.locator('#info-panel .panel-title')).toHaveText('Théâtre de Beausobre');
+  const card = page.locator('#home-photos .home-photo');
+  await expect(card).toHaveAttribute('href', '/carte/#vue-parc-independance-kiosque');
+  await expect(page.locator('#map-preview .poi-marker[data-place-id="vue-parc-independance-kiosque"]')).toHaveAttribute('aria-pressed', 'true');
+  // the photos take turns (every 6 s) and can be paused
+  await page.mouse.move(0, 0);
+  await expect(card).not.toHaveAttribute('href', '/carte/#vue-parc-independance-kiosque', { timeout: 9000 });
+  const pause = page.locator('.home-photos-pause');
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  await expect(pause).toHaveText(fr.home.photosPlay);
+  // clicking a preview marker opens that photo on the map page
+  await page.locator('#map-preview .poi-marker[data-place-id="vue-port-jetee"]').click();
+  await expect(page).toHaveURL(/\/carte\/#vue-port-jetee$/);
+  await expect(page.locator('#info-panel .panel-title')).toHaveText('Le port et le château, depuis la jetée');
 });
 
 test('the map opens in 3D by default, and a switch to 2D is remembered', async ({ page }) => {

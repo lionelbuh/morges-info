@@ -3,7 +3,7 @@ import { PLACES, MORGES_CENTER, getPlace } from './data/places.js';
 import { detectInitialLang, setLang, getLang, onLangChange, t, localized, translateDom } from './i18n/index.js';
 import { filterPlaces, filterViewpoints } from './ui/search.js';
 import { publishedViewpoints, getViewpoint } from './data/viewpoints.js';
-import { initCompare } from './site/photos.js';
+import { initCompare, photoMarker } from './site/photos.js';
 import { pageHref } from './site/links.js';
 import { createSidebar } from './ui/sidebar.js';
 import { createInfoPanel } from './ui/info-panel.js';
@@ -175,9 +175,6 @@ function visiblePlaces() {
   return filterPlaces(PLACES, { query: state.query, categories: state.categories });
 }
 
-/** Photo points on the map: red when old and current photos can be compared, ink otherwise. */
-const PHOTO_MARKER = { pair: { color: '#b3121a', icon: '◉' }, single: { color: '#1c1b19', icon: '◉' } };
-const photoMarker = (vp) => ({ ...vp, marker: vp.then && vp.now ? PHOTO_MARKER.pair : PHOTO_MARKER.single });
 
 let shownKey = '';
 /** Give the map these items, unless they are the ones it already shows (selection changes go through select()). */
