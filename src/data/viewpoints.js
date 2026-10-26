@@ -245,6 +245,63 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-debarcadere',
+    title: {
+      fr: 'Le débarcadère',
+      en: 'The landing stage',
+      de: 'Die Schiffsanlegestelle',
+      it: 'L’imbarcadero',
+    },
+    location: {
+      fr: 'Débarcadère CGN, quai Igor-Stravinski',
+      en: 'CGN pier, Quai Igor-Stravinski',
+      de: 'CGN-Anlegestelle, Quai Igor-Stravinski',
+      it: 'Imbarcadero CGN, Quai Igor-Stravinski',
+    },
+    coordinates: { lat: 46.508333282362265, lng: 6.50056336850798 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 26.10.2026' }],
+      note: 'Spot where the photographer stood on the landing-stage footbridge, looking out to the lake.',
+    },
+    placeId: 'debarcadere-cgn',
+    then: {
+      id: 'debarcadere-1909',
+      title: {
+        fr: 'Morges, le débarcadère, carte postale de 1909',
+        en: 'Morges, the landing stage, postcard from 1909',
+        de: 'Morges, die Schiffsanlegestelle, Postkarte von 1909',
+        it: 'Morges, l’imbarcadero, cartolina del 1909',
+      },
+      caption: {
+        fr: 'Le débarcadère, un pavillon vitré et fleuri au bout de sa passerelle, avec un voilier sur le lac. Carte postale de 1909.',
+        en: 'The landing stage, a glazed pavilion decked with flowers at the end of its footbridge, with a sailing boat on the lake. Postcard from 1909.',
+        de: 'Die Anlegestelle, ein verglaster, mit Blumen geschmückter Pavillon am Ende ihres Stegs, mit einem Segelboot auf dem See. Postkarte von 1909.',
+        it: 'L’imbarcadero, un padiglione vetrato e fiorito in fondo alla sua passerella, con una barca a vela sul lago. Cartolina del 1909.',
+      },
+      // notreHistoire.ch gives May 1909; the photograph itself is from that date or earlier.
+      date: { value: '1909', precision: 'circa' },
+      creator: 'Perrochet-Matile, Lausanne',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81d3bmtbvmjsvvcnkjz37sv' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'Yannik Plomb',
+        credit: 'Yannik Plomb',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-26',
+        notes:
+          'Licence read on the notreHistoire.ch page (published by Yannik Plomb). Non-commercial (NC): no advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped, only resized.',
+      },
+      image: { src: '/images/photos/debarcadere-1909.webp', width: 1600, height: 1029 },
+    },
+    now: null,
+  },
 ];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
