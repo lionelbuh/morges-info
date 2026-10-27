@@ -30,6 +30,8 @@ Quand un lecteur envoie la photo manquante, l'objet de l'e-mail contient l'ident
    (1600 px, sans métadonnées GPS) dans `public/images/photos/`, et la valeur `image` à reprendre.
 2. Ajouter le point de vue dans `src/data/viewpoints.js` : `then` / `now` suivent le modèle d'archive
    (`src/data/archive.js`) — date et précision, auteur, source, droits, vérification.
+   Plusieurs photos anciennes prises du même endroit : la première dans `then`, les autres dans `moreThen` (liste),
+   affichées l'une sous l'autre.
 3. Une image n'est publiée que si `rights.status` est `granted`, `public-domain` ou `open-licence` **et**
    `verification.status` vaut `verified`. Sinon le point de vue reste caché.
 4. `npm run check` et `npm run test:e2e`, puis pull request.
