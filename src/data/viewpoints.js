@@ -358,6 +358,62 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-aerienne-parc-des-sports',
+    title: {
+      fr: 'Morges vue d’avion en 1963',
+      en: 'Morges from the air in 1963',
+      de: 'Morges aus der Luft, 1963',
+      it: 'Morges vista dall’aereo nel 1963',
+    },
+    location: {
+      fr: 'Parc des Sports et port du Petit-Bois, vus d’avion',
+      en: 'Parc des Sports and Petit-Bois harbour, from the air',
+      de: 'Parc des Sports und Hafen Petit-Bois, aus der Luft',
+      it: 'Parc des Sports e porto del Petit-Bois, dall’aereo',
+    },
+    coordinates: { lat: 46.50501703649422, lng: 6.4937981121528106 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point placé sur la carte le 27.10.2026, au centre de la zone photographiée' }],
+      note: 'Aerial view: the point marks the filled-in ground at the centre of the photo, not where the aircraft was.',
+    },
+    placeId: 'piscine-du-parc',
+    then: {
+      id: 'morges-aerien-1963',
+      title: {
+        fr: 'Morges vue d’avion, 1963 : les remblais du Parc des Sports',
+        en: 'Morges from the air, 1963: the filled-in ground of the Parc des Sports',
+        de: 'Morges aus der Luft, 1963: die Aufschüttung für den Parc des Sports',
+        it: 'Morges dall’aereo, 1963: i terreni di riporto del Parc des Sports',
+      },
+      caption: {
+        fr: 'Vue aérienne de 1963 : le terrain gagné sur le lac par remblayage pour agrandir le Parc des Sports, près du port du Petit-Bois. L’autoroute Lausanne–Genève est en construction. Ce terrain accueillera notamment une piscine, des terrains de sport, un camping et une plage.',
+        en: 'Aerial view from 1963: the ground reclaimed from the lake by filling to extend the Parc des Sports, near the Petit-Bois harbour. The Lausanne–Geneva motorway is under construction. This ground will later hold a swimming pool, sports grounds, a campsite and a beach, among other things.',
+        de: 'Luftaufnahme von 1963: das durch Aufschüttung dem See abgewonnene Land zur Erweiterung des Parc des Sports, beim Hafen Petit-Bois. Die Autobahn Lausanne–Genf ist im Bau. Auf diesem Gelände entstehen später unter anderem ein Schwimmbad, Sportplätze, ein Campingplatz und ein Strand.',
+        it: 'Veduta aerea del 1963: il terreno sottratto al lago con un riempimento per ampliare il Parc des Sports, vicino al porto del Petit-Bois. L’autostrada Losanna–Ginevra è in costruzione. Questo terreno accoglierà fra l’altro una piscina, campi sportivi, un campeggio e una spiaggia.',
+      },
+      date: { value: '1963', precision: 'year' },
+      creator: 'Comet Photo AG, Zürich',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81cy84q969bmaw5whx14ksw' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'ETH-Bibliothek Zürich, Bildarchiv',
+        credit: 'ETH-Bibliothek Zürich, Bildarchiv',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-27',
+        notes:
+          'notreHistoire.ch gives CC BY-NC-ND and names the ETH-Bibliothek Bildarchiv with a Public Domain Mark as rights holder; the stricter licence is followed (shown whole, only resized, no advertising on this page).',
+      },
+      image: { src: '/images/photos/morges-aerien-1963.webp', width: 960, height: 728 },
+    },
+    now: null,
+  },
 ];
 
 /** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
