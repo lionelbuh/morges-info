@@ -170,10 +170,10 @@ const RIGHTS_URL = { 'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0/'
 export function viewpointSchema(vp) {
   const lang = getLang();
   const url = abs(photoPageHref(vp.id, lang));
-  const { then, now } = shownPhotos(vp);
+  const { then, now, moreThen } = shownPhotos(vp);
   return {
     '@context': 'https://schema.org',
-    '@graph': [then, now].filter(Boolean).map((photo) => ({
+    '@graph': [then, ...(then ? moreThen : []), now].filter(Boolean).map((photo) => ({
       '@type': 'ImageObject',
       name: localized(photo.title),
       ...(photo.caption && { description: localized(photo.caption) }),

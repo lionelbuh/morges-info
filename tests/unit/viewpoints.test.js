@@ -38,7 +38,8 @@ describe('photo map data', () => {
 
   it('every published image is in public/', () => {
     for (const vp of publishedViewpoints()) {
-      for (const p of Object.values(shownPhotos(vp)).filter(Boolean)) expect(existsSync(`public${p.image.src}`), p.image.src).toBe(true);
+      const { then, now, moreThen } = shownPhotos(vp);
+      for (const p of [then, now, ...moreThen].filter(Boolean)) expect(existsSync(`public${p.image.src}`), p.image.src).toBe(true);
     }
   });
 
@@ -57,7 +58,7 @@ describe('photo map data', () => {
   it('hides a photo whose rights are not cleared (the viewpoint then waits)', () => {
     const pending = viewpoint('vue-test-pending', photo('d', { value: '1910', precision: 'year' }, { rights: { status: 'requested', credit: 'X' }, image: null }), null);
     expect(validateViewpoint(pending)).toEqual([]);
-    expect(shownPhotos(pending)).toEqual({ then: null, now: null });
+    expect(shownPhotos(pending)).toEqual({ then: null, now: null, moreThen: [] });
     expect(publishedViewpoints([pending])).toHaveLength(0);
   });
 });
@@ -110,6 +111,15 @@ describe('photo map display', () => {
     const without = placePhotosBlock('gare', { href: (vp) => `#${vp.id}` });
     expect(without).toContain('Pas encore de photo ancienne de ce lieu.');
     expect(without).toContain('href="/contribuer/"');
+  });
+
+  it('shows the other old photos taken from the same spot', () => {
+    const two = { ...oldOnly, id: 'vue-test-two', moreThen: [photo('e', { value: '1904', precision: 'circa' })] };
+    expect(validateViewpoint(two)).toEqual([]);
+    const html = viewpointBody(two);
+    expect(html.match(/vp-photo--then/g)).toHaveLength(2);
+    expect(html).toContain('/images/photos/e.webp');
+    expect(validateViewpoint({ ...two, then: null, now: oldOnly.then })).toEqual(expect.arrayContaining([expect.stringMatching(/moreThen/)]));
   });
 
   it('gallery card links to the photo page', () => {

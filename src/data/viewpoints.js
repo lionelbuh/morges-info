@@ -18,6 +18,7 @@
  * @property {string=} placeId          nearby place of the map, if any
  * @property {import('./archive.js').ArchivePhoto|null} then  old photo (placeId not needed)
  * @property {import('./archive.js').ArchivePhoto|null} now   current photo
+ * @property {import('./archive.js').ArchivePhoto[]=} moreThen  other old photos taken from the same spot
  */
 import { validateArchivePhoto, publishablePhotos } from './archive.js';
 import { validateText, validateSources } from './schema.js';
@@ -469,12 +470,107 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-promenades',
+    title: {
+      fr: 'Les Promenades',
+      en: 'Les Promenades',
+      de: 'Les Promenades',
+      it: 'Les Promenades',
+    },
+    location: {
+      fr: 'Place Dufour, ancienne place des Promenades',
+      en: 'Place Dufour, formerly Place des Promenades',
+      de: 'Place Dufour, früher Place des Promenades',
+      it: 'Place Dufour, un tempo Place des Promenades',
+    },
+    coordinates: { lat: 46.5074748288215, lng: 6.496080121759667 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 27.10.2026' }],
+      note: 'Spot where the photographers stood; both postcards were taken from the square.',
+    },
+    placeId: 'parc-independance',
+    then: {
+      id: 'promenades-staub-1904',
+      title: {
+        fr: 'Morges, les Promenades, carte postale de 1904',
+        en: 'Morges, Les Promenades, postcard from 1904',
+        de: 'Morges, Les Promenades, Postkarte von 1904',
+        it: 'Morges, Les Promenades, cartolina del 1904',
+      },
+      caption: {
+        fr: 'L’allée de marronniers des Promenades, devant les maisons de maître, en direction du parc de l’Indépendance. Carte postale envoyée en 1904.',
+        en: 'The chestnut avenue of Les Promenades, in front of the mansions, towards the Parc de l’Indépendance. Postcard sent in 1904.',
+        de: 'Die Kastanienallee der Promenades vor den Herrenhäusern, in Richtung Parc de l’Indépendance. Postkarte, 1904 verschickt.',
+        it: 'Il viale di castagni delle Promenades, davanti alle case padronali, verso il Parc de l’Indépendance. Cartolina spedita nel 1904.',
+      },
+      // The card was posted in 1904; the photograph itself is from then or earlier.
+      date: { value: '1904', precision: 'circa' },
+      creator: 'E. Staub, éditeur, Morges',
+      source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81cz7wdrqrhs3f8ss3z5mnf' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-NC-ND 4.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+        holder: 'Philippe Chappuis (collection personnelle)',
+        credit: 'Collection Philippe Chappuis',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-10-27',
+        notes:
+          'Licence read on the notreHistoire.ch page (Les Promenades). Non-commercial (NC): no advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped.',
+      },
+      image: { src: '/images/photos/promenades-staub-1904.webp', width: 960, height: 631 },
+    },
+    moreThen: [
+      {
+        id: 'place-des-promenades',
+        title: {
+          fr: 'Morges, la place des Promenades, carte postale',
+          en: 'Morges, Place des Promenades, postcard',
+          de: 'Morges, Place des Promenades, Postkarte',
+          it: 'Morges, Place des Promenades, cartolina',
+        },
+        caption: {
+          fr: 'Enfants sur la place des Promenades, aussi appelée place du Manège, aménagée sur l’ancien « Pré du Château ».',
+          en: 'Children on the Place des Promenades, also called Place du Manège, laid out on the former “Pré du Château”.',
+          de: 'Kinder auf der Place des Promenades, auch Place du Manège genannt, angelegt auf dem einstigen «Pré du Château».',
+          it: 'Bambini sulla Place des Promenades, detta anche Place du Manège, sistemata sull’antico «Pré du Château».',
+        },
+        // No date on the card; published with the 1904 card, from the same years.
+        date: { value: '1900', precision: 'circa' },
+        source: { institution: 'notreHistoire.ch', url: 'https://notrehistoire.ch/documents/01k81cz7wdrqrhs3f8ss3z5mnf' },
+        rights: {
+          status: 'open-licence',
+          licence: 'CC BY-NC-ND 4.0',
+          licenceUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr',
+          holder: 'Philippe Chappuis (collection personnelle)',
+          credit: 'Collection Philippe Chappuis',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-10-27',
+          notes:
+            'Licence read on the notreHistoire.ch page (Les Promenades). Non-commercial (NC): no advertising or sponsorship on this page. No derivatives (ND): shown whole and uncropped.',
+        },
+        image: { src: '/images/photos/place-des-promenades.webp', width: 960, height: 606 },
+      },
+    ],
+    now: null,
+  },
 ];
 
-/** Photos of a viewpoint that may be shown ({ then, now }, each null when missing or not yet cleared). */
+/**
+ * Photos of a viewpoint that may be shown: { then, now } (each null when missing or not yet cleared)
+ * and moreThen, the other old photos from the same spot that may be shown.
+ */
 export function shownPhotos(vp) {
   const ok = (photo) => (photo && publishablePhotos([photo], { requirePlace: false }).length ? photo : null);
-  return { then: ok(vp.then), now: ok(vp.now) };
+  return { then: ok(vp.then), now: ok(vp.now), moreThen: (vp.moreThen || []).map(ok).filter(Boolean) };
 }
 
 /** Viewpoints with at least one photo that may be shown. */
@@ -501,6 +597,10 @@ export function validateViewpoint(vp) {
   if (!vp || (!vp.then && !vp.now)) errors.push(`${p} needs a "then" or a "now" photo`);
   for (const role of ['then', 'now']) {
     if (vp && vp[role]) errors.push(...validateArchivePhoto(vp[role], { requirePlace: false }).map((err) => `${p}.${role}: ${err}`));
+  }
+  if (vp && vp.moreThen !== undefined) {
+    if (!Array.isArray(vp.moreThen) || !vp.then) errors.push(`${p}.moreThen must be a list, next to a "then" photo`);
+    else vp.moreThen.forEach((photo, i) => errors.push(...validateArchivePhoto(photo, { requirePlace: false }).map((err) => `${p}.moreThen[${i}]: ${err}`)));
   }
   return errors;
 }

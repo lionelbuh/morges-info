@@ -112,10 +112,11 @@ export function viewpointKind(vp) {
 
 /** Everything shown for one viewpoint (map panel and photo page). */
 export function viewpointBody(vp) {
-  const { then, now } = shownPhotos(vp);
+  const { then, now, moreThen } = shownPhotos(vp);
   const place = vp.placeId && getPlace(vp.placeId);
   const photos = then && now ? compareBlock(then, now) : then ? photoBlock(then, 'then') : photoBlock(now, 'now');
   return `${photos}
+    ${then ? moreThen.map((photo) => photoBlock(photo, 'then')).join('') : ''}
     ${then && now ? '' : wantedBlock(vp, then ? 'now' : 'then')}
     ${place ? `<p class="vp-place">${e(t('photos.near'))} <a href="${placePageHref(place.id, getLang())}">${e(localized(place.name))}</a></p>` : ''}`;
 }
