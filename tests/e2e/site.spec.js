@@ -250,7 +250,8 @@ test('businesses: free directory with a type filter, carousels and contact detai
   await page.goto('/commerces/');
   const card = page.locator('#business-amandine-reflexologie');
   await expect(card.locator('.card-title')).toHaveText('Amandine Réflexologie');
-  await expect(card.locator('.business-photo img')).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
+  await expect(card.locator('.business-photo img')).toHaveCount(4);
+  await expect(card.locator('.business-photo img').nth(1)).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
   await expect(card.locator('a[href="tel:+41786062081"]')).toHaveText('+41 78 606 20 81');
   await expect(card.locator('a[href^="mailto:"]')).toHaveText('info@amandinereflexologie.ch');
   await expect(card.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveAttribute('href', /Louis-de-Savoie%2029/);
@@ -264,8 +265,13 @@ test('businesses: free directory with a type filter, carousels and contact detai
   await expect(filters.locator('[data-biz-filter="health"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(card).toBeVisible();
   await expect(page.locator('.biz-count')).toHaveText(fr.businesses.countOne.replace('{n}', '1'));
-  // one business, one photo: no carousel buttons
-  await expect(page.locator('.carousel-controls').first()).toBeHidden();
+  // her photos form a carousel: the next button scrolls to the second photo
+  const photos = card.locator('.carousel--photos');
+  await expect(photos.locator('.carousel-controls')).toBeVisible();
+  await photos.locator('[data-carousel-step="1"]').click();
+  await expect.poll(() => photos.locator('.carousel-track').evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+  // a single business: no buttons on the list of businesses
+  await expect(page.locator('.carousel--cards > .carousel-controls')).toBeHidden();
   // described for search engines
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((s) => JSON.parse(s));
   expect(ld.find((d) => d.name === 'Amandine Réflexologie')).toMatchObject({ '@type': 'HealthAndBeautyBusiness', telephone: '+41 78 606 20 81' });
