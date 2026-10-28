@@ -2503,6 +2503,12 @@ body.page-map {
   border: 1px solid var(--ink);
   cursor: pointer;
 }
+.carousel-toggle {
+  font-size: 0.75rem;
+}
+.carousel-toggle[hidden] {
+  display: none;
+}
 .carousel-btn:hover {
   background: var(--ink);
   color: #fff;

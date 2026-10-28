@@ -111,19 +111,103 @@ function mountMapPreview() {
 }
 
 /** Carousels: the ‹ › buttons scroll one slide; they show only when the slides overflow. */
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const trackOf = (box) => box.querySelector(':scope > .carousel-track');
+
 function syncCarousels() {
   document.querySelectorAll('[data-carousel]').forEach((box) => {
-    const track = box.querySelector(':scope > .carousel-track');
+    const track = trackOf(box);
     box.querySelector(':scope > .carousel-controls').hidden = track.scrollWidth <= track.clientWidth + 1;
+    box.querySelector(':scope > .carousel-controls [data-carousel-toggle]').hidden = reducedMotion();
   });
 }
-document.addEventListener('click', (event) => {
-  const btn = event.target.closest('[data-carousel-step]');
-  if (!btn) return;
-  const track = btn.closest('[data-carousel]').querySelector(':scope > .carousel-track');
+
+/** Scroll one slide forward or back; past the last slide, back to the first. */
+function stepCarousel(box, direction) {
+  const track = trackOf(box);
   const slide = track.querySelector(':scope > .carousel-slide:not([hidden])');
   const step = slide ? slide.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : track.clientWidth;
-  track.scrollBy({ left: Number(btn.dataset.carouselStep) * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  const behavior = reducedMotion() ? 'auto' : 'smooth';
+  if (direction > 0 && track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) track.scrollTo({ left: 0, behavior });
+  else track.scrollBy({ left: direction * step, behavior });
+}
+
+/**
+ * Carousels move on by themselves every 5 seconds, so the photos come alive. They wait while the
+ * pointer or keyboard focus is on them, for a while after the visitor browses them, while they are
+ * off screen, and stop with the pause button. Never for visitors who ask for reduced motion.
+ */
+const AUTOPLAY_MS = 5000;
+const carouselState = new WeakMap();
+let autoplayTimer = null;
+let carouselObserver = null;
+
+function startCarouselAutoplay() {
+  clearInterval(autoplayTimer);
+  if (carouselObserver) carouselObserver.disconnect();
+  const boxes = [...document.querySelectorAll('[data-carousel]')];
+  if (!boxes.length || reducedMotion()) return;
+  carouselObserver =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => entries.forEach((en) => (state(en.target).visible = en.isIntersecting)), { threshold: 0.5 })
+      : null;
+  boxes.forEach((box) => {
+    state(box).visible = !carouselObserver;
+    if (carouselObserver) carouselObserver.observe(box);
+  });
+  autoplayTimer = setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    boxes.forEach((box) => {
+      const s = state(box);
+      const controls = box.querySelector(':scope > .carousel-controls');
+      if (!s.visible || s.paused || s.hovered || controls.hidden || Date.now() - s.touched < AUTOPLAY_MS * 2) return;
+      // a card carousel waits while one of its cards' own photos is being looked at
+      if (box.querySelector('[data-carousel]') && [...box.querySelectorAll('[data-carousel]')].some((inner) => state(inner).hovered)) return;
+      stepCarousel(box, 1);
+    });
+  }, AUTOPLAY_MS);
+}
+function state(box) {
+  if (!carouselState.has(box)) carouselState.set(box, { visible: false, paused: false, hovered: false, touched: 0 });
+  return carouselState.get(box);
+}
+const carouselFrom = (event) => event.target.closest && event.target.closest('[data-carousel]');
+document.addEventListener('pointerover', (event) => {
+  const box = carouselFrom(event);
+  if (box) state(box).hovered = true;
+});
+document.addEventListener('pointerout', (event) => {
+  const box = carouselFrom(event);
+  if (box && !box.contains(event.relatedTarget)) state(box).hovered = false;
+});
+document.addEventListener('focusin', (event) => {
+  const box = carouselFrom(event);
+  if (box) state(box).hovered = true;
+});
+document.addEventListener('focusout', (event) => {
+  const box = carouselFrom(event);
+  if (box && !box.contains(event.relatedTarget)) state(box).hovered = false;
+});
+document.addEventListener('touchstart', (event) => {
+  const box = carouselFrom(event);
+  if (box) state(box).touched = Date.now();
+}, { passive: true });
+
+document.addEventListener('click', (event) => {
+  const toggle = event.target.closest('[data-carousel-toggle]');
+  if (toggle) {
+    const s = state(toggle.closest('[data-carousel]'));
+    s.paused = !s.paused;
+    toggle.setAttribute('aria-pressed', String(s.paused));
+    toggle.setAttribute('aria-label', t(s.paused ? 'home.photosPlay' : 'home.photosPause'));
+    toggle.firstElementChild.textContent = s.paused ? '▶' : '❚❚';
+    return;
+  }
+  const btn = event.target.closest('[data-carousel-step]');
+  if (!btn) return;
+  const box = btn.closest('[data-carousel]');
+  state(box).touched = Date.now();
+  stepCarousel(box, Number(btn.dataset.carouselStep));
 });
 window.addEventListener('resize', syncCarousels);
 
@@ -187,6 +271,7 @@ function render() {
   const filters = document.querySelector('.biz-filters');
   if (filters) filters.hidden = false;
   syncCarousels();
+  startCarouselAutoplay();
 }
 
 onLangChange(render);
