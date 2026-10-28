@@ -278,6 +278,38 @@ test('businesses: free directory with a type filter, carousels and contact detai
   expect(ld.find((d) => d.name === 'Amandine Réflexologie')).toMatchObject({ '@type': 'HealthAndBeautyBusiness', telephone: '+41 78 606 20 81' });
 });
 
+test('carousels move on by themselves every 5 seconds, and stop with the pause button', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/commerces/');
+  const photos = page.locator('#business-amandine-reflexologie .carousel--photos');
+  await photos.scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  const scroll = () => photos.locator('.carousel-track').evaluate((el) => el.scrollLeft);
+  expect(await scroll()).toBe(0);
+  await page.clock.runFor(5500);
+  await expect.poll(scroll).toBeGreaterThan(0);
+  // pause: it stays where it is
+  const pause = photos.locator('[data-carousel-toggle]');
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(1000); // let the last smooth scroll finish
+  const before = await scroll();
+  await page.clock.runFor(16000);
+  expect(await scroll()).toBe(before);
+});
+
+test('carousels do not move for visitors who ask for reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.clock.install();
+  await page.goto('/commerces/');
+  const photos = page.locator('#business-amandine-reflexologie .carousel--photos');
+  await photos.scrollIntoViewIfNeeded();
+  await expect(photos.locator('[data-carousel-toggle]')).toBeHidden();
+  await page.clock.runFor(11000);
+  expect(await photos.locator('.carousel-track').evaluate((el) => el.scrollLeft)).toBe(0);
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

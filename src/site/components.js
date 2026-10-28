@@ -119,13 +119,15 @@ const entities = (text) => [...text].map((c) => `&#${c.codePointAt(0)};`).join('
 
 /**
  * Carousel: a horizontal strip that scrolls one slide at a time (swipe, scroll or the ‹ › buttons,
- * which client.js wires up and shows only when there is more than one slide).
+ * which client.js wires up and shows only when there is more than one slide). It also moves on by
+ * itself, with a pause button (see client.js).
  */
 export function carousel(slides, { label, className = '' }) {
   return `<div class="carousel${className ? ` ${className}` : ''}" data-carousel role="region" aria-roledescription="carousel" aria-label="${e(label)}">
     <div class="carousel-track" tabindex="0">${slides.map((s) => `<div class="carousel-slide">${s}</div>`).join('')}</div>
     <div class="carousel-controls" hidden>
       <button type="button" class="carousel-btn" data-carousel-step="-1" aria-label="${e(t('common.previous'))}">‹</button>
+      <button type="button" class="carousel-btn carousel-toggle" data-carousel-toggle aria-pressed="false" aria-label="${e(t('home.photosPause'))}" hidden><span aria-hidden="true">❚❚</span></button>
       <button type="button" class="carousel-btn" data-carousel-step="1" aria-label="${e(t('common.next'))}">›</button>
     </div>
   </div>`;
