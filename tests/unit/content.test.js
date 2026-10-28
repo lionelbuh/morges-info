@@ -57,6 +57,8 @@ describe('content model', () => {
     expect(validateBusiness(business({ phone: '+41 78 606 20 81', email: 'info@exemple.ch' }))).toEqual([]);
     expect(validateBusiness(business({ phone: '078 606 20 81' })).join()).toMatch(/phone/);
     expect(validateBusiness(business({ email: 'pas-un-mail' })).join()).toMatch(/email/);
+    expect(validateBusiness(business({ instagram: 'https://www.instagram.com/exemple/' }))).toEqual([]);
+    expect(validateBusiness(business({ instagram: 'https://exemple.ch' })).join()).toMatch(/instagram/);
   });
 
   it('validates a well-formed business and rejects incomplete ones', () => {

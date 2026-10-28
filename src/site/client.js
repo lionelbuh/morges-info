@@ -113,15 +113,15 @@ function mountMapPreview() {
 /** Carousels: the ‹ › buttons scroll one slide; they show only when the slides overflow. */
 function syncCarousels() {
   document.querySelectorAll('[data-carousel]').forEach((box) => {
-    const track = box.querySelector('.carousel-track');
-    box.querySelector('.carousel-controls').hidden = track.scrollWidth <= track.clientWidth + 1;
+    const track = box.querySelector(':scope > .carousel-track');
+    box.querySelector(':scope > .carousel-controls').hidden = track.scrollWidth <= track.clientWidth + 1;
   });
 }
 document.addEventListener('click', (event) => {
   const btn = event.target.closest('[data-carousel-step]');
   if (!btn) return;
-  const track = btn.closest('[data-carousel]').querySelector('.carousel-track');
-  const slide = track.querySelector('.carousel-slide:not([hidden])');
+  const track = btn.closest('[data-carousel]').querySelector(':scope > .carousel-track');
+  const slide = track.querySelector(':scope > .carousel-slide:not([hidden])');
   const step = slide ? slide.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : track.clientWidth;
   track.scrollBy({ left: Number(btn.dataset.carouselStep) * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 });
@@ -137,14 +137,14 @@ document.addEventListener('click', (event) => {
     c.classList.toggle('is-active', c === chip);
   });
   let shown = 0;
-  document.querySelectorAll('.carousel--cards .carousel-slide').forEach((slide) => {
+  document.querySelectorAll('.carousel--cards > .carousel-track > .carousel-slide').forEach((slide) => {
     const match = !type || slide.querySelector('[data-category]').dataset.category === type;
     slide.hidden = !match;
     if (match) shown += 1;
   });
   const count = document.querySelector('.biz-count');
   if (count) count.textContent = t(shown === 1 ? 'businesses.countOne' : 'businesses.countOther', { n: shown });
-  document.querySelector('.carousel--cards .carousel-track').scrollTo({ left: 0 });
+  document.querySelector('.carousel--cards > .carousel-track').scrollTo({ left: 0 });
   syncCarousels();
 });
 

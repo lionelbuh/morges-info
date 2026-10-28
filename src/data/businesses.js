@@ -17,6 +17,7 @@ import { validateText, validateSources, validatePhoto, validateOpeningHours, val
  *   coordinates: { lat, lng } | null,
  *   description: { fr: '…', en?, de?, it? },     // written by the editors
  *   website: 'https://…' | null,
+ *   instagram?: 'https://www.instagram.com/…/',
  *   openingHours: null | { text: { fr }, sources, lastVerified },
  *   photos: [],                                     // Photo, see schema.js; several → carousel
  *   sources: [{ label, url }],
@@ -44,8 +45,22 @@ export const BUSINESSES = [
       it: 'Terapeuta di riflessologia all’Espace Anahata: riflessologia terapeutica e preventiva (diversi metodi), linfodrenaggio e massaggio metamorfico per vie riflesse, massaggio del viso e Reiki. Riconosciuta ASCA e RME, certificato di settore OrTra TC.',
     },
     website: 'https://amandinereflexologie.ch/',
+    instagram: 'https://www.instagram.com/amandinereflexologie/',
     openingHours: null,
     photos: [
+      {
+        src: '/images/businesses/amandine-reflexologie-salle-de-soins.webp',
+        width: 1200,
+        height: 900,
+        alt: {
+          fr: 'Salle de soins d’Amandine Réflexologie : table de soins, attrape-rêves, plantes et fenêtre aux voilages blancs',
+          en: 'Amandine Réflexologie’s treatment room: treatment table, dreamcatchers, plants and a window with white curtains',
+          de: 'Behandlungsraum von Amandine Réflexologie: Behandlungsliege, Traumfänger, Pflanzen und Fenster mit weissen Vorhängen',
+          it: 'Sala trattamenti di Amandine Réflexologie: lettino, acchiappasogni, piante e finestra con tende bianche',
+        },
+        credit: 'Amandine Réflexologie',
+        licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (28.10.2026)',
+      },
       {
         src: '/images/businesses/amandine-reflexologie-flyer.webp',
         width: 901,
@@ -55,6 +70,32 @@ export const BUSINESSES = [
           en: 'Amandine Réflexologie flyer: reflexology, lymphatic drainage, metamorphic massage, facial massage, Reiki',
           de: 'Flyer von Amandine Réflexologie: Reflexzonentherapie, Lymphdrainage, Metamorphose-Massage, Gesichtsmassage, Reiki',
           it: 'Volantino di Amandine Réflexologie: riflessologia, linfodrenaggio, massaggio metamorfico, massaggio del viso, Reiki',
+        },
+        credit: 'Amandine Réflexologie',
+        licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (28.10.2026)',
+      },
+      {
+        src: '/images/businesses/amandine-reflexologie-cabinet.webp',
+        width: 1200,
+        height: 900,
+        alt: {
+          fr: 'Le cabinet en soirée : table de soins, bureau et chaises, miroirs dorés au mur',
+          en: 'The practice in the evening: treatment table, desk and chairs, golden mirrors on the wall',
+          de: 'Die Praxis am Abend: Behandlungsliege, Schreibtisch und Stühle, goldene Spiegel an der Wand',
+          it: 'Lo studio la sera: lettino, scrivania e sedie, specchi dorati alla parete',
+        },
+        credit: 'Amandine Réflexologie',
+        licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (28.10.2026)',
+      },
+      {
+        src: '/images/businesses/amandine-reflexologie-salle-attente.webp',
+        width: 900,
+        height: 1200,
+        alt: {
+          fr: 'Salle d’attente sous les toits, avec fauteuils en rotin et fenêtre donnant sur le lac',
+          en: 'Waiting room under the roof, with rattan chairs and a window overlooking the lake',
+          de: 'Wartezimmer unter dem Dach, mit Rattanstühlen und Fenster mit Blick auf den See',
+          it: 'Sala d’attesa sotto il tetto, con poltrone in rattan e finestra sul lago',
         },
         credit: 'Amandine Réflexologie',
         licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (28.10.2026)',
@@ -90,6 +131,7 @@ export function validateBusiness(b, opts = {}) {
   }
   errors.push(...validateText(b && b.description, `${p}.description`));
   if (b && b.website !== null && !/^https:\/\//.test(b.website || '')) errors.push(`${p}.website must be https or null`);
+  if (b && b.instagram !== undefined && !/^https:\/\/www\.instagram\.com\/[\w.]+\/?$/.test(b.instagram)) errors.push(`${p}.instagram must be an instagram.com profile address`);
   errors.push(...validateOpeningHours(b && b.openingHours, `${p}.openingHours`));
   (b && b.photos ? b.photos : []).forEach((photo, i) => errors.push(...validatePhoto(photo, `${p}.photos[${i}]`)));
   errors.push(...validateSources(b && b.sources, `${p}.sources`));

@@ -48,6 +48,7 @@ export function businessSchema(b) {
     address: postalAddress(b.address),
     ...(b.phone && { telephone: b.phone }),
     ...(b.website && { url: b.website }),
+    ...(b.instagram && { sameAs: [b.instagram] }),
     ...(b.photos && b.photos[0] && { image: abs(b.photos[0].src) }),
     ...(b.coordinates && { geo: { '@type': 'GeoCoordinates', latitude: b.coordinates.lat, longitude: b.coordinates.lng } }),
     mainEntityOfPage: abs(`${pageHref('businesses', lang)}#business-${b.id}`),
