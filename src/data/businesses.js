@@ -17,6 +17,7 @@ import { validateText, validateSources, validatePhoto, validateOpeningHours, val
  *   coordinates: { lat, lng } | null,
  *   description: { fr: '…', en?, de?, it? },     // written by the editors
  *   website: 'https://…' | null,
+ *   instagram?: 'https://www.instagram.com/…/',
  *   openingHours: null | { text: { fr }, sources, lastVerified },
  *   photos: [],                                     // Photo, see schema.js; several → carousel
  *   sources: [{ label, url }],
@@ -44,6 +45,7 @@ export const BUSINESSES = [
       it: 'Terapeuta di riflessologia all’Espace Anahata: riflessologia terapeutica e preventiva (diversi metodi), linfodrenaggio e massaggio metamorfico per vie riflesse, massaggio del viso e Reiki. Riconosciuta ASCA e RME, certificato di settore OrTra TC.',
     },
     website: 'https://amandinereflexologie.ch/',
+    instagram: 'https://www.instagram.com/amandinereflexologie/',
     openingHours: null,
     photos: [
       {
@@ -129,6 +131,7 @@ export function validateBusiness(b, opts = {}) {
   }
   errors.push(...validateText(b && b.description, `${p}.description`));
   if (b && b.website !== null && !/^https:\/\//.test(b.website || '')) errors.push(`${p}.website must be https or null`);
+  if (b && b.instagram !== undefined && !/^https:\/\/www\.instagram\.com\/[\w.]+\/?$/.test(b.instagram)) errors.push(`${p}.instagram must be an instagram.com profile address`);
   errors.push(...validateOpeningHours(b && b.openingHours, `${p}.openingHours`));
   (b && b.photos ? b.photos : []).forEach((photo, i) => errors.push(...validatePhoto(photo, `${p}.photos[${i}]`)));
   errors.push(...validateSources(b && b.sources, `${p}.sources`));

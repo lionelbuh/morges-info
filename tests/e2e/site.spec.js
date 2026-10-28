@@ -253,6 +253,7 @@ test('businesses: free directory with a type filter, carousels and contact detai
   await expect(card.locator('.business-photo img')).toHaveCount(4);
   await expect(card.locator('.business-photo img').nth(1)).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
   await expect(card.locator('a[href="tel:+41786062081"]')).toHaveText('+41 78 606 20 81');
+  await expect(card.locator('a[href="https://www.instagram.com/amandinereflexologie/"]')).toHaveText('@amandinereflexologie');
   await expect(card.locator('a[href^="mailto:"]')).toHaveText('info@amandinereflexologie.ch');
   await expect(card.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveAttribute('href', /Louis-de-Savoie%2029/);
   // the e-mail address is not readable in the page source (harvesters)

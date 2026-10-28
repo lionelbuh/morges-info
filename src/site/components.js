@@ -154,6 +154,7 @@ export function businessCard(b) {
         ${b.email ? `<div><dt>${e(t('common.email'))}</dt><dd><a href="${entities(`mailto:${b.email}`)}">${entities(b.email)}</a></dd></div>` : ''}
         ${b.openingHours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(b.openingHours.text))}</dd></div>` : ''}
         ${b.website ? `<div><dt>${e(t('common.website'))}</dt><dd><a href="${e(b.website)}" target="_blank" rel="noopener">${e(b.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
+        ${b.instagram ? `<div><dt>Instagram</dt><dd><a href="${e(b.instagram)}" target="_blank" rel="noopener">@${e(b.instagram.replace(/^https:\/\/www\.instagram\.com\//, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
       </dl>
       <p class="card-links">
         <a href="${e(directions.google)}" target="_blank" rel="noopener">${e(t('panel.directionsGoogle'))}</a>
