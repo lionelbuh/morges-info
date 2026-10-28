@@ -2455,3 +2455,8 @@ body.page-map {
     grid-template-columns: 1fr;
   }
 }
+
+.event-summary {
+  margin: 4px 0 10px;
+  line-height: 1.55;
+}
