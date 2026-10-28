@@ -88,6 +88,7 @@ export function eventCard(event) {
     <div class="card-body">
       <p class="event-date"><time datetime="${e(event.startDate)}">${e(dates)}</time></p>
       <h3 class="card-title">${e(localized(event.title))}</h3>
+      ${event.summary ? `<p class="event-summary">${e(localized(event.summary))}</p>` : ''}
       <dl class="facts">
         ${event.placeId ? `<div><dt>${e(t('common.where'))}</dt><dd>${placeLink(event.placeId)}</dd></div>` : ''}
         ${event.hours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(event.hours))}</dd></div>` : ''}

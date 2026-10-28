@@ -130,7 +130,7 @@ export function eventSchema(event) {
     endDate: event.endDate,
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    ...(event.hours && { description: localized(event.hours) }),
+    ...((event.summary || event.hours) && { description: [event.summary, event.hours].filter(Boolean).map(localized).join(' ') }),
     url: abs(`${pageHref('life', lang)}#event-${event.id}`),
     image: shareImage(),
     location: place

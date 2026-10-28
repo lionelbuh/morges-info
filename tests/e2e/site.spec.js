@@ -170,8 +170,10 @@ test('structured data: site, events and stories are described for search engines
   const home = await types('/');
   expect(home[0]['@graph'].map((n) => n['@type'])).toEqual(['Organization', 'WebSite']);
   const life = await types('/vie-locale/');
-  expect(life[0]).toMatchObject({ '@type': 'Event', startDate: '2026-12-02', endDate: '2026-12-20' });
-  expect(life[0].location.name).toBe('Château de Morges');
+  const market = life.find((d) => d.name === 'Marché de Noël de Morges');
+  expect(market).toMatchObject({ '@type': 'Event', startDate: '2026-12-02', endDate: '2026-12-20' });
+  expect(market.location.name).toBe('Château de Morges');
+  expect(life.find((d) => d.name === 'Solann')).toMatchObject({ '@type': 'Event', startDate: '2026-11-21', description: expect.stringContaining('Solann') });
   const stories = await types('/recits/?lang=en');
   expect(stories[0]).toMatchObject({ '@type': 'Article', headline: 'Why Bern built a harbour in Morges', inLanguage: 'en' });
 });
@@ -347,8 +349,12 @@ test('stories are translated: no French-only notice in any language', async ({ p
 });
 
 test('local life lists upcoming events only', async ({ page }) => {
-  await page.clock.setFixedTime(new Date('2026-11-01T10:00:00+01:00'));
+  await page.clock.setFixedTime(new Date('2026-10-30T10:00:00+01:00'));
   await page.goto('/vie-locale/');
+  await expect(page.locator('#event-halloween-chateau-2026 .event-summary')).toContainText('sculpture de courges');
+  await page.clock.setFixedTime(new Date('2026-11-01T10:00:00+01:00'));
+  await page.reload();
+  await expect(page.locator('#event-halloween-chateau-2026')).toHaveCount(0);
   await expect(page.locator('#event-marche-de-noel-2026')).toBeVisible();
   await expect(page.locator('#event-marche-de-noel-2026 .event-date')).toContainText('2 décembre 2026');
 
