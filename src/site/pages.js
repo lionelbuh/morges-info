@@ -10,7 +10,7 @@ import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PLACES, getPlace } from '../data/places.js';
 import { CATEGORIES } from '../data/categories.js';
-import { editorialSelection } from '../data/businesses.js';
+import { editorialSelection, BUSINESS_CATEGORIES } from '../data/businesses.js';
 import { upcomingEvents } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
@@ -18,7 +18,7 @@ import { MILESTONES } from '../data/history.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
-import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema } from './structured-data.js';
+import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
@@ -26,6 +26,7 @@ import {
   eventCard,
   practicalCard,
   businessCard,
+  carousel,
   storyArticle,
   textBlock,
   frenchOnlyNotice,
@@ -163,13 +164,29 @@ function renderHome({ today } = {}) {
   }`;
 }
 
+/** Type filter (shown by client.js): "All" and each category that has at least one business. */
+function businessFilters(selection) {
+  const count = (n) => t(n === 1 ? 'businesses.countOne' : 'businesses.countOther', { n });
+  const chip = (id, label, n) =>
+    `<button type="button" class="chip${id ? '' : ' is-active'}" data-biz-filter="${id}" aria-pressed="${id ? 'false' : 'true'}">${e(label)} <span class="chip-count">(${n})</span></button>`;
+  const cats = BUSINESS_CATEGORIES.map((id) => [id, selection.filter((b) => b.category === id).length]).filter(([, n]) => n);
+  return `<div class="biz-filters" role="group" aria-label="${e(t('businesses.filterLabel'))}" hidden>
+    ${chip('', t('businesses.all'), selection.length)}${cats.map(([id, n]) => chip(id, t(`businesses.categories.${id}`), n)).join('')}
+  </div>
+  <p class="results-count biz-count" aria-live="polite">${e(count(selection.length))}</p>`;
+}
+
 function renderBusinesses() {
   const selection = editorialSelection();
   const criteria = ['local', 'independent', 'verified', 'free'].map((k) => `<li>${e(t(`businesses.criteria.${k}`))}</li>`).join('');
-  return `${pageIntro(t('home.businessesTitle'), t('businesses.intro'))}
+  return `${selection.map((b) => jsonLd(businessSchema(b))).join('')}
+  ${pageIntro(t('home.businessesTitle'), t('businesses.intro'))}
   ${
     selection.length
-      ? `<section class="section"><div class="grid grid-3">${selection.map(businessCard).join('')}</div></section>`
+      ? `<section class="section">
+          ${businessFilters(selection)}
+          ${carousel(selection.map(businessCard), { label: t('home.businessesTitle'), className: 'carousel--cards' })}
+        </section>`
       : `<section class="section">
           <div class="callout">
             <h2>${e(t('businesses.statusTitle'))}</h2>

@@ -37,6 +37,23 @@ function postalAddress(address) {
   return { '@type': 'PostalAddress', streetAddress: match[1], postalCode: match[2], addressLocality: match[3], addressCountry: 'CH' };
 }
 
+/** A business of the Commerces page (the e-mail address is left out, as for the site's own). */
+export function businessSchema(b) {
+  const lang = getLang();
+  return {
+    '@context': 'https://schema.org',
+    '@type': b.category === 'health' ? 'HealthAndBeautyBusiness' : b.category === 'food' ? 'FoodEstablishment' : 'LocalBusiness',
+    name: b.name,
+    description: localized(b.description),
+    address: postalAddress(b.address),
+    ...(b.phone && { telephone: b.phone }),
+    ...(b.website && { url: b.website }),
+    ...(b.photos && b.photos[0] && { image: abs(b.photos[0].src) }),
+    ...(b.coordinates && { geo: { '@type': 'GeoCoordinates', latitude: b.coordinates.lat, longitude: b.coordinates.lng } }),
+    mainEntityOfPage: abs(`${pageHref('businesses', lang)}#business-${b.id}`),
+  };
+}
+
 /** Questions and answers of the visit page (only the text shown on the page). */
 export function faqSchema(items) {
   return {

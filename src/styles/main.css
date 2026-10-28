@@ -2460,3 +2460,79 @@ body.page-map {
   margin: 4px 0 10px;
   line-height: 1.55;
 }
+
+/* carousels (businesses, and the photos of a business) */
+.carousel {
+  position: relative;
+}
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  padding-bottom: 6px;
+}
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  min-width: 0;
+}
+.carousel-slide[hidden] {
+  display: none;
+}
+.carousel--cards .carousel-slide {
+  flex-basis: min(100%, 360px);
+}
+.carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+.carousel-controls[hidden] {
+  display: none;
+}
+.carousel-btn {
+  width: 40px;
+  height: 40px;
+  font: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+}
+.carousel-btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.carousel--photos .carousel-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin: 0;
+}
+.business-card {
+  height: 100%;
+}
+.business-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain; /* shown whole: flyers and logos must not be cut */
+  background: var(--surface);
+}
+.biz-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.biz-filters[hidden] {
+  display: none;
+}
+.chip-count {
+  opacity: 0.7;
+}

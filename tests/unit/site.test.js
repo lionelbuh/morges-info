@@ -49,9 +49,9 @@ describe('site pages', () => {
     }
   });
 
-  it('home hides empty sections (no business yet, no past event)', () => {
+  it('home shows the businesses and hides past events', () => {
     const html = renderMain('home', { today: '2027-01-15' });
-    expect(html).not.toContain('home-businesses');
+    expect(html).toContain('home-businesses');
     expect(html).not.toContain('Marché de Noël');
     expect(renderMain('home', { today: '2026-11-30' })).toContain('Marché de Noël');
     expect(renderMain('home', { today: '2026-10-15' })).toContain('Halloween au Château de Morges'); // the next two events

@@ -37,9 +37,10 @@ export function storyHref(storyId, lang) {
  * or Apple until the visitor clicks). `name` helps Apple show the destination.
  */
 export function directionsLinks(coordinates, name) {
-  const { lat, lng } = coordinates;
+  // { query } instead of coordinates: an address, for places not yet positioned on the map
+  const target = coordinates.query ? encodeURIComponent(coordinates.query) : `${coordinates.lat},${coordinates.lng}`;
   return {
-    google: `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
-    apple: `https://maps.apple.com/?daddr=${lat},${lng}&q=${encodeURIComponent(name)}`,
+    google: `https://www.google.com/maps/dir/?api=1&destination=${target}`,
+    apple: `https://maps.apple.com/?daddr=${target}&q=${encodeURIComponent(name)}`,
   };
 }
