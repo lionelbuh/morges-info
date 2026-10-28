@@ -12,7 +12,7 @@ import { setLang } from '../../src/i18n/index.js';
 const business = (overrides = {}) => ({
   id: 'exemple',
   name: 'Exemple',
-  category: 'shop',
+  category: 'shops',
   address: 'Grand-Rue 1, 1110 Morges',
   coordinates: { lat: 46.509, lng: 6.498 },
   description: { fr: 'Description rédigée par la rédaction.' },
@@ -39,9 +39,24 @@ describe('content model', () => {
     }
   });
 
-  it('no business is published without verification (list is empty today)', () => {
-    expect(BUSINESSES).toEqual([]);
-    for (const b of BUSINESSES) expect(validateBusiness(b)).toEqual([]);
+  it('published businesses are complete and verified', () => {
+    expect(BUSINESSES.length).toBeGreaterThan(0);
+    for (const b of BUSINESSES) expect(validateBusiness(b), b.id).toEqual([]);
+    expect(new Set(BUSINESSES.map((b) => b.id)).size).toBe(BUSINESSES.length);
+  });
+
+  it('several photos of a business become a carousel, shown whole', () => {
+    const photo = (n) => ({ src: `/images/businesses/p${n}.webp`, alt: { fr: `Photo ${n}` }, credit: 'Exemple', licence: 'Avec accord' });
+    expect(businessCard(business({ photos: [photo(1)] }))).not.toContain('carousel');
+    const html = businessCard(business({ photos: [photo(1), photo(2)] }));
+    expect(html).toContain('carousel--photos');
+    expect(html.match(/carousel-slide/g)).toHaveLength(2);
+  });
+
+  it('checks phone and e-mail formats', () => {
+    expect(validateBusiness(business({ phone: '+41 78 606 20 81', email: 'info@exemple.ch' }))).toEqual([]);
+    expect(validateBusiness(business({ phone: '078 606 20 81' })).join()).toMatch(/phone/);
+    expect(validateBusiness(business({ email: 'pas-un-mail' })).join()).toMatch(/email/);
   });
 
   it('validates a well-formed business and rejects incomplete ones', () => {

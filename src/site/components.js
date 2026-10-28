@@ -7,7 +7,7 @@ import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
-import { placeHref, placePageHref } from './links.js';
+import { placeHref, placePageHref, directionsLinks } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
@@ -115,20 +115,50 @@ export function practicalCard(item) {
 }
 
 /** Business card. A sponsored entry always carries a visible label. */
+const entities = (text) => [...text].map((c) => `&#${c.codePointAt(0)};`).join('');
+
+/**
+ * Carousel: a horizontal strip that scrolls one slide at a time (swipe, scroll or the ‹ › buttons,
+ * which client.js wires up and shows only when there is more than one slide).
+ */
+export function carousel(slides, { label, className = '' }) {
+  return `<div class="carousel${className ? ` ${className}` : ''}" data-carousel role="region" aria-roledescription="carousel" aria-label="${e(label)}">
+    <div class="carousel-track" tabindex="0">${slides.map((s) => `<div class="carousel-slide">${s}</div>`).join('')}</div>
+    <div class="carousel-controls" hidden>
+      <button type="button" class="carousel-btn" data-carousel-step="-1" aria-label="${e(t('common.previous'))}">‹</button>
+      <button type="button" class="carousel-btn" data-carousel-step="1" aria-label="${e(t('common.next'))}">›</button>
+    </div>
+  </div>`;
+}
+
+/** A photo shown whole (never cropped) with its credit, for business cards. */
+function businessPhoto(photo) {
+  return `<figure class="photo business-photo"><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" />
+    <figcaption>${e(t('common.photoCredit', { credit: `© ${photo.credit}` }))}</figcaption></figure>`;
+}
+
 export function businessCard(b) {
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
-  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" id="business-${e(b.id)}">
-    ${b.photos && b.photos[0] ? photoFigure(b.photos[0]) : ''}
+  const photos = b.photos || [];
+  const directions = directionsLinks(b.coordinates || { query: `${b.address}, Suisse` }, b.name);
+  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" id="business-${e(b.id)}" data-category="${e(b.category)}">
+    ${photos.length > 1 ? carousel(photos.map(businessPhoto), { label: t('businesses.photosOf', { name: b.name }), className: 'carousel--photos' }) : photos[0] ? businessPhoto(photos[0]) : ''}
     <div class="card-body">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
       <p class="card-kicker">${e(t(`businesses.categories.${b.category}`))}</p>
       <h3 class="card-title">${e(b.name)}</h3>
       ${textBlock(b.description)}
       <dl class="facts">
-        <div><dt>${e(t('common.address'))}</dt><dd>${e(b.address)}</dd></div>
+        <div><dt>${e(t('common.address'))}</dt><dd>${b.addressNote ? `${e(b.addressNote)}<br />` : ''}${e(b.address)}</dd></div>
+        ${b.phone ? `<div><dt>${e(t('common.phone'))}</dt><dd><a href="tel:${e(b.phone.replace(/ /g, ''))}">${e(b.phone)}</a></dd></div>` : ''}
+        ${b.email ? `<div><dt>${e(t('common.email'))}</dt><dd><a href="${entities(`mailto:${b.email}`)}">${entities(b.email)}</a></dd></div>` : ''}
         ${b.openingHours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(b.openingHours.text))}</dd></div>` : ''}
         ${b.website ? `<div><dt>${e(t('common.website'))}</dt><dd><a href="${e(b.website)}" target="_blank" rel="noopener">${e(b.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
       </dl>
+      <p class="card-links">
+        <a href="${e(directions.google)}" target="_blank" rel="noopener">${e(t('panel.directionsGoogle'))}</a>
+        <a href="${e(directions.apple)}" target="_blank" rel="noopener">${e(t('panel.directionsApple'))}</a>
+      </p>
       ${verifiedLine(b.lastVerified)}
       ${sourcesList(b.sources)}
     </div>
@@ -152,7 +182,6 @@ export function storyArticle(story) {
 }
 
 /** Every character as an HTML entity: browsers show the address, simple spam harvesters miss it. */
-const entities = (text) => [...text].map((c) => `&#${c.codePointAt(0)};`).join('');
 
 /**
  * Link to write to Morges.info. `label` is plain text (escaped); without it the address is shown.

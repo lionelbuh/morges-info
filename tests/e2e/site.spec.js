@@ -246,6 +246,31 @@ test('visiting Morges: frequent questions answered from the site’s data, descr
   await expect(page.locator('#visit-market')).toHaveText(en.visit.q.market.q);
 });
 
+test('businesses: free directory with a type filter, carousels and contact details', async ({ page }) => {
+  await page.goto('/commerces/');
+  const card = page.locator('#business-amandine-reflexologie');
+  await expect(card.locator('.card-title')).toHaveText('Amandine Réflexologie');
+  await expect(card.locator('.business-photo img')).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
+  await expect(card.locator('a[href="tel:+41786062081"]')).toHaveText('+41 78 606 20 81');
+  await expect(card.locator('a[href^="mailto:"]')).toHaveText('info@amandinereflexologie.ch');
+  await expect(card.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveAttribute('href', /Louis-de-Savoie%2029/);
+  // the e-mail address is not readable in the page source (harvesters)
+  expect(await (await page.request.get('/commerces/')).text()).not.toContain('info@amandinereflexologie.ch');
+  // type filter: "All" and the categories in use
+  const filters = page.locator('.biz-filters');
+  await expect(filters).toBeVisible();
+  await expect(filters.locator('[data-biz-filter=""]')).toHaveAttribute('aria-pressed', 'true');
+  await filters.locator('[data-biz-filter="health"]').click();
+  await expect(filters.locator('[data-biz-filter="health"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(card).toBeVisible();
+  await expect(page.locator('.biz-count')).toHaveText(fr.businesses.countOne.replace('{n}', '1'));
+  // one business, one photo: no carousel buttons
+  await expect(page.locator('.carousel-controls').first()).toBeHidden();
+  // described for search engines
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((s) => JSON.parse(s));
+  expect(ld.find((d) => d.name === 'Amandine Réflexologie')).toMatchObject({ '@type': 'HealthAndBeautyBusiness', telephone: '+41 78 606 20 81' });
+});
+
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
@@ -257,11 +282,11 @@ test('pages are prerendered: real content without JavaScript', async ({ browser 
   await context.close();
 });
 
-test('home: map preview with markers, places, practical info and featured story; no empty business block', async ({ page }) => {
+test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
   await expect(page.locator('.feature-story')).toBeVisible();
-  await expect(page.locator('#home-businesses')).toHaveCount(0); // no verified business yet
+  await expect(page.locator('#home-businesses')).toHaveCount(1);
   // hero photograph: loaded, described, credited with its licence
   const hero = page.locator('.hero-photo img');
   await expect(hero).toHaveAttribute('alt', /château de Morges/);
