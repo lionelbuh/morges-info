@@ -301,7 +301,34 @@ export const VIEWPOINTS = [
       },
       image: { src: '/images/photos/debarcadere-1909.webp', width: 1600, height: 1029 },
     },
-    now: null,
+    now: {
+      id: 'debarcadere-aujourdhui',
+      title: {
+        fr: 'Morges, le débarcadère aujourd’hui',
+        en: 'Morges, the landing stage today',
+        de: 'Morges, die Schiffsanlegestelle heute',
+        it: 'Morges, l’imbarcadero oggi',
+      },
+      caption: {
+        fr: 'La passerelle du débarcadère aujourd’hui, ses lampadaires bleus décorés de cœurs, face au lac.',
+        en: 'The landing-stage footbridge today, its blue lamp posts decorated with hearts, facing the lake.',
+        de: 'Der Steg der Anlegestelle heute, die blauen Laternen mit Herzen geschmückt, mit Blick auf den See.',
+        it: 'La passerella dell’imbarcadero oggi, con i lampioni blu decorati di cuori, di fronte al lago.',
+      },
+      date: {
+        value: '2026',
+        precision: 'circa',
+        display: { fr: 'aujourd’hui', en: 'today', de: 'heute', it: 'oggi' },
+      },
+      source: { institution: 'Morges.info' },
+      rights: {
+        status: 'granted',
+        credit: 'Cat Arlt',
+        evidence: 'Photo and credit sent to the site owner (29.10.2026)',
+      },
+      verification: { status: 'verified', verifiedBy: 'Morges.info', verifiedAt: '2026-10-29' },
+      image: { src: '/images/photos/debarcadere-aujourdhui.webp', width: 1080, height: 618 },
+    },
   },
   {
     id: 'vue-college-couvaloup',

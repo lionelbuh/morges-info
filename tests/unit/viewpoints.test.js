@@ -122,6 +122,18 @@ describe('photo map display', () => {
     expect(validateViewpoint({ ...two, then: null, now: oldOnly.then })).toEqual(expect.arrayContaining([expect.stringMatching(/moreThen/)]));
   });
 
+  it('a "no derivatives" old photo is shown above the current one, never overlaid', () => {
+    const nd = viewpoint('vue-test-nd', photo('f', { value: '1909', precision: 'circa' }, {
+      rights: { status: 'open-licence', licence: 'CC BY-NC-ND 4.0', credit: 'Coll. Z' },
+    }), photo('g', { value: '2026-10-29', precision: 'day' }));
+    const html = viewpointBody(nd);
+    expect(viewpointKind(nd)).toBe('pair');
+    expect(html).not.toContain('vp-compare');
+    expect(html).toContain('vp-photo--then');
+    expect(html).toContain('vp-photo--now');
+    expect(html).not.toContain('vp-wanted');
+  });
+
   it('gallery card links to the photo page', () => {
     expect(viewpointCard(oldOnly, '/photos/vue-test-old/')).toContain('href="/photos/vue-test-old/"');
   });

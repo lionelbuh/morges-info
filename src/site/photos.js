@@ -114,7 +114,16 @@ export function viewpointKind(vp) {
 export function viewpointBody(vp) {
   const { then, now, moreThen } = shownPhotos(vp);
   const place = vp.placeId && getPlace(vp.placeId);
-  const photos = then && now ? compareBlock(then, now) : then ? photoBlock(then, 'then') : photoBlock(now, 'now');
+  // a "no derivatives" licence (CC …-ND) forbids laying the photos over each other: shown one under the other
+  const noOverlay = [then, now].some((p) => p && /\bND\b/.test(p.rights.licence || ''));
+  const photos =
+    then && now
+      ? noOverlay
+        ? photoBlock(then, 'then') + photoBlock(now, 'now')
+        : compareBlock(then, now)
+      : then
+        ? photoBlock(then, 'then')
+        : photoBlock(now, 'now');
   return `${photos}
     ${then ? moreThen.map((photo) => photoBlock(photo, 'then')).join('') : ''}
     ${then && now ? '' : wantedBlock(vp, then ? 'now' : 'then')}
