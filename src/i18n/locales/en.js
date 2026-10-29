@@ -349,6 +349,7 @@ export default {
     homeLink: 'Visiting Morges: frequent questions',
     q: {
       see: { q: 'What is there to see in Morges?', a: 'The castle, the old town and its Grand-Rue, the quays and parks on Lake Geneva, the museums and churches. The places presented on Morges.info, each with its own page:' },
+      day: { q: 'What can you do in Morges in a day?', a: 'A walk from the station to the lakeshore through the old town. Each stop links to the page of the place:' },
       map: { q: 'Is there a map of Morges?', a: 'Yes: the Morges.info interactive map shows all these places, in 2D or 3D, with a page for each. It works on phones as well as computers.' },
       come: { q: 'How do I get to Morges?' },
       market: { q: 'When is the Morges market?' },
@@ -357,6 +358,13 @@ export default {
       history: { q: 'What is the history of Morges?', a: 'The History page traces the main stages of the town, from its origins to today; the Stories tell moments of its life.' },
       official: { q: 'Is Morges.info the town’s official website?', a: 'No. Morges.info is an independent website, not linked to the municipality. The official websites:' },
       contribute: { q: 'How can I send a photo or a piece of information?', a: 'Write to us: old or current photos, news, memories and corrections are welcome. Everything is checked before publication.' },
+    },
+    walk: {
+      s1: 'From the station to the old town, along the pedestrian Rue Centrale',
+      s2: 'The Grand-Rue, its market and the Town Hall',
+      s3: 'Rue Louis-de-Savoie and its museums',
+      s4: 'The castle and its museums, then the Parc de l’Indépendance',
+      s5: 'By the lake: the harbour, the quays and the landing stage',
     },
     links: {
       map: 'Open the map',
@@ -369,7 +377,7 @@ export default {
   },
   photos: {
     listLabel: 'List of photos',
-    title: 'Then and now',
+    title: 'Photos of Morges, then and now',
     intro: 'Morges in photos, from yesterday to today. Each photo is placed where it was taken; when we have both the old and the present-day view, drag the slider to compare.',
     openMap: 'See the photos on the map',
     then: 'Then',

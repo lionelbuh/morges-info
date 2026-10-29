@@ -349,6 +349,7 @@ export default {
     homeLink: 'Visiter Morges : questions fréquentes',
     q: {
       see: { q: 'Que voir à Morges ?', a: 'Le château, la vieille ville et sa Grand-Rue, les quais et les parcs au bord du Léman, les musées et les églises. Les lieux présentés sur Morges.info, chacun avec sa page :' },
+      day: { q: 'Que faire à Morges en une journée ?', a: 'Une promenade à pied, de la gare au bord du lac en passant par la vieille ville. Chaque étape renvoie à la page du lieu :' },
       map: { q: 'Existe-t-il une carte de Morges ?', a: 'Oui : la carte interactive de Morges.info montre tous ces lieux, en 2D ou en 3D, avec une fiche pour chacun. Elle fonctionne sur téléphone comme sur ordinateur.' },
       come: { q: 'Comment venir à Morges ?' },
       market: { q: 'Quand a lieu le marché de Morges ?' },
@@ -357,6 +358,13 @@ export default {
       history: { q: 'Quelle est l’histoire de Morges ?', a: 'La page Histoire retrace les grandes étapes de la ville, des origines à aujourd’hui ; les Récits racontent des moments de sa vie.' },
       official: { q: 'Morges.info est-il le site officiel de la ville ?', a: 'Non. Morges.info est un site indépendant, sans lien avec la Commune. Les sites officiels :' },
       contribute: { q: 'Comment proposer une photo ou une information ?', a: 'Écrivez-nous : photos anciennes ou actuelles, nouvelles, souvenirs et corrections sont les bienvenus. Tout est vérifié avant publication.' },
+    },
+    walk: {
+      s1: 'De la gare à la vieille ville, par la rue Centrale piétonne',
+      s2: 'La Grand-Rue, son marché et l’Hôtel de Ville',
+      s3: 'La rue Louis-de-Savoie et ses musées',
+      s4: 'Le château et ses musées, puis le parc de l’Indépendance',
+      s5: 'Au bord du lac : le port, les quais et le débarcadère',
     },
     links: {
       map: 'Ouvrir la carte',
@@ -369,7 +377,7 @@ export default {
   },
   photos: {
     listLabel: 'Liste des photos',
-    title: 'Hier et aujourd’hui',
+    title: 'Photos de Morges, hier et aujourd’hui',
     intro: 'Morges en photos, d’hier à aujourd’hui. Chaque photo est placée à l’endroit d’où elle a été prise ; quand nous avons la vue ancienne et la vue actuelle, faites glisser le curseur pour comparer.',
     openMap: 'Voir les photos sur la carte',
     then: 'Autrefois',

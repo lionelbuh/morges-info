@@ -2542,3 +2542,12 @@ body.page-map {
 .chip-count {
   opacity: 0.7;
 }
+
+.visit-walk {
+  margin: 8px 0 0;
+  padding-left: 1.3em;
+  line-height: 1.6;
+}
+.visit-walk li {
+  margin-bottom: 8px;
+}
