@@ -378,9 +378,16 @@ function renderVisit() {
     return `<li><strong>${e(t(`categories.${cat.id}`))}</strong> — ${places.map((p) => `<a href="${placePageHref(p.id, lang)}">${e(localized(p.name))}</a>`).join(', ')}</li>`;
   }).join('');
   const photoCount = publishedViewpoints().length;
+  // a walk from the station to the lake, through the places of the map
+  const WALK = [['gare', 'grand-rue'], ['grand-rue', 'place-du-marche', 'hotel-de-ville', 'musee-forel'], ['maison-dessin-presse', 'musee-bolle'], ['chateau', 'musee-paderewski', 'parc-independance'], ['port', 'quai-lochmann', 'debarcadere-cgn']];
+  const walk = WALK.map((ids, i) => {
+    const links = ids.map(getPlace).filter(Boolean).map((p) => `<a href="${placePageHref(p.id, lang)}">${e(localized(p.name))}</a>`).join(', ');
+    return `<li><strong>${e(t(`visit.walk.s${i + 1}`))}</strong><br />${links}</li>`;
+  }).join('');
   // text: the plain answer (also used in the structured data); html: what follows it on the page
   const questions = [
     { id: 'see', text: t('visit.q.see.a'), html: `<ul class="visit-places">${placeGroups}</ul>` },
+    { id: 'day', text: t('visit.q.day.a'), html: `<ol class="visit-walk">${walk}</ol>` },
     { id: 'map', text: t('visit.q.map.a'), html: more(pageHref('map', lang), t('visit.links.map')) },
     { id: 'come', text: [practical('gare'), practical('bateau')].map((item) => localized(item.text)).join(' '), html: '' },
     { id: 'market', text: localized(practical('marche').text), html: '' },

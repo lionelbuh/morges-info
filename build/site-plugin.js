@@ -15,7 +15,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import path from 'node:path';
 import { ALL_PAGES, SITE_URL, placePageId, photoPageId } from '../src/site/config.js';
 import { PLACES, getPlace } from '../src/data/places.js';
-import { publishedViewpoints } from '../src/data/viewpoints.js';
+import { publishedViewpoints, getViewpoint, shownPhotos } from '../src/data/viewpoints.js';
+import { editorialSelection } from '../src/data/businesses.js';
 
 const MARKER = /<!--@(head|header|main|footer):([a-z]+(?::[a-z0-9-]+)?)-->/g;
 
@@ -29,6 +30,17 @@ export function renderMarkers(html) {
   });
 }
 
+/** Photos shown on a page, listed in the sitemap so they can be found in image search. */
+function pageImages(page) {
+  if (page.viewpointId) {
+    const { then, now, moreThen } = shownPhotos(getViewpoint(page.viewpointId));
+    return [then, ...(then ? moreThen : []), now].filter(Boolean).map((photo) => photo.image.src);
+  }
+  if (page.id === 'photos') return publishedViewpoints().map((vp) => (shownPhotos(vp).then || shownPhotos(vp).now).image.src);
+  if (page.id === 'businesses') return editorialSelection().flatMap((b) => (b.photos || []).map((photo) => photo.src));
+  return [];
+}
+
 export function sitemapXml() {
   const urls = ALL_PAGES.filter((p) => p.listed !== false).map((p) => {
     const alternates = LANGUAGES.map(
@@ -36,10 +48,11 @@ export function sitemapXml() {
     ).join('\n');
     // lastmod only where a real date is known: the last verification of a place
     const lastmod = p.placeId ? `\n    <lastmod>${getPlace(p.placeId).lastVerified}</lastmod>` : '';
-    return `  <url>\n    <loc>${absoluteUrl(p.id, 'fr')}</loc>${lastmod}\n${alternates}\n  </url>`;
+    const images = pageImages(p).map((src) => `\n    <image:image><image:loc>${SITE_URL}${src}</image:loc></image:image>`).join('');
+    return `  <url>\n    <loc>${absoluteUrl(p.id, 'fr')}</loc>${lastmod}\n${alternates}${images}\n  </url>`;
   }).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls}
 </urlset>
 `;

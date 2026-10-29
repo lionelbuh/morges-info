@@ -349,6 +349,7 @@ export default {
     homeLink: 'Morges besuchen: häufige Fragen',
     q: {
       see: { q: 'Was gibt es in Morges zu sehen?', a: 'Das Schloss, die Altstadt mit der Grand-Rue, die Quais und Parks am Genfersee, die Museen und Kirchen. Die auf Morges.info vorgestellten Orte, jeder mit eigener Seite:' },
+      day: { q: 'Was kann man an einem Tag in Morges unternehmen?', a: 'Ein Spaziergang vom Bahnhof durch die Altstadt bis ans Seeufer. Jede Etappe führt zur Seite des Ortes:' },
       map: { q: 'Gibt es eine Karte von Morges?', a: 'Ja: Die interaktive Karte von Morges.info zeigt alle diese Orte in 2D oder 3D, mit einer Seite für jeden. Sie funktioniert auf dem Handy wie auf dem Computer.' },
       come: { q: 'Wie komme ich nach Morges?' },
       market: { q: 'Wann ist Markt in Morges?' },
@@ -357,6 +358,13 @@ export default {
       history: { q: 'Was ist die Geschichte von Morges?', a: 'Die Seite Geschichte zeichnet die wichtigsten Etappen der Stadt nach, von den Anfängen bis heute; die Geschichten erzählen Momente aus ihrem Leben.' },
       official: { q: 'Ist Morges.info die offizielle Website der Stadt?', a: 'Nein. Morges.info ist eine unabhängige Website ohne Verbindung zur Gemeinde. Die offiziellen Websites:' },
       contribute: { q: 'Wie kann ich ein Foto oder eine Information einsenden?', a: 'Schreiben Sie uns: alte oder aktuelle Fotos, Neuigkeiten, Erinnerungen und Korrekturen sind willkommen. Alles wird vor der Veröffentlichung geprüft.' },
+    },
+    walk: {
+      s1: 'Vom Bahnhof in die Altstadt, durch die Fussgängerzone Rue Centrale',
+      s2: 'Die Grand-Rue, ihr Markt und das Rathaus',
+      s3: 'Die Rue Louis-de-Savoie und ihre Museen',
+      s4: 'Das Schloss mit seinen Museen, dann der Parc de l’Indépendance',
+      s5: 'Am See: der Hafen, die Quais und die Schiffsanlegestelle',
     },
     links: {
       map: 'Karte öffnen',
@@ -369,7 +377,7 @@ export default {
   },
   photos: {
     listLabel: 'Liste der Fotos',
-    title: 'Früher und heute',
+    title: 'Fotos von Morges, früher und heute',
     intro: 'Morges in Fotos, von gestern bis heute. Jedes Foto ist dort platziert, wo es aufgenommen wurde; wenn wir die alte und die heutige Ansicht haben, ziehen Sie den Regler, um sie zu vergleichen.',
     openMap: 'Fotos auf der Karte ansehen',
     then: 'Früher',

@@ -182,6 +182,8 @@ test('sitemap lists the place pages with their verification date; robots allow e
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
   expect(sitemap.match(/<loc>/g)).toHaveLength(42); // 13 listed pages + 20 places + 9 photo pages
+  // photos listed for image search
+  expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
@@ -234,12 +236,14 @@ test('visiting Morges: frequent questions answered from the site’s data, descr
   await page.locator(`a[href="/visiter/"]:has-text("${fr.visit.homeLink}")`).click();
   await expect(page).toHaveURL(/\/visiter\/$/);
   await expect(page.locator('main h1')).toHaveText(fr.visit.title);
-  await expect(page.locator('.visit-question h2')).toHaveCount(9);
+  await expect(page.locator('.visit-question h2')).toHaveCount(10);
+  await expect(page.locator('.visit-walk li')).toHaveCount(5);
+  await expect(page.locator('.visit-walk a[href="/lieux/chateau/"]')).toHaveCount(1);
   await expect(page.locator('.visit-places a[href="/lieux/chateau/"]')).toHaveCount(1);
   await expect(page.locator('.site-footer a[href="/visiter/"]')).toHaveText(fr.nav.visit);
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((s) => JSON.parse(s));
   const faq = ld.find((d) => d['@type'] === 'FAQPage');
-  expect(faq.mainEntity).toHaveLength(9);
+  expect(faq.mainEntity).toHaveLength(10);
   expect(faq.mainEntity[0].name).toBe(fr.visit.q.see.q);
   await page.goto('/visiter/?lang=en');
   await expect(page.locator('main h1')).toHaveText(en.visit.title);

@@ -349,6 +349,7 @@ export default {
     homeLink: 'Visitare Morges: domande frequenti',
     q: {
       see: { q: 'Cosa vedere a Morges?', a: 'Il castello, il centro storico e la Grand-Rue, i lungolago e i parchi sul Lemano, i musei e le chiese. I luoghi presentati su Morges.info, ciascuno con la sua pagina:' },
+      day: { q: 'Cosa fare a Morges in una giornata?', a: 'Una passeggiata dalla stazione alla riva del lago attraverso il centro storico. Ogni tappa rimanda alla pagina del luogo:' },
       map: { q: 'Esiste una mappa di Morges?', a: 'Sì: la mappa interattiva di Morges.info mostra tutti questi luoghi, in 2D o in 3D, con una scheda per ciascuno. Funziona sul telefono come sul computer.' },
       come: { q: 'Come arrivare a Morges?' },
       market: { q: 'Quando c’è il mercato di Morges?' },
@@ -357,6 +358,13 @@ export default {
       history: { q: 'Qual è la storia di Morges?', a: 'La pagina Storia ripercorre le grandi tappe della città, dalle origini a oggi; i Racconti narrano momenti della sua vita.' },
       official: { q: 'Morges.info è il sito ufficiale della città?', a: 'No. Morges.info è un sito indipendente, senza legami con il Comune. I siti ufficiali:' },
       contribute: { q: 'Come proporre una foto o un’informazione?', a: 'Scriveteci: foto d’epoca o attuali, notizie, ricordi e correzioni sono benvenuti. Tutto viene verificato prima della pubblicazione.' },
+    },
+    walk: {
+      s1: 'Dalla stazione al centro storico, lungo la Rue Centrale pedonale',
+      s2: 'La Grand-Rue, il suo mercato e il Municipio',
+      s3: 'La Rue Louis-de-Savoie e i suoi musei',
+      s4: 'Il castello e i suoi musei, poi il Parc de l’Indépendance',
+      s5: 'In riva al lago: il porto, i lungolago e l’imbarcadero',
     },
     links: {
       map: 'Apri la mappa',
@@ -369,7 +377,7 @@ export default {
   },
   photos: {
     listLabel: 'Elenco delle foto',
-    title: 'Ieri e oggi',
+    title: 'Foto di Morges, ieri e oggi',
     intro: 'Morges in foto, da ieri a oggi. Ogni foto è collocata nel punto da cui è stata scattata; quando abbiamo sia la veduta antica sia quella attuale, trascinate il cursore per confrontarle.',
     openMap: 'Vedere le foto sulla mappa',
     then: 'Ieri',
