@@ -20,7 +20,7 @@ import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
-import { renderVoices } from './voices.js';
+import { renderVoices, homeVoices } from './voices.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
   placeCard,
@@ -117,6 +117,8 @@ function renderHome({ today } = {}) {
       }
     </div>
   </section>
+
+  ${homeVoices()}
 
   <section class="section" aria-labelledby="home-places">
     ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}

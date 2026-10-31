@@ -6,8 +6,9 @@
  */
 import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
-import { VOICE_TOPICS, VOICE_LIMITS } from '../data/voices.js';
+import { VOICE_TOPICS, VOICE_LIMITS, latestVoice } from '../data/voices.js';
 import { SITE_URL, CONTACT_EMAIL, VOICES_FORM_KEY, VOICES_FORM_ENDPOINT, getPage } from './config.js';
+import { pageHref } from './links.js';
 import { formatDate } from './format.js';
 
 /** Subject of the email the editor receives (always in French: the editor reads French). */
@@ -110,6 +111,38 @@ export function renderVoices() {
       ${charter()}
     </aside>
   </div>`;
+}
+
+/** Home page: the latest published message and the open questions, with a way in. */
+export function homeVoices() {
+  const lang = getLang();
+  const href = pageHref('voices', lang);
+  const latest = latestVoice();
+  const quote = latest
+    ? `<figure class="home-voice">
+        <p class="home-voice-topic"><a href="${href}#${topicAnchor(latest.topic)}">${e(localized(latest.topic.question))}</a></p>
+        <blockquote class="home-voice-text"><p>${e(localized(latest.message.text))}</p></blockquote>
+        <figcaption class="voice-by"><span class="voice-name">${e(latest.message.name)}</span>${latest.message.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : ''} · <time datetime="${latest.message.date}">${e(formatDate(latest.message.date, lang))}</time>${lang !== 'fr' ? ` · <span class="voice-translated">${e(t('voices.translated'))}</span>` : ''}</figcaption>
+      </figure>`
+    : '';
+  const questions = VOICE_TOPICS.filter((topic) => !topic.free)
+    .map((topic) => `<li><a href="${href}#${topicAnchor(topic)}">${e(localized(topic.question))}</a></li>`)
+    .join('');
+  return `<section class="section home-voices" aria-labelledby="home-voices">
+    <div class="section-head">
+      <h2 id="home-voices">${e(t('voices.title'))}</h2>
+      <a class="section-link" href="${href}">${e(t('home.voicesAll'))}<span aria-hidden="true"> →</span></a>
+    </div>
+    <p class="section-text">${e(t('home.voicesText'))}</p>
+    <div class="home-voices-grid">
+      ${quote}
+      <div class="home-voices-ask">
+        <h3 class="col-title">${e(t('home.voicesQuestions'))}</h3>
+        <ul class="home-voices-questions">${questions}</ul>
+        <a class="btn" href="${href}#ecrire">${e(t('home.voicesCta'))}</a>
+      </div>
+    </div>
+  </section>`;
 }
 
 /* ---------- Browser: form handling ---------- */

@@ -175,6 +175,10 @@ export default {
     photoCredit: 'Photo: {credit}',
   },
   home: {
+    voicesText: 'Your views, ideas, questions and memories of Morges. A first name is enough, no email; every message is read before it is published.',
+    voicesAll: 'Read all messages',
+    voicesQuestions: 'Current questions',
+    voicesCta: 'Share your view',
     contributeTitle: 'Do you have old photos of Morges?',
     contributeText: 'Photos, news, memories: help us tell the story of Morges. Every contribution is checked and credited.',
     contributeCta: 'Contribute',

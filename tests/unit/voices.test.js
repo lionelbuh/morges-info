@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { VOICE_TOPICS, validateTopic, allVoiceMessages } from '../../src/data/voices.js';
+import { VOICE_TOPICS, validateTopic, allVoiceMessages, latestVoice } from '../../src/data/voices.js';
 import { setLang } from '../../src/i18n/index.js';
 
 const text = (fr) => ({ fr, en: `${fr} (en)`, de: `${fr} (de)`, it: `${fr} (it)` });
@@ -13,6 +13,17 @@ describe('Parole aux Morgiens', () => {
     const ids = allVoiceMessages().map((m) => m.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(VOICE_TOPICS.filter((x) => x.free)).toHaveLength(1);
+  });
+
+  it('the home page shows the newest message or reply, with its topic', () => {
+    const m = (id, date, replies) => ({ id, name: 'Anne', date, text: text(id), replies });
+    const topics = [
+      { id: 'a', messages: [m('old', '2026-11-01', [m('reply', '2026-11-05')])] },
+      { id: 'b', messages: [m('new', '2026-11-03'), m('same-day-later', '2026-11-05')] },
+    ];
+    expect(latestVoice(topics).message.id).toBe('same-day-later');
+    expect(latestVoice(topics).topic.id).toBe('b');
+    expect(latestVoice([{ id: 'c', messages: [] }])).toBeNull();
   });
 
   it('rejects untranslated messages, full names and replies to replies', () => {
