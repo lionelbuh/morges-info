@@ -16,7 +16,8 @@
     "check": "npm run lint && npm run test && npm run build",
     "images": "node scripts/build-hero.mjs",
     "icons": "node scripts/build-icons.mjs",
-    "photos": "node scripts/build-photos.mjs"
+    "photos": "node scripts/build-photos.mjs",
+    "share": "node scripts/build-share.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

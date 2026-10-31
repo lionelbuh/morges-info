@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { HERO_PHOTO, validateHeroPhoto } from '../../src/data/photos.js';
+import { HERO_PHOTO, HERO_PHOTOS, validateHeroPhoto, heroOfTheDay } from '../../src/data/photos.js';
+import shareManifest from '../../src/data/share-manifest.json' with { type: 'json' };
+import { shareImage } from '../../src/site/layout.js';
+import { photoPageId } from '../../src/site/config.js';
 import heroManifest from '../../src/data/hero-manifest.json' with { type: 'json' };
 import { heroPhoto } from '../../src/site/components.js';
 import { cropBox } from '../../scripts/crop.js';
@@ -28,11 +31,47 @@ describe('hero photograph', () => {
     expect(heroPhoto(HERO_PHOTO, { id: 'other', crops: fakeManifest.crops })).toBe('');
   });
 
-  it('ships generated files for this photo (wide 2:1 and square crops)', () => {
-    expect(heroManifest.id).toBe(HERO_PHOTO.id);
-    expect(heroManifest.crops.wide.box.width / heroManifest.crops.wide.box.height).toBe(2);
-    expect(heroManifest.crops.tall.box.width).toBe(heroManifest.crops.tall.box.height);
-    for (const fmt of ['avif', 'webp', 'jpg']) expect(heroManifest.crops.wide.files[fmt].length).toBeGreaterThan(0);
+  it('ships generated files for every photo of the day (wide 2:1 and square crops)', () => {
+    for (const photo of HERO_PHOTOS) {
+      const manifest = heroManifest[photo.id];
+      expect(manifest.id, photo.id).toBe(photo.id);
+      expect(manifest.crops.wide.box.width / manifest.crops.wide.box.height, photo.id).toBe(2);
+      expect(manifest.crops.tall.box.width, photo.id).toBe(manifest.crops.tall.box.height);
+      for (const fmt of ['avif', 'webp', 'jpg']) expect(manifest.crops.wide.files[fmt].length, photo.id).toBeGreaterThan(0);
+    }
+    expect(heroManifest[HERO_PHOTO.id].crops.og.files.jpg[0]).toEqual({ src: '/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg', width: 1200, height: 630 });
+  });
+
+  it('photos of the day: complete credits, never an ND licence, a different one each day in turn', () => {
+    expect(HERO_PHOTOS[0]).toBe(HERO_PHOTO);
+    for (const photo of HERO_PHOTOS) expect(validateHeroPhoto(photo), photo.id).toEqual([]);
+    expect(validateHeroPhoto({ ...HERO_PHOTOS[1], licence: 'CC BY-NC-ND 4.0' }).join()).toContain('ND');
+    const days = ['2026-11-01', '2026-11-02', '2026-11-03', '2026-11-04'].map((d) => heroOfTheDay(d).id);
+    expect(new Set(days.slice(0, 3)).size).toBe(3);
+    expect(days[3]).toBe(days[0]);
+    expect(new Set(Array.from({ length: 30 }, (_, i) => heroOfTheDay(`2026-12-${String(i + 1).padStart(2, '0')}`).id)).size).toBe(HERO_PHOTOS.length);
+  });
+
+  it('an old photo of the day is credited and links to the photo map', () => {
+    const port = HERO_PHOTOS.find((p) => p.id === 'port-jetee-1898');
+    const html = heroPhoto(port, heroManifest[port.id]);
+    expect(html).toContain('data-hero-id="port-jetee-1898"');
+    expect(html).toContain('photographe inconnu – carte postale, 1898');
+    expect(html).toContain('Public Domain Mark 1.0');
+    expect(html).toContain('href="/carte/#vue-port-jetee"');
+    setLang('en', { persist: false });
+    expect(heroPhoto(port, heroManifest[port.id])).toContain('unknown photographer');
+  });
+
+  it('shared links show the page’s own photo; the home page keeps the castle', () => {
+    expect(shareImage('home').src).toBe('/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg');
+    expect(shareImage('voices').src).toBe('/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg');
+    const port = shareImage(photoPageId('vue-port-jetee'));
+    expect(port).toEqual({ ...shareManifest['/images/photos/port-jetee-1898.webp'], alt: expect.stringContaining('1898') });
+    expect(port.src).toBe('/images/share/port-jetee-1898.jpg');
+    expect(shareImage('businesses').src).toMatch(/^\/images\/share\/amandine-reflexologie-.+\.jpg$/);
+    expect(shareImage('photos').src).toMatch(/^\/images\/share\/.+\.jpg$/);
+    for (const image of Object.values(shareManifest)) expect(image.width).toBeLessThanOrEqual(1200);
   });
 
   it('renders AVIF → WebP → JPEG, a tall crop for phones, alt text and the licence credit', () => {

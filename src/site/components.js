@@ -7,7 +7,7 @@ import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
-import { placeHref, placePageHref, directionsLinks } from './links.js';
+import { placeHref, placePageHref, directionsLinks, photoMapHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
@@ -222,13 +222,14 @@ export function heroPhoto(photo, manifest, { sizes = '(max-width: 1160px) 100vw,
   }
   const fallback = wide.files.jpg[Math.min(1, wide.files.jpg.length - 1)];
   const label = e(t('common.photoCredit', { credit: '' })).trim();
-  return `<figure class="hero-photo${photo.overlayTitle ? ' has-overlay' : ''}">
+  const mapLink = photo.viewpointId ? ` · <a href="${photoMapHref(photo.viewpointId, getLang())}">${e(t('common.viewOnMap'))}</a>` : '';
+  return `<figure class="hero-photo${photo.overlayTitle ? ' has-overlay' : ''}" data-hero-id="${e(photo.id)}">
     <picture>
       ${sources.join('\n      ')}
-      <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="${sizes}" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async" />
+      <img src="${fallback.src}" srcset="${srcset(wide, 'jpg')}" sizes="${sizes}" width="${fallback.width}" height="${fallback.height}" alt="${e(localized(photo.alt))}" fetchpriority="high" decoding="async"${photo.position ? ` style="object-position: ${e(photo.position)}"` : ''} />
     </picture>
-    <figcaption class="hero-credit">${label} ${e(photo.creator)}${photo.creatorDetail ? ` – ${e(photo.creatorDetail)}` : ''}${
+    <figcaption class="hero-credit">${label} ${e(textOf(photo.creator))}${photo.creatorDetail ? ` – ${e(photo.creatorDetail)}` : ''}${
       photo.creatorUrl ? ` (<a href="${e(photo.creatorUrl)}" target="_blank" rel="noopener">${e(photo.creatorUrlLabel || photo.creatorUrl)}</a>)` : ''
-    }, <a href="${e(photo.licenceUrl)}" target="_blank" rel="noopener license">${e(photo.licence)}</a>, <a href="${e(photo.sourceUrl)}" target="_blank" rel="noopener">${e(photo.sourceName)}</a> (${e(localized(photo.changes))})</figcaption>
+    }, <a href="${e(photo.licenceUrl)}" target="_blank" rel="noopener license">${e(photo.licence)}</a>, <a href="${e(photo.sourceUrl)}" target="_blank" rel="noopener">${e(photo.sourceName)}</a> (${e(localized(photo.changes))})${mapLink}</figcaption>
   </figure>`;
 }

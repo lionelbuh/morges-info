@@ -1,0 +1,77 @@
+{
+  "/images/photos/college-couvaloup-1904.webp": {
+    "src": "/images/share/college-couvaloup-1904.jpg",
+    "width": 1200,
+    "height": 749
+  },
+  "/images/photos/debarcadere-1909.webp": {
+    "src": "/images/share/debarcadere-1909.jpg",
+    "width": 1200,
+    "height": 772
+  },
+  "/images/photos/debarcadere-aujourdhui.webp": {
+    "src": "/images/share/debarcadere-aujourdhui.jpg",
+    "width": 1080,
+    "height": 618
+  },
+  "/images/photos/garage-sama-total-1960s.webp": {
+    "src": "/images/share/garage-sama-total-1960s.jpg",
+    "width": 1200,
+    "height": 708
+  },
+  "/images/photos/morges-aerien-1963.webp": {
+    "src": "/images/share/morges-aerien-1963.jpg",
+    "width": 960,
+    "height": 728
+  },
+  "/images/photos/parc-independance-kiosque-1902.webp": {
+    "src": "/images/share/parc-independance-kiosque-1902.jpg",
+    "width": 1200,
+    "height": 783
+  },
+  "/images/photos/place-des-promenades.webp": {
+    "src": "/images/share/place-des-promenades.jpg",
+    "width": 960,
+    "height": 606
+  },
+  "/images/photos/port-jetee-1898.webp": {
+    "src": "/images/share/port-jetee-1898.jpg",
+    "width": 1200,
+    "height": 771
+  },
+  "/images/photos/port-vapeur-1930s.webp": {
+    "src": "/images/share/port-vapeur-1930s.jpg",
+    "width": 960,
+    "height": 656
+  },
+  "/images/photos/promenades-staub-1904.webp": {
+    "src": "/images/share/promenades-staub-1904.jpg",
+    "width": 960,
+    "height": 631
+  },
+  "/images/photos/rue-des-charpentiers-briquet.webp": {
+    "src": "/images/share/rue-des-charpentiers-briquet.jpg",
+    "width": 1200,
+    "height": 754
+  },
+  "/images/businesses/amandine-reflexologie-cabinet.webp": {
+    "src": "/images/share/amandine-reflexologie-cabinet.jpg",
+    "width": 1200,
+    "height": 900
+  },
+  "/images/businesses/amandine-reflexologie-flyer.webp": {
+    "src": "/images/share/amandine-reflexologie-flyer.jpg",
+    "width": 901,
+    "height": 714
+  },
+  "/images/businesses/amandine-reflexologie-salle-attente.webp": {
+    "src": "/images/share/amandine-reflexologie-salle-attente.jpg",
+    "width": 900,
+    "height": 1200
+  },
+  "/images/businesses/amandine-reflexologie-salle-de-soins.webp": {
+    "src": "/images/share/amandine-reflexologie-salle-de-soins.jpg",
+    "width": 1200,
+    "height": 900
+  }
+}
