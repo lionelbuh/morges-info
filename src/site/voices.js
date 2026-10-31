@@ -16,10 +16,16 @@ const MAIL_SUBJECT = 'Parole aux Morgiens : nouveau message';
 
 const topicAnchor = (topic) => `sujet-${topic.id}`;
 
+/** "Translated from …" when the message is shown in another language than the one it was written in. */
+function translatedNote(m) {
+  const original = m.original || 'fr';
+  return getLang() === original ? '' : `<span class="voice-translated">${e(t(`voices.translatedFrom.${original}`))}</span>`;
+}
+
 function message(m, topic, { reply = false } = {}) {
   const lang = getLang();
   const replies = (m.replies || []).map((r) => message(r, topic, { reply: true })).join('');
-  const translated = lang !== 'fr' ? `<span class="voice-translated">${e(t('voices.translated'))}</span>` : '';
+  const translated = translatedNote(m);
   const badge = m.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : '';
   const replyButton = reply
     ? ''
@@ -122,7 +128,7 @@ export function homeVoices() {
     ? `<figure class="home-voice">
         <p class="home-voice-topic"><a href="${href}#${topicAnchor(latest.topic)}">${e(localized(latest.topic.question))}</a></p>
         <blockquote class="home-voice-text"><p>${e(localized(latest.message.text))}</p></blockquote>
-        <figcaption class="voice-by"><span class="voice-name">${e(latest.message.name)}</span>${latest.message.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : ''} · <time datetime="${latest.message.date}">${e(formatDate(latest.message.date, lang))}</time>${lang !== 'fr' ? ` · <span class="voice-translated">${e(t('voices.translated'))}</span>` : ''}</figcaption>
+        <figcaption class="voice-by"><span class="voice-name">${e(latest.message.name)}</span>${latest.message.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : ''} · <time datetime="${latest.message.date}">${e(formatDate(latest.message.date, lang))}</time>${translatedNote(latest.message) ? ` · ${translatedNote(latest.message)}` : ''}</figcaption>
       </figure>`
     : '';
   const questions = VOICE_TOPICS.filter((topic) => !topic.free)
