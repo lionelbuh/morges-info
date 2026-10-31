@@ -99,7 +99,19 @@ export const VOICE_TOPICS = [
       de: 'Ihre Meinungen, Ideen und Fragen',
       it: 'Le vostre opinioni, idee e domande',
     },
-    messages: [],
+    messages: [
+      {
+        id: 'marche-noel-parc',
+        name: 'Mathieu G.',
+        date: '2026-10-31',
+        text: {
+          fr: 'On a de beaux espaces, comme le parc de l’Indépendance, qui est sous-exploité. Pourquoi faire le marché de Noël dans la cour du château, très serrée, alors qu’on a un bel espace très grand où l’on pourrait faire un magnifique marché de Noël, très attrayant ?',
+          en: 'We have beautiful spaces, such as the Parc de l’Indépendance, which is underused. Why hold the Christmas market in the castle courtyard, which is very cramped, when we have a fine, very large space where we could hold a magnificent and really attractive Christmas market?',
+          de: 'Wir haben schöne Orte wie den Parc de l’Indépendance, der zu wenig genutzt wird. Warum findet der Weihnachtsmarkt im sehr engen Schlosshof statt, wenn wir einen schönen, sehr grossen Platz haben, auf dem man einen prächtigen und sehr attraktiven Weihnachtsmarkt machen könnte?',
+          it: 'Abbiamo begli spazi, come il Parc de l’Indépendance, che è poco sfruttato. Perché fare il mercatino di Natale nel cortile del castello, molto stretto, quando abbiamo un bello spazio molto grande dove si potrebbe fare un magnifico mercatino di Natale, molto attraente?',
+        },
+      },
+    ],
   },
 ];
 
