@@ -29,6 +29,14 @@ export const SEARCH_VERIFICATION = { google: '', bing: '' };
 export const CONTACT_EMAIL = 'hello@morges.info';
 
 /**
+ * "Parole aux Morgiens" form: Web3Forms access key (web3forms.com → enter the address that should
+ * receive the messages; the key arrives by email). Empty = the form is shown but closed. The key is
+ * public by design: it only lets the form send messages to that address.
+ */
+export const VOICES_FORM_KEY = '';
+export const VOICES_FORM_ENDPOINT = 'https://api.web3forms.com/submit';
+
+/**
  * Pages and their clean French URLs. `nav` = shown in the main navigation;
  * `listed: false` = left out of the footer and the sitemap (the 404 page, served by the host for unknown addresses).
  */
@@ -39,6 +47,7 @@ export const PAGES = [
   { id: 'history', path: '/histoire/', nav: true },
   { id: 'life', path: '/vie-locale/', nav: true },
   { id: 'stories', path: '/recits/', nav: true },
+  { id: 'voices', path: '/parole-aux-morgiens/', nav: true },
   { id: 'contribute', path: '/contribuer/', nav: true },
   { id: 'places', path: '/lieux/', nav: false },
   { id: 'photos', path: '/photos/', nav: false },

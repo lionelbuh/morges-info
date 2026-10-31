@@ -20,6 +20,7 @@ import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
+import { renderVoices } from './voices.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
   placeCard,
@@ -41,7 +42,7 @@ import { CONTACT_EMAIL } from './config.js';
 import { formatDate } from './format.js';
 
 /** Date shown at the bottom of the legal notice; change it when the text changes. */
-const LEGAL_UPDATED = '2026-10-17'; // audience statistics section added
+const LEGAL_UPDATED = '2026-10-31'; // "Parole aux Morgiens" form added
 
 /** Places highlighted on the home page (all have verified or confirmed positions). */
 export const HOME_PLACE_IDS = ['chateau', 'port', 'parc-independance', 'temple'];
@@ -326,7 +327,7 @@ function renderLegal() {
   return `${pageIntro(t('legal.title'), t('legal.intro'))}
   ${block('publisher')}
   ${block('contact', ` ${emailLink()}`)}
-  ${['data', 'photos', 'storage'].map((k) => block(k)).join('')}
+  ${['data', 'voices', 'photos', 'storage'].map((k) => block(k)).join('')}
   <section class="section prose" id="mesure-audience">
     <h2>${e(t('legal.analyticsTitle'))}</h2>
     <p>${e(t('legal.analyticsText'))}</p>
@@ -555,6 +556,7 @@ const RENDERERS = {
   places: renderPlaces,
   photos: renderPhotos,
   visit: renderVisit,
+  voices: renderVoices,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

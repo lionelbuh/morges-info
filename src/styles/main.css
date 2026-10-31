@@ -275,6 +275,13 @@ body.page-map {
     display: none; /* the compact bar (map page) needs the room for the menu */
   }
 }
+/* seven menu entries: tighter letters until the menu folds into the button */
+@media (max-width: 1240px) {
+  .site-nav-list a {
+    padding: 6px 8px;
+    letter-spacing: 0.08em;
+  }
+}
 
 /* Content pages: newspaper masthead (dateline, title, navigation between rules). */
 .site-header.site-header--masthead {
@@ -358,7 +365,7 @@ body.page-map {
   justify-self: end;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .site-nav {
     flex: 0 0 auto;
     justify-content: flex-end;
@@ -399,6 +406,38 @@ body.page-map {
   .site-header--masthead .site-nav {
     margin: 0;
     padding: 6px 0;
+  }
+}
+/* The map page's one-line bar shares its width with the brand: the menu folds into the button sooner. */
+@media (min-width: 1101px) and (max-width: 1600px) {
+  .site-header--compact .site-nav {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+  .site-header--compact .nav-toggle {
+    display: inline-flex;
+  }
+  .site-header--compact .site-nav-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 12px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--ink);
+    box-shadow: var(--shadow);
+  }
+  .site-header--compact.nav-open .site-nav-list {
+    display: flex;
+  }
+  .site-header--compact .site-nav-list a {
+    width: 100%;
+    min-height: 44px;
+    font-size: 0.88rem;
   }
 }
 @media (max-width: 700px) {
@@ -2550,4 +2589,243 @@ body.page-map {
 }
 .visit-walk li {
   margin-bottom: 8px;
+}
+
+/* ---------- Parole aux Morgiens ---------- */
+.voices-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: 32px 48px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .voices-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.voice-topic {
+  padding: 22px 0 18px;
+  border-top: 1px solid var(--ink);
+}
+.voice-topic:first-child {
+  border-top: 3px double var(--ink);
+}
+.voice-topic h2 {
+  margin: 0 0 4px;
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  line-height: 1.25;
+}
+.voice-topic--free h2 {
+  font-style: italic;
+}
+.voice-count {
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+.voice-list {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 14px;
+}
+.voice-msg {
+  padding: 14px 16px;
+  background: var(--surface);
+  border-left: 3px solid var(--sage);
+}
+.voice-msg--reply {
+  padding: 10px 0 0 14px;
+  background: none;
+  border-left: 2px solid var(--stone-2);
+}
+.voice-text {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+.voice-by {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+}
+.voice-name {
+  color: var(--ink);
+  font-weight: 600;
+}
+.voice-editor {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.voice-translated {
+  font-style: italic;
+}
+.voice-reply-btn {
+  margin-top: 6px;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--lake);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.voice-replies {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+.voices-side {
+  display: grid;
+  gap: 28px;
+}
+@media (min-width: 901px) {
+  .voices-side {
+    position: sticky;
+    top: 16px;
+  }
+}
+.voice-write {
+  padding: 22px 24px;
+  margin-right: 8px; /* room for the offset shadow */
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  scroll-margin-top: 16px;
+}
+.voice-write h2,
+.voice-charter h2 {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+}
+.voice-write > p {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+}
+.voice-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.voice-form .field {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 14px;
+}
+.voice-form label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.voice-form input[type='text'],
+.voice-form select,
+.voice-form textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--stone-3);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem; /* 16px: no zoom on focus in iOS Safari */
+}
+.voice-form textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+.voice-form input:focus-visible,
+.voice-form select:focus-visible,
+.voice-form textarea:focus-visible {
+  outline: 2px solid var(--lake);
+  outline-offset: 1px;
+  border-color: var(--lake);
+}
+.field-hint {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+.voice-counter {
+  float: right;
+}
+.voice-form .field-check {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 10px;
+}
+.voice-form .field-check input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+}
+.voice-form .field-check label {
+  font-weight: 400;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+.voice-form fieldset:disabled {
+  opacity: 0.55;
+}
+.voice-trap {
+  display: none;
+}
+.voice-replying {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 8px 12px;
+  background: var(--sage-pale);
+  font-size: 0.9rem;
+}
+.voice-replying[hidden] {
+  display: none;
+}
+.voice-cancel {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--lake);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.voice-status {
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+}
+.voice-status:empty {
+  display: none;
+}
+.voice-status.is-error {
+  color: var(--red);
+  font-weight: 600;
+}
+.voice-status.is-sent,
+.voice-thanks {
+  padding: 10px 12px;
+  background: var(--sage-pale);
+  color: var(--ink);
+}
+.voice-thanks {
+  display: none;
+  margin: 12px 0 0;
+}
+.voice-thanks:target {
+  display: block;
+}
+.voice-charter ol {
+  margin: 0;
+  padding-left: 20px;
+}
+.voice-charter li {
+  margin-bottom: 6px;
+  line-height: 1.5;
 }
