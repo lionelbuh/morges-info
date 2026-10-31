@@ -25,7 +25,20 @@ export const VOICE_TOPICS = [
       de: 'Was ist Ihr Lieblingsort in Morges, und warum?',
       it: 'Qual è il vostro angolo preferito di Morges, e perché?',
     },
-    messages: [],
+    messages: [
+      {
+        id: 'chemin-foret-st-prex',
+        name: 'Lionel B.',
+        date: '2026-10-31',
+        editor: true,
+        text: {
+          fr: 'Le chemin qui part dans la forêt le long du lac en direction de St-Prex est un coin qui me manque beaucoup.',
+          en: 'The path that heads into the woods along the lake towards St-Prex is a spot I miss very much.',
+          de: 'Der Weg, der am See entlang in den Wald Richtung St-Prex führt, ist ein Ort, den ich sehr vermisse.',
+          it: 'Il sentiero che entra nel bosco lungo il lago in direzione di St-Prex è un angolo che mi manca molto.',
+        },
+      },
+    ],
   },
   {
     id: 'ce-qui-manque',
