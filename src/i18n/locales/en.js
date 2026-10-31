@@ -345,7 +345,12 @@ export default {
     writeFree: 'Write a message',
     reply: 'Reply',
     editorBadge: 'Morges.info',
-    translated: 'Translated from French',
+    translatedFrom: {
+      fr: 'Translated from French',
+      en: 'Translated from English',
+      de: 'Translated from German',
+      it: 'Translated from Italian',
+    },
     formTitle: 'Write a message',
     formIntro: 'Choose a topic and sign with your first name and the initial of your surname. Your message is read before it is published, usually within 48 hours.',
     topicLabel: 'Topic',

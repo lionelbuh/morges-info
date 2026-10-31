@@ -345,7 +345,12 @@ export default {
     writeFree: 'Eine Nachricht schreiben',
     reply: 'Antworten',
     editorBadge: 'Morges.info',
-    translated: 'Aus dem Französischen übersetzt',
+    translatedFrom: {
+      fr: 'Aus dem Französischen übersetzt',
+      en: 'Aus dem Englischen übersetzt',
+      de: 'Aus dem Deutschen übersetzt',
+      it: 'Aus dem Italienischen übersetzt',
+    },
     formTitle: 'Eine Nachricht schreiben',
     formIntro: 'Wählen Sie ein Thema und unterschreiben Sie mit Ihrem Vornamen und der Initiale Ihres Nachnamens. Ihre Nachricht wird vor der Veröffentlichung gelesen, meist innert 48 Stunden.',
     topicLabel: 'Thema',

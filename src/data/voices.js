@@ -13,7 +13,9 @@ import { validateText, isIsoDate } from './schema.js';
  * message may have `replies` (one level only). Messages on any other subject
  * go in the topic "libre".
  *
- * Message: { id, name: 'Claire M.', date: 'YYYY-MM-DD', editor?: true, text: { fr, en, de, it }, replies?: [...] }
+ * Message: { id, name: 'Claire M.', date: 'YYYY-MM-DD', editor?: true, original?: 'en', text: { fr, en, de, it }, replies?: [...] }
+ * `original`: the language the message was written in, when not French (shown as "translated from …").
+ * The French text is then a translation, published as the page's reference text.
  */
 export const VOICE_TOPICS = [
   {
@@ -38,6 +40,18 @@ export const VOICE_TOPICS = [
           it: 'Il sentiero che entra nel bosco lungo il lago in direzione di St-Prex è un angolo che mi manca molto.',
         },
       },
+      {
+        id: 'banc-arbre-grand-rue',
+        name: 'Mimo',
+        date: '2026-10-31',
+        original: 'en',
+        text: {
+          fr: 'Le banc qui fait le tour du tronc d’arbre, au croisement de la Grand-Rue et de la rue Centrale, devant Manor. Je peux m’y installer toute la journée et oublier le monde.',
+          en: 'The seating around the tree trunk at the crossing of Grand-Rue and Rue Centrale, in front of Manor. I can sit there all day and forget about the world.',
+          de: 'Die Sitzbank rund um den Baumstamm an der Kreuzung von Grand-Rue und Rue Centrale, vor dem Manor. Dort kann ich den ganzen Tag sitzen und die Welt vergessen.',
+          it: 'La panchina intorno al tronco dell’albero, all’incrocio tra la Grand-Rue e la Rue Centrale, davanti a Manor. Posso starci tutto il giorno e dimenticare il mondo.',
+        },
+      },
     ],
   },
   {
@@ -49,7 +63,20 @@ export const VOICE_TOPICS = [
       de: 'Was fehlt in Morges? Eine Idee, um die Stadt noch angenehmer zu machen.',
       it: 'Che cosa manca a Morges? Un’idea per rendere la città ancora più piacevole.',
     },
-    messages: [],
+    messages: [
+      {
+        id: 'activite-dimanche',
+        name: 'Mimo',
+        date: '2026-10-31',
+        original: 'en',
+        text: {
+          fr: 'Une activité le dimanche. Pas besoin d’un grand événement : peut-être un groupe de musique local ou une association.',
+          en: 'Some kind of activity on Sundays. It does not have to be a major event, perhaps a local music band or a community group.',
+          de: 'Irgendeine Aktivität am Sonntag. Es muss kein grosser Anlass sein, vielleicht eine lokale Band oder ein Verein.',
+          it: 'Qualche attività la domenica. Non deve essere per forza un grande evento: magari una band locale o un’associazione.',
+        },
+      },
+    ],
   },
   {
     id: 'souvenir',
@@ -87,6 +114,7 @@ function validateMessage(m, path, { reply = false } = {}) {
   if (!m.id || !/^[a-z0-9-]+$/.test(m.id)) errors.push(`${path}.id must be a slug`);
   if (typeof m.name !== 'string' || !NAME.test(m.name) || m.name.length > VOICE_LIMITS.name) errors.push(`${path}.name must be a first name (+ initial)`);
   if (!isIsoDate(m.date)) errors.push(`${path}.date must be YYYY-MM-DD`);
+  if (m.original !== undefined && !['en', 'de', 'it'].includes(m.original)) errors.push(`${path}.original must be en, de or it (French is the default)`);
   errors.push(...validateText(m.text, `${path}.text`, { allLanguages: true }));
   if (m.text && m.text.fr && m.text.fr.length > VOICE_LIMITS.text) errors.push(`${path}.text.fr is longer than ${VOICE_LIMITS.text}`);
   if (reply && m.replies) errors.push(`${path}: replies have no replies (one level only)`);

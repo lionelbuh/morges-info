@@ -46,7 +46,7 @@ describe('Parole aux Morgiens', () => {
           name: 'Claire M.',
           date: '2026-11-02',
           text: text('Le quai Lochmann <au> matin.'),
-          replies: [{ id: 'lac-r1', name: 'Lionel B.', date: '2026-11-03', editor: true, text: text('Merci Claire !') }],
+          replies: [{ id: 'lac-r1', name: 'Lionel B.', date: '2026-11-03', editor: true, original: 'en', text: text('Merci Claire !') }],
         },
       ];
       return { ...original, VOICE_TOPICS: topics };
@@ -61,10 +61,15 @@ describe('Parole aux Morgiens', () => {
     expect(html).toContain('class="voice-editor"');
     expect(html).toContain('1 message');
     expect(html).not.toContain('Traduit du français');
+    expect(html).toContain('Traduit de l’anglais'); // the reply below was written in English
     i18n.setLang('de', { persist: false });
     html = renderVoices();
     expect(html).toContain('Le quai Lochmann &lt;au&gt; matin. (de)');
     expect(html).toContain('Aus dem Französischen übersetzt');
+    i18n.setLang('en', { persist: false });
+    html = renderVoices();
+    expect(html).toContain('Translated from French');
+    expect(html.match(/voice-translated/g)).toHaveLength(1); // the English reply is shown as written
     vi.doUnmock('../../src/data/voices.js');
   });
 });
