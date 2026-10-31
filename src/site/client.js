@@ -6,6 +6,7 @@ import { initChrome, renderChrome } from './chrome.js';
 import { renderMain, homePhotoViewpoints } from './pages.js';
 import { placeHref, photoMapHref } from './links.js';
 import { initCompare, photoMarker, homePhotoCard } from './photos.js';
+import { initVoices, saveVoiceDraft, restoreVoiceDraft } from './voices.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
@@ -261,8 +262,10 @@ function render() {
     preview.destroy();
     preview = null;
   }
+  const draft = pageId === 'voices' ? saveVoiceDraft() : null;
   renderChrome(pageId);
   document.getElementById('main').innerHTML = renderMain(pageId);
+  if (pageId === 'voices') restoreVoiceDraft(draft);
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
@@ -277,6 +280,7 @@ function render() {
 onLangChange(render);
 render();
 initCompare();
+initVoices();
 startAnalytics();
 
 // Content is re-rendered after load: honour #anchors (e.g. a story) once it is in place.

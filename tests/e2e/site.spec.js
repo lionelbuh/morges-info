@@ -4,6 +4,7 @@ import { PAGES } from '../../src/site/config.js';
 import fr from '../../src/i18n/locales/fr.js';
 import de from '../../src/i18n/locales/de.js';
 import en from '../../src/i18n/locales/en.js';
+import { VOICES_FORM_KEY } from '../../src/site/config.js';
 
 let errors;
 let externalRequests;
@@ -181,7 +182,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(42); // 13 listed pages + 20 places + 9 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(43); // 14 listed pages + 20 places + 9 photo pages
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
@@ -229,6 +230,68 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await page.locator('#info-panel .vp-mini[href$="#vue-parc-independance-kiosque"]').click();
   await expect(page).toHaveURL(/#vue-parc-independance-kiosque$/);
   await expect(page.locator('#info-panel .vp-photo--then img')).toBeVisible();
+});
+
+test('Parole aux Morgiens: the questions, the charter, and a message sent without any email', async ({ page }) => {
+  const sent = [];
+  await page.route('https://api.web3forms.com/submit', (route) => {
+    sent.push(route.request().postDataJSON());
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, message: 'ok' }) });
+  });
+  await page.goto('/');
+  await (await navLink(page, fr.nav.voices)).click();
+  await expect(page).toHaveURL(/\/parole-aux-morgiens\/$/);
+  await expect(page.locator('main h1')).toHaveText(fr.voices.title);
+  await expect(page.locator('.voice-topic')).toHaveCount(4);
+  await expect(page.locator('.voice-charter li')).toHaveCount(8);
+  await expect(page.locator('.voice-form input[type="email"]')).toHaveCount(0);
+
+  // "Answer this question" picks the topic and puts the cursor in the name field
+  await page.locator('#sujet-souvenir .voice-answer').click();
+  await expect(page.locator('#voice-topic')).toHaveValue('souvenir');
+  await expect(page.locator('#voice-name')).toBeFocused();
+  await page.locator('#voice-name').fill('Claire M.');
+  const text = 'La piscine du parc dans les années 80.';
+  await page.locator('#voice-message').fill(text);
+  await expect(page.locator('[data-voice-counter]')).toHaveText(`${text.length} / 1000`);
+
+  // a language change keeps what was typed
+  await page.locator('.lang-btn[data-lang="en"]').click();
+  await expect(page.locator('main h1')).toHaveText(en.voices.title);
+  await expect(page.locator('#voice-message')).toHaveValue(text);
+  await expect(page.locator('#voice-topic')).toHaveValue('souvenir');
+  await page.locator('.lang-btn[data-lang="fr"]').click();
+
+  // nothing leaves without the charter accepted
+  await page.locator('[data-voice-submit]').click();
+  expect(sent).toHaveLength(0);
+  await page.locator('#voice-consent').check();
+  await page.locator('[data-voice-submit]').click();
+  await expect(page.locator('[data-voice-status]')).toHaveText(fr.voices.sent);
+  expect(sent).toEqual([
+    {
+      access_key: VOICES_FORM_KEY,
+      subject: 'Parole aux Morgiens : nouveau message',
+      from_name: 'Morges.info',
+      sujet: 'Un souvenir de Morges d’autrefois ? [souvenir]',
+      prenom: 'Claire M.',
+      message: text,
+      accord: 'oui',
+    },
+  ]);
+  await expect(page.locator('#voice-message')).toHaveValue('');
+});
+
+test('Parole aux Morgiens: a failed send says so and keeps the message', async ({ page }) => {
+  await page.route('https://api.web3forms.com/submit', (route) => route.fulfill({ status: 500, body: '' }));
+  await page.goto('/parole-aux-morgiens/?lang=de');
+  await page.locator('#voice-name').fill('Anna');
+  await page.locator('#voice-message').fill('Mehr Bänke am See, bitte.');
+  await page.locator('#voice-consent').check();
+  await page.locator('[data-voice-submit]').click();
+  await expect(page.locator('[data-voice-status]')).toHaveText(de.voices.failed.replace('{email}', 'hello@morges.info'));
+  await expect(page.locator('#voice-message')).toHaveValue('Mehr Bänke am See, bitte.');
+  errors = errors.filter((m) => !m.includes('status of 500')); // the browser logs the failed request itself
 });
 
 test('visiting Morges: frequent questions answered from the site’s data, described for search engines', async ({ page }) => {

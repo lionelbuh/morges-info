@@ -17,6 +17,7 @@ traduction soignée existe.
 | Récits | `src/data/stories.js` | `/recits/`, accueil (récit à la une) |
 | Repères historiques, « hier et aujourd'hui » | `src/data/history.js` | `/histoire/` |
 | Photos d'archives (phase future) | `src/data/archive.js` | — |
+| Parole aux Morgiens (questions, messages publiés) | `src/data/voices.js` | `/parole-aux-morgiens/` |
 | Textes d'interface et des pages | `src/i18n/locales/*.js` | partout |
 
 Champs communs et validateurs : `src/data/schema.js`. Chaque type de contenu a son validateur, appliqué par les
@@ -79,6 +80,18 @@ Le bloc « Commerces indépendants » de l'accueil apparaît automatiquement dè
 Chaque événement : titre, dates de début et de fin, lieu (`placeId`), horaires si publiés par la source,
 sources et date de vérification. Les événements terminés disparaissent automatiquement (date du jour à
 Morges). Aucun événement n'est ajouté sans source officielle ou fiable.
+
+## Parole aux Morgiens
+
+Les habitants écrivent avec un formulaire (prénom + initiale, pas d'e-mail). Le service Web3Forms transmet
+chaque message par e-mail à l'adresse liée à la clé `VOICES_FORM_KEY` (`src/site/config.js`) ; clé vide =
+formulaire fermé. **Rien n'est publié automatiquement.**
+
+Publier un message : l'ajouter dans `src/data/voices.js`, dans `messages` de la question choisie (le sujet
+`[id]` figure dans l'e-mail), ou dans `replies` du message auquel il répond (`Réponse à : Prénom [id]`).
+Texte en français tel qu'écrit (orthographe corrigée, éventuellement raccourci), avec traductions en, de, it.
+Un seul niveau de réponses. Retirer un message : le supprimer du fichier. Les tests vérifient prénoms,
+dates, traductions et identifiants uniques.
 
 ## Pages et référencement
 
