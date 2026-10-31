@@ -33,7 +33,7 @@ export const CONTACT_EMAIL = 'hello@morges.info';
  * receive the messages; the key arrives by email). Empty = the form is shown but closed. The key is
  * public by design: it only lets the form send messages to that address.
  */
-export const VOICES_FORM_KEY = '';
+export const VOICES_FORM_KEY = 'c62ff984-21af-4fc1-87d4-0942dfc85db0';
 export const VOICES_FORM_ENDPOINT = 'https://api.web3forms.com/submit';
 
 /**
