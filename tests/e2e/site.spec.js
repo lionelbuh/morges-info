@@ -239,6 +239,11 @@ test('Parole aux Morgiens: the questions, the charter, and a message sent withou
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, message: 'ok' }) });
   });
   await page.goto('/');
+  // the home page shows the latest message and leads to the page
+  await expect(page.locator('#home-voices')).toHaveText(fr.voices.title);
+  await expect(page.locator('.home-voice-text')).toHaveCount(1);
+  await expect(page.locator('.home-voices-questions li')).toHaveCount(3);
+  await expect(page.locator('.home-voices a.btn')).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
   await (await navLink(page, fr.nav.voices)).click();
   await expect(page).toHaveURL(/\/parole-aux-morgiens\/$/);
   await expect(page.locator('main h1')).toHaveText(fr.voices.title);

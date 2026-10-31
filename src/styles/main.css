@@ -2829,3 +2829,84 @@ body.page-map {
   margin-bottom: 6px;
   line-height: 1.5;
 }
+
+/* Home: Parole aux Morgiens */
+.home-voices-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 24px 40px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .home-voices-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.home-voice {
+  margin: 0;
+  padding: 20px 24px;
+  background: var(--surface);
+  border-left: 4px solid var(--red);
+}
+.home-voice-topic {
+  margin: 0 0 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+.home-voice-topic a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.home-voice-topic a:hover {
+  color: var(--red);
+  text-decoration: underline;
+}
+.home-voice-text {
+  margin: 0 0 10px;
+}
+.home-voice-text p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  font-style: italic;
+  line-height: 1.45;
+}
+.home-voice-text p::before {
+  content: '«\00a0';
+}
+.home-voice-text p::after {
+  content: '\00a0»';
+}
+:lang(en) .home-voice-text p::before {
+  content: '“';
+}
+:lang(en) .home-voice-text p::after {
+  content: '”';
+}
+:lang(de) .home-voice-text p::before,
+:lang(it) .home-voice-text p::before {
+  content: '«';
+}
+:lang(de) .home-voice-text p::after,
+:lang(it) .home-voice-text p::after {
+  content: '»';
+}
+.home-voices-questions {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.home-voices-questions li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--stone-2);
+}
+.home-voices-questions a {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  text-decoration: none;
+}
+.home-voices-questions a:hover {
+  color: var(--red);
+  text-decoration: underline;
+}

@@ -175,6 +175,10 @@ export default {
     photoCredit: 'Foto: {credit}',
   },
   home: {
+    voicesText: 'Le vostre opinioni, idee, domande e ricordi di Morges. Basta il nome, senza e-mail; ogni messaggio viene letto prima della pubblicazione.',
+    voicesAll: 'Leggere tutti i messaggi',
+    voicesQuestions: 'Le domande del momento',
+    voicesCta: 'Dite la vostra',
     contributeTitle: 'Avete foto d’epoca di Morges?',
     contributeText: 'Foto, notizie, ricordi: aiutateci a raccontare Morges. Ogni contributo viene verificato e citato.',
     contributeCta: 'Contribuire',

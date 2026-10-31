@@ -110,3 +110,10 @@ export function allVoiceMessages(topics = VOICE_TOPICS) {
   return topics.flatMap((t) => t.messages.flatMap((m) => [m, ...(m.replies || [])]));
 }
 
+
+/** The most recent published message or reply, with its topic (home page). Null when none is published. */
+export function latestVoice(topics = VOICE_TOPICS) {
+  const all = topics.flatMap((topic) => topic.messages.flatMap((m) => [m, ...(m.replies || [])].map((message) => ({ message, topic }))));
+  // newest date first; on the same day, the one listed last (added last) wins
+  return all.reduce((best, item) => (!best || item.message.date >= best.message.date ? item : best), null);
+}
