@@ -263,8 +263,9 @@ function render() {
     preview = null;
   }
   const draft = pageId === 'voices' ? saveVoiceDraft() : null;
+  const heroId = document.querySelector('[data-hero-id]')?.dataset.heroId;
   renderChrome(pageId);
-  document.getElementById('main').innerHTML = renderMain(pageId);
+  document.getElementById('main').innerHTML = renderMain(pageId, { heroId });
   if (pageId === 'voices') restoreVoiceDraft(draft);
   if (pageId === 'home') {
     mountMapPreview();

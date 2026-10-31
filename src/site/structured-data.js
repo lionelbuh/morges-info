@@ -9,6 +9,7 @@ import { SITE_URL } from './config.js';
 import { pageHref, placePageHref, storyHref, photoPageHref } from './links.js';
 import { shownPhotos } from '../data/viewpoints.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
+import { HERO_PHOTO } from '../data/photos.js';
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const SITE_ID = `${SITE_URL}/#website`;
@@ -20,7 +21,7 @@ export function jsonLd(data) {
 }
 
 const shareImage = () => {
-  const image = heroManifest.crops?.og?.files.jpg[0];
+  const image = heroManifest[HERO_PHOTO.id]?.crops?.og?.files.jpg[0];
   return image ? abs(image.src) : undefined;
 };
 

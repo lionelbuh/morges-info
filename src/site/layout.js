@@ -6,10 +6,12 @@ import { t, getLang, LANGUAGES, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PAGES, SITE_URL, SEARCH_VERIFICATION, getPage } from './config.js';
 import { getPlace } from '../data/places.js';
-import { getViewpoint, shownPhotos } from '../data/viewpoints.js';
+import { getViewpoint, shownPhotos, publishedViewpoints } from '../data/viewpoints.js';
 import { formatPhotoDate } from './photos.js';
 import { emailLink } from './components.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
+import shareManifest from '../data/share-manifest.json' with { type: 'json' };
+import { editorialSelection } from '../data/businesses.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import { pageHref } from './links.js';
 import { formatToday } from './format.js';
@@ -94,15 +96,44 @@ export function renderFooter() {
 </footer>`;
 }
 
-/** Preview image for links shared on social networks and messaging apps. */
-function shareImageTags() {
-  const image = heroManifest.crops?.og?.files.jpg[0];
+/** A photo of the photo map or of a business, as its share image ({ src, width, height, alt }). */
+function sharedPhoto(src, alt) {
+  const image = shareManifest[src];
+  return image ? { ...image, alt: localized(alt) } : null;
+}
+
+/**
+ * Preview image for links shared on social networks and messaging apps: the page's own photo
+ * (a photo page, the photos, the businesses), otherwise the castle seen from the air.
+ * The home page keeps the castle: networks keep a preview for weeks, so it does not follow the photo of the day.
+ */
+export function shareImage(pageId) {
+  const page = getPage(pageId);
+  let image = null;
+  if (page.viewpointId) {
+    const { then, now } = shownPhotos(getViewpoint(page.viewpointId));
+    const photo = then || now;
+    image = photo && sharedPhoto(photo.image.src, photo.title);
+  } else if (pageId === 'photos') {
+    const photo = publishedViewpoints().map((vp) => shownPhotos(vp).then).find(Boolean);
+    image = photo && sharedPhoto(photo.image.src, photo.title);
+  } else if (pageId === 'businesses') {
+    const photo = editorialSelection().flatMap((b) => b.photos || [])[0];
+    image = photo && sharedPhoto(photo.src, photo.alt);
+  }
+  if (image) return image;
+  const og = heroManifest[HERO_PHOTO.id]?.crops?.og?.files.jpg[0];
+  return og ? { ...og, alt: localized(HERO_PHOTO.alt) } : null;
+}
+
+function shareImageTags(pageId) {
+  const image = shareImage(pageId);
   if (!image) return '';
   return `
     <meta property="og:image" content="${SITE_URL}${image.src}" />
     <meta property="og:image:width" content="${image.width}" />
     <meta property="og:image:height" content="${image.height}" />
-    <meta property="og:image:alt" content="${e(localized(HERO_PHOTO.alt))}" />
+    <meta property="og:image:alt" content="${e(image.alt)}" />
     <meta name="twitter:card" content="summary_large_image" />`;
 }
 
@@ -171,7 +202,7 @@ export function renderHeadTags(pageId) {
     <meta property="og:title" content="${e(title)}" />
     <meta property="og:description" content="${e(description)}" />
     <meta property="og:url" content="${absoluteUrl(pageId, lang)}" />
-    <meta property="og:locale" content="${OG_LOCALES[lang]}" />${shareImageTags()}`;
+    <meta property="og:locale" content="${OG_LOCALES[lang]}" />${shareImageTags(pageId)}`;
 }
 
 /** Browser: sync <html lang>, title, description, canonical and Open Graph with the language. */
@@ -187,5 +218,6 @@ export function applyHead(pageId) {
   set('meta[property="og:description"]', 'content', description);
   set('meta[property="og:url"]', 'content', absoluteUrl(pageId, lang));
   set('meta[property="og:locale"]', 'content', OG_LOCALES[lang]);
-  set('meta[property="og:image:alt"]', 'content', localized(HERO_PHOTO.alt));
+  const image = shareImage(pageId);
+  if (image) set('meta[property="og:image:alt"]', 'content', image.alt);
 }

@@ -11,11 +11,11 @@ import { escapeHtml as e } from '../ui/dom.js';
 import { PLACES, getPlace } from '../data/places.js';
 import { CATEGORIES } from '../data/categories.js';
 import { editorialSelection, BUSINESS_CATEGORIES } from '../data/businesses.js';
-import { upcomingEvents } from '../data/events.js';
+import { upcomingEvents, todayInMorges } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
-import { HERO_PHOTO } from '../data/photos.js';
+import { heroOfTheDay, getHeroPhoto } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
@@ -67,7 +67,11 @@ export function homePhotoViewpoints() {
   return [...viewpoints.filter((vp) => vp.then), ...viewpoints.filter((vp) => !vp.then)];
 }
 
-function renderHome({ today } = {}) {
+/**
+ * @param {{ today?: string, heroId?: string }} [opts] heroId: the large photo already chosen for this page
+ * (the browser keeps the one the build picked, so the photo never changes under the visitor's eyes).
+ */
+function renderHome({ today, heroId } = {}) {
   const lang = getLang();
   const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
   const events = upcomingEvents(undefined, today).slice(0, 2);
@@ -81,7 +85,8 @@ function renderHome({ today } = {}) {
       </div>`
     : '';
 
-  const hero = heroPhoto(HERO_PHOTO, heroManifest, { sizes: '(max-width: 860px) 100vw, 680px' });
+  const heroChoice = (heroId && getHeroPhoto(heroId)) || heroOfTheDay(today || todayInMorges());
+  const hero = heroPhoto(heroChoice, heroManifest[heroChoice.id], { sizes: '(max-width: 860px) 100vw, 680px' });
   // "Explorer la carte" opens the photo map: Morges then (and now), the places are one click away
   const oldPhotos = homePhotoViewpoints();
   const photosMap = oldPhotos.length ? photoMapHref('photos', lang) : pageHref('map', lang);

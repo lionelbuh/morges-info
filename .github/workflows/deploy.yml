@@ -1,11 +1,14 @@
 name: Deploy to GitHub Pages
 
-# Publishes the site (dist/) on GitHub Pages each time main changes.
+# Publishes the site (dist/) on GitHub Pages each time main changes, and again every night
+# so that the home page shows the photo of the day and past events drop off.
 # One-time setup in the repository: Settings → Pages → Source: "GitHub Actions",
 # then Custom domain: morges.info and "Enforce HTTPS" (see README, Déploiement).
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 1 * * *' # every night, 02:17 in Morges in winter (03:17 in summer)
   workflow_dispatch:
 
 permissions:
@@ -50,6 +53,7 @@ jobs:
   # The key is public by design; the same value is published at https://morges.info/<key>.txt.
   indexnow:
     needs: deploy
+    if: github.event_name != 'schedule' # the nightly rebuild changes no page worth announcing
     runs-on: ubuntu-latest
     continue-on-error: true
     env:

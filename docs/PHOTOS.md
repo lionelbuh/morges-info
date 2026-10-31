@@ -37,12 +37,26 @@ Photos écartées : « Morges château.jpg » (Pierre Bona) — non retenue par 
 à Morges » (Edouard55, Flickr) — tous droits réservés, à n'utiliser qu'avec une autorisation écrite (modèle
 ci-dessous).
 
-## Changer la photo d'accueil
+## Photo d'accueil (photo du jour)
 
-1. Enregistrer l'original sans le modifier dans `assets/photos/` et mettre à jour `HERO_PHOTO` dans
-   `src/data/photos.js` (auteur, source, licence, attribution, texte alternatif en 4 langues).
+La grande photo de l'accueil change chaque jour : les photos de `HERO_PHOTOS` (`src/data/photos.js`)
+passent à tour de rôle. Le site est reconstruit chaque nuit (`deploy.yml`, tâche planifiée), ce qui
+change la photo. Le navigateur garde celle choisie par la construction. Seules les photos dont la
+licence permet de les recadrer y figurent : jamais de licence « ND » (refusée par les tests).
+
+Ajouter une photo :
+1. Original dans `assets/photos/` (ou une photo de la carte, `public/images/photos/`) ; ajouter une
+   entrée à `HERO_PHOTOS` (auteur, source, licence, attribution, texte alternatif en 4 langues,
+   recadrages ; `viewpointId` ajoute le lien vers la carte des photos).
 2. Lancer `npm run images` : génère `public/images/hero/*` et `src/data/hero-manifest.json`.
 3. Vérifier les recadrages ; ajuster `focusX` / `focusY` si besoin et relancer `npm run images`.
+
+## Images de partage (réseaux sociaux)
+
+Chaque page photo, la page Photos et la page Commerces se partagent avec leur propre photo, entière
+(jamais recadrée), en JPEG. Les autres pages, et l'accueil, gardent le château vu du ciel (version
+`og` de `HERO_PHOTO`). Après avoir ajouté ou changé une photo de la carte ou d'un commerce :
+`npm run share` (génère `public/images/share/*` et `src/data/share-manifest.json`).
 
 ## Modèle de demande d'autorisation (Flickr, message à Edouard55)
 

@@ -5,6 +5,7 @@ import fr from '../../src/i18n/locales/fr.js';
 import de from '../../src/i18n/locales/de.js';
 import en from '../../src/i18n/locales/en.js';
 import { VOICES_FORM_KEY } from '../../src/site/config.js';
+import { HERO_PHOTOS } from '../../src/data/photos.js';
 
 let errors;
 let externalRequests;
@@ -93,14 +94,21 @@ test('the address is not written in plain text in the page source (spam harveste
   }
 });
 
-test('shared links show a preview image', async ({ page, request }) => {
-  await page.goto('/histoire/');
-  const image = await page.locator('meta[property="og:image"]').getAttribute('content');
-  expect(image).toMatch(/^https:\/\/morges\.info\/images\/hero\/.+-og-1200\.jpg$/);
-  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
-  const res = await request.get(new URL(image).pathname);
-  expect(res.status()).toBe(200);
-  expect(res.headers()['content-type']).toContain('image/jpeg');
+test('shared links show a preview image: the castle, or the page’s own photo', async ({ page, request }) => {
+  for (const [path, expected] of [
+    ['/histoire/', /^https:\/\/morges\.info\/images\/hero\/chateau-.+-og-1200\.jpg$/],
+    ['/', /^https:\/\/morges\.info\/images\/hero\/chateau-.+-og-1200\.jpg$/],
+    ['/photos/vue-port-jetee/', /^https:\/\/morges\.info\/images\/share\/port-jetee-1898\.jpg$/],
+    ['/commerces/', /^https:\/\/morges\.info\/images\/share\/amandine-reflexologie-.+\.jpg$/],
+  ]) {
+    await page.goto(path);
+    const image = await page.locator('meta[property="og:image"]').getAttribute('content');
+    expect(image, path).toMatch(expected);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+    const res = await request.get(new URL(image).pathname);
+    expect(res.status(), path).toBe(200);
+    expect(res.headers()['content-type']).toContain('image/jpeg');
+  }
 });
 
 test('404 page: translated, not indexed, links back to the site', async ({ page }) => {
@@ -393,18 +401,30 @@ test('pages are prerendered: real content without JavaScript', async ({ browser 
   await context.close();
 });
 
+test('home: the photo of the day stays the same when the language changes', async ({ page }) => {
+  await page.goto('/');
+  const heroId = await page.locator('.hero-photo').getAttribute('data-hero-id');
+  await page.locator('.lang-btn[data-lang="de"]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  await expect(page.locator('.hero-photo')).toHaveAttribute('data-hero-id', heroId);
+  await expect(page.locator('.hero-photo img')).toHaveAttribute('alt', HERO_PHOTOS.find((p) => p.id === heroId).alt.de);
+});
+
 test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
   await expect(page.locator('.feature-story')).toBeVisible();
   await expect(page.locator('#home-businesses')).toHaveCount(1);
-  // hero photograph: loaded, described, credited with its licence
+  // photo of the day: one of the hero photos, loaded, described, credited with its licence
+  const heroId = await page.locator('.hero-photo').getAttribute('data-hero-id');
+  const photo = HERO_PHOTOS.find((p) => p.id === heroId);
+  expect(photo).toBeTruthy();
   const hero = page.locator('.hero-photo img');
-  await expect(hero).toHaveAttribute('alt', /château de Morges/);
+  await expect(hero).toHaveAttribute('alt', photo.alt.fr);
   await expect.poll(() => hero.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
   expect(await hero.evaluate((img) => img.currentSrc)).toMatch(/\.avif$/);
-  await expect(page.locator('.hero-credit a[href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr"]')).toHaveText('CC BY-SA 4.0');
-  await expect(page.locator('.hero-credit')).toContainText('D. Jaquet');
+  await expect(page.locator(`.hero-credit a[href="${photo.licenceUrl}"]`)).toHaveText(photo.licence);
+  await expect(page.locator('.hero-credit')).toContainText(typeof photo.creator === 'string' ? photo.creator : photo.creator.fr);
   // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
   await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
