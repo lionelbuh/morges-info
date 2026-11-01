@@ -100,10 +100,12 @@ function renderHome({ today, heroId } = {}) {
     <p class="lead">${e(t('home.intro'))}</p>
     <p class="hero-actions">
       <a class="btn" href="${photosMap}">${e(t('home.mapCta'))}</a>
-      <a class="btn btn-ghost" href="${pageHref('history', lang)}">${e(t('nav.history'))}</a>
+      <a class="btn btn-ghost" href="${pageHref('voices', lang)}#ecrire">${e(t('home.voicesCta'))}</a>
     </p>
   </section>
   </div>
+
+  ${homeVoices()}
 
   <section class="section" aria-labelledby="home-map">
     ${sectionHead('home-map', t('home.mapTitle'), { href: photosMap, label: t('home.mapCta') })}
@@ -122,8 +124,6 @@ function renderHome({ today, heroId } = {}) {
       }
     </div>
   </section>
-
-  ${homeVoices()}
 
   <section class="section" aria-labelledby="home-places">
     ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}

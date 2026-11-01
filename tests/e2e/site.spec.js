@@ -428,6 +428,9 @@ test('home: map preview with markers, places, practical info, businesses and fea
   await expect(page.locator('.hero-credit')).toContainText(typeof photo.creator === 'string' ? photo.creator : photo.creator.fr);
   // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
   await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
+  // "Parole aux Morgiens" right after the opening: second button, first section
+  await expect(page.locator('.hero-actions .btn').nth(1)).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
+  await expect(page.locator('main .section h2').first()).toHaveAttribute('id', 'home-voices');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(9);
