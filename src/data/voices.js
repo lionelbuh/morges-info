@@ -87,6 +87,17 @@ export const VOICE_TOPICS = [
           it: 'Qualche attività la domenica. Non deve essere per forza un grande evento: magari una band locale o un’associazione.',
         },
       },
+      {
+        id: 'terrain-tiny-house',
+        name: 'Anne C.',
+        date: '2026-11-01',
+        text: {
+          fr: 'Un terrain aménagé pour vivre en tiny house.',
+          en: 'A plot of land set up for living in a tiny house.',
+          de: 'Ein erschlossenes Grundstück, um in einem Tiny House zu wohnen.',
+          it: 'Un terreno attrezzato per vivere in una tiny house.',
+        },
+      },
     ],
   },
   {
