@@ -589,6 +589,113 @@ export const VIEWPOINTS = [
     ],
     now: null,
   },
+  {
+    id: 'vue-casino',
+    title: {
+      fr: 'Le Casino de Morges',
+      en: 'The Morges Casino',
+      de: 'Das Casino von Morges',
+      it: 'Il Casinò di Morges',
+    },
+    location: {
+      fr: 'Casino de Morges',
+      en: 'Morges Casino',
+      de: 'Casino von Morges',
+      it: 'Casinò di Morges',
+    },
+    coordinates: { lat: 46.50878188477087, lng: 6.499710007938375 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point de prise de vue placé sur la carte le 01.11.2026' }],
+      note: 'Spot facing the Casino building, as indicated by the site owner.',
+    },
+    then: {
+      id: 'casino-morges-1930',
+      title: {
+        fr: 'Le Casino de Morges vers 1930',
+        en: 'The Morges Casino around 1930',
+        de: 'Das Casino von Morges um 1930',
+        it: 'Il Casinò di Morges verso il 1930',
+      },
+      caption: {
+        fr: 'Photo d’album, légendée à la main « Casino à Morges » : la façade richement décorée, ses balcons en fer forgé et ses statues sur le toit.',
+        en: 'An album photo, captioned by hand “Casino à Morges”: the richly decorated façade, its wrought-iron balconies and the statues on the roof.',
+        de: 'Ein Albumfoto, von Hand beschriftet «Casino à Morges»: die reich verzierte Fassade, die schmiedeeisernen Balkone und die Statuen auf dem Dach.',
+        it: 'Una foto d’album, con la didascalia a mano «Casino à Morges»: la facciata riccamente decorata, i balconi in ferro battuto e le statue sul tetto.',
+      },
+      date: { value: '1930', precision: 'circa' },
+      source: { institution: 'Wikimedia Commons (Flickr, Peter Forster)', url: 'https://commons.wikimedia.org/w/index.php?curid=15769572' },
+      rights: {
+        status: 'open-licence',
+        licence: 'CC BY-SA 2.0',
+        licenceUrl: 'https://creativecommons.org/licenses/by-sa/2.0/deed.fr',
+        holder: 'Peter Forster',
+        credit: 'Peter Forster',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-11-01',
+        notes:
+          'Attribution as given on Wikimedia Commons ("By Peter Forster - Flickr: 114 Casinò à Morges 1930, CC BY-SA 2.0"), supplied by the site owner. Date from the album caption ("um 1930"). Share-alike: any adaptation stays under CC BY-SA.',
+      },
+      image: { src: '/images/photos/casino-morges-1930.webp', width: 579, height: 472 },
+    },
+    now: null,
+  },
+  {
+    id: 'vue-maison-blanchenay',
+    title: {
+      fr: 'La cour de la maison Blanchenay, aujourd’hui le Musée Forel',
+      en: 'The courtyard of the Maison Blanchenay, today the Musée Forel',
+      de: 'Der Hof des Hauses Blanchenay, heute das Musée Forel',
+      it: 'Il cortile della casa Blanchenay, oggi il Musée Forel',
+    },
+    location: {
+      fr: 'Grand-Rue 54, Musée Alexis Forel',
+      en: 'Grand-Rue 54, Musée Alexis Forel',
+      de: 'Grand-Rue 54, Musée Alexis Forel',
+      it: 'Grand-Rue 54, Musée Alexis Forel',
+    },
+    coordinates: { lat: 46.509444, lng: 6.498056 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point placé sur la carte le 01.11.2026 (46°30′34″ N, 6°29′53″ E)' }],
+      note: 'The inner courtyard of the house; the photographer stood in the courtyard.',
+    },
+    placeId: 'musee-forel',
+    then: {
+      id: 'maison-blanchenay-cour-1905',
+      title: {
+        fr: 'La cour intérieure de la « maison de la laiterie », photographiée par Max van Berchem',
+        en: 'The inner courtyard of the “dairy house”, photographed by Max van Berchem',
+        de: 'Der Innenhof des «Molkereihauses», fotografiert von Max van Berchem',
+        it: 'Il cortile interno della «casa della latteria», fotografato da Max van Berchem',
+      },
+      caption: {
+        fr: 'La maison Blanchenay, siège de la Société de laiterie de Morges depuis 1825 : les galeries à l’italienne de la cour, avec le linge qui sèche. Alexis et Emmeline Forel achètent la maison en 1918 pour y installer leur musée, qui prend le nom de Musée Alexis Forel en 1943. Les galeries existent toujours.',
+        en: 'The Maison Blanchenay, home of the Morges dairy society since 1825: the Italian-style galleries of the courtyard, with washing hung out to dry. Alexis and Emmeline Forel bought the house in 1918 to set up their museum, named the Musée Alexis Forel in 1943. The galleries are still there.',
+        de: 'Das Haus Blanchenay, seit 1825 Sitz der Molkereigesellschaft von Morges: die Galerien des Hofes im italienischen Stil, mit trocknender Wäsche. Alexis und Emmeline Forel kauften das Haus 1918, um darin ihr Museum einzurichten, das 1943 den Namen Musée Alexis Forel erhielt. Die Galerien sind bis heute erhalten.',
+        it: 'La casa Blanchenay, sede della Società di latteria di Morges dal 1825: le gallerie all’italiana del cortile, con il bucato steso ad asciugare. Alexis ed Emmeline Forel acquistarono la casa nel 1918 per allestirvi il loro museo, che nel 1943 prese il nome di Musée Alexis Forel. Le gallerie esistono ancora.',
+      },
+      date: { value: '1905', precision: 'circa' },
+      source: { institution: 'Bibliothèque nationale suisse, collection Max van Berchem (via Wikimedia Commons)', url: 'https://commons.wikimedia.org/w/index.php?curid=46388586' },
+      rights: {
+        status: 'public-domain',
+        licence: 'Public domain',
+        credit: 'Max van Berchem',
+      },
+      verification: {
+        status: 'verified',
+        verifiedBy: 'Morges.info',
+        verifiedAt: '2026-11-01',
+        notes:
+          'Public domain on Wikimedia Commons (Max van Berchem, 1863–1921; Swiss National Library, helveticarchives.ch ID 838612), supplied by the site owner. History: Musée Alexis Forel (museeforel.ch, 1825 dairy society), French Wikipedia (Maison Blanchenay; 1918 purchase, 1943 name), Journal de Morges (galleries still standing). Opening year differs between sources (1919/1920), so it is not given.',
+      },
+      image: { src: '/images/photos/maison-blanchenay-cour-1905.webp', width: 1600, height: 2206 },
+    },
+    now: null,
+  },
 ];
 
 /**
