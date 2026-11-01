@@ -505,12 +505,12 @@ test('stories are translated: no French-only notice in any language', async ({ p
 });
 
 test('local life lists upcoming events only', async ({ page }) => {
-  await page.clock.setFixedTime(new Date('2026-10-30T10:00:00+01:00'));
+  await page.clock.setFixedTime(new Date('2026-11-04T10:00:00+01:00'));
   await page.goto('/vie-locale/');
-  await expect(page.locator('#event-halloween-chateau-2026 .event-summary')).toContainText('sculpture de courges');
-  await page.clock.setFixedTime(new Date('2026-11-01T10:00:00+01:00'));
+  await expect(page.locator('#event-beausobre-zip-zap-circus-2026')).toBeVisible();
+  await page.clock.setFixedTime(new Date('2026-11-05T10:00:00+01:00'));
   await page.reload();
-  await expect(page.locator('#event-halloween-chateau-2026')).toHaveCount(0);
+  await expect(page.locator('#event-beausobre-zip-zap-circus-2026')).toHaveCount(0);
   await expect(page.locator('#event-marche-de-noel-2026')).toBeVisible();
   await expect(page.locator('#event-marche-de-noel-2026 .event-date')).toContainText('2 décembre 2026');
 
