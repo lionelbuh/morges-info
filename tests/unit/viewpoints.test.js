@@ -108,7 +108,7 @@ describe('photo map display', () => {
     const withPhoto = placePhotosBlock('parc-independance', { href: (vp) => `#${vp.id}` });
     expect(withPhoto).toContain('href="#vue-parc-independance-kiosque"');
     expect(withPhoto).toContain('Photos anciennes');
-    const without = placePhotosBlock('gare', { href: (vp) => `#${vp.id}` });
+    const without = placePhotosBlock('beausobre', { href: (vp) => `#${vp.id}` });
     expect(without).toContain('Pas encore de photo ancienne de ce lieu.');
     expect(without).toContain('href="/contribuer/"');
   });

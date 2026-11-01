@@ -696,6 +696,181 @@ export const VIEWPOINTS = [
     },
     now: null,
   },
+  {
+    id: 'vue-gare',
+    title: {
+      fr: 'La gare de Morges',
+      en: 'Morges station',
+      de: 'Der Bahnhof Morges',
+      it: 'La stazione di Morges',
+    },
+    location: {
+      fr: 'Gare de Morges, place de la Gare',
+      en: 'Morges station, Place de la Gare',
+      de: 'Bahnhof Morges, Place de la Gare',
+      it: 'Stazione di Morges, Place de la Gare',
+    },
+    coordinates: { lat: 46.511312567566044, lng: 6.4940086579443195 },
+    geo: {
+      status: 'team',
+      sources: [{ label: 'Morges.info — point placé sur la carte le 01.11.2026' }],
+      note: 'The station; the 1948 photos were taken from the station square.',
+    },
+    placeId: 'gare',
+    then: {
+        id: 'gare-1948-facade',
+        title: {
+          fr: 'Morges : le bâtiment aux voyageurs, vu depuis la place de la gare, octobre 1948',
+          en: 'Morges: the station building, seen from the station square, October 1948',
+          de: 'Morges: das Aufnahmegebäude, vom Bahnhofplatz aus gesehen, Oktober 1948',
+          it: 'Morges: il fabbricato viaggiatori, visto dalla piazza della stazione, ottobre 1948',
+        },
+        caption: {
+          fr: 'La façade de la gare et son grand escalier, avec une voiture garée devant.',
+          en: 'The station façade and its wide staircase, with a car parked in front.',
+          de: 'Die Fassade des Bahnhofs mit der breiten Treppe, davor ein parkiertes Auto.',
+          it: 'La facciata della stazione con la sua ampia scalinata e un’automobile parcheggiata davanti.',
+        },
+        date: { value: '1948-10', precision: 'month' },
+        source: { institution: 'SBB Historic', url: 'https://www.sbbarchiv.ch/detail.aspx?id=354969' },
+        rights: {
+          status: 'public-domain',
+          licence: 'Domaine public (droit d’auteur échu)',
+          credit: 'SBB Historic',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-11-01',
+          notes:
+            'Photo by the SBB photo service, SBB Historic archive (record 354969). Swiss copyright has expired: unknown author, created 1948 (LDA art. 31: 70 years; art. 29 al. 2 let. a bis: 50 years for photos without individual character). SBB Historic also publishes its historic railway-station photos as open data with source attribution (opendata.swiss, 2018). Credit: SBB Historic. Record pages could not be opened from the build environment; images and record details supplied by the site owner.',
+        },
+        image: { src: '/images/photos/gare-1948-facade.webp', width: 520, height: 373 },
+      },
+    moreThen: [
+      {
+        id: 'gare-1948-voitures',
+        title: {
+          fr: 'La place de la gare et ses voitures, octobre 1948',
+          en: 'The station square and its cars, October 1948',
+          de: 'Der Bahnhofplatz mit seinen Autos, Oktober 1948',
+          it: 'La piazza della stazione e le sue automobili, ottobre 1948',
+        },
+        caption: {
+          fr: 'La gare vue en biais, avec les voitures de l’époque garées sur la place.',
+          en: 'The station seen at an angle, with cars of the time parked on the square.',
+          de: 'Der Bahnhof schräg von vorn, mit den Autos jener Zeit auf dem Platz.',
+          it: 'La stazione vista di sbieco, con le automobili dell’epoca parcheggiate sulla piazza.',
+        },
+        date: { value: '1948-10', precision: 'month' },
+        source: { institution: 'SBB Historic', url: 'https://www.sbbarchiv.ch/detail.aspx?id=354965' },
+        rights: {
+          status: 'public-domain',
+          licence: 'Domaine public (droit d’auteur échu)',
+          credit: 'SBB Historic',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-11-01',
+          notes:
+            'Photo by the SBB photo service, SBB Historic archive (record 354965). Swiss copyright has expired: unknown author, created 1948 (LDA art. 31: 70 years; art. 29 al. 2 let. a bis: 50 years for photos without individual character). SBB Historic also publishes its historic railway-station photos as open data with source attribution (opendata.swiss, 2018). Credit: SBB Historic. Record pages could not be opened from the build environment; images and record details supplied by the site owner.',
+        },
+        image: { src: '/images/photos/gare-1948-voitures.webp', width: 520, height: 376 },
+      },
+      {
+        id: 'gare-1948-place',
+        title: {
+          fr: 'La gare et la rampe d’accès, octobre 1948',
+          en: 'The station and its access ramp, October 1948',
+          de: 'Der Bahnhof und die Zufahrtsrampe, Oktober 1948',
+          it: 'La stazione e la rampa d’accesso, ottobre 1948',
+        },
+        caption: {
+          fr: 'Vue de côté : la rampe qui monte vers les quais et un passant sur la place.',
+          en: 'A side view: the ramp up to the platforms and a passer-by on the square.',
+          de: 'Seitenansicht: die Rampe zu den Perrons und ein Passant auf dem Platz.',
+          it: 'Vista laterale: la rampa che sale verso i binari e un passante sulla piazza.',
+        },
+        date: { value: '1948-10', precision: 'month' },
+        source: { institution: 'SBB Historic', url: 'https://www.sbbarchiv.ch/detail.aspx?id=354966' },
+        rights: {
+          status: 'public-domain',
+          licence: 'Domaine public (droit d’auteur échu)',
+          credit: 'SBB Historic',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-11-01',
+          notes:
+            'Photo by the SBB photo service, SBB Historic archive (record 354966). Swiss copyright has expired: unknown author, created 1948 (LDA art. 31: 70 years; art. 29 al. 2 let. a bis: 50 years for photos without individual character). SBB Historic also publishes its historic railway-station photos as open data with source attribution (opendata.swiss, 2018). Credit: SBB Historic. Record pages could not be opened from the build environment; images and record details supplied by the site owner.',
+        },
+        image: { src: '/images/photos/gare-1948-place.webp', width: 520, height: 376 },
+      },
+      {
+        id: 'gare-buffet-salle-a',
+        title: {
+          fr: 'Le buffet de la gare, l’une des salles, vers 1950',
+          en: 'The station buffet, one of the rooms, around 1950',
+          de: 'Das Bahnhofbuffet, einer der Säle, um 1950',
+          it: 'Il buffet della stazione, una delle sale, verso il 1950',
+        },
+        caption: {
+          fr: 'Une salle du buffet de la gare, avec ses chaises de bistrot et ses grandes fenêtres.',
+          en: 'A room of the station buffet, with its bistro chairs and tall windows.',
+          de: 'Ein Saal des Bahnhofbuffets mit Bistrostühlen und hohen Fenstern.',
+          it: 'Una sala del buffet della stazione, con le sedie da bistrot e le grandi finestre.',
+        },
+        date: { value: '1950', precision: 'circa' },
+        source: { institution: 'SBB Historic', url: 'https://www.sbbarchiv.ch/detail.aspx?id=354985' },
+        rights: {
+          status: 'public-domain',
+          licence: 'Domaine public (droit d’auteur échu)',
+          credit: 'SBB Historic',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-11-01',
+          notes:
+            'Photo by the SBB photo service, SBB Historic archive (record 354985). Swiss copyright has expired: unknown author, created 1950 (LDA art. 31: 70 years; art. 29 al. 2 let. a bis: 50 years for photos without individual character). SBB Historic also publishes its historic railway-station photos as open data with source attribution (opendata.swiss, 2018). Credit: SBB Historic. Record pages could not be opened from the build environment; images and record details supplied by the site owner.',
+        },
+        image: { src: '/images/photos/gare-buffet-salle-a.webp', width: 520, height: 374 },
+      },
+      {
+        id: 'gare-buffet-salle-b',
+        title: {
+          fr: 'Le buffet de la gare, une autre salle, vers 1950',
+          en: 'The station buffet, another room, around 1950',
+          de: 'Das Bahnhofbuffet, ein weiterer Saal, um 1950',
+          it: 'Il buffet della stazione, un’altra sala, verso il 1950',
+        },
+        caption: {
+          fr: 'Une autre salle du buffet, avec le comptoir au fond et la liste des prix au mur.',
+          en: 'Another room of the buffet, with the counter at the back and the price list on the wall.',
+          de: 'Ein weiterer Saal des Buffets, hinten die Theke und an der Wand die Preisliste.',
+          it: 'Un’altra sala del buffet, con il bancone in fondo e il listino prezzi alla parete.',
+        },
+        date: { value: '1950', precision: 'circa' },
+        source: { institution: 'SBB Historic', url: 'https://www.sbbarchiv.ch/detail.aspx?id=354982' },
+        rights: {
+          status: 'public-domain',
+          licence: 'Domaine public (droit d’auteur échu)',
+          credit: 'SBB Historic',
+        },
+        verification: {
+          status: 'verified',
+          verifiedBy: 'Morges.info',
+          verifiedAt: '2026-11-01',
+          notes:
+            'Photo by the SBB photo service, SBB Historic archive (record 354982). Swiss copyright has expired: unknown author, created 1950 (LDA art. 31: 70 years; art. 29 al. 2 let. a bis: 50 years for photos without individual character). SBB Historic also publishes its historic railway-station photos as open data with source attribution (opendata.swiss, 2018). Credit: SBB Historic. Record pages could not be opened from the build environment; images and record details supplied by the site owner.',
+        },
+        image: { src: '/images/photos/gare-buffet-salle-b.webp', width: 520, height: 373 },
+      },
+    ],
+    now: null,
+  },
 ];
 
 /**

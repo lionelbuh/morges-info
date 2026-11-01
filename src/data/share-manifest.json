@@ -24,6 +24,31 @@
     "width": 1200,
     "height": 708
   },
+  "/images/photos/gare-1948-facade.webp": {
+    "src": "/images/share/gare-1948-facade.jpg",
+    "width": 520,
+    "height": 373
+  },
+  "/images/photos/gare-1948-place.webp": {
+    "src": "/images/share/gare-1948-place.jpg",
+    "width": 520,
+    "height": 376
+  },
+  "/images/photos/gare-1948-voitures.webp": {
+    "src": "/images/share/gare-1948-voitures.jpg",
+    "width": 520,
+    "height": 376
+  },
+  "/images/photos/gare-buffet-salle-a.webp": {
+    "src": "/images/share/gare-buffet-salle-a.jpg",
+    "width": 520,
+    "height": 374
+  },
+  "/images/photos/gare-buffet-salle-b.webp": {
+    "src": "/images/share/gare-buffet-salle-b.jpg",
+    "width": 520,
+    "height": 373
+  },
   "/images/photos/maison-blanchenay-cour-1905.webp": {
     "src": "/images/share/maison-blanchenay-cour-1905.jpg",
     "width": 1200,

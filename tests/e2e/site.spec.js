@@ -191,7 +191,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(45); // 14 listed pages + 20 places + 11 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(46); // 14 listed pages + 20 places + 12 photo pages
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
@@ -205,7 +205,7 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await expect(page).toHaveURL(/\/carte\/#photos$/);
   await expect(page.locator('.filters-block')).toBeHidden();
   await expect(page.locator('#search-input')).toHaveAttribute('placeholder', fr.photos.searchPlaceholder);
-  await expect(page.locator('.poi-marker--photo')).toHaveCount(11);
+  await expect(page.locator('.poi-marker--photo')).toHaveCount(12);
   // the mode survives a reload (shareable address)
   await page.reload();
   await expect(page.locator('#mode-toggle [data-mode="photos"]')).toHaveAttribute('aria-pressed', 'true');
@@ -224,7 +224,7 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
 
   await page.goto('/photos/');
   await expect(page.locator('main h1')).toHaveText(fr.photos.title);
-  await expect(page.locator('.vp-card')).toHaveCount(11);
+  await expect(page.locator('.vp-card')).toHaveCount(12);
   await expect(page.locator('.site-footer a[href="/photos/"]')).toHaveText(fr.nav.photos);
   await page.locator('.vp-card .card-title a[href="/photos/vue-parc-independance-kiosque/"]').click();
   await expect(page).toHaveURL(/\/photos\/vue-parc-independance-kiosque\/$/);
@@ -433,7 +433,7 @@ test('home: map preview with markers, places, practical info, businesses and fea
   await expect(page.locator('main .section h2').first()).toHaveAttribute('id', 'home-voices');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
-  await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(11);
+  await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(12);
   await expect(page.locator('#map-preview .maplibregl-ctrl-attrib')).toContainText('OpenStreetMap');
   const card = page.locator('#home-photos .home-photo');
   await expect(card).toHaveAttribute('href', '/carte/#vue-parc-independance-kiosque');
