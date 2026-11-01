@@ -123,7 +123,7 @@ describe('content model', () => {
   });
 
   it('upcoming events hide past ones and use the Morges calendar date', () => {
-    expect(upcomingEvents(EVENTS, '2026-11-01')[0].id).toBe('beausobre-zip-zap-circus-2026'); // Halloween (31 Oct) is over
+    expect(upcomingEvents(EVENTS, '2026-11-01')[0].id).toBe('beausobre-zip-zap-circus-2026'); // the first event in November
     expect(upcomingEvents(EVENTS, '2026-11-30').map((e) => e.id)).toEqual(['marche-de-noel-2026']);
     expect(upcomingEvents(EVENTS, '2026-12-20')).toHaveLength(1); // last day still listed
     expect(upcomingEvents(EVENTS, '2026-12-21')).toHaveLength(0);

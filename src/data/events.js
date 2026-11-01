@@ -8,34 +8,6 @@ import { validateText, validateSources, isIsoDate } from './schema.js';
  */
 export const EVENTS = [
   {
-    id: 'halloween-chateau-2026',
-    title: {
-      fr: 'Halloween au Château de Morges',
-      en: 'Halloween at Morges Castle',
-      de: 'Halloween im Schloss Morges',
-      it: 'Halloween al Castello di Morges',
-    },
-    startDate: '2026-10-31',
-    endDate: '2026-10-31',
-    placeId: 'chateau',
-    hours: {
-      fr: 'De 15 h à 22 h.',
-      en: '3 pm to 10 pm.',
-      de: '15 bis 22 Uhr.',
-      it: 'Dalle 15 alle 22.',
-    },
-    summary: {
-      fr: 'Le château fête Halloween : sculpture de courges, jeu du Loup-Garou, Cirque Coquino et ateliers dans les jardins ; projections par âge dans le donjon (dès 15 h pour les 5–8 ans, adultes dès 19 h 15) ; contes et lectures de la Bibliothèque de Morges dans les caves ; parcours à la bougie sur les procès de sorcellerie, de 17 h à 21 h ; grand spectacle de clôture à 21 h par la Cie du Petit Grimoire. Soupe et marshmallows grillés dès 18 h, restauration sur place. Costumes bienvenus. Jardins et caves accessibles aux personnes à mobilité réduite.',
-      en: 'The castle celebrates Halloween: pumpkin carving, a Werewolf game, the Cirque Coquino and workshops in the gardens; screenings by age group in the keep (from 3 pm for ages 5–8, adults from 7.15 pm); tales and readings by the Morges library in the cellars; a candlelit trail on the witch trials, 5 pm to 9 pm; a closing show at 9 pm by the Cie du Petit Grimoire. Soup and toasted marshmallows from 6 pm, food on site. Costumes welcome. Gardens and cellars accessible to people with reduced mobility.',
-      de: 'Das Schloss feiert Halloween: Kürbisschnitzen, ein Werwolf-Spiel, der Cirque Coquino und Workshops in den Gärten; Filmvorführungen nach Altersgruppen im Bergfried (ab 15 Uhr für 5- bis 8-Jährige, Erwachsene ab 19.15 Uhr); Märchen und Lesungen der Bibliothek Morges in den Kellern; ein Rundgang bei Kerzenlicht zu den Hexenprozessen, 17 bis 21 Uhr; Abschlussvorstellung um 21 Uhr mit der Cie du Petit Grimoire. Suppe und geröstete Marshmallows ab 18 Uhr, Verpflegung vor Ort. Kostüme willkommen. Gärten und Keller sind für Menschen mit eingeschränkter Mobilität zugänglich.',
-      it: 'Il castello festeggia Halloween: zucche da intagliare, il gioco del Lupo Mannaro, il Cirque Coquino e laboratori nei giardini; proiezioni per fasce d’età nel torrione (dalle 15 per i 5–8 anni, adulti dalle 19.15); racconti e letture della Biblioteca di Morges nelle cantine; un percorso a lume di candela sui processi alle streghe, dalle 17 alle 21; spettacolo di chiusura alle 21 con la Cie du Petit Grimoire. Zuppa e marshmallow arrostiti dalle 18, ristorazione sul posto. Costumi benvenuti. Giardini e cantine accessibili alle persone con mobilità ridotta.',
-    },
-    sources: [
-      { label: 'Château de Morges — Halloween au Château de Morges', url: 'https://chateau-morges.ch/agenda/agenda-detail/news/halloween-au-chateau-de-morges/' },
-    ],
-    lastVerified: '2026-10-28',
-  },
-  {
     id: 'beausobre-zip-zap-circus-2026',
     title: {
       fr: 'Zip Zap Circus',
