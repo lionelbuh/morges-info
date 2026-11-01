@@ -184,7 +184,8 @@ test('structured data: site, events and stories are described for search engines
   expect(market.location.name).toBe('Château de Morges');
   expect(life.find((d) => d.name === 'Solann')).toMatchObject({ '@type': 'Event', startDate: '2026-11-21', description: expect.stringContaining('Solann') });
   const stories = await types('/recits/?lang=en');
-  expect(stories[0]).toMatchObject({ '@type': 'Article', headline: 'Why Bern built a harbour in Morges', inLanguage: 'en' });
+  expect(stories[0]).toMatchObject({ '@type': 'Article', headline: 'Stravinsky in Morges: five years on the shore of Lake Geneva', inLanguage: 'en' });
+  expect(stories[1]).toMatchObject({ '@type': 'Article', headline: 'Why Bern built a harbour in Morges', inLanguage: 'en' });
 });
 
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
@@ -495,12 +496,17 @@ test('language switch translates the page and carries over to other pages', asyn
   await expect(page.locator('main h1')).toHaveText(de.history.title);
 });
 
-test('stories are translated: no French-only notice in any language', async ({ page }) => {
-  for (const [lang, title] of [['en', 'Why Bern built a harbour in Morges'], ['de', 'Warum Bern in Morges einen Hafen baute'], ['it', 'Perché Berna costruì un porto a Morges']]) {
+test('stories are translated: no French-only notice in any language; the older one is archived', async ({ page }) => {
+  for (const [lang, title, archived] of [
+    ['en', 'Stravinsky in Morges: five years on the shore of Lake Geneva', 'Why Bern built a harbour in Morges'],
+    ['de', 'Strawinsky in Morges: fünf Jahre am Ufer des Genfersees', 'Warum Bern in Morges einen Hafen baute'],
+    ['it', 'Stravinskij a Morges: cinque anni sulle rive del Lemano', 'Perché Berna costruì un porto a Morges'],
+  ]) {
     await page.goto(`/recits/?lang=${lang}`);
-    await expect(page.locator('.story-title')).toHaveText(title);
+    await expect(page.locator('.story-title')).toHaveText([title, archived]);
+    await expect(page.locator('.stories-archive .story-title')).toHaveText(archived);
     await expect(page.locator('.story .notice-lang')).toHaveCount(0);
-    await expect(page.locator('.story-title')).not.toHaveAttribute('lang', 'fr');
+    await expect(page.locator('.story-title[lang="fr"]')).toHaveCount(0);
   }
 });
 

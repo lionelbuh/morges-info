@@ -243,6 +243,7 @@ export default {
   stories: {
     title: 'Stories of Morges',
     intro: 'Stories of Morges, written from cited sources.',
+    archiveTitle: 'Story archive',
   },
   about: {
     title: 'Editorial charter',

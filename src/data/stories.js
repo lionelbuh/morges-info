@@ -5,8 +5,67 @@ import { validateText, validateSources, isIsoDate } from './schema.js';
  * Published stories are complete in fr, en, de and it (checked by the tests).
  * A draft may exist in French only: other languages then show the French text
  * with a notice, until a careful translation is added.
+ *
+ * Newest first. `featured`: the story shown on the home page and at the top of the
+ * stories page. `archived: true`: kept whole, under "Archives" (its link still works).
  */
 export const STORIES = [
+  {
+    id: 'stravinsky-morges',
+    title: {
+      fr: 'Stravinsky à Morges : cinq ans au bord du Léman',
+      en: 'Stravinsky in Morges: five years on the shore of Lake Geneva',
+      de: 'Strawinsky in Morges: fünf Jahre am Ufer des Genfersees',
+      it: 'Stravinskij a Morges: cinque anni sulle rive del Lemano',
+    },
+    summary: {
+      fr: 'Pendant la Première Guerre mondiale, le compositeur russe Igor Stravinsky vit à Morges avec sa famille, de 1915 à 1920. C’est ici qu’il achève Les Noces et compose L’Histoire du soldat.',
+      en: 'During the First World War, the Russian composer Igor Stravinsky lived in Morges with his family, from 1915 to 1920. It was here that he completed Les Noces and composed L’Histoire du soldat.',
+      de: 'Während des Ersten Weltkriegs lebte der russische Komponist Igor Strawinsky mit seiner Familie von 1915 bis 1920 in Morges. Hier vollendete er Les Noces und komponierte L’Histoire du soldat.',
+      it: 'Durante la Prima guerra mondiale il compositore russo Igor Stravinskij visse a Morges con la famiglia, dal 1915 al 1920. Fu qui che completò Les Noces e compose L’Histoire du soldat.',
+    },
+    body: {
+      fr: [
+        'Installé en Suisse romande au début de la Première Guerre mondiale, le compositeur russe Igor Stravinsky s’établit à Morges avec sa famille en 1915.',
+        'La famille habite d’abord la villa Rogivue, au bord du lac, devenue aujourd’hui l’hôtel « La Maison d’Igor ». De 1917 à 1920, elle loge au deuxième étage de la grande maison Bornand, place Saint-Louis, face au temple.',
+        'À Morges, Stravinsky achève Renard et, le 4 avril 1917, la première partition des Noces. L’écrivain vaudois Charles-Ferdinand Ramuz, que lui a présenté le chef d’orchestre Ernest Ansermet, traduit en français les textes russes de ces deux œuvres.',
+        'Avec Ramuz, il compose ensuite L’Histoire du soldat : la partition est datée « Morges, 6 avril – 23 septembre 1918 ». L’œuvre est créée à Lausanne le 28 septembre 1918, sous la direction d’Ansermet, dans des décors du peintre René Auberjonois.',
+        'En 1920, peu après avoir terminé le ballet Pulcinella, Stravinsky quitte Morges pour la France. Un quai de la ville, au débarcadère, porte aujourd’hui son nom.',
+      ],
+      en: [
+        'Settled in French-speaking Switzerland when the First World War broke out, the Russian composer Igor Stravinsky moved to Morges with his family in 1915.',
+        'The family first lived in the Villa Rogivue, by the lake, which is now the hotel “La Maison d’Igor”. From 1917 to 1920 they lived on the second floor of the large Maison Bornand, on Place Saint-Louis, opposite the temple.',
+        'In Morges, Stravinsky completed Renard and, on 4 April 1917, the first score of Les Noces. The Vaud writer Charles-Ferdinand Ramuz, whom the conductor Ernest Ansermet had introduced to him, translated the Russian texts of both works into French.',
+        'With Ramuz he then wrote L’Histoire du soldat: the score is dated “Morges, 6 April – 23 September 1918”. The work was first performed in Lausanne on 28 September 1918, conducted by Ansermet, with sets by the painter René Auberjonois.',
+        'In 1920, shortly after finishing the ballet Pulcinella, Stravinsky left Morges for France. A quay in the town, at the landing stage, bears his name today.',
+      ],
+      de: [
+        'Der russische Komponist Igor Strawinsky, der sich bei Ausbruch des Ersten Weltkriegs in der Westschweiz aufhielt, liess sich 1915 mit seiner Familie in Morges nieder.',
+        'Die Familie wohnte zuerst in der Villa Rogivue am Seeufer, heute das Hotel «La Maison d’Igor». Von 1917 bis 1920 lebte sie im zweiten Stock des grossen Hauses Bornand an der Place Saint-Louis, gegenüber der Kirche.',
+        'In Morges vollendete Strawinsky Renard und am 4. April 1917 die erste Partitur von Les Noces. Der Waadtländer Schriftsteller Charles-Ferdinand Ramuz, den ihm der Dirigent Ernest Ansermet vorgestellt hatte, übersetzte die russischen Texte beider Werke ins Französische.',
+        'Mit Ramuz schrieb er danach L’Histoire du soldat: Die Partitur ist datiert «Morges, 6. April – 23. September 1918». Das Werk wurde am 28. September 1918 in Lausanne uraufgeführt, unter der Leitung von Ansermet und mit Bühnenbildern des Malers René Auberjonois.',
+        '1920, kurz nach der Vollendung des Balletts Pulcinella, verliess Strawinsky Morges in Richtung Frankreich. Ein Quai der Stadt, bei der Schiffsanlegestelle, trägt heute seinen Namen.',
+      ],
+      it: [
+        'Stabilitosi nella Svizzera romanda allo scoppio della Prima guerra mondiale, il compositore russo Igor Stravinskij si trasferì a Morges con la famiglia nel 1915.',
+        'La famiglia abitò dapprima nella villa Rogivue, in riva al lago, oggi l’albergo «La Maison d’Igor». Dal 1917 al 1920 visse al secondo piano della grande casa Bornand, in place Saint-Louis, di fronte al tempio.',
+        'A Morges Stravinskij completò Renard e, il 4 aprile 1917, la prima partitura di Les Noces. Lo scrittore vodese Charles-Ferdinand Ramuz, che gli era stato presentato dal direttore d’orchestra Ernest Ansermet, tradusse in francese i testi russi delle due opere.',
+        'Con Ramuz scrisse poi L’Histoire du soldat: la partitura è datata «Morges, 6 aprile – 23 settembre 1918». L’opera fu rappresentata per la prima volta a Losanna il 28 settembre 1918, diretta da Ansermet, con le scene del pittore René Auberjonois.',
+        'Nel 1920, poco dopo aver terminato il balletto Pulcinella, Stravinskij lasciò Morges per la Francia. Una banchina della città, all’imbarcadero, porta oggi il suo nome.',
+      ],
+    },
+    placeIds: ['temple', 'debarcadere-cgn'],
+    sources: [
+      { label: '24 heures — Et Stravinsky devint Vaudois', url: 'https://www.24heures.ch/et-stravinsky-devint-vaudois-240619274060' },
+      { label: 'immobilier.ch — Igor Stravinsky, le Russe qui devint vaudois', url: 'https://www.immobilier.ch/fr/actualite/igor-stravinsky-le-russe-qui-devint-vaudois' },
+      { label: '24 heures — Igor Stravinsky est mort il y a 50 ans', url: 'https://www.24heures.ch/igor-stravinsky-est-mort-il-y-a-50-ans-328651569167' },
+      { label: 'IRCAM, Brahms — Les Noces', url: 'https://brahms.ircam.fr/en/works/work/12219' },
+      { label: 'IRCAM — Histoire du soldat (1918)', url: 'https://ressources.ircam.fr/fr/work/histoire-du-soldat' },
+      { label: 'BCU Lausanne — Stravinsky and his “Waldensian” ballets', url: 'https://www.bcu-lausanne.ch/en/selections-en/tour-de-danse-2-5-stravinsky-and-his-waldensian-ballets/' },
+    ],
+    published: '2026-11-01',
+    featured: true,
+  },
   {
     id: 'port-bernois',
     title: {
@@ -54,7 +113,7 @@ export const STORIES = [
       { label: 'ADAC Skipper-Portal — Port de Morges', url: 'https://skipper.adac.de/en/marinas/port-de-morges-2/' },
     ],
     published: '2026-10-15',
-    featured: true,
+    archived: true,
   },
 ];
 
@@ -67,6 +126,7 @@ export function validateStory(story) {
   errors.push(...validateText(story && story.body, `${p}.body`));
   errors.push(...validateSources(story && story.sources, `${p}.sources`));
   if (!story || !isIsoDate(story.published)) errors.push(`${p}.published must be YYYY-MM-DD`);
+  if (story && story.featured && story.archived) errors.push(`${p}: an archived story cannot be featured`);
   return errors;
 }
 

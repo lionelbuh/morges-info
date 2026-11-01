@@ -243,6 +243,7 @@ export default {
   stories: {
     title: 'Racconti di Morges',
     intro: 'Storie di Morges, scritte a partire da fonti citate.',
+    archiveTitle: 'Archivio dei racconti',
   },
   about: {
     title: 'Carta redazionale',
