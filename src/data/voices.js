@@ -51,6 +51,19 @@ export const VOICE_TOPICS = [
           de: 'Die Sitzbank rund um den Baumstamm an der Kreuzung von Grand-Rue und Rue Centrale, vor dem Manor. Dort kann ich den ganzen Tag sitzen und die Welt vergessen.',
           it: 'La panchina intorno al tronco dell’albero, all’incrocio tra la Grand-Rue e la Rue Centrale, davanti a Manor. Posso starci tutto il giorno e dimenticare il mondo.',
         },
+        replies: [
+          {
+            id: 'banc-arbre-grand-rue-r1',
+            name: 'Christiane M.',
+            date: '2026-11-02',
+            text: {
+              fr: 'C’est vrai, ce banc voit passer énormément de monde ! Un endroit idéal pour se reposer, lire un peu et observer toutes les petites scènes de la vie morgienne au fil de la journée. Je me demande depuis combien de temps ce banc existe à cet endroit !',
+              en: 'It’s true, an awful lot of people pass by this bench! An ideal spot to rest, read a little and watch all the small scenes of Morges life through the day. I wonder how long this bench has been here!',
+              de: 'Stimmt, an dieser Bank kommen unglaublich viele Leute vorbei! Ein idealer Ort, um sich auszuruhen, ein wenig zu lesen und den ganzen Tag über die kleinen Szenen des Lebens in Morges zu beobachten. Ich frage mich, seit wann diese Bank wohl hier steht!',
+              it: 'È vero, davanti a questa panchina passa tantissima gente! Un posto ideale per riposarsi, leggere un po’ e osservare tutte le piccole scene della vita di Morges nel corso della giornata. Mi chiedo da quanto tempo questa panchina si trovi qui!',
+            },
+          },
+        ],
       },
       {
         id: 'piscine-souvenirs',
