@@ -1,4 +1,9 @@
 {
+  "/images/photos/casino-morges-1930.webp": {
+    "src": "/images/share/casino-morges-1930.jpg",
+    "width": 579,
+    "height": 472
+  },
   "/images/photos/college-couvaloup-1904.webp": {
     "src": "/images/share/college-couvaloup-1904.jpg",
     "width": 1200,
@@ -18,6 +23,11 @@
     "src": "/images/share/garage-sama-total-1960s.jpg",
     "width": 1200,
     "height": 708
+  },
+  "/images/photos/maison-blanchenay-cour-1905.webp": {
+    "src": "/images/share/maison-blanchenay-cour-1905.jpg",
+    "width": 1200,
+    "height": 1654
   },
   "/images/photos/morges-aerien-1963.webp": {
     "src": "/images/share/morges-aerien-1963.jpg",
