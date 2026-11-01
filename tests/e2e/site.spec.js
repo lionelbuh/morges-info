@@ -575,4 +575,8 @@ test('SEO files: sitemap lists every page, robots points to it', async ({ reques
   for (const p of PAGES.filter((x) => x.listed !== false)) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
   const robots = await (await request.get('/robots.txt')).text();
   expect(robots).toContain('Sitemap: https://morges.info/sitemap.xml');
+  expect(robots).toContain('User-agent: GPTBot');
+  const llms = await request.get('/llms.txt');
+  expect(llms.status()).toBe(200);
+  expect(await llms.text()).toContain('# Morges.info');
 });

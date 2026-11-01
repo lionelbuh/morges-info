@@ -5,7 +5,7 @@ import { renderMain, CONTENT_PAGE_IDS } from '../../src/site/pages.js';
 import { renderHeader, renderHeadTags } from '../../src/site/layout.js';
 import { pageHref, placeHref } from '../../src/site/links.js';
 import { formatToday } from '../../src/site/format.js';
-import { renderMarkers, sitemapXml, robotsTxt } from '../../build/site-plugin.js';
+import { renderMarkers, sitemapXml, robotsTxt, llmsTxt, AI_CRAWLERS } from '../../build/site-plugin.js';
 
 describe('site pages', () => {
   beforeEach(() => setLang('fr', { persist: false }));
@@ -117,5 +117,14 @@ describe('site pages', () => {
     for (const p of PAGES.filter((x) => x.listed !== false)) expect(sitemap).toContain(`<loc>https://morges.info${p.path}</loc>`);
     expect(sitemap).not.toContain('404');
     expect(robotsTxt()).toContain('Sitemap: https://morges.info/sitemap.xml');
+    expect(robotsTxt()).not.toContain('Disallow');
+    for (const bot of ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'PerplexityBot']) expect(AI_CRAWLERS).toContain(bot);
+    for (const bot of AI_CRAWLERS) expect(robotsTxt()).toContain(`User-agent: ${bot}\n`);
+    const llms = llmsTxt();
+    expect(llms.startsWith('# Morges.info\n\n> ')).toBe(true);
+    expect(llms).toContain('(https://morges.info/parole-aux-morgiens/)');
+    expect(llms).toContain('(https://morges.info/lieux/chateau/)');
+    expect(llms).toContain('(https://morges.info/photos/vue-port-jetee/)');
+    expect(llms).toContain('(https://morges.info/recits/#stravinsky-morges)');
   });
 });
