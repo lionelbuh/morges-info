@@ -2640,6 +2640,7 @@ body.page-map {
 }
 .voice-text {
   margin: 0 0 6px;
+  overflow-wrap: anywhere;
   font-family: var(--serif);
   font-size: 1.05rem;
   line-height: 1.55;
@@ -2684,7 +2685,9 @@ body.page-map {
 }
 .voices-side {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 28px;
+  min-width: 0;
 }
 @media (min-width: 901px) {
   .voices-side {
@@ -2717,6 +2720,7 @@ body.page-map {
 }
 .voice-form .field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* Safari sizes a <select> to its longest option otherwise */
   gap: 4px;
   margin: 0 0 14px;
 }
@@ -2728,6 +2732,8 @@ body.page-map {
 .voice-form select,
 .voice-form textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 9px 10px;
   border: 1px solid var(--stone-3);
   border-radius: var(--radius);
@@ -2755,7 +2761,7 @@ body.page-map {
   float: right;
 }
 .voice-form .field-check {
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
   gap: 10px;
 }
