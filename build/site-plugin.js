@@ -3,7 +3,7 @@
  *  - replaces <!--@head:id-->, <!--@header:id-->, <!--@main:id-->, <!--@footer:id-->
  *    in each HTML page with the French prerender, so search engines and
  *    visitors without JavaScript get real content;
- *  - emits sitemap.xml and robots.txt at build time;
+ *  - emits sitemap.xml, robots.txt and llms.txt at build time;
  *  - generates one HTML entry per place (lieux/<id>/index.html, from lieux/index.html) and per published
  *    photo viewpoint (photos/<id>/index.html, from photos/index.html); both git-ignored.
  * In the browser, src/site/client.js re-renders the same markup (language, dates).
@@ -17,6 +17,8 @@ import { ALL_PAGES, SITE_URL, placePageId, photoPageId } from '../src/site/confi
 import { PLACES, getPlace } from '../src/data/places.js';
 import { publishedViewpoints, getViewpoint, shownPhotos } from '../src/data/viewpoints.js';
 import { editorialSelection } from '../src/data/businesses.js';
+import { STORIES } from '../src/data/stories.js';
+import fr from '../src/i18n/locales/fr.js';
 
 const MARKER = /<!--@(head|header|main|footer):([a-z]+(?::[a-z0-9-]+)?)-->/g;
 
@@ -58,8 +60,59 @@ ${urls}
 `;
 }
 
+/**
+ * Assistants' search and training robots, named so the choice is explicit: all are allowed
+ * (owner's decision, 2026-11-01). The catch-all rule allows every other robot.
+ */
+export const AI_CRAWLERS = [
+  'OAI-SearchBot', 'ChatGPT-User', 'GPTBot', // OpenAI (ChatGPT)
+  'Claude-SearchBot', 'Claude-User', 'ClaudeBot', // Anthropic (Claude)
+  'Google-Extended', // Google (Gemini)
+  'PerplexityBot', 'Perplexity-User', // Perplexity
+  'Applebot-Extended', // Apple
+  'CCBot', // Common Crawl
+];
+
 export function robotsTxt() {
-  return `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+  const ai = AI_CRAWLERS.map((bot) => `User-agent: ${bot}`).join('\n');
+  return `User-agent: *\nAllow: /\n\n# AI assistants (search and training): allowed\n${ai}\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+}
+
+/** llms.txt (llmstxt.org): a plain summary of the site and its main pages, for AI assistants. */
+export function llmsTxt() {
+  setLang('fr', { persist: false });
+  const line = (id) => `- [${fr.pages[id].title.replace(/ — Morges\.info$/, '')}](${absoluteUrl(id)}): ${fr.pages[id].description}`;
+  const main = ['map', 'visit', 'photos', 'places', 'history', 'stories', 'life', 'businesses', 'voices', 'contribute'].map(line);
+  const places = PLACES.map((p) => `- [${p.name.fr}](${absoluteUrl(placePageId(p.id))})`);
+  const photos = publishedViewpoints().map((vp) => `- [${vp.title.fr}](${absoluteUrl(photoPageId(vp.id))})`);
+  const stories = STORIES.map((s) => `- [${s.title.fr}](${SITE_URL}/recits/#${s.id})`);
+  return `# Morges.info
+
+> ${fr.pages.home.description}
+
+Site indépendant, non commercial, consacré à la seule commune de Morges (Vaud, Suisse). Il n’est lié ni à la Ville de Morges ni à un parti politique. Chaque information cite sa source ; les photos indiquent leur auteur et leur licence. Contenu en français, aussi en anglais, allemand et italien (paramètre ?lang=en|de|it).
+
+## Pages principales
+
+${main.join('\n')}
+
+## Lieux
+
+${places.join('\n')}
+
+## Photos d’hier et d’aujourd’hui
+
+${photos.join('\n')}
+
+## Récits
+
+${stories.join('\n')}
+
+## À propos
+
+- [${fr.pages.about.title.replace(/ — Morges\.info$/, '')}](${absoluteUrl('about')}): ${fr.pages.about.description}
+- Contact : voir ${absoluteUrl('legal')}
+`;
 }
 
 /**
@@ -106,6 +159,7 @@ export function morgesSite() {
     generateBundle() {
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemapXml() });
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robotsTxt() });
+      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: llmsTxt() });
     },
   };
 }

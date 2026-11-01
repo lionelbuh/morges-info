@@ -12,6 +12,11 @@
 - **`sitemap.xml`** (toutes les pages, date de vérification des lieux) annoncé dans **`robots.txt`**.
 - **IndexNow** : à chaque publication, le workflow `deploy.yml` signale les adresses du sitemap à Bing, Yandex,
   Seznam, Naver… (clé publique dans `public/<clé>.txt`). Google lit le sitemap.
+- **Assistants IA** (ChatGPT, Claude, Gemini, Perplexity…) : `robots.txt` autorise nommément leurs robots de
+  recherche et d'entraînement (choix du propriétaire, 1er novembre 2026 ; liste `AI_CRAWLERS` dans
+  `build/site-plugin.js`). **`llms.txt`** (format llmstxt.org) résume le site et liste ses pages principales,
+  lieux, photos et récits ; il est généré à chaque build. Ces assistants cherchent via Google (Gemini), Bing
+  (ChatGPT, Copilot) ou leurs propres robots : être bien indexé dans Google et Bing reste l'essentiel.
 - Page 404 exclue de l'index ; site rapide (images AVIF/WebP, polices locales, carte chargée à la demande).
 
 ## À faire par le propriétaire (une fois)
