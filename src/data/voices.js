@@ -52,6 +52,17 @@ export const VOICE_TOPICS = [
           it: 'La panchina intorno al tronco dell’albero, all’incrocio tra la Grand-Rue e la Rue Centrale, davanti a Manor. Posso starci tutto il giorno e dimenticare il mondo.',
         },
       },
+      {
+        id: 'piscine-souvenirs',
+        name: 'Lionel',
+        date: '2026-11-01',
+        text: {
+          fr: 'La piscine de Morges me rappelle d’excellents souvenirs avec mes deux enfants. J’adorais y aller vers 17 h, lorsque la piscine se vidait peu à peu de ses visiteurs. Nous avions alors presque l’impression d’avoir la piscine pour nous seuls. Et cette vue magique sur le lac Léman depuis notre linge de bain… Des moments simples, mais inoubliables ! ❤️',
+          en: 'The Morges swimming pool brings back wonderful memories with my two children. I loved going there around 5 pm, when the pool was slowly emptying of visitors. We almost felt as if we had the pool to ourselves. And that magical view of Lake Geneva from our beach towel… Simple but unforgettable moments! ❤️',
+          de: 'Das Schwimmbad von Morges weckt wunderbare Erinnerungen an die Zeit mit meinen zwei Kindern. Am liebsten ging ich gegen 17 Uhr hin, wenn sich das Bad nach und nach leerte. Dann hatten wir fast das Gefühl, das Schwimmbad für uns allein zu haben. Und diese zauberhafte Sicht auf den Genfersee von unserem Badetuch aus… Einfache, aber unvergessliche Momente! ❤️',
+          it: 'La piscina di Morges mi ricorda momenti splendidi con i miei due figli. Adoravo andarci verso le 17, quando la piscina si svuotava a poco a poco. Avevamo quasi l’impressione di avere la piscina tutta per noi. E quella vista magica sul Lemano dal nostro telo da bagno… Momenti semplici, ma indimenticabili! ❤️',
+        },
+      },
     ],
   },
   {
