@@ -243,6 +243,7 @@ export default {
   stories: {
     title: 'Geschichten aus Morges',
     intro: 'Geschichten aus Morges, verfasst auf Grundlage zitierter Quellen.',
+    archiveTitle: 'Archiv der Geschichten',
   },
   about: {
     title: 'Redaktionelle Grundsätze',

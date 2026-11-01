@@ -260,10 +260,21 @@ function renderLife({ today } = {}) {
   </section>`;
 }
 
+/** Current stories first, then the archived ones (whole, so their links keep working). */
 function renderStories() {
+  const current = STORIES.filter((s) => !s.archived);
+  const archived = STORIES.filter((s) => s.archived);
   return `${STORIES.map((s) => jsonLd(storySchema(s))).join('')}
   ${pageIntro(t('stories.title'), t('stories.intro'))}
-  <div class="stories">${STORIES.map(storyArticle).join('')}</div>`;
+  <div class="stories">${current.map(storyArticle).join('')}</div>
+  ${
+    archived.length
+      ? `<section class="section stories-archive" aria-labelledby="stories-archive">
+    ${sectionHead('stories-archive', t('stories.archiveTitle'))}
+    <div class="stories">${archived.map(storyArticle).join('')}</div>
+  </section>`
+      : ''
+  }`;
 }
 
 function renderAbout() {

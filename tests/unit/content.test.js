@@ -140,7 +140,8 @@ describe('content model', () => {
   });
 
   it('has a featured story and no unverified "then and now" pairs', () => {
-    expect(featuredStory().id).toBe('port-bernois');
+    expect(featuredStory().id).toBe('stravinsky-morges');
+    expect(STORIES.find((s) => s.id === 'port-bernois').archived).toBe(true);
     expect(THEN_AND_NOW).toEqual([]);
   });
 });
