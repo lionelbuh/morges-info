@@ -250,13 +250,23 @@ test('Parole aux Morgiens: the questions, the charter, and a message sent withou
   await page.goto('/');
   // the home page shows the latest message and leads to the page
   await expect(page.locator('#home-voices')).toHaveText(fr.voices.title);
-  await expect(page.locator('.home-voice-text')).toHaveCount(1);
+  // the latest messages take turns: one shown, the next one with ›
+  const slides = page.locator('[data-voice-slide]');
+  expect(await slides.count()).toBeGreaterThan(1);
+  await expect(page.locator('[data-voice-slide]:visible')).toHaveCount(1);
+  const first = await page.locator('[data-voice-slide]:visible .home-voice-text').textContent();
+  await page.locator('[data-voice-step="1"]').click();
+  await expect(page.locator('[data-voice-slide]:visible')).toHaveCount(1);
+  await expect(page.locator('[data-voice-slide]:visible .home-voice-text')).not.toHaveText(first);
+  await expect(page.locator('[data-voice-pos]')).toContainText('2 /');
   await expect(page.locator('.home-voices-questions li')).toHaveCount(3);
   await expect(page.locator('.home-voices a.btn')).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
   await (await navLink(page, fr.nav.voices)).click();
   await expect(page).toHaveURL(/\/parole-aux-morgiens\/$/);
   await expect(page.locator('main h1')).toHaveText(fr.voices.title);
   await expect(page.locator('.voice-topic')).toHaveCount(4);
+  // under each question, the most recently active message first (a reply brings it up)
+  await expect(page.locator('#sujet-coin-prefere .voice-list > .voice-msg').first()).toHaveAttribute('id', 'm-banc-arbre-grand-rue');
   await expect(page.locator('.voice-charter li')).toHaveCount(8);
   await expect(page.locator('.voice-form input[type="email"]')).toHaveCount(0);
 

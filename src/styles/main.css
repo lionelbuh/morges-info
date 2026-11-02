@@ -3081,3 +3081,36 @@ body.page-map {
   color: var(--red);
   text-decoration: underline;
 }
+.home-voice[hidden] {
+  display: none;
+}
+.home-voices-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.home-voices-controls[hidden],
+.home-voices-btn[hidden] {
+  display: none;
+}
+.home-voices-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+.home-voices-btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.home-voices-pos {
+  min-width: 3.5em;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  text-align: center;
+}
