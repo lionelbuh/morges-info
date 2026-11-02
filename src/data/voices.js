@@ -186,9 +186,31 @@ export function allVoiceMessages(topics = VOICE_TOPICS) {
 }
 
 
-/** The most recent published message or reply, with its topic (home page). Null when none is published. */
-export function latestVoice(topics = VOICE_TOPICS) {
+/** Newest first; on the same day, the one listed last (added last) first. */
+function newestFirst(items, dateOf) {
+  return items
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => dateOf(b.item).localeCompare(dateOf(a.item)) || b.index - a.index)
+    .map(({ item }) => item);
+}
+
+/** Date of the latest activity on a message: its own date or that of its newest reply. */
+export function activityDate(message) {
+  return [message.date, ...(message.replies || []).map((r) => r.date)].sort().pop();
+}
+
+/** A topic's messages, the most recently active first (a new reply brings its message to the top). */
+export function messagesByActivity(topic) {
+  return newestFirst(topic.messages, activityDate);
+}
+
+/** The most recent published messages and replies, with their topic, newest first (home page). */
+export function recentVoices(limit = 5, topics = VOICE_TOPICS) {
   const all = topics.flatMap((topic) => topic.messages.flatMap((m) => [m, ...(m.replies || [])].map((message) => ({ message, topic }))));
-  // newest date first; on the same day, the one listed last (added last) wins
-  return all.reduce((best, item) => (!best || item.message.date >= best.message.date ? item : best), null);
+  return newestFirst(all, (item) => item.message.date).slice(0, limit);
+}
+
+/** The most recent published message or reply, with its topic. Null when none is published. */
+export function latestVoice(topics = VOICE_TOPICS) {
+  return recentVoices(1, topics)[0] || null;
 }

@@ -6,7 +6,7 @@
  */
 import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
-import { VOICE_TOPICS, VOICE_LIMITS, latestVoice } from '../data/voices.js';
+import { VOICE_TOPICS, VOICE_LIMITS, recentVoices, messagesByActivity } from '../data/voices.js';
 import { SITE_URL, CONTACT_EMAIL, VOICES_FORM_KEY, VOICES_FORM_ENDPOINT, getPage } from './config.js';
 import { pageHref } from './links.js';
 import { formatDate } from './format.js';
@@ -42,7 +42,7 @@ function topicSection(topic) {
   const count = topic.messages.length;
   const countLabel = count ? t(count === 1 ? 'voices.countOne' : 'voices.countOther', { n: count }) : '';
   const list = count
-    ? `<div class="voice-list">${topic.messages.map((m) => message(m, topic)).join('')}</div>`
+    ? `<div class="voice-list">${messagesByActivity(topic).map((m) => message(m, topic)).join('')}</div>`
     : `<p class="empty-note">${e(t('voices.empty'))}</p>`;
   return `<section class="voice-topic${topic.free ? ' voice-topic--free' : ''}" id="${topicAnchor(topic)}" aria-labelledby="${topicAnchor(topic)}-q">
     <h2 id="${topicAnchor(topic)}-q">${e(localized(topic.question))}</h2>
@@ -119,17 +119,31 @@ export function renderVoices() {
   </div>`;
 }
 
-/** Home page: the latest published message and the open questions, with a way in. */
+/** One message quoted on the home page, with its question, name and date. */
+function homeQuote({ message: m, topic }, href, lang, index) {
+  return `<figure class="home-voice" data-voice-slide${index ? ' hidden' : ''}>
+        <p class="home-voice-topic"><a href="${href}#${topicAnchor(topic)}">${e(localized(topic.question))}</a></p>
+        <blockquote class="home-voice-text"><p>${e(localized(m.text))}</p></blockquote>
+        <figcaption class="voice-by"><span class="voice-name">${e(m.name)}</span>${m.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : ''} · <time datetime="${m.date}">${e(formatDate(m.date, lang))}</time>${translatedNote(m) ? ` · ${translatedNote(m)}` : ''}</figcaption>
+      </figure>`;
+}
+
+/** Home page: the latest messages taking turns, the open questions, and a way in. */
 export function homeVoices() {
   const lang = getLang();
   const href = pageHref('voices', lang);
-  const latest = latestVoice();
-  const quote = latest
-    ? `<figure class="home-voice">
-        <p class="home-voice-topic"><a href="${href}#${topicAnchor(latest.topic)}">${e(localized(latest.topic.question))}</a></p>
-        <blockquote class="home-voice-text"><p>${e(localized(latest.message.text))}</p></blockquote>
-        <figcaption class="voice-by"><span class="voice-name">${e(latest.message.name)}</span>${latest.message.editor ? ` <span class="voice-editor">${e(t('voices.editorBadge'))}</span>` : ''} · <time datetime="${latest.message.date}">${e(formatDate(latest.message.date, lang))}</time>${translatedNote(latest.message) ? ` · ${translatedNote(latest.message)}` : ''}</figcaption>
-      </figure>`
+  const recent = recentVoices(5);
+  const controls =
+    recent.length > 1
+      ? `<div class="home-voices-controls" data-voice-controls hidden>
+          <button type="button" class="home-voices-btn" data-voice-step="-1" aria-label="${e(t('common.previous'))}">‹</button>
+          <span class="home-voices-pos" data-voice-pos aria-live="polite">1 / ${recent.length}</span>
+          <button type="button" class="home-voices-btn" data-voice-step="1" aria-label="${e(t('common.next'))}">›</button>
+          <button type="button" class="home-voices-btn home-voices-pause" data-voice-pause aria-pressed="false">${e(t('home.photosPause'))}</button>
+        </div>`
+      : '';
+  const quote = recent.length
+    ? `<div class="home-voices-rotator" data-voice-rotator>${recent.map((item, i) => homeQuote(item, href, lang, i)).join('')}${controls}</div>`
     : '';
   const questions = VOICE_TOPICS.filter((topic) => !topic.free)
     .map((topic) => `<li><a href="${href}#${topicAnchor(topic)}">${e(localized(topic.question))}</a></li>`)
@@ -149,6 +163,49 @@ export function homeVoices() {
       </div>
     </div>
   </section>`;
+}
+
+/* ---------- Browser: the home page's messages take turns ---------- */
+
+const ROTATE_MS = 8000;
+let rotateTimer = null;
+
+/**
+ * Home: the latest messages take turns every 8 seconds, with ‹ › and pause buttons. They wait while
+ * the pointer or keyboard focus is on them, and never move for visitors who ask for reduced motion.
+ */
+export function startVoiceRotator() {
+  clearInterval(rotateTimer);
+  const box = document.querySelector('[data-voice-rotator]');
+  const slides = box ? [...box.querySelectorAll('[data-voice-slide]')] : [];
+  if (slides.length < 2) return;
+  const controls = box.querySelector('[data-voice-controls]');
+  const pause = box.querySelector('[data-voice-pause]');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  controls.hidden = false;
+  pause.hidden = reduced;
+  let index = 0;
+  let paused = false;
+  let hovered = false;
+  const show = (i) => {
+    index = (i + slides.length) % slides.length;
+    slides.forEach((slide, n) => (slide.hidden = n !== index));
+    box.querySelector('[data-voice-pos]').textContent = `${index + 1} / ${slides.length}`;
+  };
+  box.querySelectorAll('[data-voice-step]').forEach((btn) => btn.addEventListener('click', () => show(index + Number(btn.dataset.voiceStep))));
+  pause.addEventListener('click', () => {
+    paused = !paused;
+    pause.setAttribute('aria-pressed', String(paused));
+    pause.textContent = t(paused ? 'home.photosPlay' : 'home.photosPause');
+  });
+  box.addEventListener('mouseenter', () => (hovered = true));
+  box.addEventListener('mouseleave', () => (hovered = false));
+  box.addEventListener('focusin', () => (hovered = true));
+  box.addEventListener('focusout', () => (hovered = false));
+  if (reduced) return;
+  rotateTimer = setInterval(() => {
+    if (!paused && !hovered && document.visibilityState === 'visible') show(index + 1);
+  }, ROTATE_MS);
 }
 
 /* ---------- Browser: form handling ---------- */

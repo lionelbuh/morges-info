@@ -6,7 +6,7 @@ import { initChrome, renderChrome } from './chrome.js';
 import { renderMain, homePhotoViewpoints } from './pages.js';
 import { placeHref, photoMapHref } from './links.js';
 import { initCompare, photoMarker, homePhotoCard } from './photos.js';
-import { initVoices, saveVoiceDraft, restoreVoiceDraft } from './voices.js';
+import { initVoices, saveVoiceDraft, restoreVoiceDraft, startVoiceRotator } from './voices.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
@@ -183,6 +183,7 @@ function render() {
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
+    startVoiceRotator();
   }
   if (pageId === 'legal') syncAnalyticsControl();
   const filters = document.querySelector('.biz-filters');

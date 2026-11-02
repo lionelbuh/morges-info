@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { VOICE_TOPICS, validateTopic, allVoiceMessages, latestVoice } from '../../src/data/voices.js';
+import { VOICE_TOPICS, validateTopic, allVoiceMessages, latestVoice, recentVoices, messagesByActivity } from '../../src/data/voices.js';
 import { setLang } from '../../src/i18n/index.js';
 
 const text = (fr) => ({ fr, en: `${fr} (en)`, de: `${fr} (de)`, it: `${fr} (it)` });
@@ -24,6 +24,9 @@ describe('Parole aux Morgiens', () => {
     expect(latestVoice(topics).message.id).toBe('same-day-later');
     expect(latestVoice(topics).topic.id).toBe('b');
     expect(latestVoice([{ id: 'c', messages: [] }])).toBeNull();
+    expect(recentVoices(3, topics).map((x) => x.message.id)).toEqual(['same-day-later', 'reply', 'new']);
+    // a new reply brings its message to the top of its question
+    expect(messagesByActivity({ messages: [m('a', '2026-11-01'), m('b', '2026-11-03'), m('c', '2026-10-30', [m('c-r', '2026-11-04')])] }).map((x) => x.id)).toEqual(['c', 'b', 'a']);
   });
 
   it('rejects untranslated messages, full names and replies to replies', () => {
