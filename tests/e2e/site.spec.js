@@ -353,6 +353,7 @@ test('businesses: free directory with a type filter, a photo gallery and contact
   await expect(lucky.locator('.biz-where')).toContainText('Morges et environs');
   await expect(lucky.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveCount(0);
   await expect(lucky.locator('a[href="tel:+41763840137"]')).toBeVisible();
+  await expect(lucky.locator('a[href="https://www.luckycats.ch/"]')).toContainText('luckycats.ch');
   // type filter: "All" and the categories in use
   const filters = page.locator('.biz-filters');
   await expect(filters).toBeVisible();

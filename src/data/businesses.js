@@ -230,7 +230,7 @@ export const BUSINESSES = [
       },
       until: '2027-01-06',
     },
-    website: null,
+    website: 'https://www.luckycats.ch/',
     openingHours: null,
     photos: [
       {
@@ -299,7 +299,10 @@ export const BUSINESSES = [
         licence: 'Tous droits réservés, publié avec l’accord de Luckycats (02.11.2026)',
       },
     ],
-    sources: [{ label: 'Morges.info — informations et photos transmises par Luckycats, avec son accord (02.11.2026)' }],
+    sources: [
+      { label: 'Luckycats — site web', url: 'https://www.luckycats.ch/' },
+      { label: 'Morges.info — informations et photos transmises par Luckycats, avec son accord (02.11.2026)' },
+    ],
     lastVerified: '2026-11-02',
     editorial: { selected: true },
     commercial: { status: 'none' },
