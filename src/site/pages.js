@@ -125,6 +125,15 @@ function renderHome({ today, heroId } = {}) {
     </div>
   </section>
 
+  ${
+    businesses.length
+      ? `<section class="section" aria-labelledby="home-businesses">
+    ${sectionHead('home-businesses', t('home.businessesTitle'), { href: pageHref('businesses', lang), label: t('home.businessesCta') })}
+    <div class="grid grid-3">${businesses.map(businessCard).join('')}</div>
+  </section>`
+      : ''
+  }
+
   <section class="section" aria-labelledby="home-places">
     ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}
     <div class="grid grid-4">${places.map(placeCard).join('')}</div>
@@ -161,15 +170,7 @@ function renderHome({ today, heroId } = {}) {
     <p>${e(t('home.contributeText'))}</p>
     <a class="btn" href="${pageHref('contribute', lang)}">${e(t('home.contributeCta'))}</a>
   </section>
-
-  ${
-    businesses.length
-      ? `<section class="section" aria-labelledby="home-businesses">
-    ${sectionHead('home-businesses', t('home.businessesTitle'), { href: pageHref('businesses', lang), label: t('home.businessesCta') })}
-    <div class="grid grid-3">${businesses.map(businessCard).join('')}</div>
-  </section>`
-      : ''
-  }`;
+`;
 }
 
 /** Type filter (shown by client.js): "All" and each category that has at least one business. */

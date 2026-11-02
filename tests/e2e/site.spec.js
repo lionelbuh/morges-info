@@ -428,6 +428,9 @@ test('home: map preview with markers, places, practical info, businesses and fea
   // "Parole aux Morgiens" right after the opening: second button, first section
   await expect(page.locator('.hero-actions .btn').nth(1)).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
   await expect(page.locator('main .section h2').first()).toHaveAttribute('id', 'home-voices');
+  // then the photo map, then the businesses
+  await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-map');
+  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-businesses');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(12);
