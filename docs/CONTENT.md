@@ -48,10 +48,16 @@ Après vérification (idéalement sur place), ajouter une entrée dans `BUSINESS
 {
   id: 'nom-du-commerce',
   name: 'Nom officiel',
-  category: 'shop',                 // food | cafe | shop | crafts | services
-  address: 'Rue …, 1110 Morges',     // obligatoirement dans 1110 Morges
+  category: 'shops',                // health | food | shops | services | animals
+  person: 'Prénom Nom',             // facultatif : la personne qui tient le commerce
+  address: 'Rue …, 1110 Morges',     // obligatoirement dans 1110 Morges…
+  // serviceArea: { fr, en, de, it } // …ou, pour un service à domicile basé à Morges, la zone desservie
   coordinates: { lat: 46.5…, lng: 6.4… },
   description: { fr: 'Deux phrases écrites par la rédaction.' },
+  services: [{ title: { fr, en, de, it }, text: { fr, en, de, it } }], // facultatif : prestations
+  about: { fr, en, de, it },        // facultatif : parcours, formations, labels
+  note: { fr, en, de, it },         // facultatif : p. ex. « ne remplace pas un avis médical »
+  notice: { text: { fr, en, de, it }, until: '2027-01-06' }, // facultatif : avis temporaire, masqué après la date
   website: 'https://…',             // ou null
   openingHours: null,               // ou { text: { fr }, sources, lastVerified }
   photos: [],
@@ -62,7 +68,9 @@ Après vérification (idéalement sur place), ajouter une entrée dans `BUSINESS
 }
 ```
 
-Le bloc « Commerces indépendants » de l'accueil apparaît automatiquement dès la première entrée.
+Chaque commerce a sa fiche sur `/commerces/` : galerie (grande photo + vignettes, photos jamais recadrées),
+prestations, parcours et boutons de contact (appeler, e-mail, site, Instagram, itinéraire si adresse). Le bloc
+« Commerces indépendants » de l'accueil apparaît automatiquement dès la première entrée.
 
 ## Préparation à une monétisation future (rien n'est activé)
 

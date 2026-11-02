@@ -46,7 +46,10 @@ export function businessSchema(b) {
     '@type': b.category === 'health' ? 'HealthAndBeautyBusiness' : b.category === 'food' ? 'FoodEstablishment' : 'LocalBusiness',
     name: b.name,
     description: localized(b.description),
-    address: postalAddress(b.address),
+    ...(b.address
+      ? { address: postalAddress(b.address) }
+      : { address: { '@type': 'PostalAddress', addressLocality: 'Morges', addressCountry: 'CH' }, areaServed: localized(b.serviceArea) }),
+    ...(b.person && { founder: { '@type': 'Person', name: b.person } }),
     ...(b.phone && { telephone: b.phone }),
     ...(b.website && { url: b.website }),
     ...(b.instagram && { sameAs: [b.instagram] }),

@@ -327,68 +327,52 @@ test('visiting Morges: frequent questions answered from the site’s data, descr
   await expect(page.locator('#visit-market')).toHaveText(en.visit.q.market.q);
 });
 
-test('businesses: free directory with a type filter, carousels and contact details', async ({ page }) => {
+test('businesses: free directory with a type filter, a photo gallery and contact buttons', async ({ page }) => {
   await page.goto('/commerces/');
-  const card = page.locator('#business-amandine-reflexologie');
-  await expect(card.locator('.card-title')).toHaveText('Amandine Réflexologie');
-  await expect(card.locator('.business-photo img')).toHaveCount(4);
-  await expect(card.locator('.business-photo img').nth(1)).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
-  await expect(card.locator('a[href="tel:+41786062081"]')).toHaveText('+41 78 606 20 81');
-  await expect(card.locator('a[href="https://www.instagram.com/amandinereflexologie/"]')).toHaveText('@amandinereflexologie');
-  await expect(card.locator('a[href^="mailto:"]')).toHaveText('info@amandinereflexologie.ch');
-  await expect(card.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveAttribute('href', /Louis-de-Savoie%2029/);
-  // the e-mail address is not readable in the page source (harvesters)
-  expect(await (await page.request.get('/commerces/')).text()).not.toContain('info@amandinereflexologie.ch');
+  const profile = page.locator('#business-amandine-reflexologie');
+  await expect(profile.locator('.biz-name')).toHaveText('Amandine Réflexologie');
+  await expect(profile.locator('[data-gallery-thumb]')).toHaveCount(4);
+  await expect(profile.locator('a[href="tel:+41786062081"]')).toContainText('+41 78 606 20 81');
+  await expect(profile.locator('a[href="https://www.instagram.com/amandinereflexologie/"]')).toContainText('@amandinereflexologie');
+  await expect(profile.locator('a[href^="mailto:"]')).toContainText('info@amandinereflexologie.ch');
+  await expect(profile.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveAttribute('href', /Louis-de-Savoie%2029/);
+  await expect(profile.locator('.biz-service h4')).toHaveText(['Réflexologie', 'Reiki', 'Autres soins']);
+  // the e-mail addresses are not readable in the page source (harvesters)
+  const source = await (await page.request.get('/commerces/')).text();
+  expect(source).not.toContain('info@amandinereflexologie.ch');
+  expect(source).not.toContain('contact@luckycats.ch');
+  // gallery: a thumbnail shows its photo large, with its credit
+  const stage = profile.locator('.biz-stage img');
+  await expect(stage).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-salle-de-soins.webp');
+  await profile.locator('[data-gallery-thumb]').nth(1).click();
+  await expect(stage).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-flyer.webp');
+  await expect(profile.locator('[data-gallery-thumb]').nth(1)).toHaveAttribute('aria-pressed', 'true');
+  // a home-visit business: service area, no address or directions
+  const lucky = page.locator('#business-luckycats');
+  await expect(lucky.locator('.biz-person')).toHaveText('Estelle Franzone');
+  await expect(lucky.locator('.biz-where')).toContainText('Morges et environs');
+  await expect(lucky.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveCount(0);
+  await expect(lucky.locator('a[href="tel:+41763840137"]')).toBeVisible();
   // type filter: "All" and the categories in use
   const filters = page.locator('.biz-filters');
   await expect(filters).toBeVisible();
   await expect(filters.locator('[data-biz-filter=""]')).toHaveAttribute('aria-pressed', 'true');
-  await filters.locator('[data-biz-filter="health"]').click();
-  await expect(filters.locator('[data-biz-filter="health"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(card).toBeVisible();
+  await filters.locator('[data-biz-filter="animals"]').click();
+  await expect(filters.locator('[data-biz-filter="animals"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(lucky).toBeVisible();
+  await expect(profile).toBeHidden();
   await expect(page.locator('.biz-count')).toHaveText(fr.businesses.countOne.replace('{n}', '1'));
-  // her photos form a carousel: the next button scrolls to the second photo
-  const photos = card.locator('.carousel--photos');
-  await expect(photos.locator('.carousel-controls')).toBeVisible();
-  await photos.locator('[data-carousel-step="1"]').click();
-  await expect.poll(() => photos.locator('.carousel-track').evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
-  // a single business: no buttons on the list of businesses
-  await expect(page.locator('.carousel--cards > .carousel-controls')).toBeHidden();
   // described for search engines
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((s) => JSON.parse(s));
   expect(ld.find((d) => d.name === 'Amandine Réflexologie')).toMatchObject({ '@type': 'HealthAndBeautyBusiness', telephone: '+41 78 606 20 81' });
+  expect(ld.find((d) => d.name === 'Luckycats')).toMatchObject({ '@type': 'LocalBusiness', founder: { name: 'Estelle Franzone' } });
 });
 
-test('carousels move on by themselves every 5 seconds, and stop with the pause button', async ({ page }) => {
-  await page.clock.install();
-  await page.goto('/commerces/');
-  const photos = page.locator('#business-amandine-reflexologie .carousel--photos');
-  await photos.scrollIntoViewIfNeeded();
-  await page.mouse.move(0, 0);
-  const scroll = () => photos.locator('.carousel-track').evaluate((el) => el.scrollLeft);
-  expect(await scroll()).toBe(0);
-  await page.clock.runFor(5500);
-  await expect.poll(scroll).toBeGreaterThan(0);
-  // pause: it stays where it is
-  const pause = photos.locator('[data-carousel-toggle]');
-  await pause.click();
-  await expect(pause).toHaveAttribute('aria-pressed', 'true');
-  await page.mouse.move(0, 0);
-  await page.waitForTimeout(1000); // let the last smooth scroll finish
-  const before = await scroll();
-  await page.clock.runFor(16000);
-  expect(await scroll()).toBe(before);
-});
-
-test('carousels do not move for visitors who ask for reduced motion', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.clock.install();
-  await page.goto('/commerces/');
-  const photos = page.locator('#business-amandine-reflexologie .carousel--photos');
-  await photos.scrollIntoViewIfNeeded();
-  await expect(photos.locator('[data-carousel-toggle]')).toBeHidden();
-  await page.clock.runFor(11000);
-  expect(await photos.locator('.carousel-track').evaluate((el) => el.scrollLeft)).toBe(0);
+test('businesses in four languages: the new category and the profile headings are translated', async ({ page }) => {
+  await page.goto('/commerces/?lang=de');
+  await expect(page.locator('[data-biz-filter="animals"]')).toContainText(de.businesses.categories.animals);
+  await expect(page.locator('#business-luckycats .biz-section-title').first()).toHaveText(de.businesses.services);
+  await expect(page.locator('#business-luckycats .biz-action--main')).toContainText(de.businesses.call);
 });
 
 test('pages are prerendered: real content without JavaScript', async ({ browser }) => {

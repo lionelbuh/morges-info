@@ -6,7 +6,7 @@ import { PRACTICAL, OFFICIAL_LINKS, validatePractical } from '../../src/data/pra
 import { STORIES, validateStory, featuredStory } from '../../src/data/stories.js';
 import { MILESTONES, THEN_AND_NOW, validateMilestone } from '../../src/data/history.js';
 import { validatePhoto, validateOpeningHours, validateCommercial, isIsoDate, COMMERCIAL_LISTINGS_ENABLED } from '../../src/data/schema.js';
-import { businessCard, textBlock, frenchOnlyNotice } from '../../src/site/components.js';
+import { businessCard, businessProfile, textBlock, frenchOnlyNotice } from '../../src/site/components.js';
 import { setLang } from '../../src/i18n/index.js';
 
 const business = (overrides = {}) => ({
@@ -45,12 +45,26 @@ describe('content model', () => {
     expect(new Set(BUSINESSES.map((b) => b.id)).size).toBe(BUSINESSES.length);
   });
 
-  it('several photos of a business become a carousel, shown whole', () => {
+  it('several photos of a business form a gallery: one large, the others as thumbnails', () => {
     const photo = (n) => ({ src: `/images/businesses/p${n}.webp`, alt: { fr: `Photo ${n}` }, credit: 'Exemple', licence: 'Avec accord' });
-    expect(businessCard(business({ photos: [photo(1)] }))).not.toContain('carousel');
-    const html = businessCard(business({ photos: [photo(1), photo(2)] }));
-    expect(html).toContain('carousel--photos');
-    expect(html.match(/carousel-slide/g)).toHaveLength(2);
+    expect(businessProfile(business({ photos: [photo(1)] }))).not.toContain('data-gallery-thumb');
+    const html = businessProfile(business({ photos: [photo(1), photo(2)] }));
+    expect(html.match(/data-gallery-thumb /g)).toHaveLength(2);
+    expect(html).toContain('<img src="/images/businesses/p1.webp" alt="Photo 1"');
+    expect(html).toContain('aria-pressed="true"');
+  });
+
+  it('a home-visit business shows its service area instead of an address; a notice disappears after its date', () => {
+    const area = { fr: 'À domicile, Morges', en: 'At home, Morges', de: 'Zu Hause, Morges', it: 'A domicilio, Morges' };
+    const text = (fr) => ({ fr, en: fr, de: fr, it: fr });
+    const homeVisits = business({ address: undefined, serviceArea: area, notice: { text: text('Complet à Noël'), until: '2027-01-06' } });
+    expect(validateBusiness(homeVisits)).toEqual([]);
+    expect(validateBusiness(business({ serviceArea: area })).join()).toMatch(/either an address or a serviceArea/);
+    expect(validateBusiness(business({ address: undefined })).join()).toMatch(/1110 Morges/);
+    expect(businessProfile(homeVisits, { today: '2026-12-01' })).toContain('À domicile, Morges');
+    expect(businessProfile(homeVisits, { today: '2026-12-01' })).toContain('Complet à Noël');
+    expect(businessProfile(homeVisits, { today: '2027-01-07' })).not.toContain('Complet à Noël');
+    expect(businessProfile(homeVisits)).not.toContain('google.com/maps'); // no address: no directions
   });
 
   it('checks phone and e-mail formats', () => {
@@ -78,6 +92,7 @@ describe('content model', () => {
   it('sponsored entries are always labelled and never part of the editorial selection', () => {
     const sponsored = business({ id: 'sponsor', commercial: { status: 'sponsored' } });
     expect(businessCard(sponsored)).toContain('Contenu sponsorisé');
+    expect(businessProfile(sponsored)).toContain('Contenu sponsorisé');
     expect(businessCard(business())).not.toContain('Contenu sponsorisé');
     expect(editorialSelection([business(), sponsored]).map((b) => b.id)).toEqual(['exemple']);
   });
