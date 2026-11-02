@@ -175,6 +175,7 @@ export default {
     photoCredit: 'Photo : {credit}',
   },
   home: {
+    businessMore: 'Voir la fiche',
     voicesText: 'Vos avis, vos idées, vos questions et vos souvenirs de Morges. Un prénom suffit, sans e-mail ; chaque message est lu avant publication.',
     voicesAll: 'Lire tous les messages',
     voicesQuestions: 'Les questions du moment',

@@ -175,6 +175,7 @@ export default {
     photoCredit: 'Foto: {credit}',
   },
   home: {
+    businessMore: 'Zum Porträt',
     voicesText: 'Ihre Meinungen, Ideen, Fragen und Erinnerungen an Morges. Ein Vorname genügt, ohne E-Mail; jede Nachricht wird vor der Veröffentlichung gelesen.',
     voicesAll: 'Alle Nachrichten lesen',
     voicesQuestions: 'Aktuelle Fragen',
