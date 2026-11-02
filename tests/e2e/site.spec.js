@@ -364,6 +364,8 @@ test('businesses: free directory with a type filter, a photo gallery and contact
   await expect(lucky.locator('a[href^="https://www.google.com/maps/dir/"]')).toHaveCount(0);
   await expect(lucky.locator('a[href="tel:+41763840137"]')).toBeVisible();
   await expect(lucky.locator('.biz-action[href="https://www.luckycats.ch/"]')).toContainText('luckycats.ch');
+  await expect(lucky.locator('.biz-action[href="https://www.instagram.com/luckycatslesheureuxchats/"]')).toContainText('@luckycatslesheureuxchats');
+  await expect(lucky.locator('.biz-action[href="https://www.facebook.com/profile.php?id=100039481723383"]')).toContainText('Facebook');
   // type filter: "All" and the categories in use
   const filters = page.locator('.biz-filters');
   await expect(filters).toBeVisible();

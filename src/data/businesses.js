@@ -24,6 +24,7 @@ import { validateText, validateSources, validatePhoto, validateOpeningHours, val
  *   notice?: { text: {…}, until: 'YYYY-MM-DD' },     // temporary notice, hidden after `until`
  *   website: 'https://…' | null,
  *   instagram?: 'https://www.instagram.com/…/',
+ *   facebook?: 'https://www.facebook.com/…',
  *   openingHours: null | { text: { fr }, sources, lastVerified },
  *   photos: [],                                     // Photo, see schema.js; several → gallery
  *   sources: [{ label, url }],
@@ -257,6 +258,8 @@ export const BUSINESSES = [
       until: '2027-01-06',
     },
     website: 'https://www.luckycats.ch/',
+    instagram: 'https://www.instagram.com/luckycatslesheureuxchats/',
+    facebook: 'https://www.facebook.com/profile.php?id=100039481723383',
     openingHours: null,
     photos: [
       {
@@ -370,6 +373,7 @@ export function validateBusiness(b, opts = {}) {
   errors.push(...validateText(b && b.description, `${p}.description`));
   if (b && b.website !== null && !/^https:\/\//.test(b.website || '')) errors.push(`${p}.website must be https or null`);
   if (b && b.instagram !== undefined && !/^https:\/\/www\.instagram\.com\/[\w.]+\/?$/.test(b.instagram)) errors.push(`${p}.instagram must be an instagram.com profile address`);
+  if (b && b.facebook !== undefined && !/^https:\/\/www\.facebook\.com\/(profile\.php\?id=\d+|[\w.-]+\/?)$/.test(b.facebook)) errors.push(`${p}.facebook must be a facebook.com page address`);
   errors.push(...validateOpeningHours(b && b.openingHours, `${p}.openingHours`));
   (b && b.photos ? b.photos : []).forEach((photo, i) => errors.push(...validatePhoto(photo, `${p}.photos[${i}]`)));
   errors.push(...validateSources(b && b.sources, `${p}.sources`));

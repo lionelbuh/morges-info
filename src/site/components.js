@@ -148,6 +148,7 @@ function businessActions(b) {
   if (b.email) actions.push(`<a class="biz-action" href="${entities(`mailto:${b.email}`)}"><span aria-hidden="true">✉</span> ${entities(b.email)}</a>`);
   if (b.website) actions.push(`<a class="biz-action" href="${e(b.website)}" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> ${e(b.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>`);
   if (b.instagram) actions.push(`<a class="biz-action" href="${e(b.instagram)}" target="_blank" rel="noopener"><span aria-hidden="true">◎</span> @${e(b.instagram.replace(/^https:\/\/www\.instagram\.com\//, '').replace(/\/$/, ''))}</a>`);
+  if (b.facebook) actions.push(`<a class="biz-action" href="${e(b.facebook)}" target="_blank" rel="noopener"><span aria-hidden="true">f</span> Facebook</a>`);
   if (b.address) {
     const directions = directionsLinks(b.coordinates || { query: `${b.address}, Suisse` }, b.name);
     actions.push(`<a class="biz-action" href="${e(directions.google)}" target="_blank" rel="noopener"><span aria-hidden="true">➜</span> ${e(t('panel.directionsGoogle'))}</a>`);

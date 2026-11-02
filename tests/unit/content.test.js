@@ -73,6 +73,8 @@ describe('content model', () => {
     expect(validateBusiness(business({ email: 'pas-un-mail' })).join()).toMatch(/email/);
     expect(validateBusiness(business({ instagram: 'https://www.instagram.com/exemple/' }))).toEqual([]);
     expect(validateBusiness(business({ instagram: 'https://exemple.ch' })).join()).toMatch(/instagram/);
+    expect(validateBusiness(business({ facebook: 'https://www.facebook.com/profile.php?id=123' }))).toEqual([]);
+    expect(validateBusiness(business({ facebook: 'https://exemple.ch' })).join()).toMatch(/facebook/);
   });
 
   it('validates a well-formed business and rejects incomplete ones', () => {
