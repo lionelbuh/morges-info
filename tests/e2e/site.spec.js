@@ -408,6 +408,15 @@ test('home: the photo of the day stays the same when the language changes', asyn
   await expect(page.locator('.hero-photo img')).toHaveAttribute('alt', HERO_PHOTOS.find((p) => p.id === heroId).alt.de);
 });
 
+test('home: a click anywhere on a business card opens its profile on the businesses page', async ({ page }) => {
+  await page.goto('/');
+  const card = page.locator('section[aria-labelledby="home-businesses"] .business-card').filter({ hasText: 'Luckycats' });
+  await expect(card.locator('.business-card-more')).toHaveText(`${fr.home.businessMore} →`);
+  await card.click({ position: { x: 30, y: 30 } }); // on the photo, not only the name
+  await expect(page).toHaveURL(/\/commerces\/#business-luckycats$/);
+  await expect(page.locator('#business-luckycats')).toBeInViewport();
+});
+
 test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);

@@ -3114,3 +3114,32 @@ body.page-map {
   font-size: 0.86rem;
   text-align: center;
 }
+
+/* Home: the whole business card links to its profile on the businesses page */
+.business-card {
+  position: relative;
+  transition: box-shadow 0.15s;
+}
+.business-card .card-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.business-card:hover,
+.business-card:focus-within {
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.business-card:focus-within .card-title a {
+  text-decoration: underline;
+}
+.business-card-more {
+  margin: 10px 0 0;
+  color: var(--red);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+/* arriving from the home page: the chosen profile is highlighted */
+.biz-profile:target {
+  box-shadow: 8px 8px 0 var(--red);
+  border-color: var(--red);
+}

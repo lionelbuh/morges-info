@@ -199,7 +199,7 @@ export function businessProfile(b, { today } = {}) {
   </article>`;
 }
 
-/** A short card for the home page: first photo, name and summary, linking to the full presentation. */
+/** A short card for the home page: first photo, name and summary; the whole card links to the full presentation. */
 export function businessCard(b) {
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
   const photo = (b.photos || [])[0];
@@ -210,6 +210,7 @@ export function businessCard(b) {
       <p class="card-kicker">${e(t(`businesses.categories.${b.category}`))}</p>
       <h3 class="card-title"><a href="${pageHref('businesses', getLang())}#business-${e(b.id)}">${e(b.name)}</a></h3>
       ${textBlock(b.description)}
+      <p class="business-card-more" aria-hidden="true">${e(t('home.businessMore'))} →</p>
     </div>
   </article>`;
 }
