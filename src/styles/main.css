@@ -2500,74 +2500,239 @@ body.page-map {
   line-height: 1.55;
 }
 
-/* carousels (businesses, and the photos of a business) */
-.carousel {
-  position: relative;
-}
-.carousel-track {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  padding-bottom: 6px;
-}
-.carousel-slide {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-  min-width: 0;
-}
-.carousel-slide[hidden] {
-  display: none;
-}
-.carousel--cards .carousel-slide {
-  flex-basis: min(100%, 360px);
-}
-.carousel-controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+/* businesses: one full presentation each (gallery, what they offer, contact buttons) */
+.biz-list {
+  display: grid;
+  gap: 40px;
   margin-top: 8px;
 }
-.carousel-controls[hidden] {
-  display: none;
-}
-.carousel-btn {
-  width: 40px;
-  height: 40px;
-  font: inherit;
-  font-size: 1.3rem;
-  line-height: 1;
+.biz-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-areas:
+    'gallery info'
+    'more more'
+    'footer footer';
+  gap: 24px 36px;
+  padding: 24px;
+  margin-right: 8px; /* room for the offset shadow */
   background: var(--surface);
   border: 1px solid var(--ink);
-  cursor: pointer;
+  box-shadow: 8px 8px 0 var(--ink);
+  scroll-margin-top: 16px;
 }
-.carousel-toggle {
-  font-size: 0.75rem;
-}
-.carousel-toggle[hidden] {
+.biz-profile[hidden] {
   display: none;
 }
-.carousel-btn:hover {
+@media (max-width: 820px) {
+  .biz-profile {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'gallery' 'info' 'more' 'footer';
+    padding: 16px;
+  }
+}
+.biz-gallery {
+  grid-area: gallery;
+  min-width: 0;
+}
+.biz-stage {
+  margin: 0;
+}
+.biz-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain; /* shown whole: flyers, portraits and logos must not be cut */
+  background: var(--stone);
+}
+.biz-stage figcaption {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+}
+.biz-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding: 2px;
+}
+.biz-thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 1px solid var(--stone-3);
+  background: var(--stone);
+  cursor: pointer;
+}
+.biz-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.biz-thumb[aria-pressed='true'] {
+  outline: 3px solid var(--red);
+  outline-offset: 1px;
+}
+.biz-info {
+  grid-area: info;
+  min-width: 0;
+}
+.biz-category {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 2px 10px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.biz-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  line-height: 1.1;
+}
+.biz-person {
+  margin: 4px 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.biz-notice {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border-left: 4px solid var(--red);
+  background: #f8e7d8;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.biz-lead {
+  margin: 14px 0;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  line-height: 1.55;
+}
+.biz-where {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+}
+.biz-where-label {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.biz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.biz-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 8px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.biz-action:hover {
   background: var(--ink);
   color: #fff;
 }
-.carousel--photos .carousel-controls {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+.biz-action--main {
+  background: var(--ink);
+  color: #fff;
+}
+.biz-action--main:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+.biz-action-detail {
+  font-weight: 400;
+  opacity: 0.85;
+}
+.biz-more {
+  grid-area: more;
+  min-width: 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--stone-2);
+}
+.biz-section + .biz-section {
+  margin-top: 18px;
+}
+.biz-section-title {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.biz-services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.biz-service {
+  padding: 14px 16px;
+  background: var(--paper);
+  border-top: 3px solid var(--red);
+}
+.biz-service h4 {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+}
+.biz-service p,
+.biz-section > p {
+  margin: 0;
+  line-height: 1.55;
+}
+.biz-note {
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-style: italic;
+}
+.biz-footer {
+  grid-area: footer;
+  min-width: 0;
+  font-size: 0.82rem;
 }
 .business-card {
   height: 100%;
+}
+.business-card .card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.business-card .card-title a:hover {
+  color: var(--red);
 }
 .business-photo img {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 4 / 3;
-  object-fit: contain; /* shown whole: flyers and logos must not be cut */
-  background: var(--surface);
+  object-fit: contain;
+  background: var(--stone);
 }
 .biz-filters {
   display: flex;

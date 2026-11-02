@@ -27,7 +27,7 @@ import {
   eventCard,
   practicalCard,
   businessCard,
-  carousel,
+  businessProfile,
   storyArticle,
   textBlock,
   frenchOnlyNotice,
@@ -184,8 +184,9 @@ function businessFilters(selection) {
   <p class="results-count biz-count" aria-live="polite">${e(count(selection.length))}</p>`;
 }
 
-function renderBusinesses() {
+function renderBusinesses({ today } = {}) {
   const selection = editorialSelection();
+  const day = today || todayInMorges();
   const criteria = ['local', 'independent', 'verified', 'free'].map((k) => `<li>${e(t(`businesses.criteria.${k}`))}</li>`).join('');
   return `${selection.map((b) => jsonLd(businessSchema(b))).join('')}
   ${pageIntro(t('home.businessesTitle'), t('businesses.intro'))}
@@ -193,7 +194,7 @@ function renderBusinesses() {
     selection.length
       ? `<section class="section">
           ${businessFilters(selection)}
-          ${carousel(selection.map(businessCard), { label: t('home.businessesTitle'), className: 'carousel--cards' })}
+          <div class="biz-list">${selection.map((b) => businessProfile(b, { today: day })).join('')}</div>
         </section>`
       : `<section class="section">
           <div class="callout">

@@ -7,7 +7,7 @@ import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate } from './format.js';
-import { placeHref, placePageHref, directionsLinks, photoMapHref } from './links.js';
+import { placeHref, placePageHref, directionsLinks, photoMapHref, pageHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
@@ -114,56 +114,101 @@ export function practicalCard(item) {
   </article>`;
 }
 
-/** Business card. A sponsored entry always carries a visible label. */
+/** Every character as an HTML entity (e-mail addresses): browsers show them, simple harvesters miss them. */
 const entities = (text) => [...text].map((c) => `&#${c.codePointAt(0)};`).join('');
 
+/** The photo shown large in a business gallery: whole (never cropped), with its credit. */
+function galleryStage(photo) {
+  return `<figure class="biz-stage" data-gallery-stage>
+      <img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} decoding="async" />
+      <figcaption>${e(t('common.photoCredit', { credit: `© ${photo.credit}` }))}</figcaption>
+    </figure>`;
+}
+
+/** Photos of a business: one large, the others as thumbnails that show it large when chosen. */
+function businessGallery(b) {
+  const photos = b.photos || [];
+  if (!photos.length) return '';
+  const thumbs =
+    photos.length > 1
+      ? `<div class="biz-thumbs" role="group" aria-label="${e(t('businesses.photosOf', { name: b.name }))}">${photos
+          .map(
+            (photo, i) =>
+              `<button type="button" class="biz-thumb" data-gallery-thumb data-src="${e(photo.src)}" data-alt="${e(localized(photo.alt))}" data-width="${photo.width || ''}" data-height="${photo.height || ''}" data-credit="${e(t('common.photoCredit', { credit: `© ${photo.credit}` }))}" aria-pressed="${i === 0}" aria-label="${e(t('businesses.showPhoto', { n: i + 1, total: photos.length }))}"><img src="${e(photo.src)}" alt="" loading="lazy" decoding="async" /></button>`,
+          )
+          .join('')}</div>`
+      : '';
+  return `<div class="biz-gallery" data-gallery>${galleryStage(photos[0])}${thumbs}</div>`;
+}
+
+/** Contact buttons: call, write, website, Instagram, directions (only what the business has). */
+function businessActions(b) {
+  const actions = [];
+  if (b.phone) actions.push(`<a class="biz-action biz-action--main" href="tel:${e(b.phone.replace(/ /g, ''))}"><span aria-hidden="true">☎</span> ${e(t('businesses.call'))} <span class="biz-action-detail">${e(b.phone)}</span></a>`);
+  if (b.email) actions.push(`<a class="biz-action" href="${entities(`mailto:${b.email}`)}"><span aria-hidden="true">✉</span> ${entities(b.email)}</a>`);
+  if (b.website) actions.push(`<a class="biz-action" href="${e(b.website)}" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> ${e(b.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a>`);
+  if (b.instagram) actions.push(`<a class="biz-action" href="${e(b.instagram)}" target="_blank" rel="noopener"><span aria-hidden="true">◎</span> @${e(b.instagram.replace(/^https:\/\/www\.instagram\.com\//, '').replace(/\/$/, ''))}</a>`);
+  if (b.address) {
+    const directions = directionsLinks(b.coordinates || { query: `${b.address}, Suisse` }, b.name);
+    actions.push(`<a class="biz-action" href="${e(directions.google)}" target="_blank" rel="noopener"><span aria-hidden="true">➜</span> ${e(t('panel.directionsGoogle'))}</a>`);
+    actions.push(`<a class="biz-action" href="${e(directions.apple)}" target="_blank" rel="noopener"><span aria-hidden="true">➜</span> ${e(t('panel.directionsApple'))}</a>`);
+  }
+  return actions.length ? `<div class="biz-actions">${actions.join('')}</div>` : '';
+}
+
 /**
- * Carousel: a horizontal strip that scrolls one slide at a time (swipe, scroll or the ‹ › buttons,
- * which client.js wires up and shows only when there is more than one slide). It also moves on by
- * itself, with a pause button (see client.js).
+ * The full presentation of a business on the businesses page: photo gallery, what they offer,
+ * background, and contact buttons. `today` (YYYY-MM-DD) decides whether a temporary notice still shows.
  */
-export function carousel(slides, { label, className = '' }) {
-  return `<div class="carousel${className ? ` ${className}` : ''}" data-carousel role="region" aria-roledescription="carousel" aria-label="${e(label)}">
-    <div class="carousel-track" tabindex="0">${slides.map((s) => `<div class="carousel-slide">${s}</div>`).join('')}</div>
-    <div class="carousel-controls" hidden>
-      <button type="button" class="carousel-btn" data-carousel-step="-1" aria-label="${e(t('common.previous'))}">‹</button>
-      <button type="button" class="carousel-btn carousel-toggle" data-carousel-toggle aria-pressed="false" aria-label="${e(t('home.photosPause'))}" hidden><span aria-hidden="true">❚❚</span></button>
-      <button type="button" class="carousel-btn" data-carousel-step="1" aria-label="${e(t('common.next'))}">›</button>
+export function businessProfile(b, { today } = {}) {
+  // a sponsored entry always carries a visible label
+  const sponsored = b.commercial && b.commercial.status === 'sponsored';
+  const notice = b.notice && (!today || today <= b.notice.until) ? b.notice : null;
+  const services = (b.services || [])
+    .map((sv) => `<li class="biz-service"><h4>${e(localized(sv.title))}</h4><p>${e(localized(sv.text))}</p></li>`)
+    .join('');
+  const where = b.address
+    ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.address'))}</span> ${b.addressNote ? `${e(b.addressNote)}, ` : ''}${e(b.address)}</p>`
+    : b.serviceArea
+      ? `<p class="biz-where"><span class="biz-where-label">${e(t('businesses.serviceArea'))}</span> ${e(localized(b.serviceArea))}</p>`
+      : '';
+  return `<article class="biz-profile${sponsored ? ' is-sponsored' : ''}" id="business-${e(b.id)}" data-category="${e(b.category)}">
+    ${businessGallery(b)}
+    <div class="biz-info">
+      ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
+      <p class="biz-category">${e(t(`businesses.categories.${b.category}`))}</p>
+      <h3 class="biz-name">${e(b.name)}</h3>
+      ${b.person ? `<p class="biz-person">${e(b.person)}</p>` : ''}
+      ${notice ? `<p class="biz-notice" role="note">${e(localized(notice.text))}</p>` : ''}
+      ${textBlock(b.description, { className: 'biz-lead' })}
+      ${where}
+      ${b.openingHours ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.hours'))}</span> ${e(localized(b.openingHours.text))}</p>` : ''}
+      ${businessActions(b)}
     </div>
-  </div>`;
+    ${
+      services || b.about || b.note
+        ? `<div class="biz-more">
+      ${services ? `<section class="biz-section"><h4 class="biz-section-title">${e(t('businesses.services'))}</h4><ul class="biz-services">${services}</ul></section>` : ''}
+      ${b.about ? `<section class="biz-section"><h4 class="biz-section-title">${e(t('businesses.about'))}</h4>${textBlock(b.about)}</section>` : ''}
+      ${b.note ? `<p class="biz-note">${e(localized(b.note))}</p>` : ''}
+    </div>`
+        : ''
+    }
+    <footer class="biz-footer">${verifiedLine(b.lastVerified)}${sourcesList(b.sources)}</footer>
+  </article>`;
 }
 
-/** A photo shown whole (never cropped) with its credit, for business cards. */
-function businessPhoto(photo) {
-  return `<figure class="photo business-photo"><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" />
-    <figcaption>${e(t('common.photoCredit', { credit: `© ${photo.credit}` }))}</figcaption></figure>`;
-}
-
+/** A short card for the home page: first photo, name and summary, linking to the full presentation. */
 export function businessCard(b) {
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
-  const photos = b.photos || [];
-  const directions = directionsLinks(b.coordinates || { query: `${b.address}, Suisse` }, b.name);
-  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" id="business-${e(b.id)}" data-category="${e(b.category)}">
-    ${photos.length > 1 ? carousel(photos.map(businessPhoto), { label: t('businesses.photosOf', { name: b.name }), className: 'carousel--photos' }) : photos[0] ? businessPhoto(photos[0]) : ''}
+  const photo = (b.photos || [])[0];
+  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" data-category="${e(b.category)}">
+    ${photo ? `<figure class="photo business-photo"><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" /></figure>` : ''}
     <div class="card-body">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
       <p class="card-kicker">${e(t(`businesses.categories.${b.category}`))}</p>
-      <h3 class="card-title">${e(b.name)}</h3>
+      <h3 class="card-title"><a href="${pageHref('businesses', getLang())}#business-${e(b.id)}">${e(b.name)}</a></h3>
       ${textBlock(b.description)}
-      <dl class="facts">
-        <div><dt>${e(t('common.address'))}</dt><dd>${b.addressNote ? `${e(b.addressNote)}<br />` : ''}${e(b.address)}</dd></div>
-        ${b.phone ? `<div><dt>${e(t('common.phone'))}</dt><dd><a href="tel:${e(b.phone.replace(/ /g, ''))}">${e(b.phone)}</a></dd></div>` : ''}
-        ${b.email ? `<div><dt>${e(t('common.email'))}</dt><dd><a href="${entities(`mailto:${b.email}`)}">${entities(b.email)}</a></dd></div>` : ''}
-        ${b.openingHours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(b.openingHours.text))}</dd></div>` : ''}
-        ${b.website ? `<div><dt>${e(t('common.website'))}</dt><dd><a href="${e(b.website)}" target="_blank" rel="noopener">${e(b.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
-        ${b.instagram ? `<div><dt>Instagram</dt><dd><a href="${e(b.instagram)}" target="_blank" rel="noopener">@${e(b.instagram.replace(/^https:\/\/www\.instagram\.com\//, '').replace(/\/$/, ''))}</a></dd></div>` : ''}
-      </dl>
-      <p class="card-links">
-        <a href="${e(directions.google)}" target="_blank" rel="noopener">${e(t('panel.directionsGoogle'))}</a>
-        <a href="${e(directions.apple)}" target="_blank" rel="noopener">${e(t('panel.directionsApple'))}</a>
-      </p>
-      ${verifiedLine(b.lastVerified)}
-      ${sourcesList(b.sources)}
     </div>
   </article>`;
 }
