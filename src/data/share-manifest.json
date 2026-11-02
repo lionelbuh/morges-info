@@ -99,6 +99,16 @@
     "width": 901,
     "height": 714
   },
+  "/images/businesses/amandine-reflexologie-pied.webp": {
+    "src": "/images/share/amandine-reflexologie-pied.jpg",
+    "width": 1200,
+    "height": 1600
+  },
+  "/images/businesses/amandine-reflexologie-reiki.webp": {
+    "src": "/images/share/amandine-reflexologie-reiki.jpg",
+    "width": 1200,
+    "height": 900
+  },
   "/images/businesses/amandine-reflexologie-salle-attente.webp": {
     "src": "/images/share/amandine-reflexologie-salle-attente.jpg",
     "width": 900,
@@ -108,5 +118,30 @@
     "src": "/images/share/amandine-reflexologie-salle-de-soins.jpg",
     "width": 1200,
     "height": 900
+  },
+  "/images/businesses/luckycats-chat-abyssin.webp": {
+    "src": "/images/share/luckycats-chat-abyssin.jpg",
+    "width": 300,
+    "height": 633
+  },
+  "/images/businesses/luckycats-chat-himalayen.webp": {
+    "src": "/images/share/luckycats-chat-himalayen.jpg",
+    "width": 300,
+    "height": 400
+  },
+  "/images/businesses/luckycats-chat-jardin.webp": {
+    "src": "/images/share/luckycats-chat-jardin.jpg",
+    "width": 300,
+    "height": 300
+  },
+  "/images/businesses/luckycats-chaton-sapin.webp": {
+    "src": "/images/share/luckycats-chaton-sapin.jpg",
+    "width": 300,
+    "height": 400
+  },
+  "/images/businesses/luckycats-estelle-franzone.webp": {
+    "src": "/images/share/luckycats-estelle-franzone.jpg",
+    "width": 450,
+    "height": 675
   }
 }

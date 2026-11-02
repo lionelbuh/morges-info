@@ -105,6 +105,32 @@ export const BUSINESSES = [
     openingHours: null,
     photos: [
       {
+        src: '/images/businesses/amandine-reflexologie-reiki.webp',
+        width: 1200,
+        height: 900,
+        alt: {
+          fr: 'Une séance de Reiki : la thérapeute pose les mains sur le haut du buste d’une personne allongée sous une couverture',
+          en: 'A Reiki session: the therapist places her hands on the upper chest of a person lying under a blanket',
+          de: 'Eine Reiki-Sitzung: Die Therapeutin legt die Hände auf den Oberkörper einer liegenden, zugedeckten Person',
+          it: 'Una seduta di Reiki: la terapeuta posa le mani sulla parte alta del busto di una persona sdraiata sotto una coperta',
+        },
+        credit: 'Amandine Réflexologie',
+        licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (02.11.2026)',
+      },
+      {
+        src: '/images/businesses/amandine-reflexologie-pied.webp',
+        width: 1200,
+        height: 1600,
+        alt: {
+          fr: 'Réflexologie plantaire : les mains de la thérapeute sur le pied d’une personne, posé sur une serviette bleue',
+          en: 'Foot reflexology: the therapist’s hands on a person’s foot, resting on a blue towel',
+          de: 'Fussreflexzonenmassage: die Hände der Therapeutin am Fuss einer Person, auf einem blauen Tuch',
+          it: 'Riflessologia plantare: le mani della terapeuta sul piede di una persona, appoggiato su un asciugamano blu',
+        },
+        credit: 'Amandine Réflexologie',
+        licence: 'Tous droits réservés, publié avec l’accord d’Amandine Réflexologie (02.11.2026)',
+      },
+      {
         src: '/images/businesses/amandine-reflexologie-salle-de-soins.webp',
         width: 1200,
         height: 900,
