@@ -341,7 +341,7 @@ test('businesses: free directory with a type filter, a photo gallery and contact
   await page.goto('/commerces/');
   const profile = page.locator('#business-amandine-reflexologie');
   await expect(profile.locator('.biz-name')).toHaveText('Amandine Réflexologie');
-  await expect(profile.locator('[data-gallery-thumb]')).toHaveCount(6);
+  await expect(profile.locator('[data-gallery-thumb]')).toHaveCount(5);
   await expect(profile.locator('a[href="tel:+41786062081"]')).toContainText('+41 78 606 20 81');
   await expect(profile.locator('a[href="https://www.instagram.com/amandinereflexologie/"]')).toContainText('@amandinereflexologie');
   await expect(profile.locator('a[href^="mailto:"]')).toContainText('info@amandinereflexologie.ch');
@@ -353,9 +353,9 @@ test('businesses: free directory with a type filter, a photo gallery and contact
   expect(source).not.toContain('contact@luckycats.ch');
   // gallery: a thumbnail shows its photo large, with its credit
   const stage = profile.locator('.biz-stage img');
-  await expect(stage).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-reiki.webp');
-  await profile.locator('[data-gallery-thumb]').nth(1).click();
   await expect(stage).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-pied.webp');
+  await profile.locator('[data-gallery-thumb]').nth(1).click();
+  await expect(stage).toHaveAttribute('src', '/images/businesses/amandine-reflexologie-salle-de-soins.webp');
   await expect(profile.locator('[data-gallery-thumb]').nth(1)).toHaveAttribute('aria-pressed', 'true');
   // a home-visit business: service area, no address or directions
   const lucky = page.locator('#business-luckycats');
