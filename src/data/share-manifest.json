@@ -119,6 +119,11 @@
     "width": 1200,
     "height": 900
   },
+  "/images/businesses/luckycats-annonce.webp": {
+    "src": "/images/share/luckycats-annonce.jpg",
+    "width": 1167,
+    "height": 603
+  },
   "/images/businesses/luckycats-chat-bengal.webp": {
     "src": "/images/share/luckycats-chat-bengal.jpg",
     "width": 828,
@@ -143,10 +148,5 @@
     "src": "/images/share/luckycats-estelle-franzone.jpg",
     "width": 450,
     "height": 675
-  },
-  "/images/businesses/luckycats-yeux-chat.webp": {
-    "src": "/images/share/luckycats-yeux-chat.jpg",
-    "width": 153,
-    "height": 358
   }
 }
