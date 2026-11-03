@@ -22,6 +22,7 @@ initChrome();
 let preview = null;
 let previewObserver = null;
 let photoTimer = null;
+let businessTimer = null;
 
 /**
  * Home: the old photos take turns next to the map (every 6 s), each one highlighted on the map.
@@ -55,6 +56,54 @@ function startHomePhotos() {
     button.setAttribute('aria-pressed', String(paused));
     button.textContent = t(paused ? 'home.photosPlay' : 'home.photosPause');
   });
+}
+
+/**
+ * Home: each business card shows its photos in turn (every 5 s, the cards a little apart), with a
+ * short fade. Stops while the pointer or keyboard focus is on the businesses, when the tab is
+ * hidden, and never moves for visitors who ask for reduced motion.
+ */
+function startBusinessPhotos() {
+  const figures = [...document.querySelectorAll('.business-photo[data-photos]')];
+  if (!figures.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const grid = figures[0].closest('.grid');
+  let hovered = false;
+  grid.addEventListener('mouseenter', () => (hovered = true));
+  grid.addEventListener('mouseleave', () => (hovered = false));
+  grid.addEventListener('focusin', () => (hovered = true));
+  grid.addEventListener('focusout', () => (hovered = false));
+  const slides = figures.map((figure) => {
+    let photos = [];
+    try {
+      photos = JSON.parse(figure.dataset.photos);
+    } catch {
+      // keep the first photo
+    }
+    return { figure, photos, index: 0 };
+  });
+  let tick = 0;
+  businessTimer = setInterval(() => {
+    if (hovered || document.visibilityState !== 'visible') return;
+    const slide = slides[tick % slides.length];
+    tick += 1;
+    if (slide.photos.length < 2) return;
+    slide.index = (slide.index + 1) % slide.photos.length;
+    const next = slide.photos[slide.index];
+    const loader = new Image();
+    loader.onload = () => {
+      const img = slide.figure.querySelector('img');
+      if (!img) return;
+      img.classList.add('is-fading');
+      setTimeout(() => {
+        img.src = next.src;
+        img.alt = next.alt;
+        if (next.width) img.setAttribute('width', next.width);
+        if (next.height) img.setAttribute('height', next.height);
+        img.classList.remove('is-fading');
+      }, 300);
+    };
+    loader.src = next.src;
+  }, 5000 / slides.length);
 }
 
 /** Home: a small, non-interactive map, loaded only when it scrolls into view. */
@@ -171,6 +220,7 @@ document.addEventListener('click', (event) => {
 function render() {
   if (previewObserver) previewObserver.disconnect();
   clearInterval(photoTimer);
+  clearInterval(businessTimer);
   if (preview) {
     preview.destroy();
     preview = null;
@@ -183,6 +233,7 @@ function render() {
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
+    startBusinessPhotos();
     startVoiceRotator();
   }
   if (pageId === 'legal') syncAnalyticsControl();

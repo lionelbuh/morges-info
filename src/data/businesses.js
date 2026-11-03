@@ -318,6 +318,19 @@ export const BUSINESSES = [
         credit: 'Luckycats',
         licence: 'Tous droits réservés, publié avec l’accord de Luckycats (03.11.2026)',
       },
+      {
+        src: '/images/businesses/luckycats-yeux-chat.webp',
+        width: 153,
+        height: 358,
+        alt: {
+          fr: 'Gros plan sur les yeux bleu clair d’un chat tigré',
+          en: 'Close-up of the pale blue eyes of a tabby cat',
+          de: 'Nahaufnahme der hellblauen Augen einer Tigerkatze',
+          it: 'Primo piano degli occhi azzurro chiaro di un gatto tigrato',
+        },
+        credit: 'Luckycats',
+        licence: 'Tous droits réservés, publié avec l’accord de Luckycats (03.11.2026)',
+      },
     ],
     sources: [
       { label: 'Luckycats — site web', url: 'https://www.luckycats.ch/' },

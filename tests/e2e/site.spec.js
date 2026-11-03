@@ -417,6 +417,28 @@ test('home: a click anywhere on a business card opens its profile on the busines
   await expect(page.locator('#business-luckycats')).toBeInViewport();
 });
 
+test('home: business cards show their photos in turn, but not for visitors who ask for reduced motion', async ({
+  browser,
+}) => {
+  const photo = (page) =>
+    page
+      .locator('section[aria-labelledby="home-businesses"] .business-card')
+      .filter({ hasText: 'Luckycats' })
+      .locator('.business-photo img');
+  const page = await browser.newPage();
+  await page.goto('/');
+  await expect(photo(page)).toHaveAttribute('src', /luckycats-estelle-franzone/);
+  await expect(photo(page)).not.toHaveAttribute('src', /luckycats-estelle-franzone/, { timeout: 12000 });
+  await expect(photo(page)).toHaveAttribute('alt', /chat/);
+  await page.close();
+
+  const still = await browser.newPage({ reducedMotion: 'reduce' });
+  await still.goto('/');
+  await still.waitForTimeout(6000);
+  await expect(photo(still)).toHaveAttribute('src', /luckycats-estelle-franzone/);
+  await still.close();
+});
+
 test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
