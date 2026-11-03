@@ -143,5 +143,10 @@
     "src": "/images/share/luckycats-estelle-franzone.jpg",
     "width": 450,
     "height": 675
+  },
+  "/images/businesses/luckycats-yeux-chat.webp": {
+    "src": "/images/share/luckycats-yeux-chat.jpg",
+    "width": 153,
+    "height": 358
   }
 }

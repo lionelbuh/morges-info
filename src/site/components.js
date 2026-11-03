@@ -202,9 +202,15 @@ export function businessProfile(b, { today } = {}) {
 /** A short card for the home page: first photo, name and summary; the whole card links to the full presentation. */
 export function businessCard(b) {
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
-  const photo = (b.photos || [])[0];
+  const photos = b.photos || [];
+  const photo = photos[0];
+  // the other photos take turns on the home page (see startBusinessPhotos in client.js)
+  const rotation =
+    photos.length > 1
+      ? ` data-photos="${e(JSON.stringify(photos.map((p) => ({ src: p.src, alt: localized(p.alt), width: p.width, height: p.height }))))}"`
+      : '';
   return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" data-category="${e(b.category)}">
-    ${photo ? `<figure class="photo business-photo"><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" /></figure>` : ''}
+    ${photo ? `<figure class="photo business-photo"${rotation}><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" /></figure>` : ''}
     <div class="card-body">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
       <p class="card-kicker">${e(t(`businesses.categories.${b.category}`))}</p>

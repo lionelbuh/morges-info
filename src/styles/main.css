@@ -3132,6 +3132,12 @@ body.page-map {
 .business-card:focus-within .card-title a {
   text-decoration: underline;
 }
+.business-photo[data-photos] img {
+  transition: opacity 0.3s ease;
+}
+.business-photo img.is-fading {
+  opacity: 0;
+}
 .business-card-more {
   margin: 10px 0 0;
   color: var(--red);
