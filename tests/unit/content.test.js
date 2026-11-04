@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PLACES, getPlace } from '../../src/data/places.js';
 import { BUSINESSES, validateBusiness, editorialSelection } from '../../src/data/businesses.js';
-import { EVENTS, validateEvent, upcomingEvents, todayInMorges } from '../../src/data/events.js';
+import { EVENTS, validateEvent, upcomingEvents, todayInMorges, eventsOnDay, featuredEvent } from '../../src/data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS, validatePractical } from '../../src/data/practical.js';
 import { STORIES, validateStory, featuredStory } from '../../src/data/stories.js';
 import { MILESTONES, THEN_AND_NOW, validateMilestone } from '../../src/data/history.js';
 import { validatePhoto, validateOpeningHours, validateCommercial, isIsoDate, COMMERCIAL_LISTINGS_ENABLED } from '../../src/data/schema.js';
-import { businessCard, businessProfile, textBlock, frenchOnlyNotice } from '../../src/site/components.js';
+import { businessCard, businessProfile, textBlock, frenchOnlyNotice, eventCalendar, calendarDayPanel } from '../../src/site/components.js';
 import { setLang } from '../../src/i18n/index.js';
 
 const business = (overrides = {}) => ({
@@ -145,6 +145,30 @@ describe('content model', () => {
     expect(upcomingEvents(EVENTS, '2026-12-20')).toHaveLength(1); // last day still listed
     expect(upcomingEvents(EVENTS, '2026-12-21')).toHaveLength(0);
     expect(todayInMorges(new Date('2026-12-20T23:30:00Z'))).toBe('2026-12-21'); // already the 21st in Zurich
+  });
+
+  it('an event with opening days is only on the days it is open; the featured one comes first', () => {
+    const market = EVENTS.find((e) => e.id === 'marche-de-noel-2026');
+    expect(eventsOnDay(EVENTS, '2026-12-05')).toEqual([market]); // a Saturday
+    expect(eventsOnDay(EVENTS, '2026-12-07')).toEqual([]); // a Monday: closed
+    expect(eventsOnDay(EVENTS, '2026-12-21')).toEqual([]); // after the end
+    expect(featuredEvent(EVENTS, '2026-11-04')).toBe(market);
+    expect(featuredEvent(EVENTS, '2026-12-21')).toBeNull();
+    expect(validateEvent({ ...market, weekHours: { ...market.weekHours, mon: ['9h', '17h'] } })).toContain('event(marche-de-noel-2026).weekHours.mon must be null or [\'HH:MM\', \'HH:MM\']');
+  });
+
+  it('the calendar shows each month from today to the last event, with a tile per day', () => {
+    const html = eventCalendar(upcomingEvents(EVENTS, '2026-11-04'), '2026-11-04');
+    expect(html).toContain('novembre 2026');
+    expect(html).toContain('décembre 2026');
+    expect(html).not.toContain('janvier 2027');
+    expect(html).toContain('data-day="2026-12-05"');
+    expect(html).not.toContain('data-day="2026-12-07"'); // closed on Mondays
+    expect(html).toMatch(/class="cal-day is-today has-events" href="#event-beausobre-zip-zap-circus-2026" data-day="2026-11-04" aria-current="date"/);
+    expect(eventCalendar([], '2026-12-21')).toBe('');
+    const panel = calendarDayPanel('2026-12-06', EVENTS);
+    expect(panel).toContain('dimanche 6 décembre 2026');
+    expect(panel).toContain('10 h – 20 h · Château de Morges');
   });
 
   it('shows French with a notice when a draft story is not translated yet', () => {
