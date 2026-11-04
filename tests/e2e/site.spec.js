@@ -566,7 +566,7 @@ test('local life: the Christmas market is featured, and the calendar opens the e
   await page.goto('/vie-locale/');
   const featured = page.locator('.featured-event');
   await expect(featured.locator('h2')).toHaveText('Marché de Noël de Morges');
-  await expect(featured.locator('a[href="https://www.morgesnoel.ch/"]')).toBeVisible();
+  await expect(featured.locator('.btn[href="https://www.morgesnoel.ch/"]')).toBeVisible();
   await expect(featured.locator('.week-hours tr')).toHaveCount(7);
   await expect(featured.locator('.week-hours tr').first()).toContainText(fr.life.closed);
   await expect(featured.locator('.week-hours tr').last()).toContainText('10 h – 20 h');
