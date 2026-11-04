@@ -294,4 +294,10 @@ startAnalytics();
 
 // Content is re-rendered after load: honour #anchors (e.g. a story) once it is in place.
 const anchor = window.location.hash.slice(1);
-if (anchor) document.getElementById(anchor)?.scrollIntoView();
+// from the home page's calendar: #jour-2026-12-05 opens that day
+const dayLink = /^jour-(\d{4}-\d{2}-\d{2})$/.exec(anchor);
+const dayTile = dayLink && document.querySelector(`.cal-day[data-day="${dayLink[1]}"]`);
+if (dayTile) {
+  dayTile.click();
+  dayTile.scrollIntoView({ block: 'center' });
+} else if (anchor) document.getElementById(anchor)?.scrollIntoView();

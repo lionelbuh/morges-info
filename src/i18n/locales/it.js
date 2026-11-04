@@ -193,6 +193,7 @@ export default {
     placesTitle: 'Luoghi da scoprire',
     placesCta: 'Tutti i luoghi sulla mappa',
     agendaTitle: 'Prossimamente a Morges',
+    calendarLink: 'Tutto il calendario',
     practicalTitle: 'Informazioni pratiche',
     lifeCta: 'Tutta la vita locale',
     storyTitle: 'Racconto in evidenza',

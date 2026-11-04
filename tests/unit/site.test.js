@@ -54,7 +54,8 @@ describe('site pages', () => {
     expect(html).toContain('home-businesses');
     expect(html).not.toContain('Marché de Noël');
     expect(renderMain('home', { today: '2026-11-30' })).toContain('Marché de Noël');
-    expect(renderMain('home', { today: '2026-10-15' })).toContain('Zip Zap Circus'); // the next two events
+    expect(renderMain('home', { today: '2026-10-15' })).toContain('Zip Zap Circus'); // the next events
+    expect(renderMain('home', { today: '2026-11-04' })).toContain('href="/vie-locale/#jour-2026-12-05"'); // the five weeks ahead
   });
 
   it('header marks the current page and offers the four languages', () => {

@@ -193,6 +193,7 @@ export default {
     placesTitle: 'Places to discover',
     placesCta: 'All places on the map',
     agendaTitle: 'Coming up in Morges',
+    calendarLink: 'The full calendar',
     practicalTitle: 'Practical information',
     lifeCta: 'All local life',
     storyTitle: 'Featured story',

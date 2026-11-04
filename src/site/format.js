@@ -59,3 +59,21 @@ export function formatTimeRange([from, to], lang) {
   };
   return `${fr(from)} – ${fr(to)}`;
 }
+
+/** 2026-12-02 → « 2 déc. »; a range in one month → « 2–20 déc. ». */
+export function formatShortRange(start, end, lang) {
+  const fmt = (iso, opts) =>
+    new Intl.DateTimeFormat(LOCALES[lang] || LOCALES.fr, { ...opts, timeZone: 'UTC' }).format(new Date(`${iso}T12:00:00Z`));
+  const short = (iso) => fmt(iso, { day: 'numeric', month: 'short' });
+  if (start === end) return short(start);
+  if (start.slice(0, 7) === end.slice(0, 7)) {
+    // « 2–20 déc. »: the day of the start, then the end with its month
+    return `${fmt(start, { day: 'numeric' }).replace(/\.$/, '')}–${short(end)}`;
+  }
+  return `${short(start)} – ${short(end)}`;
+}
+
+/** 2026-12-01 → « déc. » */
+export function formatMonthShort(iso, lang) {
+  return new Intl.DateTimeFormat(LOCALES[lang] || LOCALES.fr, { month: 'short', timeZone: 'UTC' }).format(new Date(`${iso}T12:00:00Z`));
+}
