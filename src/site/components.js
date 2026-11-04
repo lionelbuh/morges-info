@@ -6,7 +6,8 @@ import { t, localized, localizedWithFallback, getLang, textOf } from '../i18n/in
 import { escapeHtml } from '../ui/dom.js';
 import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
-import { formatDate } from './format.js';
+import { formatDate, formatMonth, formatDayLong, weekdayNames, formatTimeRange } from './format.js';
+import { eventsOnDay, weekdayOf } from '../data/events.js';
 import { placeHref, placePageHref, directionsLinks, photoMapHref, pageHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
@@ -78,25 +79,156 @@ function placeLink(placeId) {
   return `<a href="${placeHref(place.id, getLang())}">${e(localized(place.name))}</a>`;
 }
 
-export function eventCard(event) {
+function eventDates(event, lang) {
+  return event.startDate === event.endDate
+    ? formatDate(event.startDate, lang)
+    : t('common.dateRange', { start: formatDate(event.startDate, lang), end: formatDate(event.endDate, lang) });
+}
+
+/** An event; `featured` (home page) adds the "À la une" label and a link to its full presentation. */
+export function eventCard(event, { featured = false } = {}) {
   const lang = getLang();
-  const dates =
-    event.startDate === event.endDate
-      ? formatDate(event.startDate, lang)
-      : t('common.dateRange', { start: formatDate(event.startDate, lang), end: formatDate(event.endDate, lang) });
-  return `<article class="card event-card" id="event-${e(event.id)}">
+  return `<article class="card event-card${featured ? ' is-featured' : ''}" id="event-${e(event.id)}">
     <div class="card-body">
-      <p class="event-date"><time datetime="${e(event.startDate)}">${e(dates)}</time></p>
+      ${featured ? `<p class="featured-kicker"><span aria-hidden="true">★ </span>${e(t('life.featured'))}</p>` : ''}
+      <p class="event-date"><time datetime="${e(event.startDate)}">${e(eventDates(event, lang))}</time></p>
       <h3 class="card-title">${e(localized(event.title))}</h3>
       ${event.summary ? `<p class="event-summary">${e(localized(event.summary))}</p>` : ''}
       <dl class="facts">
         ${event.placeId ? `<div><dt>${e(t('common.where'))}</dt><dd>${placeLink(event.placeId)}</dd></div>` : ''}
         ${event.hours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(event.hours))}</dd></div>` : ''}
       </dl>
-      ${verifiedLine(event.lastVerified)}
-      ${sourcesList(event.sources)}
+      ${
+        featured
+          ? `<p class="callout-link"><a href="${pageHref('life', lang)}#event-${e(event.id)}">${e(t('life.more'))}<span aria-hidden="true"> →</span></a></p>`
+          : `${verifiedLine(event.lastVerified)}${sourcesList(event.sources)}`
+      }
     </div>
   </article>`;
+}
+
+/** The event of the moment, large, on the local-life page: dates, hours day by day, how to get there. */
+export function featuredEventBlock(event) {
+  const lang = getLang();
+  const hours = event.weekHours
+    ? `<div class="featured-hours">
+        <h3>${e(t('common.hours'))}</h3>
+        <table class="week-hours">
+          <tbody>${weekdayNames(lang)
+            .map(({ key, name }) => {
+              const h = event.weekHours[key];
+              return `<tr${h ? '' : ' class="is-closed"'}><th scope="row">${e(name)}</th><td>${e(h ? formatTimeRange(h, lang) : t('life.closed'))}</td></tr>`;
+            })
+            .join('')}</tbody>
+        </table>
+      </div>`
+    : event.hours
+      ? `<div class="featured-hours"><h3>${e(t('common.hours'))}</h3><p>${e(localized(event.hours))}</p></div>`
+      : '';
+  const place = event.placeId && getPlace(event.placeId);
+  return `<section class="featured-event event-card" id="event-${e(event.id)}" aria-labelledby="featured-${e(event.id)}">
+    <div class="featured-event-main">
+      <p class="featured-kicker"><span aria-hidden="true">★ </span>${e(t('life.featured'))}</p>
+      <h2 class="featured-title" id="featured-${e(event.id)}">${e(localized(event.title))}</h2>
+      <p class="event-date"><time datetime="${e(event.startDate)}">${e(eventDates(event, lang))}</time></p>
+      ${event.summary ? `<p class="featured-summary">${e(localized(event.summary))}</p>` : ''}
+      <p class="featured-actions">
+        ${event.website ? `<a class="btn" href="${e(event.website)}" target="_blank" rel="noopener">${e(t('life.website'))}<span aria-hidden="true"> ↗</span></a>` : ''}
+        ${place ? `<a class="btn btn-ghost" href="${placeHref(place.id, lang)}">${e(localized(place.name))}</a>` : ''}
+      </p>
+    </div>
+    ${hours}
+    ${
+      event.details && event.details.length
+        ? `<div class="featured-details">${event.details
+            .map((d) => `<div class="featured-detail"><h3>${e(localized(d.title))}</h3><p>${e(localized(d.text))}</p></div>`)
+            .join('')}</div>`
+        : ''
+    }
+    <footer class="featured-footer">${verifiedLine(event.lastVerified)}${sourcesList(event.sources)}</footer>
+  </section>`;
+}
+
+const pad = (n) => String(n).padStart(2, '0');
+
+/**
+ * The agenda as a calendar, one month after the other, from this month to the last event: each day a
+ * square tile, like the doors of an Advent calendar. A day with events links to the first one; in the
+ * browser it opens the day's list (see calendarDayPanel).
+ */
+export function eventCalendar(events, today) {
+  if (!events.length) return '';
+  const lang = getLang();
+  const last = events.reduce((max, ev) => (ev.endDate > max ? ev.endDate : max), today);
+  const heads = weekdayNames(lang, 'short')
+    .map(({ name }) => `<li>${e(name)}</li>`)
+    .join('');
+  const months = [];
+  let year = Number(today.slice(0, 4));
+  let month = Number(today.slice(5, 7));
+  while (`${year}-${pad(month)}` <= last.slice(0, 7)) {
+    const key = `${year}-${pad(month)}`;
+    const days = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    const offset = (new Date(Date.UTC(year, month - 1, 1)).getUTCDay() + 6) % 7; // Monday first
+    const cells = Array.from({ length: offset }, () => '<li class="cal-blank" aria-hidden="true"></li>');
+    for (let d = 1; d <= days; d += 1) {
+      const iso = `${key}-${pad(d)}`;
+      const onDay = eventsOnDay(events, iso);
+      const cls = ['cal-day'];
+      if (iso < today) cls.push('is-past');
+      if (iso === today) cls.push('is-today');
+      if (onDay.length) cls.push('has-events');
+      if (onDay.some((ev) => ev.featured)) cls.push('is-featured');
+      const current = iso === today ? ' aria-current="date"' : '';
+      const labels = onDay
+        .slice(0, 2)
+        .map((ev) => `<span class="cal-ev">${e(localized(ev.title))}</span>`)
+        .join('');
+      const more = onDay.length > 2 ? `<span class="cal-ev cal-more">+${onDay.length - 2}</span>` : '';
+      const num = `<span class="cal-num">${d}</span>`;
+      cells.push(
+        onDay.length
+          ? `<li><a class="${cls.join(' ')}" href="#event-${e(onDay[0].id)}" data-day="${iso}"${current} aria-label="${e(`${formatDayLong(iso, lang)} : ${onDay.map((ev) => localized(ev.title)).join(', ')}`)}">${num}${labels}${more}</a></li>`
+          : `<li><span class="${cls.join(' ')}"${current}>${num}</span></li>`,
+      );
+    }
+    months.push(`<section class="cal-month" aria-labelledby="cal-${key}">
+      <h3 class="cal-month-title" id="cal-${key}">${e(formatMonth(key, lang))}</h3>
+      <ol class="cal-weekdays" aria-hidden="true">${heads}</ol>
+      <ol class="cal-grid">${cells.join('')}</ol>
+      <div class="cal-panel" hidden></div>
+    </section>`);
+    month += 1;
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+  }
+  return `<div class="cal">
+    <p class="cal-hint">${e(t('life.calendarHint'))}</p>
+    ${months.join('')}
+  </div>`;
+}
+
+/** The events of one day, shown under its month when the day is chosen in the calendar. */
+export function calendarDayPanel(iso, events) {
+  const lang = getLang();
+  const items = eventsOnDay(events, iso)
+    .map((ev) => {
+      const h = ev.weekHours && ev.weekHours[weekdayOf(iso)];
+      const place = ev.placeId && getPlace(ev.placeId);
+      return `<li class="cal-panel-item${ev.featured ? ' is-featured' : ''}">
+        <strong class="cal-panel-title">${e(localized(ev.title))}</strong>
+        ${h || place ? `<span class="cal-panel-meta">${[h && formatTimeRange(h, lang), place && localized(place.name)].filter(Boolean).map(e).join(' · ')}</span>` : ''}
+        <a href="#event-${e(ev.id)}">${e(t('life.more'))}<span aria-hidden="true"> →</span></a>
+      </li>`;
+    })
+    .join('');
+  return `<div class="cal-panel-head">
+      <h4 class="cal-panel-date">${e(formatDayLong(iso, lang))}</h4>
+      <button type="button" class="cal-close">${e(t('life.dayClose'))}</button>
+    </div>
+    <ul class="cal-panel-list">${items}</ul>`;
 }
 
 export function practicalCard(item) {

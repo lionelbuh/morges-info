@@ -561,6 +561,37 @@ test('local life lists upcoming events only', async ({ page }) => {
   await expect(page.locator('.empty-note')).toHaveText(fr.life.agendaEmpty);
 });
 
+test('local life: the Christmas market is featured, and the calendar opens the events of a day', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-04T10:00:00+01:00'));
+  await page.goto('/vie-locale/');
+  const featured = page.locator('.featured-event');
+  await expect(featured.locator('h2')).toHaveText('Marché de Noël de Morges');
+  await expect(featured.locator('.btn[href="https://www.morgesnoel.ch/"]')).toBeVisible();
+  await expect(featured.locator('.week-hours tr')).toHaveCount(7);
+  await expect(featured.locator('.week-hours tr').first()).toContainText(fr.life.closed);
+  await expect(featured.locator('.week-hours tr').last()).toContainText('10 h – 20 h');
+  // the featured event is not listed a second time
+  await expect(page.locator('#event-marche-de-noel-2026')).toHaveCount(1);
+
+  const december = page.locator('.cal-month').filter({ has: page.locator('h3', { hasText: 'décembre 2026' }) });
+  await expect(december.locator('a.cal-day.is-featured')).toHaveCount(15); // Wednesday to Sunday, three weeks
+  await expect(december.locator('[data-day="2026-12-07"]')).toHaveCount(0); // Monday: closed
+  await expect(page.locator('.cal-day.is-today')).toHaveAttribute('data-day', '2026-11-04');
+  await december.locator('[data-day="2026-12-05"]').click();
+  const panel = december.locator('.cal-panel');
+  await expect(panel).toBeVisible();
+  await expect(panel.locator('.cal-panel-date')).toHaveText('samedi 5 décembre 2026');
+  await expect(panel).toContainText('10 h – 21 h · Château de Morges');
+  await expect(page).toHaveURL(/\/vie-locale\/$/); // the click opened the panel, it did not jump
+  await panel.locator('.cal-close').click();
+  await expect(panel).toBeHidden();
+
+  // in English
+  await page.goto('/vie-locale/?lang=en');
+  await expect(page.locator('.featured-event .week-hours tr').last()).toContainText('10:00–20:00');
+  await expect(page.locator('.cal-month-title').first()).toHaveText('November 2026');
+});
+
 test('mobile menu opens, closes with Escape and lists all sections', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'mobile layout only');
   await page.goto('/');

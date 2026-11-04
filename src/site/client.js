@@ -2,6 +2,8 @@
 import '../styles/main.css';
 import { detectInitialLang, setLang, onLangChange, getLang, localized, t } from '../i18n/index.js';
 import { PLACES, getPlace, MORGES_CENTER } from '../data/places.js';
+import { upcomingEvents } from '../data/events.js';
+import { calendarDayPanel } from './components.js';
 import { initChrome, renderChrome } from './chrome.js';
 import { renderMain, homePhotoViewpoints } from './pages.js';
 import { placeHref, photoMapHref } from './links.js';
@@ -210,6 +212,49 @@ function syncAnalyticsControl() {
   button.textContent = t(off ? 'legal.analyticsTurnOn' : 'legal.analyticsTurnOff');
   status.textContent = t(off ? 'legal.analyticsStatusOff' : 'legal.analyticsStatusOn');
 }
+
+/**
+ * Local life: a day of the calendar opens the list of its events under its month; again, or "Fermer",
+ * closes it. Without JavaScript the day links to its first event.
+ */
+document.addEventListener('click', (event) => {
+  const close = event.target.closest('.cal-close');
+  const day = event.target.closest('.cal-day[data-day]');
+  if (!close && !day) return;
+  const month = (close || day).closest('.cal-month');
+  const panel = month && month.querySelector('.cal-panel');
+  if (!panel) return;
+  const selected = month.querySelector('.cal-day.is-selected');
+  const hide = () => {
+    panel.hidden = true;
+    panel.innerHTML = '';
+    if (selected) {
+      selected.classList.remove('is-selected');
+      selected.removeAttribute('aria-expanded');
+    }
+  };
+  event.preventDefault();
+  if (close) {
+    hide();
+    if (selected) selected.focus();
+    return;
+  }
+  if (day === selected) {
+    hide();
+    return;
+  }
+  hide();
+  document.querySelectorAll('.cal-day.is-selected').forEach((el) => el.classList.remove('is-selected'));
+  document.querySelectorAll('.cal-panel').forEach((el) => {
+    el.hidden = true;
+    el.innerHTML = '';
+  });
+  day.classList.add('is-selected');
+  day.setAttribute('aria-expanded', 'true');
+  panel.innerHTML = calendarDayPanel(day.dataset.day, upcomingEvents());
+  panel.hidden = false;
+  panel.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+});
 
 document.addEventListener('click', (event) => {
   if (!event.target.closest('[data-analytics-toggle]')) return;

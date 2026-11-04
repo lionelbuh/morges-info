@@ -11,7 +11,7 @@ import { escapeHtml as e } from '../ui/dom.js';
 import { PLACES, getPlace } from '../data/places.js';
 import { CATEGORIES } from '../data/categories.js';
 import { editorialSelection, BUSINESS_CATEGORIES } from '../data/businesses.js';
-import { upcomingEvents, todayInMorges } from '../data/events.js';
+import { upcomingEvents, todayInMorges, featuredEvent } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
@@ -25,6 +25,8 @@ import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhot
 import {
   placeCard,
   eventCard,
+  featuredEventBlock,
+  eventCalendar,
   practicalCard,
   businessCard,
   businessProfile,
@@ -74,14 +76,19 @@ export function homePhotoViewpoints() {
 function renderHome({ today, heroId } = {}) {
   const lang = getLang();
   const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
-  const events = upcomingEvents(undefined, today).slice(0, 2);
+  // the event of the moment first, then the next two
+  const highlight = featuredEvent(undefined, today);
+  const events = upcomingEvents(undefined, today)
+    .filter((ev) => ev !== highlight)
+    .slice(0, 2);
   const story = featuredStory();
   const businesses = editorialSelection().slice(0, 3);
 
-  const agenda = events.length
+  const agenda = events.length || highlight
     ? `<div class="col">
         <h3 class="col-title">${e(t('home.agendaTitle'))}</h3>
-        ${events.map(eventCard).join('')}
+        ${highlight ? eventCard(highlight, { featured: true }) : ''}
+        ${events.map((ev) => eventCard(ev)).join('')}
       </div>`
     : '';
 
@@ -244,13 +251,22 @@ function renderHistory() {
 }
 
 function renderLife({ today } = {}) {
-  const events = upcomingEvents(undefined, today);
+  const day = today || todayInMorges();
+  const events = upcomingEvents(undefined, day);
+  const highlight = featuredEvent(undefined, day);
+  const others = events.filter((ev) => ev !== highlight);
   const links = OFFICIAL_LINKS.map((l) => `<li><a href="${e(l.url)}" target="_blank" rel="noopener">${e(l.label)}</a></li>`).join('');
   return `${events.map((ev) => jsonLd(eventSchema(ev))).join('')}
   ${pageIntro(t('life.title'), t('life.intro'))}
+  ${highlight ? featuredEventBlock(highlight) : ''}
   <section class="section" aria-labelledby="life-agenda">
     ${sectionHead('life-agenda', t('life.agendaTitle'))}
-    ${events.length ? `<div class="grid grid-2">${events.map(eventCard).join('')}</div>` : `<p class="empty-note">${e(t('life.agendaEmpty'))}</p>`}
+    ${
+      events.length
+        ? `${eventCalendar(events, day)}
+    ${others.length ? `<h3 class="life-list-title">${e(t('life.listTitle'))}</h3><div class="grid grid-2">${others.map((ev) => eventCard(ev)).join('')}</div>` : ''}`
+        : `<p class="empty-note">${e(t('life.agendaEmpty'))}</p>`
+    }
   </section>
   <section class="section" aria-labelledby="life-practical">
     ${sectionHead('life-practical', t('life.practicalTitle'))}
