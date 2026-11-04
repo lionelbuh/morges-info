@@ -3646,3 +3646,46 @@ a.mini-day.is-featured::after {
     transform: none;
   }
 }
+
+/* ── Home: the businesses one at a time ──────────────────────────────────── */
+.biz-spotlight-track {
+  display: grid;
+}
+/* every card in the same cell: the box keeps the height of the tallest, nothing jumps */
+.biz-spotlight-track > .business-card {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  transition: opacity 0.5s ease;
+}
+.biz-spotlight-track > .business-card.is-off {
+  visibility: hidden;
+  opacity: 0;
+}
+.biz-spotlight .business-photo {
+  margin: 0;
+}
+.biz-spotlight .business-photo img {
+  aspect-ratio: 4 / 3;
+}
+.biz-spotlight .card-body {
+  padding: 22px 26px;
+}
+.biz-spotlight .card-title {
+  font-size: 1.5rem;
+}
+@media (max-width: 760px) {
+  .biz-spotlight-track > .business-card {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .biz-spotlight .card-body {
+    padding: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .biz-spotlight-track > .business-card {
+    transition: none;
+  }
+}

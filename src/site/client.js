@@ -60,52 +60,85 @@ function startHomePhotos() {
   });
 }
 
+/** Home: the next photo of a business card, with a short fade (its photos are listed in data-photos). */
+function nextBusinessPhoto(card) {
+  const figure = card.querySelector('.business-photo[data-photos]');
+  if (!figure) return;
+  let photos;
+  try {
+    photos = JSON.parse(figure.dataset.photos);
+  } catch {
+    return; // keep the first photo
+  }
+  if (photos.length < 2) return;
+  const index = (Number(figure.dataset.photoIndex || 0) + 1) % photos.length;
+  figure.dataset.photoIndex = String(index);
+  const next = photos[index];
+  const loader = new Image();
+  loader.onload = () => {
+    const img = figure.querySelector('img');
+    if (!img) return;
+    img.classList.add('is-fading');
+    setTimeout(() => {
+      img.src = next.src;
+      img.alt = next.alt;
+      if (next.width) img.setAttribute('width', next.width);
+      if (next.height) img.setAttribute('height', next.height);
+      img.classList.remove('is-fading');
+    }, 300);
+  };
+  loader.src = next.src;
+}
+
 /**
- * Home: each business card shows its photos in turn (every 5 s, the cards a little apart), with a
- * short fade. Stops while the pointer or keyboard focus is on the businesses, when the tab is
- * hidden, and never moves for visitors who ask for reduced motion.
+ * Home: the businesses one at a time. The one shown changes its photo every 4 s, and the next business
+ * comes every 12 s, with ‹ › and pause buttons. Everything waits while the pointer or keyboard focus
+ * is on it or the tab is hidden, and never moves for visitors who ask for reduced motion.
  */
-function startBusinessPhotos() {
-  const figures = [...document.querySelectorAll('.business-photo[data-photos]')];
-  if (!figures.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const grid = figures[0].closest('.grid');
-  let hovered = false;
-  grid.addEventListener('mouseenter', () => (hovered = true));
-  grid.addEventListener('mouseleave', () => (hovered = false));
-  grid.addEventListener('focusin', () => (hovered = true));
-  grid.addEventListener('focusout', () => (hovered = false));
-  const slides = figures.map((figure) => {
-    let photos = [];
-    try {
-      photos = JSON.parse(figure.dataset.photos);
-    } catch {
-      // keep the first photo
-    }
-    return { figure, photos, index: 0 };
-  });
+function startBusinessSpotlight() {
+  const box = document.querySelector('[data-biz-rotator]');
+  const slides = box ? [...box.querySelectorAll('[data-biz-slide]')] : [];
+  if (!slides.length) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const controls = box.querySelector('[data-biz-controls]');
+  let index = 0;
   let tick = 0;
+  let paused = false;
+  let hovered = false;
+  const show = (i) => {
+    index = (i + slides.length) % slides.length;
+    tick = 0;
+    slides.forEach((slide, n) => {
+      const on = n === index;
+      slide.classList.toggle('is-off', !on);
+      slide.toggleAttribute('inert', !on);
+      if (on) slide.removeAttribute('aria-hidden');
+      else slide.setAttribute('aria-hidden', 'true');
+    });
+    box.querySelector('[data-biz-pos]').textContent = `${index + 1} / ${slides.length}`;
+  };
+  if (controls) {
+    const pause = box.querySelector('[data-biz-pause]');
+    controls.hidden = false;
+    pause.hidden = reduced;
+    box.querySelectorAll('[data-biz-step]').forEach((btn) => btn.addEventListener('click', () => show(index + Number(btn.dataset.bizStep))));
+    pause.addEventListener('click', () => {
+      paused = !paused;
+      pause.setAttribute('aria-pressed', String(paused));
+      pause.textContent = t(paused ? 'home.photosPlay' : 'home.photosPause');
+    });
+  }
+  box.addEventListener('mouseenter', () => (hovered = true));
+  box.addEventListener('mouseleave', () => (hovered = false));
+  box.addEventListener('focusin', () => (hovered = true));
+  box.addEventListener('focusout', () => (hovered = false));
+  if (reduced) return;
   businessTimer = setInterval(() => {
-    if (hovered || document.visibilityState !== 'visible') return;
-    const slide = slides[tick % slides.length];
+    if (paused || hovered || document.visibilityState !== 'visible') return;
     tick += 1;
-    if (slide.photos.length < 2) return;
-    slide.index = (slide.index + 1) % slide.photos.length;
-    const next = slide.photos[slide.index];
-    const loader = new Image();
-    loader.onload = () => {
-      const img = slide.figure.querySelector('img');
-      if (!img) return;
-      img.classList.add('is-fading');
-      setTimeout(() => {
-        img.src = next.src;
-        img.alt = next.alt;
-        if (next.width) img.setAttribute('width', next.width);
-        if (next.height) img.setAttribute('height', next.height);
-        img.classList.remove('is-fading');
-      }, 300);
-    };
-    loader.src = next.src;
-  }, 5000 / slides.length);
+    if (tick >= 3 && slides.length > 1) show(index + 1);
+    else nextBusinessPhoto(slides[index]);
+  }, 4000);
 }
 
 /** Home: a small, non-interactive map, loaded only when it scrolls into view. */
@@ -278,7 +311,7 @@ function render() {
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
-    startBusinessPhotos();
+    startBusinessSpotlight();
     startVoiceRotator();
   }
   if (pageId === 'legal') syncAnalyticsControl();

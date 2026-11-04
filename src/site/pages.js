@@ -30,7 +30,7 @@ import {
   miniCalendar,
   agendaList,
   practicalCard,
-  businessCard,
+  businessSpotlight,
   businessProfile,
   storyArticle,
   textBlock,
@@ -84,7 +84,7 @@ function renderHome({ today, heroId } = {}) {
   const highlight = featuredEvent(undefined, day);
   const events = upcoming.filter((ev) => ev !== highlight).slice(0, 3);
   const story = featuredStory();
-  const businesses = editorialSelection().slice(0, 3);
+  const businesses = editorialSelection();
 
   const agenda = events.length || highlight
     ? `<div class="col">
@@ -135,20 +135,6 @@ function renderHome({ today, heroId } = {}) {
     </div>
   </section>
 
-  ${
-    businesses.length
-      ? `<section class="section" aria-labelledby="home-businesses">
-    ${sectionHead('home-businesses', t('home.businessesTitle'), { href: pageHref('businesses', lang), label: t('home.businessesCta') })}
-    <div class="grid grid-3">${businesses.map(businessCard).join('')}</div>
-  </section>`
-      : ''
-  }
-
-  <section class="section" aria-labelledby="home-places">
-    ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}
-    <div class="grid grid-4">${places.map(placeCard).join('')}</div>
-  </section>
-
   <section class="section" aria-labelledby="home-life">
     ${sectionHead('home-life', t('nav.life'), { href: pageHref('life', lang), label: t('home.lifeCta') })}
     <div class="cols">
@@ -159,6 +145,20 @@ function renderHome({ today, heroId } = {}) {
         <p class="callout-link"><a href="${pageHref('visit', lang)}">${e(t('visit.homeLink'))}<span aria-hidden="true"> →</span></a></p>
       </div>
     </div>
+  </section>
+
+  ${
+    businesses.length
+      ? `<section class="section" aria-labelledby="home-businesses">
+    ${sectionHead('home-businesses', t('home.businessesTitle'), { href: pageHref('businesses', lang), label: t('home.businessesCta') })}
+    ${businessSpotlight(businesses, day)}
+  </section>`
+      : ''
+  }
+
+  <section class="section" aria-labelledby="home-places">
+    ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}
+    <div class="grid grid-4">${places.map(placeCard).join('')}</div>
   </section>
 
   ${

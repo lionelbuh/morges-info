@@ -409,6 +409,7 @@ test('home: the photo of the day stays the same when the language changes', asyn
 });
 
 test('home: a click anywhere on a business card opens its profile on the businesses page', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') }); // Luckycats comes first that day
   await page.goto('/');
   const card = page.locator('section[aria-labelledby="home-businesses"] .business-card').filter({ hasText: 'Luckycats' });
   await expect(card.locator('.business-card-more')).toHaveText(`${fr.home.businessMore} →`);
@@ -417,25 +418,39 @@ test('home: a click anywhere on a business card opens its profile on the busines
   await expect(page.locator('#business-luckycats')).toBeInViewport();
 });
 
-test('home: business cards show their photos in turn, but not for visitors who ask for reduced motion', async ({
-  browser,
-}) => {
-  const photo = (page) =>
-    page
-      .locator('section[aria-labelledby="home-businesses"] .business-card')
-      .filter({ hasText: 'Luckycats' })
-      .locator('.business-photo img');
+test('home: one business at a time, its photos in turn, then the next; nothing moves for reduced motion', async ({ browser }) => {
+  const shown = (page) => page.locator('[data-biz-slide]:not(.is-off)');
   const page = await browser.newPage();
+  await page.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') });
   await page.goto('/');
-  await expect(photo(page)).toHaveAttribute('src', /luckycats-estelle-franzone/);
-  await expect(photo(page)).not.toHaveAttribute('src', /luckycats-estelle-franzone/, { timeout: 12000 });
-  await expect(photo(page)).toHaveAttribute('alt', /chat/);
+  await page.mouse.move(0, 0);
+  await expect(shown(page)).toHaveCount(1);
+  await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
+  await expect(page.locator('[data-biz-slide].is-off')).toHaveAttribute('inert', '');
+  const photo = shown(page).locator('.business-photo img');
+  await expect(photo).toHaveAttribute('src', /luckycats-estelle-franzone/);
+  // after 4 s, the next photo of the same business (with a short fade)
+  await page.clock.runFor(4100);
+  await expect(page.locator('[data-biz-slide] .business-photo img.is-fading')).toHaveCount(1);
+  await page.clock.runFor(400);
+  await expect(photo).not.toHaveAttribute('src', /luckycats-estelle-franzone/);
+  await expect(photo).toHaveAttribute('alt', /chat/);
+  // after 12 s, the next business
+  await page.clock.runFor(8000);
+  await expect(shown(page).locator('.card-title')).toHaveText('Amandine Réflexologie');
+  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 2');
+  // the buttons
+  await page.locator('[data-biz-step="1"]').click();
+  await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
   await page.close();
 
   const still = await browser.newPage({ reducedMotion: 'reduce' });
+  await still.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') });
   await still.goto('/');
-  await still.waitForTimeout(6000);
-  await expect(photo(still)).toHaveAttribute('src', /luckycats-estelle-franzone/);
+  await still.clock.runFor(13000);
+  await expect(shown(still).locator('.card-title')).toHaveText('Luckycats');
+  await expect(shown(still).locator('.business-photo img')).toHaveAttribute('src', /luckycats-estelle-franzone/);
+  await expect(still.locator('[data-biz-pause]')).toBeHidden();
   await still.close();
 });
 
@@ -459,9 +474,10 @@ test('home: map preview with markers, places, practical info, businesses and fea
   // "Parole aux Morgiens" right after the opening: second button, first section
   await expect(page.locator('.hero-actions .btn').nth(1)).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
   await expect(page.locator('main .section h2').first()).toHaveAttribute('id', 'home-voices');
-  // then the photo map, then the businesses
+  // then the photo map, the calendar (local life), then the businesses
   await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-map');
-  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-businesses');
+  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-life');
+  await expect(page.locator('main .section h2').nth(3)).toHaveAttribute('id', 'home-businesses');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(12);
