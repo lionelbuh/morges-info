@@ -592,6 +592,19 @@ test('local life: the Christmas market is featured, and the calendar opens the e
   await expect(page.locator('.cal-month-title').first()).toHaveText('November 2026');
 });
 
+test('home: the next five weeks at a glance; a day opens it in the calendar of the local-life page', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-04T10:00:00+01:00'));
+  await page.goto('/');
+  const mini = page.locator('.mini-cal');
+  await expect(mini.locator('.mini-day')).toHaveCount(35);
+  await expect(mini.locator('.mini-day.is-today')).toHaveText('4');
+  await expect(mini.locator('a.mini-day.is-featured')).toHaveCount(5); // 2–6 December
+  await expect(page.locator('.agenda-list li').first()).toContainText('Marché de Noël de Morges');
+  await mini.locator('a.mini-day[href$="#jour-2026-12-05"]').click();
+  await expect(page).toHaveURL(/\/vie-locale\/#jour-2026-12-05$/);
+  await expect(page.locator('.cal-panel-date')).toHaveText('samedi 5 décembre 2026');
+});
+
 test('mobile menu opens, closes with Escape and lists all sections', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'mobile layout only');
   await page.goto('/');

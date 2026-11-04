@@ -3287,11 +3287,6 @@ body.page-map {
     padding: 20px 16px;
   }
 }
-/* the same label on the home page's card */
-.event-card.is-featured {
-  border-left: 4px solid var(--red);
-  padding-left: 14px;
-}
 
 /* ── Local life: the calendar, a tile per day like an Advent calendar ─────── */
 .cal-hint {
@@ -3515,6 +3510,139 @@ a.cal-day.is-featured::after {
   a.cal-day:hover,
   a.cal-day:focus-visible,
   .cal-day.is-selected {
+    transform: none;
+  }
+}
+
+/* ── Home: the next five weeks at a glance ───────────────────────────────── */
+.mini-cal-weekdays,
+.mini-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mini-cal-weekdays {
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.mini-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--stone-2);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1;
+}
+.mini-num {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.mini-month {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+a.mini-day {
+  border-color: var(--lake-2);
+  background: var(--lake-pale);
+  transition: transform 0.15s ease;
+}
+a.mini-day::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: var(--lake);
+}
+a.mini-day:hover,
+a.mini-day:focus-visible {
+  transform: translateY(-2px) rotate(-2deg);
+}
+a.mini-day.is-featured {
+  border-color: #1f4a37;
+  background: linear-gradient(150deg, #2c6249, #1f4a37);
+  box-shadow: inset 0 0 0 2px rgba(242, 207, 120, 0.55);
+  color: #fff;
+}
+a.mini-day.is-featured .mini-num {
+  color: #f2cf78;
+}
+a.mini-day.is-featured .mini-month {
+  color: #fff;
+}
+a.mini-day.is-featured::after {
+  content: '★';
+  width: auto;
+  height: auto;
+  margin-top: 1px;
+  border-radius: 0;
+  background: none;
+  font-size: 0.55rem;
+  color: #f2cf78;
+}
+.mini-day.is-past {
+  opacity: 0.45;
+}
+.mini-day.is-today {
+  outline: 2px solid var(--red);
+  outline-offset: 1px;
+}
+.agenda-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--stone-2);
+}
+.agenda-list a {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--stone-2);
+  color: var(--ink);
+  text-decoration: none;
+}
+.agenda-list a:hover .agenda-title {
+  color: var(--red);
+  text-decoration: underline;
+}
+.agenda-date {
+  font-weight: 700;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+}
+.agenda-title {
+  font-weight: 600;
+}
+.agenda-list .is-featured .agenda-date,
+.agenda-list .is-featured .agenda-title span {
+  color: #2c6249;
+}
+@media (prefers-reduced-motion: reduce) {
+  a.mini-day {
+    transition: none;
+  }
+  a.mini-day:hover,
+  a.mini-day:focus-visible {
     transform: none;
   }
 }

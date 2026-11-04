@@ -27,6 +27,8 @@ import {
   eventCard,
   featuredEventBlock,
   eventCalendar,
+  miniCalendar,
+  agendaList,
   practicalCard,
   businessCard,
   businessProfile,
@@ -76,23 +78,24 @@ export function homePhotoViewpoints() {
 function renderHome({ today, heroId } = {}) {
   const lang = getLang();
   const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
-  // the event of the moment first, then the next two
-  const highlight = featuredEvent(undefined, today);
-  const events = upcomingEvents(undefined, today)
-    .filter((ev) => ev !== highlight)
-    .slice(0, 2);
+  // the next five weeks at a glance, then the event of the moment and the next three
+  const day = today || todayInMorges();
+  const upcoming = upcomingEvents(undefined, day);
+  const highlight = featuredEvent(undefined, day);
+  const events = upcoming.filter((ev) => ev !== highlight).slice(0, 3);
   const story = featuredStory();
   const businesses = editorialSelection().slice(0, 3);
 
   const agenda = events.length || highlight
     ? `<div class="col">
         <h3 class="col-title">${e(t('home.agendaTitle'))}</h3>
-        ${highlight ? eventCard(highlight, { featured: true }) : ''}
-        ${events.map((ev) => eventCard(ev)).join('')}
+        ${miniCalendar(upcoming, day)}
+        ${agendaList(highlight ? [highlight, ...events] : events)}
+        <p class="callout-link"><a href="${pageHref('life', lang)}#life-agenda">${e(t('home.calendarLink'))}<span aria-hidden="true"> →</span></a></p>
       </div>`
     : '';
 
-  const heroChoice = (heroId && getHeroPhoto(heroId)) || heroOfTheDay(today || todayInMorges());
+  const heroChoice = (heroId && getHeroPhoto(heroId)) || heroOfTheDay(day);
   const hero = heroPhoto(heroChoice, heroManifest[heroChoice.id], { sizes: '(max-width: 860px) 100vw, 680px' });
   // "Explorer la carte" opens the photo map: Morges then (and now), the places are one click away
   const oldPhotos = homePhotoViewpoints();
