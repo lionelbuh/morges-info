@@ -206,6 +206,29 @@ export function eventCalendar(events, today) {
 }
 
 /**
+ * Home page: the businesses one at a time, so the page never looks like a page of ads. Each day a
+ * different one comes first; in the browser they take turns (see startBusinessSpotlight in client.js).
+ */
+export function businessSpotlight(list, today) {
+  if (!list.length) return '';
+  const start = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86400000) % list.length;
+  const ordered = [...list.slice(start), ...list.slice(0, start)];
+  const controls =
+    ordered.length > 1
+      ? `<div class="home-voices-controls" data-biz-controls hidden>
+          <button type="button" class="home-voices-btn" data-biz-step="-1" aria-label="${e(t('common.previous'))}">‹</button>
+          <span class="home-voices-pos" data-biz-pos aria-live="polite">1 / ${ordered.length}</span>
+          <button type="button" class="home-voices-btn" data-biz-step="1" aria-label="${e(t('common.next'))}">›</button>
+          <button type="button" class="home-voices-btn home-voices-pause" data-biz-pause aria-pressed="false">${e(t('home.photosPause'))}</button>
+        </div>`
+      : '';
+  return `<div class="biz-spotlight" data-biz-rotator>
+    <div class="biz-spotlight-track">${ordered.map((b, i) => businessCard(b, { off: i > 0 })).join('')}</div>
+    ${controls}
+  </div>`;
+}
+
+/**
  * Home page: the next five weeks at a glance, from the Monday of this week. A day with events opens
  * that day in the calendar of the local-life page.
  */
@@ -376,8 +399,11 @@ export function businessProfile(b, { today } = {}) {
   </article>`;
 }
 
-/** A short card for the home page: first photo, name and summary; the whole card links to the full presentation. */
-export function businessCard(b) {
+/**
+ * A short card for the home page: first photo, name and summary; the whole card links to the full
+ * presentation. `off`: a card of the carousel that waits its turn (kept in the page, not shown).
+ */
+export function businessCard(b, { off = false } = {}) {
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
   const photos = b.photos || [];
   const photo = photos[0];
@@ -386,7 +412,7 @@ export function businessCard(b) {
     photos.length > 1
       ? ` data-photos="${e(JSON.stringify(photos.map((p) => ({ src: p.src, alt: localized(p.alt), width: p.width, height: p.height }))))}"`
       : '';
-  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}" data-category="${e(b.category)}">
+  return `<article class="card business-card${sponsored ? ' is-sponsored' : ''}${off ? ' is-off' : ''}" data-category="${e(b.category)}" data-biz-slide${off ? ' aria-hidden="true" inert' : ''}>
     ${photo ? `<figure class="photo business-photo"${rotation}><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" /></figure>` : ''}
     <div class="card-body">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
