@@ -1,4 +1,4 @@
-import { validateText, validateSources, isIsoDate } from './schema.js';
+import { validateText, validateSources, isIsoDate, validatePhoto } from './schema.js';
 
 /**
  * Local events — only from official or otherwise reliable sources, each with
@@ -29,6 +29,48 @@ export const EVENTS = [
       { label: 'Théâtre de Beausobre — programme', url: 'https://beausobre.ch/' },
     ],
     lastVerified: '2026-10-28',
+  },
+  {
+    id: 'david-chante-renaud-2026',
+    title: {
+      fr: 'Concert : David chante Renaud',
+      en: 'Concert: David sings Renaud',
+      de: 'Konzert: David singt Renaud',
+      it: 'Concerto: David canta Renaud',
+    },
+    startDate: '2026-11-06',
+    endDate: '2026-11-06',
+    startTime: '20:00',
+    endTime: '22:00',
+    placeId: null,
+    venue: { name: 'Lykke Concept Store', address: 'Grand-Rue 89, 1110 Morges' },
+    hours: {
+      fr: 'Vendredi à 20 h, pendant environ deux heures. Entrée libre, chapeau à la sortie.',
+      en: 'Friday at 8 pm, for about two hours. Free entry, with a collection at the end.',
+      de: 'Freitag um 20 Uhr, etwa zwei Stunden. Eintritt frei, Kollekte am Ausgang.',
+      it: 'Venerdì alle 20, per circa due ore. Ingresso libero, offerta all’uscita.',
+    },
+    summary: {
+      fr: 'Depuis 2003, David reprend les chansons de Renaud, des plus connues aux plus rares, sans imitation et avec sincérité. Accompagné depuis 2018 par le guitariste Jonathan, en acoustique.',
+      en: 'Since 2003, David has been singing Renaud’s songs, from the best known to the rarest, sincerely and without imitation. Accompanied since 2018 by the guitarist Jonathan, in an acoustic set.',
+      de: 'Seit 2003 singt David die Lieder von Renaud, von den bekanntesten bis zu den seltensten, ohne Imitation und mit viel Aufrichtigkeit. Seit 2018 begleitet ihn der Gitarrist Jonathan, akustisch.',
+      it: 'Dal 2003 David reinterpreta le canzoni di Renaud, dalle più note alle più rare, senza imitazione e con sincerità. Dal 2018 lo accompagna il chitarrista Jonathan, in acustico.',
+    },
+    photo: {
+      src: '/images/events/david-chante-renaud.webp',
+      width: 960,
+      height: 640,
+      alt: {
+        fr: 'David et le guitariste Jonathan, debout devant des wagons de marchandises tagués',
+        en: 'David and the guitarist Jonathan, standing in front of graffitied freight wagons',
+        de: 'David und der Gitarrist Jonathan vor besprayten Güterwagen',
+        it: 'David e il chitarrista Jonathan, in piedi davanti a vagoni merci coperti di graffiti',
+      },
+      credit: 'David chante Renaud',
+      licence: 'Photo de presse transmise à Morges.info pour annoncer le concert (05.11.2026)',
+    },
+    sources: [{ label: 'Lykke Concept Store — événements', url: 'https://lykke-conceptstore.ch/events' }],
+    lastVerified: '2026-11-05',
   },
   {
     id: 'festival-des-sports-patinoire-2026',
@@ -246,6 +288,16 @@ export function validateEvent(e) {
     if (!Array.isArray(e.details)) errors.push(`${p}.details must be a list`);
     else e.details.forEach((d, i) => errors.push(...validateText(d && d.title, `${p}.details[${i}].title`, { allLanguages: true }), ...validateText(d && d.text, `${p}.details[${i}].text`, { allLanguages: true })));
   }
+  const time = /^([01]\d|2[0-3]):[0-5]\d$/;
+  if (e && e.startTime !== undefined && !time.test(e.startTime)) errors.push(`${p}.startTime must be HH:MM`);
+  if (e && e.endTime !== undefined && (!time.test(e.endTime) || e.startTime === undefined)) errors.push(`${p}.endTime must be HH:MM, after a startTime`);
+  if (e && e.venue !== undefined) {
+    const v = e.venue || {};
+    if (typeof v.name !== 'string' || !v.name.trim() || typeof v.address !== 'string' || !/,\s*\d{4}\s+\S/.test(v.address)) {
+      errors.push(`${p}.venue needs a name and an address ("street, 1110 Morges")`);
+    }
+  }
+  if (e && e.photo !== undefined) errors.push(...validatePhoto(e.photo, `${p}.photo`));
   if (e && e.website !== undefined && !/^https:\/\//.test(e.website)) errors.push(`${p}.website must be https`);
   if (e && e.featured !== undefined && typeof e.featured !== 'boolean') errors.push(`${p}.featured must be true or false`);
   errors.push(...validateSources(e && e.sources, `${p}.sources`));
