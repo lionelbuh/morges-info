@@ -76,15 +76,22 @@ export function placeCard(place) {
 /** Where an event takes place: a place of the site (linked), or a venue that has no page here. */
 function eventWhere(event) {
   if (event.placeId) return placeLink(event.placeId);
-  if (event.venue) return `${e(event.venue.name)}, ${e(event.venue.address)}`;
+  if (event.venue) {
+    const v = event.venue;
+    return [venueName(v), v.address, v.note && localized(v.note)].filter(Boolean).map(e).join(', ');
+  }
   return '';
+}
+
+function venueName(venue) {
+  return typeof venue.name === 'string' ? venue.name : localized(venue.name);
 }
 
 /** The name of the place or venue of an event, for short lines. */
 function eventPlaceName(event) {
   const place = event.placeId && getPlace(event.placeId);
   if (place) return localized(place.name);
-  return event.venue ? event.venue.name : '';
+  return event.venue ? venueName(event.venue) : '';
 }
 
 /** Times of an event on a given day: its opening hours that weekday, or its start and end time. */
@@ -122,6 +129,11 @@ export function eventCard(event) {
       <dl class="facts">
         ${event.placeId || event.venue ? `<div><dt>${e(t('common.where'))}</dt><dd>${eventWhere(event)}</dd></div>` : ''}
         ${event.hours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(event.hours))}</dd></div>` : ''}
+        ${
+          event.registration
+            ? `<div><dt>${e(t('life.registration'))}</dt><dd>${event.registration.until ? `${e(t('life.registerBefore', { date: formatDate(event.registration.until, lang) }))} · ` : ''}<a href="${e(event.registration.url)}" target="_blank" rel="noopener">${e(t('life.register'))}<span aria-hidden="true"> ↗</span></a></dd></div>`
+            : ''
+        }
       </dl>
       ${verifiedLine(event.lastVerified)}
       ${sourcesList(event.sources)}
