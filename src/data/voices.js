@@ -145,6 +145,19 @@ export const VOICE_TOPICS = [
           de: 'Wir haben schöne Orte wie den Parc de l’Indépendance, der zu wenig genutzt wird. Warum findet der Weihnachtsmarkt im sehr engen Schlosshof statt, wenn wir einen schönen, sehr grossen Platz haben, auf dem man einen prächtigen und sehr attraktiven Weihnachtsmarkt machen könnte?',
           it: 'Abbiamo begli spazi, come il Parc de l’Indépendance, che è poco sfruttato. Perché fare il mercatino di Natale nel cortile del castello, molto stretto, quando abbiamo un bello spazio molto grande dove si potrebbe fare un magnifico mercatino di Natale, molto attraente?',
         },
+        replies: [
+          {
+            id: 'marche-noel-parc-r1',
+            name: 'Ludovic D.',
+            date: '2026-11-05',
+            text: {
+              fr: 'Malheureusement, c’est impossible dans le parc : la Ville interdit d’y installer des chalets ou de l’éclairage.',
+              en: 'Unfortunately, it’s impossible in the park: the town does not allow chalets or lighting to be put up there.',
+              de: 'Leider ist das im Park nicht möglich: Die Stadt verbietet es, dort Chalets aufzustellen oder Beleuchtung anzubringen.',
+              it: 'Purtroppo nel parco è impossibile: il Comune vieta di installarvi chalet o illuminazione.',
+            },
+          },
+        ],
       },
     ],
   },
