@@ -165,7 +165,11 @@ export function eventSchema(event) {
           }),
         }
       : event.venue
-        ? { '@type': 'Place', name: event.venue.name, address: postalAddress(event.venue.address) }
+        ? {
+            '@type': 'Place',
+            name: typeof event.venue.name === 'string' ? event.venue.name : localized(event.venue.name),
+            address: postalAddress(event.venue.address),
+          }
         : MORGES,
   };
 }

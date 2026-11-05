@@ -96,6 +96,60 @@ export const EVENTS = [
     lastVerified: '2026-10-28',
   },
   {
+    id: 'atelier-peinture-doree-2026',
+    title: {
+      fr: 'Atelier « La peinture dorée »',
+      en: '“Golden painting” workshop',
+      de: 'Workshop «Goldene Malerei»',
+      it: 'Laboratorio «La pittura dorata»',
+    },
+    startDate: '2026-11-14',
+    endDate: '2026-11-14',
+    startTime: '16:00',
+    endTime: '18:00',
+    placeId: null,
+    venue: {
+      name: { fr: 'Villa privée à Morges', en: 'Private villa in Morges', de: 'Private Villa in Morges', it: 'Villa privata a Morges' },
+      note: {
+        fr: 'adresse communiquée après l’inscription',
+        en: 'address given after registration',
+        de: 'Adresse nach der Anmeldung mitgeteilt',
+        it: 'indirizzo comunicato dopo l’iscrizione',
+      },
+    },
+    hours: {
+      fr: 'Samedi de 16 h à 18 h. Places limitées.',
+      en: 'Saturday 4 pm to 6 pm. Limited places.',
+      de: 'Samstag 16 bis 18 Uhr. Begrenzte Plätze.',
+      it: 'Sabato dalle 16 alle 18. Posti limitati.',
+    },
+    summary: {
+      fr: 'Un atelier créatif pour les femmes : deux heures pour soi, dans une ambiance douce et bienveillante, à la découverte de la peinture acrylique et de la feuille d’or. Animé par Déborah et Matière.',
+      en: 'A creative workshop for women: two hours for yourself, in a gentle, caring atmosphere, discovering acrylic painting and gold leaf. Led by Déborah and Matière.',
+      de: 'Ein kreativer Workshop für Frauen: zwei Stunden für sich, in einer sanften, wohlwollenden Atmosphäre, mit Acrylmalerei und Blattgold. Geleitet von Déborah und Matière.',
+      it: 'Un laboratorio creativo per donne: due ore per sé, in un’atmosfera dolce e accogliente, alla scoperta della pittura acrilica e della foglia d’oro. Condotto da Déborah e Matière.',
+    },
+    registration: { url: 'https://luma.com/4i3dsrp5', until: '2026-11-12' },
+    photo: {
+      src: '/images/events/peinture-doree.webp',
+      width: 600,
+      height: 600,
+      alt: {
+        fr: 'Feuilles d’or posées sur une toile blanche, à côté de deux pinceaux',
+        en: 'Gold leaf laid on a white canvas, next to two paintbrushes',
+        de: 'Blattgold auf einer weissen Leinwand neben zwei Pinseln',
+        it: 'Foglie d’oro posate su una tela bianca, accanto a due pennelli',
+      },
+      credit: 'Matière',
+      licence: 'Visuel de l’atelier transmis à Morges.info par l’organisatrice (05.11.2026)',
+    },
+    sources: [
+      { label: 'Luma — La peinture dorée (inscription)', url: 'https://luma.com/4i3dsrp5' },
+      { label: 'Morges.info — informations transmises par l’organisatrice, Déborah (05.11.2026)' },
+    ],
+    lastVerified: '2026-11-05',
+  },
+  {
     id: 'beausobre-blaise-bersinger-2026',
     title: {
       fr: 'Blaise Bersinger',
@@ -292,10 +346,19 @@ export function validateEvent(e) {
   if (e && e.startTime !== undefined && !time.test(e.startTime)) errors.push(`${p}.startTime must be HH:MM`);
   if (e && e.endTime !== undefined && (!time.test(e.endTime) || e.startTime === undefined)) errors.push(`${p}.endTime must be HH:MM, after a startTime`);
   if (e && e.venue !== undefined) {
+    // a venue without a page here: its name (a string, or text in four languages), its address
+    // ("street, 1110 Morges"), or a note saying why there is none (a private home)
     const v = e.venue || {};
-    if (typeof v.name !== 'string' || !v.name.trim() || typeof v.address !== 'string' || !/,\s*\d{4}\s+\S/.test(v.address)) {
-      errors.push(`${p}.venue needs a name and an address ("street, 1110 Morges")`);
-    }
+    const nameOk = typeof v.name === 'string' ? v.name.trim() : validateText(v.name, 'name', { allLanguages: true }).length === 0;
+    if (!nameOk) errors.push(`${p}.venue.name is required`);
+    if (v.address !== undefined && (typeof v.address !== 'string' || !/,\s*\d{4}\s+\S/.test(v.address))) errors.push(`${p}.venue.address must read "street, 1110 Morges"`);
+    if (v.address === undefined && v.note === undefined) errors.push(`${p}.venue needs an address or a note`);
+    if (v.note !== undefined) errors.push(...validateText(v.note, `${p}.venue.note`, { allLanguages: true }));
+  }
+  if (e && e.registration !== undefined) {
+    const r = e.registration || {};
+    if (!/^https:\/\//.test(r.url || '')) errors.push(`${p}.registration.url must be https`);
+    if (r.until !== undefined && (!isIsoDate(r.until) || r.until > e.startDate)) errors.push(`${p}.registration.until must be a date before the event`);
   }
   if (e && e.photo !== undefined) errors.push(...validatePhoto(e.photo, `${p}.photo`));
   if (e && e.website !== undefined && !/^https:\/\//.test(e.website)) errors.push(`${p}.website must be https`);
