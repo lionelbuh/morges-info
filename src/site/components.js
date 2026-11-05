@@ -73,6 +73,27 @@ export function placeCard(place) {
   </article>`;
 }
 
+/** Where an event takes place: a place of the site (linked), or a venue that has no page here. */
+function eventWhere(event) {
+  if (event.placeId) return placeLink(event.placeId);
+  if (event.venue) return `${e(event.venue.name)}, ${e(event.venue.address)}`;
+  return '';
+}
+
+/** The name of the place or venue of an event, for short lines. */
+function eventPlaceName(event) {
+  const place = event.placeId && getPlace(event.placeId);
+  if (place) return localized(place.name);
+  return event.venue ? event.venue.name : '';
+}
+
+/** Times of an event on a given day: its opening hours that weekday, or its start and end time. */
+function eventTimes(event, iso) {
+  if (event.weekHours) return event.weekHours[weekdayOf(iso)];
+  if (event.startTime) return event.endTime ? [event.startTime, event.endTime] : null;
+  return null;
+}
+
 function placeLink(placeId) {
   const place = placeId && getPlace(placeId);
   if (!place) return '';
@@ -87,13 +108,19 @@ function eventDates(event, lang) {
 
 export function eventCard(event) {
   const lang = getLang();
+  const photo = event.photo;
   return `<article class="card event-card" id="event-${e(event.id)}">
+    ${
+      photo
+        ? `<figure class="photo event-photo"><img src="${e(photo.src)}" alt="${e(localized(photo.alt))}"${photo.width ? ` width="${photo.width}" height="${photo.height}"` : ''} loading="lazy" decoding="async" /><figcaption class="photo-credit">${e(t('common.photoCredit', { credit: `© ${photo.credit}` }))}</figcaption></figure>`
+        : ''
+    }
     <div class="card-body">
       <p class="event-date"><time datetime="${e(event.startDate)}">${e(eventDates(event, lang))}</time></p>
       <h3 class="card-title">${e(localized(event.title))}</h3>
       ${event.summary ? `<p class="event-summary">${e(localized(event.summary))}</p>` : ''}
       <dl class="facts">
-        ${event.placeId ? `<div><dt>${e(t('common.where'))}</dt><dd>${placeLink(event.placeId)}</dd></div>` : ''}
+        ${event.placeId || event.venue ? `<div><dt>${e(t('common.where'))}</dt><dd>${eventWhere(event)}</dd></div>` : ''}
         ${event.hours ? `<div><dt>${e(t('common.hours'))}</dt><dd>${e(localized(event.hours))}</dd></div>` : ''}
       </dl>
       ${verifiedLine(event.lastVerified)}
@@ -283,11 +310,11 @@ export function calendarDayPanel(iso, events) {
   const lang = getLang();
   const items = eventsOnDay(events, iso)
     .map((ev) => {
-      const h = ev.weekHours && ev.weekHours[weekdayOf(iso)];
-      const place = ev.placeId && getPlace(ev.placeId);
+      const h = eventTimes(ev, iso);
+      const where = eventPlaceName(ev);
       return `<li class="cal-panel-item${ev.featured ? ' is-featured' : ''}">
         <strong class="cal-panel-title">${e(localized(ev.title))}</strong>
-        ${h || place ? `<span class="cal-panel-meta">${[h && formatTimeRange(h, lang), place && localized(place.name)].filter(Boolean).map(e).join(' · ')}</span>` : ''}
+        ${h || where ? `<span class="cal-panel-meta">${[h && formatTimeRange(h, lang), where].filter(Boolean).map(e).join(' · ')}</span>` : ''}
         <a href="#event-${e(ev.id)}">${e(t('life.more'))}<span aria-hidden="true"> →</span></a>
       </li>`;
     })

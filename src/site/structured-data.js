@@ -148,13 +148,13 @@ export function eventSchema(event) {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: localized(event.title),
-    startDate: event.startDate,
-    endDate: event.endDate,
+    startDate: event.startTime ? `${event.startDate}T${event.startTime}` : event.startDate,
+    endDate: event.endTime ? `${event.endDate}T${event.endTime}` : event.endDate,
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     ...((event.summary || event.hours) && { description: [event.summary, event.hours].filter(Boolean).map(localized).join(' ') }),
     url: abs(`${pageHref('life', lang)}#event-${event.id}`),
-    image: shareImage(),
+    image: event.photo ? abs(event.photo.src) : shareImage(),
     location: place
       ? {
           '@type': 'Place',
@@ -164,7 +164,9 @@ export function eventSchema(event) {
             geo: { '@type': 'GeoCoordinates', latitude: place.coordinates.lat, longitude: place.coordinates.lng },
           }),
         }
-      : MORGES,
+      : event.venue
+        ? { '@type': 'Place', name: event.venue.name, address: postalAddress(event.venue.address) }
+        : MORGES,
   };
 }
 

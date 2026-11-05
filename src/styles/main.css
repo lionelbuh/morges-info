@@ -3689,3 +3689,15 @@ a.mini-day.is-featured::after {
     transition: none;
   }
 }
+
+/* an event with a photo (a concert's artists, a poster) */
+.event-photo {
+  margin: 0;
+}
+.event-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}

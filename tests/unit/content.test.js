@@ -169,6 +169,8 @@ describe('content model', () => {
     const panel = calendarDayPanel('2026-12-06', EVENTS);
     expect(panel).toContain('dimanche 6 décembre 2026');
     expect(panel).toContain('10 h – 20 h · Château de Morges');
+    // an evening event at a venue without a page here: its time and the venue's name
+    expect(calendarDayPanel('2026-11-06', EVENTS)).toContain('20 h – 22 h · Lykke Concept Store');
   });
 
   it('shows French with a notice when a draft story is not translated yet', () => {
