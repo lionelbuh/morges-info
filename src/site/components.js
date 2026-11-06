@@ -8,6 +8,7 @@ import { getCategory } from '../data/categories.js';
 import { getPlace } from '../data/places.js';
 import { formatDate, formatMonth, formatDayLong, weekdayNames, formatTimeRange, formatShortRange, formatMonthShort } from './format.js';
 import { eventsOnDay, weekdayOf } from '../data/events.js';
+import { rotateByDay } from '../data/businesses.js';
 import { placeHref, placePageHref, directionsLinks, photoMapHref, pageHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
@@ -250,8 +251,7 @@ export function eventCalendar(events, today) {
  */
 export function businessSpotlight(list, today) {
   if (!list.length) return '';
-  const start = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86400000) % list.length;
-  const ordered = [...list.slice(start), ...list.slice(0, start)];
+  const ordered = rotateByDay(list, today);
   const controls =
     ordered.length > 1
       ? `<div class="home-voices-controls" data-biz-controls hidden>
@@ -422,7 +422,7 @@ export function businessProfile(b, { today } = {}) {
       ${notice ? `<p class="biz-notice" role="note">${e(localized(notice.text))}</p>` : ''}
       ${textBlock(b.description, { className: 'biz-lead' })}
       ${where}
-      ${b.openingHours ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.hours'))}</span> ${e(localized(b.openingHours.text))}</p>` : ''}
+      ${b.openingHours ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.hours'))}</span> ${[].concat(localized(b.openingHours.text)).map(e).join('<br />')}</p>` : ''}
       ${businessActions(b)}
     </div>
     ${

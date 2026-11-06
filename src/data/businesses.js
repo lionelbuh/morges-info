@@ -327,6 +327,121 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'chez-loubna',
+    name: 'Chez Loubna',
+    category: 'food',
+    address: 'Grand-Rue 31, 1110 Morges',
+    phone: '+41 79 959 68 92',
+    email: 'chezloubna3@gmail.com',
+    coordinates: null,
+    description: {
+      fr: 'Cuisine marocaine maison au cœur de Morges, sur place ou à emporter : couscous, tajines, pastillas, harira, pâtisseries orientales et thé marocain.',
+      en: 'Home-made Moroccan cooking in the heart of Morges, to eat in or take away: couscous, tagines, pastillas, harira, oriental pastries and Moroccan tea.',
+      de: 'Hausgemachte marokkanische Küche im Herzen von Morges, vor Ort oder zum Mitnehmen: Couscous, Tajines, Pastillas, Harira, orientalisches Gebäck und marokkanischer Tee.',
+      it: 'Cucina marocchina fatta in casa nel cuore di Morges, sul posto o da asporto: cuscus, tajine, pastille, harira, dolci orientali e tè marocchino.',
+    },
+    services: [
+      {
+        title: { fr: 'Sur place ou à emporter', en: 'Eat in or take away', de: 'Vor Ort oder zum Mitnehmen', it: 'Sul posto o da asporto' },
+        text: {
+          fr: 'Couscous, tajines, pastillas et autres spécialités marocaines, avec une cuisine ouverte en continu aux heures d’ouverture.',
+          en: 'Couscous, tagines, pastillas and other Moroccan specialities, with the kitchen open throughout opening hours.',
+          de: 'Couscous, Tajines, Pastillas und weitere marokkanische Spezialitäten, mit durchgehend warmer Küche während der Öffnungszeiten.',
+          it: 'Cuscus, tajine, pastille e altre specialità marocchine, con la cucina aperta senza interruzione durante l’orario di apertura.',
+        },
+      },
+      {
+        title: { fr: 'Douceurs et thé', en: 'Sweets and tea', de: 'Süsses und Tee', it: 'Dolci e tè' },
+        text: {
+          fr: 'Pâtisseries orientales et thé marocain, à déguster sur place ou à emporter.',
+          en: 'Oriental pastries and Moroccan tea, to enjoy on the spot or take away.',
+          de: 'Orientalisches Gebäck und marokkanischer Tee, vor Ort oder zum Mitnehmen.',
+          it: 'Dolci orientali e tè marocchino, da gustare sul posto o da portare via.',
+        },
+      },
+    ],
+    about: {
+      fr: 'Une cuisine familiale, généreuse et préparée avec soin, aux saveurs traditionnelles et aux épices parfumées, servie avec le sourire dans une adresse conviviale de la Grand-Rue.',
+      en: 'Generous family cooking, carefully prepared, with traditional flavours and fragrant spices, served with a smile at a friendly address on the Grand-Rue.',
+      de: 'Grosszügige, sorgfältig zubereitete Familienküche mit traditionellen Aromen und duftenden Gewürzen, mit einem Lächeln serviert an einer gemütlichen Adresse an der Grand-Rue.',
+      it: 'Una cucina di famiglia generosa e preparata con cura, dai sapori tradizionali e dalle spezie profumate, servita con il sorriso in un indirizzo accogliente della Grand-Rue.',
+    },
+    website: 'https://chezloubna.ch/',
+    instagram: 'https://www.instagram.com/chezloubna2/',
+    facebook: 'https://www.facebook.com/profile.php?id=61576461120789',
+    openingHours: {
+      text: {
+        fr: ['Lundi : 10 h 30 – 18 h 30', 'Mardi, mercredi, jeudi et samedi : 9 h 30 – 18 h 30', 'Vendredi : 9 h 30 – 14 h 30 et 18 h – 22 h', 'Dimanche : fermé'],
+        en: ['Monday: 10:30–18:30', 'Tuesday, Wednesday, Thursday and Saturday: 9:30–18:30', 'Friday: 9:30–14:30 and 18:00–22:00', 'Sunday: closed'],
+        de: ['Montag: 10.30–18.30 Uhr', 'Dienstag, Mittwoch, Donnerstag und Samstag: 9.30–18.30 Uhr', 'Freitag: 9.30–14.30 und 18–22 Uhr', 'Sonntag: geschlossen'],
+        it: ['Lunedì: 10.30–18.30', 'Martedì, mercoledì, giovedì e sabato: 9.30–18.30', 'Venerdì: 9.30–14.30 e 18–22', 'Domenica: chiuso'],
+      },
+      sources: [{ label: 'Morges.info — horaires transmis par Chez Loubna (06.11.2026)' }],
+      lastVerified: '2026-11-06',
+    },
+    photos: [
+      {
+        src: '/images/businesses/chez-loubna-vitrine.webp',
+        width: 1200,
+        height: 675,
+        alt: {
+          fr: 'La vitrine de Chez Loubna, avec des lanternes, des plats en céramique peints et l’inscription « Cuisine marocaine sur place ou à emporter »',
+          en: 'The window of Chez Loubna, with lanterns, painted ceramic plates and the words “Moroccan cooking, eat in or take away”',
+          de: 'Das Schaufenster von Chez Loubna mit Laternen, bemalten Keramiktellern und der Aufschrift «Marokkanische Küche, vor Ort oder zum Mitnehmen»',
+          it: 'La vetrina di Chez Loubna, con lanterne, piatti di ceramica dipinti e la scritta «Cucina marocchina sul posto o da asporto»',
+        },
+        credit: 'Chez Loubna',
+        licence: 'Tous droits réservés, publié avec l’accord de Chez Loubna (06.11.2026)',
+      },
+      {
+        src: '/images/businesses/chez-loubna-tajine.webp',
+        width: 1086,
+        height: 1448,
+        alt: {
+          fr: 'Un tajine aux pruneaux, abricots secs et graines de sésame, dans un plat en terre peint en bleu',
+          en: 'A tagine with prunes, dried apricots and sesame seeds, in a blue painted earthenware dish',
+          de: 'Eine Tajine mit Dörrpflaumen, getrockneten Aprikosen und Sesam in einer blau bemalten Tonschale',
+          it: 'Un tajine con prugne secche, albicocche secche e semi di sesamo, in un piatto di terracotta dipinto di blu',
+        },
+        credit: 'Chez Loubna',
+        licence: 'Tous droits réservés, publié avec l’accord de Chez Loubna (06.11.2026)',
+      },
+      {
+        src: '/images/businesses/chez-loubna-couscous.webp',
+        width: 901,
+        height: 1600,
+        alt: {
+          fr: 'Deux grands plats de couscous aux légumes, pois chiches et oignons caramélisés aux raisins secs, en cuisine',
+          en: 'Two large dishes of couscous with vegetables, chickpeas and caramelised onions with raisins, in the kitchen',
+          de: 'Zwei grosse Platten Couscous mit Gemüse, Kichererbsen und karamellisierten Zwiebeln mit Rosinen, in der Küche',
+          it: 'Due grandi piatti di cuscus con verdure, ceci e cipolle caramellate con uvetta, in cucina',
+        },
+        credit: 'Chez Loubna',
+        licence: 'Tous droits réservés, publié avec l’accord de Chez Loubna (06.11.2026)',
+      },
+      {
+        src: '/images/businesses/chez-loubna-logo.webp',
+        width: 720,
+        height: 720,
+        alt: {
+          fr: 'Le logo de Chez Loubna, cuisine marocaine, Grande Rue 31 à Morges',
+          en: 'The logo of Chez Loubna, Moroccan cooking, Grande Rue 31 in Morges',
+          de: 'Das Logo von Chez Loubna, marokkanische Küche, Grande Rue 31 in Morges',
+          it: 'Il logo di Chez Loubna, cucina marocchina, Grande Rue 31 a Morges',
+        },
+        credit: 'Chez Loubna',
+        licence: 'Tous droits réservés, publié avec l’accord de Chez Loubna (06.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Chez Loubna — site web', url: 'https://chezloubna.ch/' },
+      { label: 'Morges.info — informations et photos transmises par Chez Loubna, avec son accord (06.11.2026)' },
+    ],
+    lastVerified: '2026-11-06',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */
@@ -380,6 +495,16 @@ export function activeNotice(b, today) {
 }
 
 /** Entries shown in the editorial selection (sponsored entries are never part of it). */
+/**
+ * The list turned so that a different business comes first each day (YYYY-MM-DD in Morges), the
+ * others following in the same order: no business is always at the top.
+ */
+export function rotateByDay(list, today) {
+  if (!list.length) return [];
+  const start = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86400000) % list.length;
+  return [...list.slice(start), ...list.slice(0, start)];
+}
+
 export function editorialSelection(list = BUSINESSES) {
   return list.filter((b) => b.editorial && b.editorial.selected && b.commercial.status !== 'sponsored');
 }
