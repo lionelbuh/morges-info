@@ -437,10 +437,10 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   await expect(photo).toHaveAttribute('alt', /chat/);
   // after 12 s, the next business
   await page.clock.runFor(8000);
-  await expect(shown(page).locator('.card-title')).toHaveText('Amandine Réflexologie');
-  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 2');
+  await expect(shown(page).locator('.card-title')).toHaveText('Chez Loubna');
+  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 3');
   // the buttons
-  await page.locator('[data-biz-step="1"]').click();
+  await page.locator('[data-biz-step="-1"]').click();
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
   await page.close();
 

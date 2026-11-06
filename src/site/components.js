@@ -422,7 +422,7 @@ export function businessProfile(b, { today } = {}) {
       ${notice ? `<p class="biz-notice" role="note">${e(localized(notice.text))}</p>` : ''}
       ${textBlock(b.description, { className: 'biz-lead' })}
       ${where}
-      ${b.openingHours ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.hours'))}</span> ${e(localized(b.openingHours.text))}</p>` : ''}
+      ${b.openingHours ? `<p class="biz-where"><span class="biz-where-label">${e(t('common.hours'))}</span> ${[].concat(localized(b.openingHours.text)).map(e).join('<br />')}</p>` : ''}
       ${businessActions(b)}
     </div>
     ${

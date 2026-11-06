@@ -114,6 +114,26 @@
     "width": 1200,
     "height": 900
   },
+  "/images/businesses/chez-loubna-couscous.webp": {
+    "src": "/images/share/chez-loubna-couscous.jpg",
+    "width": 901,
+    "height": 1600
+  },
+  "/images/businesses/chez-loubna-logo.webp": {
+    "src": "/images/share/chez-loubna-logo.jpg",
+    "width": 720,
+    "height": 720
+  },
+  "/images/businesses/chez-loubna-tajine.webp": {
+    "src": "/images/share/chez-loubna-tajine.jpg",
+    "width": 1086,
+    "height": 1448
+  },
+  "/images/businesses/chez-loubna-vitrine.webp": {
+    "src": "/images/share/chez-loubna-vitrine.jpg",
+    "width": 1200,
+    "height": 675
+  },
   "/images/businesses/luckycats-annonce.webp": {
     "src": "/images/share/luckycats-annonce.jpg",
     "width": 1167,
