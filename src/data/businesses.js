@@ -495,6 +495,16 @@ export function activeNotice(b, today) {
 }
 
 /** Entries shown in the editorial selection (sponsored entries are never part of it). */
+/**
+ * The list turned so that a different business comes first each day (YYYY-MM-DD in Morges), the
+ * others following in the same order: no business is always at the top.
+ */
+export function rotateByDay(list, today) {
+  if (!list.length) return [];
+  const start = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86400000) % list.length;
+  return [...list.slice(start), ...list.slice(0, start)];
+}
+
 export function editorialSelection(list = BUSINESSES) {
   return list.filter((b) => b.editorial && b.editorial.selected && b.commercial.status !== 'sponsored');
 }

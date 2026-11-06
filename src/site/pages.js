@@ -10,7 +10,7 @@ import { t, getLang, localized } from '../i18n/index.js';
 import { escapeHtml as e } from '../ui/dom.js';
 import { PLACES, getPlace } from '../data/places.js';
 import { CATEGORIES } from '../data/categories.js';
-import { editorialSelection, BUSINESS_CATEGORIES } from '../data/businesses.js';
+import { editorialSelection, rotateByDay, BUSINESS_CATEGORIES } from '../data/businesses.js';
 import { upcomingEvents, todayInMorges, featuredEvent } from '../data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS } from '../data/practical.js';
 import { STORIES, featuredStory } from '../data/stories.js';
@@ -196,8 +196,9 @@ function businessFilters(selection) {
 }
 
 function renderBusinesses({ today } = {}) {
-  const selection = editorialSelection();
   const day = today || todayInMorges();
+  // a different business at the top each day, as on the home page
+  const selection = rotateByDay(editorialSelection(), day);
   const criteria = ['local', 'independent', 'verified', 'free'].map((k) => `<li>${e(t(`businesses.criteria.${k}`))}</li>`).join('');
   return `${selection.map((b) => jsonLd(businessSchema(b))).join('')}
   ${pageIntro(t('home.businessesTitle'), t('businesses.intro'))}

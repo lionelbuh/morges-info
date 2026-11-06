@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { PLACES, getPlace } from '../../src/data/places.js';
-import { BUSINESSES, validateBusiness, editorialSelection } from '../../src/data/businesses.js';
+import { BUSINESSES, validateBusiness, editorialSelection, rotateByDay } from '../../src/data/businesses.js';
 import { EVENTS, validateEvent, upcomingEvents, todayInMorges, eventsOnDay, featuredEvent } from '../../src/data/events.js';
 import { PRACTICAL, OFFICIAL_LINKS, validatePractical } from '../../src/data/practical.js';
 import { STORIES, validateStory, featuredStory } from '../../src/data/stories.js';
@@ -145,6 +145,15 @@ describe('content model', () => {
     expect(upcomingEvents(EVENTS, '2026-12-20')).toHaveLength(1); // last day still listed
     expect(upcomingEvents(EVENTS, '2026-12-21')).toHaveLength(0);
     expect(todayInMorges(new Date('2026-12-20T23:30:00Z'))).toBe('2026-12-21'); // already the 21st in Zurich
+  });
+
+  it('businesses: a different one comes first each day, the others in the same order', () => {
+    const list = ['a', 'b', 'c'];
+    expect(rotateByDay(list, '2026-11-04')).toEqual(['b', 'c', 'a']);
+    expect(rotateByDay(list, '2026-11-05')).toEqual(['c', 'a', 'b']);
+    expect(rotateByDay(list, '2026-11-06')).toEqual(['a', 'b', 'c']);
+    expect(new Set(['2026-11-04', '2026-11-05', '2026-11-06'].map((d) => rotateByDay(list, d)[0])).size).toBe(3);
+    expect(rotateByDay([], '2026-11-04')).toEqual([]);
   });
 
   it('an event with opening days is only on the days it is open; the featured one comes first', () => {
