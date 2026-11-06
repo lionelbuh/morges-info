@@ -332,6 +332,8 @@ export const BUSINESSES = [
     name: 'Chez Loubna',
     category: 'food',
     address: 'Grand-Rue 31, 1110 Morges',
+    phone: '+41 79 959 68 92',
+    email: 'chezloubna3@gmail.com',
     coordinates: null,
     description: {
       fr: 'Cuisine marocaine maison au cœur de Morges, sur place ou à emporter : couscous, tajines, pastillas, harira, pâtisseries orientales et thé marocain.',
@@ -366,6 +368,8 @@ export const BUSINESSES = [
       it: 'Una cucina di famiglia generosa e preparata con cura, dai sapori tradizionali e dalle spezie profumate, servita con il sorriso in un indirizzo accogliente della Grand-Rue.',
     },
     website: 'https://chezloubna.ch/',
+    instagram: 'https://www.instagram.com/chezloubna2/',
+    facebook: 'https://www.facebook.com/profile.php?id=61576461120789',
     openingHours: {
       text: {
         fr: ['Lundi : 10 h 30 – 18 h 30', 'Mardi, mercredi, jeudi et samedi : 9 h 30 – 18 h 30', 'Vendredi : 9 h 30 – 14 h 30 et 18 h – 22 h', 'Dimanche : fermé'],

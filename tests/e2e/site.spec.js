@@ -426,7 +426,7 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   await page.mouse.move(0, 0);
   await expect(shown(page)).toHaveCount(1);
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
-  await expect(page.locator('[data-biz-slide].is-off')).toHaveAttribute('inert', '');
+  await expect(page.locator('[data-biz-slide].is-off[inert]')).toHaveCount(2);
   const photo = shown(page).locator('.business-photo img');
   await expect(photo).toHaveAttribute('src', /luckycats-estelle-franzone/);
   // after 4 s, the next photo of the same business (with a short fade)
