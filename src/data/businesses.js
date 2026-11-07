@@ -336,10 +336,10 @@ export const BUSINESSES = [
     email: 'chezloubna3@gmail.com',
     coordinates: null,
     description: {
-      fr: 'Cuisine marocaine maison au cœur de Morges, sur place ou à emporter : couscous, tajines, pastillas, harira, pâtisseries orientales et thé marocain.',
-      en: 'Home-made Moroccan cooking in the heart of Morges, to eat in or take away: couscous, tagines, pastillas, harira, oriental pastries and Moroccan tea.',
-      de: 'Hausgemachte marokkanische Küche im Herzen von Morges, vor Ort oder zum Mitnehmen: Couscous, Tajines, Pastillas, Harira, orientalisches Gebäck und marokkanischer Tee.',
-      it: 'Cucina marocchina fatta in casa nel cuore di Morges, sul posto o da asporto: cuscus, tajine, pastille, harira, dolci orientali e tè marocchino.',
+      fr: 'Cuisine marocaine maison au cœur de Morges, sur place ou à emporter : couscous, tajines, pastillas, harira, pâtisseries marocaines et thé marocain.',
+      en: 'Home-made Moroccan cooking in the heart of Morges, to eat in or take away: couscous, tagines, pastillas, harira, Moroccan pastries and Moroccan tea.',
+      de: 'Hausgemachte marokkanische Küche im Herzen von Morges, vor Ort oder zum Mitnehmen: Couscous, Tajines, Pastillas, Harira, marokkanisches Gebäck und marokkanischer Tee.',
+      it: 'Cucina marocchina fatta in casa nel cuore di Morges, sul posto o da asporto: cuscus, tajine, pastille, harira, dolci marocchini e tè marocchino.',
     },
     services: [
       {
@@ -354,10 +354,10 @@ export const BUSINESSES = [
       {
         title: { fr: 'Douceurs et thé', en: 'Sweets and tea', de: 'Süsses und Tee', it: 'Dolci e tè' },
         text: {
-          fr: 'Pâtisseries orientales et thé marocain, à déguster sur place ou à emporter.',
-          en: 'Oriental pastries and Moroccan tea, to enjoy on the spot or take away.',
-          de: 'Orientalisches Gebäck und marokkanischer Tee, vor Ort oder zum Mitnehmen.',
-          it: 'Dolci orientali e tè marocchino, da gustare sul posto o da portare via.',
+          fr: 'Pâtisseries marocaines et thé marocain, à déguster sur place ou à emporter.',
+          en: 'Moroccan pastries and Moroccan tea, to enjoy on the spot or take away.',
+          de: 'Marokkanisches Gebäck und marokkanischer Tee, vor Ort oder zum Mitnehmen.',
+          it: 'Dolci marocchini e tè marocchino, da gustare sul posto o da portare via.',
         },
       },
     ],
