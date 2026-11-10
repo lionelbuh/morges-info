@@ -82,8 +82,8 @@ export function homeSectionOrder(sections, now = new Date()) {
   const day = Math.floor(Date.parse(`${get('year')}-${get('month')}-${get('day')}T00:00:00Z`) / 86400000);
   const slot = day * 2 + (Number(get('hour')) >= 12 ? 1 : 0);
   const filled = sections.filter(([, html]) => html);
-  // counted from the morning of 10 November 2026, when Découvrir Morges led (the first in the list)
-  const anchor = (Date.parse('2026-11-10T00:00:00Z') / 86400000) * 2;
+  // counted from the afternoon of 10 November 2026, when Découvrir Morges led (the first in the list)
+  const anchor = (Date.parse('2026-11-10T00:00:00Z') / 86400000) * 2 + 1;
   const start = (((slot - anchor) % filled.length) + filled.length) % filled.length;
   return [...filled.slice(start), ...filled.slice(0, start)].map(([, html]) => html);
 }

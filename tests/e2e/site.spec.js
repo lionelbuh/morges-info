@@ -203,9 +203,9 @@ test('home: the sections take turns at the top every 12 hours', async ({ page })
     await page.goto('/');
     return page.locator('main .section h2').first().getAttribute('id');
   };
-  expect(await first('2026-11-10T10:00:00+01:00')).toBe('home-discover');
-  expect(await first('2026-11-10T13:00:00+01:00')).toBe('home-map');
-  expect(await first('2026-11-11T09:00:00+01:00')).toBe('home-life');
+  expect(await first('2026-11-10T17:00:00+01:00')).toBe('home-discover');
+  expect(await first('2026-11-11T09:00:00+01:00')).toBe('home-map');
+  expect(await first('2026-11-11T13:00:00+01:00')).toBe('home-life');
 });
 
 test('photos page: an old and a recent photo of the same place take turns; not for reduced motion', async ({ browser }) => {
@@ -444,7 +444,7 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
 });
 
 test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
-  await page.clock.setFixedTime(new Date('2026-11-10T10:00:00+01:00')); // the morning Découvrir Morges leads
+  await page.clock.setFixedTime(new Date('2026-11-10T17:00:00+01:00')); // the afternoon Découvrir Morges leads
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
   await expect(page.locator('.feature-story')).toBeVisible();
@@ -462,7 +462,7 @@ test('home: map preview with markers, places, practical info, businesses and fea
   // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
   await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
   await expect(page.locator('.hero-actions .btn')).toHaveCount(1);
-  // that morning: Découvrir Morges first (its six themes), then the photo map, the calendar, the businesses
+  // that afternoon: Découvrir Morges first (its six themes), then the photo map, the calendar, the businesses
   await expect(page.locator('main .section h2').nth(0)).toHaveAttribute('id', 'home-discover');
   await expect(page.locator('.home-discover a')).toHaveCount(6);
   await expect(page.locator('.home-discover a').first()).toHaveAttribute('href', '/decouvrir-morges/#incontournables');

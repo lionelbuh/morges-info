@@ -63,11 +63,11 @@ describe('site pages', () => {
 
   it('home: the sections move on by one every 12 hours, empty ones left out', () => {
     const list = [['a', 'A'], ['b', 'B'], ['c', ''], ['d', 'D']];
-    expect(homeSectionOrder(list, new Date('2026-11-10T08:00:00+01:00'))).toEqual(['A', 'B', 'D']);
-    expect(homeSectionOrder(list, new Date('2026-11-10T11:59:00+01:00'))).toEqual(['A', 'B', 'D']);
-    expect(homeSectionOrder(list, new Date('2026-11-10T12:00:00+01:00'))).toEqual(['B', 'D', 'A']);
-    expect(homeSectionOrder(list, new Date('2026-11-11T00:30:00+01:00'))).toEqual(['D', 'A', 'B']);
-    expect(homeSectionOrder(list, new Date('2026-11-09T20:00:00+01:00'))).toEqual(['D', 'A', 'B']); // before the start too
+    expect(homeSectionOrder(list, new Date('2026-11-10T12:00:00+01:00'))).toEqual(['A', 'B', 'D']);
+    expect(homeSectionOrder(list, new Date('2026-11-10T23:59:00+01:00'))).toEqual(['A', 'B', 'D']);
+    expect(homeSectionOrder(list, new Date('2026-11-11T00:00:00+01:00'))).toEqual(['B', 'D', 'A']);
+    expect(homeSectionOrder(list, new Date('2026-11-11T12:30:00+01:00'))).toEqual(['D', 'A', 'B']);
+    expect(homeSectionOrder(list, new Date('2026-11-10T08:00:00+01:00'))).toEqual(['D', 'A', 'B']); // before the start too
   });
 
   it('home shows the businesses and hides past events', () => {
