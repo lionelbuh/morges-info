@@ -184,6 +184,16 @@
     "width": 1067,
     "height": 1600
   },
+  "/images/businesses/lykke-grande-table.webp": {
+    "src": "/images/share/lykke-grande-table.jpg",
+    "width": 1200,
+    "height": 900
+  },
+  "/images/businesses/lykke-logo.webp": {
+    "src": "/images/share/lykke-logo.jpg",
+    "width": 1200,
+    "height": 1200
+  },
   "/images/businesses/lykke-planchette.webp": {
     "src": "/images/share/lykke-planchette.jpg",
     "width": 900,
@@ -193,5 +203,10 @@
     "src": "/images/share/lykke-roules-cannelle.jpg",
     "width": 900,
     "height": 1200
+  },
+  "/images/businesses/lykke-salle.webp": {
+    "src": "/images/share/lykke-salle.jpg",
+    "width": 1200,
+    "height": 900
   }
 }
