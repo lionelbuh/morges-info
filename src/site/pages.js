@@ -17,7 +17,7 @@ import { STORIES, featuredStory } from '../data/stories.js';
 import { MILESTONES } from '../data/history.js';
 import { heroOfTheDay, getHeroPhoto } from '../data/photos.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
-import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks } from './links.js';
+import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks, businessPageHref } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { renderVoices, homeVoices } from './voices.js';
@@ -32,6 +32,7 @@ import {
   practicalCard,
   businessSpotlight,
   businessProfile,
+  businessCard,
   storyArticle,
   textBlock,
   frenchOnlyNotice,
@@ -465,6 +466,36 @@ function renderVisit() {
   </div>`;
 }
 
+/**
+ * The page of one business, with its own address: easier to find in search engines than an anchor of the
+ * businesses page, and with its own photo when the link is shared. The other businesses follow.
+ */
+function renderBusiness(businessId, { today } = {}) {
+  const lang = getLang();
+  const day = today || todayInMorges();
+  const all = editorialSelection();
+  const b = all.find((item) => item.id === businessId);
+  const crumbs = [
+    { name: t('places.home'), href: pageHref('home', lang) },
+    { name: t('home.businessesTitle'), href: pageHref('businesses', lang) },
+    { name: b.name, href: businessPageHref(b.id, lang) },
+  ];
+  const others = rotateByDay(all, day).filter((item) => item.id !== b.id);
+  return `${jsonLd(businessSchema(b))}${jsonLd(breadcrumbSchema(crumbs))}
+  <nav class="breadcrumb" aria-label="${e(t('places.breadcrumb'))}">
+    <ol>${crumbs.map((cr, i) => (i < crumbs.length - 1 ? `<li><a href="${cr.href}">${e(cr.name)}</a></li>` : `<li aria-current="page">${e(cr.name)}</li>`)).join('')}</ol>
+  </nav>
+  <section class="section business-page">${businessProfile(b, { today: day, page: true })}</section>
+  ${
+    others.length
+      ? `<section class="section" aria-labelledby="business-others">
+    ${sectionHead('business-others', t('businesses.others'), { href: pageHref('businesses', lang), label: t('businesses.allLink') })}
+    <div class="grid grid-3">${others.map((item) => businessCard(item)).join('')}</div>
+  </section>`
+      : ''
+  }`;
+}
+
 /** The page of one place: what the map panel shows, as an indexable page with its own address. */
 function renderPlace(placeId) {
   const lang = getLang();
@@ -605,6 +636,7 @@ export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);
 export function renderMain(pageId, opts) {
   if (pageId.startsWith('place:')) return renderPlace(pageId.slice('place:'.length));
   if (pageId.startsWith('photo:')) return renderPhoto(pageId.slice('photo:'.length));
+  if (pageId.startsWith('business:')) return renderBusiness(pageId.slice('business:'.length), opts);
   const render = RENDERERS[pageId];
   if (!render) throw new Error(`No renderer for page ${pageId}`);
   return render(opts);

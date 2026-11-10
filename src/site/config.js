@@ -5,6 +5,7 @@
  */
 import { PLACES } from '../data/places.js';
 import { publishedViewpoints } from '../data/viewpoints.js';
+import { editorialSelection } from '../data/businesses.js';
 
 export const SITE_URL = 'https://morges.info';
 
@@ -62,6 +63,8 @@ export const PAGES = [
 export const placePageId = (placeId) => `place:${placeId}`;
 /** …and each published viewpoint of the photo map, /photos/<id>/ (page id "photo:<id>"). */
 export const photoPageId = (viewpointId) => `photo:${viewpointId}`;
+/** …and each listed business, /commerces/<id>/ (page id "business:<id>"). */
+export const businessPageId = (businessId) => `business:${businessId}`;
 
 export function getPage(id) {
   if (id.startsWith('place:')) {
@@ -74,6 +77,11 @@ export function getPage(id) {
     if (!publishedViewpoints().some((vp) => vp.id === viewpointId)) throw new Error(`Unknown photo page: ${id}`);
     return { id, path: `/photos/${viewpointId}/`, nav: false, viewpointId };
   }
+  if (id.startsWith('business:')) {
+    // not checked against the list: the cards of the tests' sample businesses link here too
+    const businessId = id.slice('business:'.length);
+    return { id, path: `/commerces/${businessId}/`, nav: false, businessId };
+  }
   const page = PAGES.find((p) => p.id === id);
   if (!page) throw new Error(`Unknown page: ${id}`);
   return page;
@@ -84,4 +92,5 @@ export const ALL_PAGES = [
   ...PAGES,
   ...PLACES.map((p) => getPage(placePageId(p.id))),
   ...publishedViewpoints().map((vp) => getPage(photoPageId(vp.id))),
+  ...editorialSelection().map((b) => getPage(businessPageId(b.id))),
 ];

@@ -191,7 +191,8 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(46); // 14 listed pages + 20 places + 12 photo pages
+  expect(sitemap.match(/<loc>/g)).toHaveLength(50); // 14 listed pages + 20 places + 12 photo pages + 4 businesses
+  expect(sitemap).toContain('<loc>https://morges.info/commerces/lykke/</loc>\n    <lastmod>');
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
@@ -414,8 +415,26 @@ test('home: a click anywhere on a business card opens its profile on the busines
   const card = page.locator('section[aria-labelledby="home-businesses"] .business-card').filter({ hasText: 'Luckycats' });
   await expect(card.locator('.business-card-more')).toHaveText(`${fr.home.businessMore} →`);
   await card.click({ position: { x: 30, y: 30 } }); // on the photo, not only the name
-  await expect(page).toHaveURL(/\/commerces\/#business-luckycats$/);
-  await expect(page.locator('#business-luckycats')).toBeInViewport();
+  await expect(page).toHaveURL(/\/commerces\/luckycats\/$/);
+  await expect(page.locator('main h1')).toHaveText('Luckycats');
+});
+
+test('each business has its own page: title, share photo, breadcrumb, the others; linked from the list', async ({ page }) => {
+  await page.goto('/commerces/');
+  await page.locator('#business-chez-loubna .biz-name a').click();
+  await expect(page).toHaveURL(/\/commerces\/chez-loubna\/$/);
+  await expect(page).toHaveTitle('Chez Loubna — Restaurants et cafés, Morges — Morges.info');
+  await expect(page.locator('main h1')).toHaveText('Chez Loubna');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://morges.info/commerces/chez-loubna/');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/images\/share\/chez-loubna-vitrine\.jpg$/);
+  await expect(page.locator('.site-header [aria-current="page"], header nav [aria-current="page"]').first()).toHaveText(fr.nav.businesses);
+  await expect(page.locator('.breadcrumb a[href="/commerces/"]')).toBeVisible();
+  await expect(page.locator('section[aria-labelledby="business-others"] .business-card')).toHaveCount(3);
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join();
+  expect(ld).toContain('"mainEntityOfPage":"https://morges.info/commerces/chez-loubna/"');
+  // in German
+  await page.goto('/commerces/lykke/?lang=de');
+  await expect(page).toHaveTitle('lykke — Restaurants und Cafés, Morges — Morges.info');
 });
 
 test('home: one business at a time, its photos in turn, then the next; nothing moves for reduced motion', async ({ browser }) => {

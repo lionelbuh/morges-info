@@ -202,6 +202,8 @@ export default {
     businessesCta: 'Vedi la selezione',
   },
   businesses: {
+    others: 'Altri negozi indipendenti',
+    allLink: 'Tutti i negozi',
     intro: 'Negozi e indipendenti con sede nel comune di Morges, presentati gratuitamente. Ogni scheda è verificata prima della pubblicazione e indica la data di verifica.',
     statusTitle: 'Selezione in preparazione',
     status: 'Nessun negozio è ancora presentato: ogni indirizzo viene verificato prima della pubblicazione e mostrato con la data di verifica.',

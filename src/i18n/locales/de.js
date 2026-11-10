@@ -202,6 +202,8 @@ export default {
     businessesCta: 'Zur Auswahl',
   },
   businesses: {
+    others: 'Weitere unabhängige Geschäfte',
+    allLink: 'Alle Geschäfte',
     intro: 'Geschäfte und Selbständige in der Gemeinde Morges, kostenlos vorgestellt. Jeder Eintrag wird vor der Veröffentlichung geprüft und trägt sein Prüfdatum.',
     statusTitle: 'Auswahl in Vorbereitung',
     status: 'Noch wird kein Geschäft vorgestellt: Jede Adresse wird vor der Veröffentlichung überprüft und mit dem Prüfdatum angezeigt.',

@@ -5,7 +5,8 @@
  *    visitors without JavaScript get real content;
  *  - emits sitemap.xml, robots.txt and llms.txt at build time;
  *  - generates one HTML entry per place (lieux/<id>/index.html, from lieux/index.html) and per published
- *    photo viewpoint (photos/<id>/index.html, from photos/index.html); both git-ignored.
+ *    photo viewpoint (photos/<id>/index.html, from photos/index.html) and per listed business
+ *    (commerces/<id>/index.html, from commerces/index.html); all git-ignored.
  * In the browser, src/site/client.js re-renders the same markup (language, dates).
  */
 import { setLang, LANGUAGES } from '../src/i18n/index.js';
@@ -13,7 +14,7 @@ import { renderHeader, renderFooter, renderHeadTags, absoluteUrl } from '../src/
 import { renderMain } from '../src/site/pages.js';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { ALL_PAGES, SITE_URL, placePageId, photoPageId } from '../src/site/config.js';
+import { ALL_PAGES, SITE_URL, placePageId, photoPageId, businessPageId } from '../src/site/config.js';
 import { PLACES, getPlace } from '../src/data/places.js';
 import { publishedViewpoints, getViewpoint, shownPhotos } from '../src/data/viewpoints.js';
 import { editorialSelection } from '../src/data/businesses.js';
@@ -40,6 +41,7 @@ function pageImages(page) {
   }
   if (page.id === 'photos') return publishedViewpoints().map((vp) => (shownPhotos(vp).then || shownPhotos(vp).now).image.src);
   if (page.id === 'businesses') return editorialSelection().flatMap((b) => (b.photos || []).map((photo) => photo.src));
+  if (page.businessId) return (editorialSelection().find((b) => b.id === page.businessId).photos || []).map((photo) => photo.src);
   return [];
 }
 
@@ -49,7 +51,8 @@ export function sitemapXml() {
       (l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${absoluteUrl(p.id, l).replace(/&/g, '&amp;')}"/>`,
     ).join('\n');
     // lastmod only where a real date is known: the last verification of a place
-    const lastmod = p.placeId ? `\n    <lastmod>${getPlace(p.placeId).lastVerified}</lastmod>` : '';
+    const verified = p.placeId ? getPlace(p.placeId).lastVerified : p.businessId ? editorialSelection().find((b) => b.id === p.businessId).lastVerified : null;
+    const lastmod = verified ? `\n    <lastmod>${verified}</lastmod>` : '';
     const images = pageImages(p).map((src) => `\n    <image:image><image:loc>${SITE_URL}${src}</image:loc></image:image>`).join('');
     return `  <url>\n    <loc>${absoluteUrl(p.id, 'fr')}</loc>${lastmod}\n${alternates}${images}\n  </url>`;
   }).join('\n');
@@ -86,6 +89,7 @@ export function llmsTxt() {
   const places = PLACES.map((p) => `- [${p.name.fr}](${absoluteUrl(placePageId(p.id))})`);
   const photos = publishedViewpoints().map((vp) => `- [${vp.title.fr}](${absoluteUrl(photoPageId(vp.id))})`);
   const stories = STORIES.map((s) => `- [${s.title.fr}](${SITE_URL}/recits/#${s.id})`);
+  const businesses = editorialSelection().map((b) => `- [${b.name}](${absoluteUrl(businessPageId(b.id))}): ${b.description.fr}`);
   return `# Morges.info
 
 > ${fr.pages.home.description}
@@ -107,6 +111,10 @@ ${photos.join('\n')}
 ## Récits
 
 ${stories.join('\n')}
+
+## Commerces indépendants
+
+${businesses.join('\n')}
 
 ## À propos
 
@@ -139,6 +147,7 @@ function writeItemPages(root, folder, indexId, items) {
 export function writePlacePages(root) {
   writeItemPages(root, 'lieux', 'places', PLACES.map((p) => ({ id: p.id, pageId: placePageId(p.id) })));
   writeItemPages(root, 'photos', 'photos', publishedViewpoints().map((vp) => ({ id: vp.id, pageId: photoPageId(vp.id) })));
+  writeItemPages(root, 'commerces', 'businesses', editorialSelection().map((b) => ({ id: b.id, pageId: businessPageId(b.id) })));
 }
 
 /** HTML entry points, one per page (clean URLs: /carte/ → carte/index.html; /404.html stays a file). */

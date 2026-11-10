@@ -9,7 +9,7 @@ import { getPlace } from '../data/places.js';
 import { formatDate, formatMonth, formatDayLong, weekdayNames, formatTimeRange, formatShortRange, formatMonthShort } from './format.js';
 import { eventsOnDay, weekdayOf } from '../data/events.js';
 import { rotateByDay } from '../data/businesses.js';
-import { placeHref, placePageHref, directionsLinks, photoMapHref, pageHref } from './links.js';
+import { placeHref, placePageHref, directionsLinks, photoMapHref, pageHref, businessPageHref } from './links.js';
 import { CONTACT_EMAIL } from './config.js';
 
 const e = escapeHtml;
@@ -400,7 +400,11 @@ function businessActions(b) {
  * The full presentation of a business on the businesses page: photo gallery, what they offer,
  * background, and contact buttons. `today` (YYYY-MM-DD) decides whether a temporary notice still shows.
  */
-export function businessProfile(b, { today } = {}) {
+/**
+ * A business, in full. On the businesses page (`page: false`) its name links to its own page; on that page
+ * (`page: true`) the name is the page's heading.
+ */
+export function businessProfile(b, { today, page = false } = {}) {
   // a sponsored entry always carries a visible label
   const sponsored = b.commercial && b.commercial.status === 'sponsored';
   const notice = b.notice && (!today || today <= b.notice.until) ? b.notice : null;
@@ -417,7 +421,7 @@ export function businessProfile(b, { today } = {}) {
     <div class="biz-info">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
       <p class="biz-category">${e(t(`businesses.categories.${b.category}`))}</p>
-      <h3 class="biz-name">${e(b.name)}</h3>
+      ${page ? `<h1 class="biz-name">${e(b.name)}</h1>` : `<h3 class="biz-name"><a href="${businessPageHref(b.id, getLang())}">${e(b.name)}</a></h3>`}
       ${b.person ? `<p class="biz-person">${e(b.person)}</p>` : ''}
       ${notice ? `<p class="biz-notice" role="note">${e(localized(notice.text))}</p>` : ''}
       ${textBlock(b.description, { className: 'biz-lead' })}
@@ -456,7 +460,7 @@ export function businessCard(b, { off = false } = {}) {
     <div class="card-body">
       ${sponsored ? `<p class="sponsored-label">${e(t('common.sponsored'))}</p>` : ''}
       <p class="card-kicker">${e(t(`businesses.categories.${b.category}`))}</p>
-      <h3 class="card-title"><a href="${pageHref('businesses', getLang())}#business-${e(b.id)}">${e(b.name)}</a></h3>
+      <h3 class="card-title"><a href="${businessPageHref(b.id, getLang())}">${e(b.name)}</a></h3>
       ${textBlock(b.description)}
       <p class="business-card-more" aria-hidden="true">${e(t('home.businessMore'))} →</p>
     </div>
