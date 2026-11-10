@@ -180,6 +180,8 @@ export default {
     photoCredit: 'Photo: {credit}',
   },
   home: {
+    discoverCta: 'All the ideas',
+    discoverText: 'The must-sees, the walks, the heritage and the beautiful spots: six ideas for discovering Morges.',
     businessMore: 'See the profile',
     voicesText: 'Your views, ideas, questions and memories of Morges. A first name is enough, no email; every message is read before it is published.',
     voicesAll: 'Read all messages',

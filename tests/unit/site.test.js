@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { setLang, MESSAGES, LANGUAGES } from '../../src/i18n/index.js';
 import { PAGES } from '../../src/site/config.js';
-import { renderMain, CONTENT_PAGE_IDS } from '../../src/site/pages.js';
+import { renderMain, CONTENT_PAGE_IDS, homeSectionOrder } from '../../src/site/pages.js';
 import { renderHeader, renderHeadTags } from '../../src/site/layout.js';
 import { pageHref, placeHref } from '../../src/site/links.js';
 import { formatToday } from '../../src/site/format.js';
@@ -59,6 +59,15 @@ describe('site pages', () => {
     const html = renderMain('discover');
     expect(html).toContain('Les incontournables');
     expect(html).toContain('href="/lieux/chateau/"');
+  });
+
+  it('home: the sections move on by one every 12 hours, empty ones left out', () => {
+    const list = [['a', 'A'], ['b', 'B'], ['c', ''], ['d', 'D']];
+    expect(homeSectionOrder(list, new Date('2026-11-10T12:00:00+01:00'))).toEqual(['A', 'B', 'D']);
+    expect(homeSectionOrder(list, new Date('2026-11-10T23:59:00+01:00'))).toEqual(['A', 'B', 'D']);
+    expect(homeSectionOrder(list, new Date('2026-11-11T00:00:00+01:00'))).toEqual(['B', 'D', 'A']);
+    expect(homeSectionOrder(list, new Date('2026-11-11T12:30:00+01:00'))).toEqual(['D', 'A', 'B']);
+    expect(homeSectionOrder(list, new Date('2026-11-10T08:00:00+01:00'))).toEqual(['D', 'A', 'B']); // before the start too
   });
 
   it('home shows the businesses and hides past events', () => {

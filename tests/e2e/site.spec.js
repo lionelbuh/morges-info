@@ -197,6 +197,38 @@ test('sitemap lists the place pages with their verification date; robots allow e
   expect(await (await request.get('/robots.txt')).text()).toContain('Allow: /');
 });
 
+test('home: the sections take turns at the top every 12 hours', async ({ page }) => {
+  const first = async (time) => {
+    await page.clock.setFixedTime(new Date(time));
+    await page.goto('/');
+    return page.locator('main .section h2').first().getAttribute('id');
+  };
+  expect(await first('2026-11-10T17:00:00+01:00')).toBe('home-discover');
+  expect(await first('2026-11-11T09:00:00+01:00')).toBe('home-map');
+  expect(await first('2026-11-11T13:00:00+01:00')).toBe('home-life');
+});
+
+test('photos page: an old and a recent photo of the same place take turns; not for reduced motion', async ({ browser }) => {
+  const page = await browser.newPage();
+  await page.clock.install();
+  await page.goto('/photos/');
+  const card = page.locator('[data-vp-alternate][href="/photos/vue-college-couvaloup/"]');
+  await expect(card).toHaveCount(1);
+  await expect(card.locator('.vp-alt-label')).toHaveText(fr.photos.then);
+  await page.mouse.move(0, 0);
+  await page.clock.runFor(5000);
+  await expect(card).toHaveClass(/is-now/);
+  await expect(card.locator('.vp-alt-label')).toHaveText(fr.photos.now);
+  await expect(card.locator('.vp-alt-now')).not.toHaveAttribute('aria-hidden', /.*/);
+  await page.close();
+  const still = await browser.newPage({ reducedMotion: 'reduce' });
+  await still.clock.install();
+  await still.goto('/photos/');
+  await still.clock.runFor(10000);
+  await expect(still.locator('[data-vp-alternate].is-now')).toHaveCount(0);
+  await still.close();
+});
+
 test('photo map: the map switches between places and photos; a viewpoint shows its photo and asks for today’s view', async ({ page }) => {
   await page.goto('/carte/');
   await expect(page.locator('#map')).toHaveAttribute('data-ready', 'true');
@@ -412,6 +444,7 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
 });
 
 test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-10T17:00:00+01:00')); // the afternoon Découvrir Morges leads
   await page.goto('/');
   await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
   await expect(page.locator('.feature-story')).toBeVisible();
@@ -429,10 +462,13 @@ test('home: map preview with markers, places, practical info, businesses and fea
   // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
   await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
   await expect(page.locator('.hero-actions .btn')).toHaveCount(1);
-  // the photo map first, then the calendar (local life), then the businesses
-  await expect(page.locator('main .section h2').nth(0)).toHaveAttribute('id', 'home-map');
-  await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-life');
-  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-businesses');
+  // that afternoon: Découvrir Morges first (its six themes), then the photo map, the calendar, the businesses
+  await expect(page.locator('main .section h2').nth(0)).toHaveAttribute('id', 'home-discover');
+  await expect(page.locator('.home-discover a')).toHaveCount(6);
+  await expect(page.locator('.home-discover a').first()).toHaveAttribute('href', '/decouvrir-morges/#incontournables');
+  await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-map');
+  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-life');
+  await expect(page.locator('main .section h2').nth(3)).toHaveAttribute('id', 'home-businesses');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(12);

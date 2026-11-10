@@ -24,6 +24,7 @@ let preview = null;
 let previewObserver = null;
 let photoTimer = null;
 let businessTimer = null;
+let pairTimer = null;
 
 /**
  * Home: the old photos take turns next to the map (every 6 s), each one highlighted on the map.
@@ -138,6 +139,34 @@ function startBusinessSpotlight() {
     if (tick >= 3 && slides.length > 1) show(index + 1);
     else nextBusinessPhoto(slides[index]);
   }, 4000);
+}
+
+/**
+ * Photos page: a viewpoint with an old and a recent photo shows them in turn (every 4.5 s, the cards a
+ * little apart), with a label. A card waits while the pointer is on it; nothing moves for visitors who
+ * ask for reduced motion.
+ */
+function startPhotoPairs() {
+  const cards = [...document.querySelectorAll('[data-vp-alternate]')];
+  if (!cards.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hovered = new Set();
+  cards.forEach((card) => {
+    card.addEventListener('mouseenter', () => hovered.add(card));
+    card.addEventListener('mouseleave', () => hovered.delete(card));
+  });
+  let tick = 0;
+  pairTimer = setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    const card = cards[tick % cards.length];
+    tick += 1;
+    if (hovered.has(card)) return;
+    const now = !card.classList.contains('is-now');
+    card.classList.toggle('is-now', now);
+    card.querySelector('.vp-alt-then').toggleAttribute('aria-hidden', now);
+    card.querySelector('.vp-alt-now').toggleAttribute('aria-hidden', !now);
+    const label = card.querySelector('.vp-alt-label');
+    label.textContent = now ? label.dataset.now : label.dataset.then;
+  }, 4500 / cards.length);
 }
 
 /** Home: a small, non-interactive map, loaded only when it scrolls into view. */
@@ -298,6 +327,7 @@ function render() {
   if (previewObserver) previewObserver.disconnect();
   clearInterval(photoTimer);
   clearInterval(businessTimer);
+  clearInterval(pairTimer);
   if (preview) {
     preview.destroy();
     preview = null;
@@ -310,6 +340,7 @@ function render() {
     startHomePhotos();
     startBusinessSpotlight();
   }
+  if (pageId === 'photos') startPhotoPairs();
   if (pageId === 'legal') syncAnalyticsControl();
   const filters = document.querySelector('.biz-filters');
   if (filters) filters.hidden = false;

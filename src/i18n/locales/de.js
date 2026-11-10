@@ -180,6 +180,8 @@ export default {
     photoCredit: 'Foto: {credit}',
   },
   home: {
+    discoverCta: 'Alle Ideen',
+    discoverText: 'Das Wichtigste, Spaziergänge, Kulturerbe und schöne Orte: sechs Ideen, um Morges zu entdecken.',
     businessMore: 'Zum Porträt',
     voicesText: 'Ihre Meinungen, Ideen, Fragen und Erinnerungen an Morges. Ein Vorname genügt, ohne E-Mail; jede Nachricht wird vor der Veröffentlichung gelesen.',
     voicesAll: 'Alle Nachrichten lesen',

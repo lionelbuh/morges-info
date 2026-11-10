@@ -3765,3 +3765,90 @@ a.mini-day.is-featured::after {
   font-weight: 600;
   font-size: 0.92rem;
 }
+
+/* ── Photos page: old and recent photo in turn ───────────────────────────── */
+.vp-card-image--pair {
+  position: relative;
+  display: grid;
+}
+.vp-card-image--pair img {
+  grid-area: 1 / 1;
+  transition: opacity 0.6s ease;
+}
+.vp-card-image--pair .vp-alt-now,
+.vp-card-image--pair.is-now .vp-alt-then {
+  opacity: 0;
+}
+.vp-card-image--pair.is-now .vp-alt-now {
+  opacity: 1;
+}
+.vp-alt-label {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(28, 27, 25, 0.78);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vp-card-image--pair img {
+    transition: none;
+  }
+}
+
+/* ── Home: the themes of Découvrir Morges, as small photos ───────────────── */
+.home-discover {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.home-discover a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--stone-2);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.home-discover a:hover,
+.home-discover a:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+/* photos shown whole (some licences forbid cropping) */
+.home-discover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--stone);
+}
+.home-discover span {
+  padding: 8px 10px 10px;
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-discover a {
+    transition: none;
+  }
+  .home-discover a:hover,
+  .home-discover a:focus-visible {
+    transform: none;
+  }
+}
