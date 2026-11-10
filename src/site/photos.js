@@ -135,8 +135,13 @@ export function viewpointCard(vp, href) {
   const { then, now } = shownPhotos(vp);
   const photo = then || now;
   const kind = viewpointKind(vp);
+  // with an old and a recent photo, the card shows both in turn (see startPhotoPairs in client.js)
+  const image =
+    then && now
+      ? `<a class="vp-card-image vp-card-image--pair" href="${href}" data-vp-alternate>${img(then, 'vp-alt-then')}${img(now, 'vp-alt-now').replace('<img', '<img aria-hidden="true"')}<span class="vp-alt-label" aria-hidden="true" data-then="${e(t('photos.then'))}" data-now="${e(t('photos.now'))}">${e(t('photos.then'))}</span></a>`
+      : `<a class="vp-card-image" href="${href}">${img(photo)}</a>`;
   return `<article class="card vp-card">
-    <a class="vp-card-image" href="${href}">${img(photo)}</a>
+    ${image}
     <div class="card-body">
       <span class="vp-badge vp-badge--${kind}">${e(t(`photos.kind.${kind}`))}</span>
       <h3 class="card-title"><a href="${href}">${e(localized(vp.title))}</a></h3>

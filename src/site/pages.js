@@ -73,10 +73,26 @@ export function homePhotoViewpoints() {
 }
 
 /**
+ * The home page's sections take turns at the top: the order moves on by one every 12 hours (midnight and
+ * noon in Morges), so each section is first in turn. Sections that are empty (no business yet) are left out.
+ */
+export function homeSectionOrder(sections, now = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(now);
+  const get = (type) => parts.find((x) => x.type === type).value;
+  const day = Math.floor(Date.parse(`${get('year')}-${get('month')}-${get('day')}T00:00:00Z`) / 86400000);
+  const slot = day * 2 + (Number(get('hour')) >= 12 ? 1 : 0);
+  const filled = sections.filter(([, html]) => html);
+  // counted from the morning of 10 November 2026, when Découvrir Morges led (the first in the list)
+  const anchor = (Date.parse('2026-11-10T00:00:00Z') / 86400000) * 2;
+  const start = (((slot - anchor) % filled.length) + filled.length) % filled.length;
+  return [...filled.slice(start), ...filled.slice(0, start)].map(([, html]) => html);
+}
+
+/**
  * @param {{ today?: string, heroId?: string }} [opts] heroId: the large photo already chosen for this page
  * (the browser keeps the one the build picked, so the photo never changes under the visitor's eyes).
  */
-function renderHome({ today, heroId } = {}) {
+function renderHome({ today, heroId, now = new Date() } = {}) {
   const lang = getLang();
   const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
   // the next five weeks at a glance, then the event of the moment and the next three
@@ -116,7 +132,18 @@ function renderHome({ today, heroId } = {}) {
   </div>
 
 
-  <section class="section" aria-labelledby="home-map">
+  ${homeSectionOrder([
+    ['discover', `<section class="section" aria-labelledby="home-discover">
+    ${sectionHead('home-discover', t('discover.title'), { href: pageHref('discover', lang), label: t('home.discoverCta') })}
+    <p class="section-text">${e(t('home.discoverText'))}</p>
+    <ul class="home-discover">${DISCOVER_THEMES.map(
+      (theme) => `<li><a href="${pageHref('discover', lang)}#${e(theme.id)}">
+        <img src="${e(theme.photo.src)}" alt="" width="${theme.photo.width}" height="${theme.photo.height}" loading="lazy" decoding="async" />
+        <span>${e(localized(theme.title))}</span>
+      </a></li>`,
+    ).join('')}</ul>
+  </section>`],
+    ['map', `<section class="section" aria-labelledby="home-map">
     ${sectionHead('home-map', t('home.mapTitle'), { href: photosMap, label: t('home.mapCta') })}
     <p class="section-text">${e(t('home.mapText'))}</p>
     <div class="home-map${oldPhotos.length ? ' home-map--photos' : ''}">
@@ -132,9 +159,8 @@ function renderHome({ today, heroId } = {}) {
           : ''
       }
     </div>
-  </section>
-
-  <section class="section" aria-labelledby="home-life">
+  </section>`],
+    ['life', `<section class="section" aria-labelledby="home-life">
     ${sectionHead('home-life', t('nav.life'), { href: pageHref('life', lang), label: t('home.lifeCta') })}
     <div class="cols">
       ${agenda}
@@ -144,24 +170,18 @@ function renderHome({ today, heroId } = {}) {
         <p class="callout-link"><a href="${pageHref('visit', lang)}">${e(t('visit.homeLink'))}<span aria-hidden="true"> →</span></a></p>
       </div>
     </div>
-  </section>
-
-  ${
-    businesses.length
+  </section>`],
+    ['businesses', businesses.length
       ? `<section class="section" aria-labelledby="home-businesses">
     ${sectionHead('home-businesses', t('home.businessesTitle'), { href: pageHref('businesses', lang), label: t('home.businessesCta') })}
     ${businessSpotlight(businesses, day)}
   </section>`
-      : ''
-  }
-
-  <section class="section" aria-labelledby="home-places">
+      : ''],
+    ['places', `<section class="section" aria-labelledby="home-places">
     ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}
     <div class="grid grid-4">${places.map(placeCard).join('')}</div>
-  </section>
-
-  ${
-    story
+  </section>`],
+    ['story', story
       ? `<section class="section" aria-labelledby="home-story">
     ${sectionHead('home-story', t('home.storyTitle'))}
     <article class="feature-story">
@@ -171,8 +191,8 @@ function renderHome({ today, heroId } = {}) {
       <a class="btn btn-ghost" href="${storyHref(story.id, lang)}">${e(t('home.readStory'))}</a>
     </article>
   </section>`
-      : ''
-  }
+      : ''],
+  ], now).join('\n\n')}
 
   <section class="contribute-band" aria-labelledby="home-contribute">
     <h2 id="home-contribute">${e(t('home.contributeTitle'))}</h2>

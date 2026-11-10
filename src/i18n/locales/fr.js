@@ -180,6 +180,8 @@ export default {
     photoCredit: 'Photo : {credit}',
   },
   home: {
+    discoverCta: 'Toutes les idées',
+    discoverText: 'Les incontournables, les promenades, le patrimoine et les beaux endroits : six idées pour découvrir Morges.',
     businessMore: 'Voir la fiche',
     voicesText: 'Vos avis, vos idées, vos questions et vos souvenirs de Morges. Un prénom suffit, sans e-mail ; chaque message est lu avant publication.',
     voicesAll: 'Lire tous les messages',

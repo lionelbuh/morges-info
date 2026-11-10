@@ -180,6 +180,8 @@ export default {
     photoCredit: 'Foto: {credit}',
   },
   home: {
+    discoverCta: 'Tutte le idee',
+    discoverText: 'I luoghi da non perdere, le passeggiate, il patrimonio e i luoghi più belli: sei idee per scoprire Morges.',
     businessMore: 'Vedi la scheda',
     voicesText: 'Le vostre opinioni, idee, domande e ricordi di Morges. Basta il nome, senza e-mail; ogni messaggio viene letto prima della pubblicazione.',
     voicesAll: 'Leggere tutti i messaggi',
