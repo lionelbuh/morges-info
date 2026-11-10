@@ -9,6 +9,11 @@
     "width": 1200,
     "height": 749
   },
+  "/images/photos/college-couvaloup-aujourdhui.webp": {
+    "src": "/images/share/college-couvaloup-aujourdhui.jpg",
+    "width": 1200,
+    "height": 1600
+  },
   "/images/photos/debarcadere-1909.webp": {
     "src": "/images/share/debarcadere-1909.jpg",
     "width": 1200,
@@ -163,5 +168,30 @@
     "src": "/images/share/luckycats-estelle-franzone.jpg",
     "width": 450,
     "height": 675
+  },
+  "/images/businesses/lykke-cocktails.webp": {
+    "src": "/images/share/lykke-cocktails.jpg",
+    "width": 1200,
+    "height": 1600
+  },
+  "/images/businesses/lykke-coin-hygge.webp": {
+    "src": "/images/share/lykke-coin-hygge.jpg",
+    "width": 900,
+    "height": 1200
+  },
+  "/images/businesses/lykke-comptoir.webp": {
+    "src": "/images/share/lykke-comptoir.jpg",
+    "width": 1067,
+    "height": 1600
+  },
+  "/images/businesses/lykke-planchette.webp": {
+    "src": "/images/share/lykke-planchette.jpg",
+    "width": 900,
+    "height": 1200
+  },
+  "/images/businesses/lykke-roules-cannelle.webp": {
+    "src": "/images/share/lykke-roules-cannelle.jpg",
+    "width": 900,
+    "height": 1200
   }
 }
