@@ -113,7 +113,7 @@ export default {
       description: 'Morges in foto, da ieri a oggi: ogni foto è collocata sulla mappa nel punto da cui è stata scattata, con la veduta attuale per il confronto quando l’abbiamo.',
     },
     places: {
-      title: 'Luoghi da scoprire a Morges — Morges.info',
+      title: 'Luoghi di Morges — Morges.info',
       description: 'Tutti i luoghi di Morges.info: castello, musei, parchi, lungolaghi, porto, chiese, pista di pattinaggio e piscina, con descrizione, indirizzo e fonti.',
     },
     notfound: {
@@ -422,7 +422,7 @@ export default {
     map: 'Apri la mappa',
   },
   places: {
-    title: 'Luoghi da scoprire',
+    title: 'Luoghi di Morges',
     intro: 'Tutti i luoghi presentati sulla mappa di Morges.info, suddivisi per categoria. Ognuno ha la sua pagina, con descrizione, indirizzo e fonti.',
     home: 'Pagina iniziale',
     breadcrumb: 'Percorso di navigazione',

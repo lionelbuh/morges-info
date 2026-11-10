@@ -113,7 +113,7 @@ export default {
       description: 'Morges in Fotos, von gestern bis heute: Jedes Foto ist auf der Karte dort platziert, wo es aufgenommen wurde, mit der heutigen Ansicht zum Vergleich, wenn wir sie haben.',
     },
     places: {
-      title: 'Orte in Morges entdecken — Morges.info',
+      title: 'Orte in Morges — Morges.info',
       description: 'Alle Orte auf Morges.info: Schloss, Museen, Parks, Quais, Hafen, Kirchen, Eisbahn und Schwimmbad, mit Beschreibung, Adresse und Quellen.',
     },
     notfound: {
@@ -422,7 +422,7 @@ export default {
     map: 'Karte öffnen',
   },
   places: {
-    title: 'Orte entdecken',
+    title: 'Orte in Morges',
     intro: 'Alle Orte der Karte von Morges.info, nach Kategorien geordnet. Jeder hat eine eigene Seite mit Beschreibung, Adresse und Quellen.',
     home: 'Startseite',
     breadcrumb: 'Brotkrümelnavigation',
