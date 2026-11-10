@@ -65,7 +65,7 @@ describe('hero photograph', () => {
 
   it('shared links show the page’s own photo; the home page keeps the castle', () => {
     expect(shareImage('home').src).toBe('/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg');
-    expect(shareImage('voices').src).toBe('/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg');
+    expect(shareImage('discover').src).toBe('/images/hero/chateau-morges-aerien-jaquet-2016-og-1200.jpg');
     const port = shareImage(photoPageId('vue-port-jetee'));
     expect(port).toEqual({ ...shareManifest['/images/photos/port-jetee-1898.webp'], alt: expect.stringContaining('1898') });
     expect(port.src).toBe('/images/share/port-jetee-1898.jpg');

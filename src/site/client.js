@@ -8,7 +8,6 @@ import { initChrome, renderChrome } from './chrome.js';
 import { renderMain, homePhotoViewpoints } from './pages.js';
 import { placeHref, photoMapHref } from './links.js';
 import { initCompare, photoMarker, homePhotoCard } from './photos.js';
-import { initVoices, saveVoiceDraft, restoreVoiceDraft, startVoiceRotator } from './voices.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
 
 const pageId = document.body.dataset.page;
@@ -303,16 +302,13 @@ function render() {
     preview.destroy();
     preview = null;
   }
-  const draft = pageId === 'voices' ? saveVoiceDraft() : null;
   const heroId = document.querySelector('[data-hero-id]')?.dataset.heroId;
   renderChrome(pageId);
   document.getElementById('main').innerHTML = renderMain(pageId, { heroId });
-  if (pageId === 'voices') restoreVoiceDraft(draft);
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
     startBusinessSpotlight();
-    startVoiceRotator();
   }
   if (pageId === 'legal') syncAnalyticsControl();
   const filters = document.querySelector('.biz-filters');
@@ -322,7 +318,6 @@ function render() {
 onLangChange(render);
 render();
 initCompare();
-initVoices();
 startAnalytics();
 
 // Content is re-rendered after load: honour #anchors (e.g. a story) once it is in place.

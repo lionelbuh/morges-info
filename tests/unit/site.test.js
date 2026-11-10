@@ -5,6 +5,7 @@ import { renderMain, CONTENT_PAGE_IDS } from '../../src/site/pages.js';
 import { renderHeader, renderHeadTags } from '../../src/site/layout.js';
 import { pageHref, placeHref } from '../../src/site/links.js';
 import { formatToday } from '../../src/site/format.js';
+import { DISCOVER_THEMES, validateTheme } from '../../src/data/discover.js';
 import { renderMarkers, sitemapXml, robotsTxt, llmsTxt, AI_CRAWLERS } from '../../build/site-plugin.js';
 
 describe('site pages', () => {
@@ -47,6 +48,17 @@ describe('site pages', () => {
       // no raw translation keys leaked into the page
       expect(html).not.toMatch(/>\s*(home|common|businesses|history|life|stories|about|nav|site)\.[a-zA-Z.]+\s*</);
     }
+  });
+
+  it('Découvrir Morges: six themes, complete in four languages, each linking to pages that exist', () => {
+    expect(DISCOVER_THEMES).toHaveLength(6);
+    for (const theme of DISCOVER_THEMES) {
+      expect(validateTheme(theme), theme.id).toEqual([]);
+      for (const link of theme.links) expect(() => pageHref(link.page), link.page).not.toThrow();
+    }
+    const html = renderMain('discover');
+    expect(html).toContain('Les incontournables');
+    expect(html).toContain('href="/lieux/chateau/"');
   });
 
   it('home shows the businesses and hides past events', () => {
@@ -123,7 +135,7 @@ describe('site pages', () => {
     for (const bot of AI_CRAWLERS) expect(robotsTxt()).toContain(`User-agent: ${bot}\n`);
     const llms = llmsTxt();
     expect(llms.startsWith('# Morges.info\n\n> ')).toBe(true);
-    expect(llms).toContain('(https://morges.info/parole-aux-morgiens/)');
+    expect(llms).toContain('(https://morges.info/decouvrir-morges/)');
     expect(llms).toContain('(https://morges.info/lieux/chateau/)');
     expect(llms).toContain('(https://morges.info/photos/vue-port-jetee/)');
     expect(llms).toContain('(https://morges.info/recits/#stravinsky-morges)');

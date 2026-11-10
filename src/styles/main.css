@@ -3712,3 +3712,56 @@ a.mini-day.is-featured::after {
   color: var(--red);
   text-decoration: underline;
 }
+
+/* ── Découvrir Morges: one card per theme ────────────────────────────────── */
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+}
+.discover-theme {
+  display: flex;
+  flex-direction: column;
+}
+.discover-photo {
+  margin: 0;
+}
+/* photos shown whole (some licences forbid cropping) */
+.discover-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  background: var(--stone);
+}
+.discover-photo figcaption {
+  padding: 4px 16px 0;
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+}
+.discover-body {
+  padding: 12px 16px 18px;
+}
+.discover-title {
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-size: 1.45rem;
+}
+.discover-body p {
+  margin: 0 0 12px;
+  line-height: 1.55;
+}
+.discover-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.discover-links a {
+  color: var(--red);
+  font-weight: 600;
+  font-size: 0.92rem;
+}

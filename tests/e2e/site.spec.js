@@ -242,81 +242,20 @@ test('photo map: the map switches between places and photos; a viewpoint shows i
   await expect(page.locator('#info-panel .vp-photo--then img')).toBeVisible();
 });
 
-test('Parole aux Morgiens: the questions, the charter, and a message sent without any email', async ({ page }) => {
-  const sent = [];
-  await page.route('https://api.web3forms.com/submit', (route) => {
-    sent.push(route.request().postDataJSON());
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, message: 'ok' }) });
-  });
+test('Découvrir Morges: six themes with photos and links, in the menu where Parole aux Morgiens was; the old address redirects', async ({ page }) => {
   await page.goto('/');
-  // the home page shows the latest message and leads to the page
-  await expect(page.locator('#home-voices')).toHaveText(fr.voices.title);
-  // the latest messages take turns: one shown, the next one with ›
-  const slides = page.locator('[data-voice-slide]');
-  expect(await slides.count()).toBeGreaterThan(1);
-  await expect(page.locator('[data-voice-slide]:visible')).toHaveCount(1);
-  const first = await page.locator('[data-voice-slide]:visible .home-voice-text').textContent();
-  await page.locator('[data-voice-step="1"]').click();
-  await expect(page.locator('[data-voice-slide]:visible')).toHaveCount(1);
-  await expect(page.locator('[data-voice-slide]:visible .home-voice-text')).not.toHaveText(first);
-  await expect(page.locator('[data-voice-pos]')).toContainText('2 /');
-  await expect(page.locator('.home-voices-questions li')).toHaveCount(3);
-  await expect(page.locator('.home-voices a.btn')).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
-  await (await navLink(page, fr.nav.voices)).click();
-  await expect(page).toHaveURL(/\/parole-aux-morgiens\/$/);
-  await expect(page.locator('main h1')).toHaveText(fr.voices.title);
-  await expect(page.locator('.voice-topic')).toHaveCount(4);
-  // under each question, the most recently active message first (a reply brings it up)
-  await expect(page.locator('#sujet-coin-prefere .voice-list > .voice-msg').first()).toHaveAttribute('id', 'm-banc-arbre-grand-rue');
-  await expect(page.locator('.voice-charter li')).toHaveCount(8);
-  await expect(page.locator('.voice-form input[type="email"]')).toHaveCount(0);
-
-  // "Answer this question" picks the topic and puts the cursor in the name field
-  await page.locator('#sujet-souvenir .voice-answer').click();
-  await expect(page.locator('#voice-topic')).toHaveValue('souvenir');
-  await expect(page.locator('#voice-name')).toBeFocused();
-  await page.locator('#voice-name').fill('Claire M.');
-  const text = 'La piscine du parc dans les années 80.';
-  await page.locator('#voice-message').fill(text);
-  await expect(page.locator('[data-voice-counter]')).toHaveText(`${text.length} / 1000`);
-
-  // a language change keeps what was typed
-  await page.locator('.lang-btn[data-lang="en"]').click();
-  await expect(page.locator('main h1')).toHaveText(en.voices.title);
-  await expect(page.locator('#voice-message')).toHaveValue(text);
-  await expect(page.locator('#voice-topic')).toHaveValue('souvenir');
-  await page.locator('.lang-btn[data-lang="fr"]').click();
-
-  // nothing leaves without the charter accepted
-  await page.locator('[data-voice-submit]').click();
-  expect(sent).toHaveLength(0);
-  await page.locator('#voice-consent').check();
-  await page.locator('[data-voice-submit]').click();
-  await expect(page.locator('[data-voice-status]')).toHaveText(fr.voices.sent);
-  expect(sent).toEqual([
-    {
-      access_key: VOICES_FORM_KEY,
-      subject: 'Parole aux Morgiens : nouveau message',
-      from_name: 'Morges.info',
-      sujet: 'Un souvenir de Morges d’autrefois ? [souvenir]',
-      prenom: 'Claire M.',
-      message: text,
-      accord: 'oui',
-    },
-  ]);
-  await expect(page.locator('#voice-message')).toHaveValue('');
-});
-
-test('Parole aux Morgiens: a failed send says so and keeps the message', async ({ page }) => {
-  await page.route('https://api.web3forms.com/submit', (route) => route.fulfill({ status: 500, body: '' }));
+  await (await navLink(page, fr.nav.discover)).click();
+  await expect(page).toHaveURL(/\/decouvrir-morges\/$/);
+  await expect(page.locator('main h1')).toHaveText(fr.discover.title);
+  await expect(page.locator('.discover-theme')).toHaveCount(6);
+  await expect(page.locator('.discover-theme h2').first()).toHaveText('Les incontournables');
+  await expect(page.locator('.discover-theme figcaption').first()).toContainText('CC BY-SA 4.0');
+  await page.locator('#incontournables a[href="/lieux/chateau/"]').click();
+  await expect(page).toHaveURL(/\/lieux\/chateau\/$/);
+  // the old address leads here, keeping the language
   await page.goto('/parole-aux-morgiens/?lang=de');
-  await page.locator('#voice-name').fill('Anna');
-  await page.locator('#voice-message').fill('Mehr Bänke am See, bitte.');
-  await page.locator('#voice-consent').check();
-  await page.locator('[data-voice-submit]').click();
-  await expect(page.locator('[data-voice-status]')).toHaveText(de.voices.failed.replace('{email}', 'hello@morges.info'));
-  await expect(page.locator('#voice-message')).toHaveValue('Mehr Bänke am See, bitte.');
-  errors = errors.filter((m) => !m.includes('status of 500')); // the browser logs the failed request itself
+  await expect(page).toHaveURL(/\/decouvrir-morges\/\?lang=de$/);
+  await expect(page.locator('main h1')).toHaveText(de.discover.title);
 });
 
 test('visiting Morges: frequent questions answered from the site’s data, described for search engines', async ({ page }) => {
@@ -490,13 +429,11 @@ test('home: map preview with markers, places, practical info, businesses and fea
   await expect(page.locator('.hero-credit')).toContainText(typeof photo.creator === 'string' ? photo.creator : photo.creator.fr);
   // "Explorer la carte": the photo map, with an old photo beside it, highlighted on the map
   await expect(page.locator('.hero-actions .btn').first()).toHaveAttribute('href', '/carte/#photos');
-  // "Parole aux Morgiens" right after the opening: second button, first section
-  await expect(page.locator('.hero-actions .btn').nth(1)).toHaveAttribute('href', '/parole-aux-morgiens/#ecrire');
-  await expect(page.locator('main .section h2').first()).toHaveAttribute('id', 'home-voices');
-  // then the photo map, the calendar (local life), then the businesses
-  await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-map');
-  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-life');
-  await expect(page.locator('main .section h2').nth(3)).toHaveAttribute('id', 'home-businesses');
+  await expect(page.locator('.hero-actions .btn')).toHaveCount(1);
+  // the photo map first, then the calendar (local life), then the businesses
+  await expect(page.locator('main .section h2').nth(0)).toHaveAttribute('id', 'home-map');
+  await expect(page.locator('main .section h2').nth(1)).toHaveAttribute('id', 'home-life');
+  await expect(page.locator('main .section h2').nth(2)).toHaveAttribute('id', 'home-businesses');
   await expect(page.locator('section[aria-labelledby="home-map"] .section-head a')).toHaveAttribute('href', '/carte/#photos');
   await page.locator('#map-preview').scrollIntoViewIfNeeded();
   await expect(page.locator('#map-preview .poi-marker--photo')).toHaveCount(12);

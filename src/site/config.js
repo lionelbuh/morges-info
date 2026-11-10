@@ -48,7 +48,7 @@ export const PAGES = [
   { id: 'history', path: '/histoire/', nav: true },
   { id: 'life', path: '/vie-locale/', nav: true },
   { id: 'stories', path: '/recits/', nav: true },
-  { id: 'voices', path: '/parole-aux-morgiens/', nav: true },
+  { id: 'discover', path: '/decouvrir-morges/', nav: true },
   { id: 'contribute', path: '/contribuer/', nav: true },
   { id: 'places', path: '/lieux/', nav: false },
   { id: 'photos', path: '/photos/', nav: false },

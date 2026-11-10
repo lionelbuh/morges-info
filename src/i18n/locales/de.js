@@ -80,6 +80,7 @@ export default {
     home: 'Morges.info Startseite',
   },
   nav: {
+    discover: 'Morges entdecken',
     voices: 'Stimmen aus Morges',
     visit: 'Morges besuchen',
     photos: 'Fotos',
@@ -95,6 +96,10 @@ export default {
     us: 'Über uns',
   },
   pages: {
+    discover: {
+      title: 'Morges entdecken: Sehenswertes, Spaziergänge, Kulturerbe und schöne Orte — Morges.info',
+      description: 'Eine Einladung, Morges zu entdecken: das Wichtigste, Spaziergänge am Genfersee, das Kulturerbe, Kurioses, Ideen für Familien und die schönsten Orte.',
+    },
     voices: {
       title: 'Stimmen aus Morges: Meinungen, Ideen und Fragen der Einwohner — Morges.info',
       description: 'Einwohnerinnen und Einwohner von Morges teilen ihre Meinung, Ideen, Erinnerungen und Fragen. Jede Nachricht wird vor der Veröffentlichung gelesen; keine E-Mail nötig, Ihr Vorname genügt.',
@@ -241,6 +246,10 @@ export default {
     milestonesTitle: 'Eckdaten',
     archiveTitle: 'Archivfotografien',
     archiveText: 'Alte Fotografien werden erst veröffentlicht, wenn Herkunft, Datum und Reproduktionsrechte überprüft sind. Jede wird einer aktuellen Ansicht desselben Ortes gegenübergestellt, mit Legende und Bildnachweis.',
+  },
+  discover: {
+    title: 'Morges entdecken',
+    intro: 'Zwischen See, Altstadt und Parks eine Einladung, Morges zu entdecken: das Wichtigste, Spaziergänge, Kulturerbe und Kurioses. Jedes Thema führt zu den Orten und Fotos der Website.',
   },
   life: {
     title: 'Lokales Leben und praktische Informationen',

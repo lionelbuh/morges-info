@@ -80,6 +80,7 @@ export default {
     home: 'Pagina iniziale di Morges.info',
   },
   nav: {
+    discover: 'Scoprire Morges',
     voices: 'Voci di Morges',
     visit: 'Visitare Morges',
     photos: 'Foto',
@@ -95,6 +96,10 @@ export default {
     us: 'Chi siamo',
   },
   pages: {
+    discover: {
+      title: 'Scoprire Morges: da non perdere, passeggiate, patrimonio e luoghi più belli — Morges.info',
+      description: 'Un invito a scoprire Morges: i luoghi da non perdere, le passeggiate in riva al Lemano, il patrimonio, le curiosità, idee per le famiglie e i luoghi più belli.',
+    },
     voices: {
       title: 'Voci di Morges: opinioni, idee e domande degli abitanti — Morges.info',
       description: 'Gli abitanti di Morges condividono opinioni, idee, ricordi e domande. Ogni messaggio viene letto prima della pubblicazione; nessuna e-mail necessaria, basta il nome.',
@@ -241,6 +246,10 @@ export default {
     milestonesTitle: 'Tappe',
     archiveTitle: 'Fotografie d’archivio',
     archiveText: 'Le fotografie d’epoca saranno pubblicate solo dopo la verifica di provenienza, data e diritti di riproduzione. Ognuna sarà affiancata a una veduta attuale dello stesso luogo, con didascalia e credito.',
+  },
+  discover: {
+    title: 'Scoprire Morges',
+    intro: 'Tra il lago, il centro storico e i parchi, un invito a scoprire Morges: i luoghi da non perdere, le passeggiate, il patrimonio e le curiosità. Ogni tema porta ai luoghi e alle foto del sito.',
   },
   life: {
     title: 'Vita locale e informazioni pratiche',
