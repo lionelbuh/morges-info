@@ -3701,3 +3701,14 @@ a.mini-day.is-featured::after {
   aspect-ratio: 3 / 2;
   object-fit: cover;
 }
+
+/* the name of a business links to its own page */
+.biz-name a {
+  color: inherit;
+  text-decoration: none;
+}
+.biz-name a:hover,
+.biz-name a:focus-visible {
+  color: var(--red);
+  text-decoration: underline;
+}

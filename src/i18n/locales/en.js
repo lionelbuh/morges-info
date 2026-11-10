@@ -202,6 +202,8 @@ export default {
     businessesCta: 'See the selection',
   },
   businesses: {
+    others: 'Other independent businesses',
+    allLink: 'All businesses',
     intro: 'Shops and independent professionals based in the municipality of Morges, listed free of charge. Each entry is checked before publication and shows its verification date.',
     statusTitle: 'Selection in preparation',
     status: 'No business is listed yet: each address is checked before publication and shown with its verification date.',

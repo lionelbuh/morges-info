@@ -1,4 +1,4 @@
-import { getPage, placePageId, photoPageId } from './config.js';
+import { getPage, placePageId, photoPageId, businessPageId } from './config.js';
 
 const langQuery = (lang) => (lang && lang !== 'fr' ? `?lang=${lang}` : '');
 
@@ -15,6 +15,11 @@ export function placeHref(placeId, lang) {
 /** Link to the page of a place (/lieux/<id>/). */
 export function placePageHref(placeId, lang) {
   return pageHref(placePageId(placeId), lang);
+}
+
+/** Link to the page of a business (/commerces/<id>/). */
+export function businessPageHref(businessId, lang) {
+  return pageHref(businessPageId(businessId), lang);
 }
 
 /** Link to the page of a photo-map viewpoint (/photos/<id>/). */

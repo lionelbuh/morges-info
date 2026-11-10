@@ -202,6 +202,8 @@ export default {
     businessesCta: 'Voir la sélection',
   },
   businesses: {
+    others: 'Autres commerces indépendants',
+    allLink: 'Tous les commerces',
     intro: 'Commerces et indépendants établis dans la commune de Morges, présentés gratuitement. Chaque fiche est vérifiée avant publication, avec sa date de vérification.',
     statusTitle: 'Sélection en préparation',
     status: 'Aucun commerce n’est encore présenté : chaque adresse est vérifiée avant publication, avec sa date de vérification.',

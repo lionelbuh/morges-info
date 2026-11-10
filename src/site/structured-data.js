@@ -6,7 +6,7 @@
 import { getLang, localized, textOf } from '../i18n/index.js';
 import { getPlace } from '../data/places.js';
 import { SITE_URL } from './config.js';
-import { pageHref, placePageHref, storyHref, photoPageHref } from './links.js';
+import { pageHref, placePageHref, storyHref, photoPageHref, businessPageHref } from './links.js';
 import { shownPhotos } from '../data/viewpoints.js';
 import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { HERO_PHOTO } from '../data/photos.js';
@@ -55,7 +55,7 @@ export function businessSchema(b) {
     ...((b.instagram || b.facebook) && { sameAs: [b.instagram, b.facebook].filter(Boolean) }),
     ...(b.photos && b.photos[0] && { image: abs(b.photos[0].src) }),
     ...(b.coordinates && { geo: { '@type': 'GeoCoordinates', latitude: b.coordinates.lat, longitude: b.coordinates.lng } }),
-    mainEntityOfPage: abs(`${pageHref('businesses', lang)}#business-${b.id}`),
+    mainEntityOfPage: abs(businessPageHref(b.id, lang)),
   };
 }
 

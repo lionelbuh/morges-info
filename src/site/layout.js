@@ -38,7 +38,8 @@ export function renderHeader(pageId) {
   const lang = getLang();
   const navItems = PAGES.filter((p) => p.nav)
     .map((p) => {
-      const current = p.id === pageId ? ' aria-current="page"' : '';
+      // a business page belongs to the businesses section of the menu
+      const current = p.id === pageId || (p.id === 'businesses' && pageId.startsWith('business:')) ? ' aria-current="page"' : '';
       return `<li><a href="${pageHref(p.id, lang)}"${current}>${e(t(`nav.${p.id}`))}</a></li>`;
     })
     .join('');
@@ -117,6 +118,9 @@ export function shareImage(pageId) {
   } else if (pageId === 'photos') {
     const photo = publishedViewpoints().map((vp) => shownPhotos(vp).then).find(Boolean);
     image = photo && sharedPhoto(photo.image.src, photo.title);
+  } else if (page.businessId) {
+    const photo = (editorialSelection().find((b) => b.id === page.businessId).photos || [])[0];
+    image = photo && sharedPhoto(photo.src, photo.alt);
   } else if (pageId === 'businesses') {
     const photo = editorialSelection().flatMap((b) => b.photos || [])[0];
     image = photo && sharedPhoto(photo.src, photo.alt);
@@ -163,6 +167,13 @@ export function pageMeta(pageId) {
     return {
       title: `${name}${name.includes('Morges') ? '' : ', Morges'} — Morges.info`,
       description: summarize(localized(place.description)),
+    };
+  }
+  if (page.businessId) {
+    const b = editorialSelection().find((item) => item.id === page.businessId);
+    return {
+      title: `${b.name} — ${t(`businesses.categories.${b.category}`)}, Morges — Morges.info`,
+      description: summarize(localized(b.description)),
     };
   }
   if (page.viewpointId) {
