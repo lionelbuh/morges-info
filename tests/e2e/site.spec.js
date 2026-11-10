@@ -443,10 +443,10 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   await still.close();
 });
 
-test('home: map preview with markers, places, practical info, businesses and featured story', async ({ page }) => {
+test('home: map preview with markers, practical info, businesses and featured story', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-11-10T17:00:00+01:00')); // the afternoon Découvrir Morges leads
   await page.goto('/');
-  await expect(page.locator('section[aria-labelledby="home-places"] .place-card')).toHaveCount(4);
+  await expect(page.locator('#home-places')).toHaveCount(0); // replaced by Découvrir Morges
   await expect(page.locator('.feature-story')).toBeVisible();
   await expect(page.locator('#home-businesses')).toHaveCount(1);
   // photo of the day: one of the hero photos, loaded, described, credited with its licence

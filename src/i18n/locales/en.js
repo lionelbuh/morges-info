@@ -113,7 +113,7 @@ export default {
       description: 'Morges in photos, from yesterday to today: each photo is placed on the map where it was taken, with the present-day view for comparison when we have it.',
     },
     places: {
-      title: 'Places to discover in Morges — Morges.info',
+      title: 'Places in Morges — Morges.info',
       description: 'All the places on Morges.info: castle, museums, parks, quays, harbour, churches, ice rink and swimming pool, with their description, address and sources.',
     },
     notfound: {
@@ -422,7 +422,7 @@ export default {
     map: 'Open the map',
   },
   places: {
-    title: 'Places to discover',
+    title: 'Places in Morges',
     intro: 'All the places shown on the Morges.info map, grouped by category. Each has its own page, with its description, address and sources.',
     home: 'Home',
     breadcrumb: 'Breadcrumb',

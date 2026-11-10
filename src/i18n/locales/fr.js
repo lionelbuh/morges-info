@@ -113,7 +113,7 @@ export default {
       description: 'Morges en photos, d’hier à aujourd’hui : chaque photo est placée sur la carte à l’endroit d’où elle a été prise, avec la vue actuelle pour comparer quand nous l’avons.',
     },
     places: {
-      title: 'Lieux à découvrir à Morges — Morges.info',
+      title: 'Lieux de Morges — Morges.info',
       description: 'Tous les lieux de Morges.info : château, musées, parcs, quais, port, églises, patinoire et piscine, avec leur description, leur adresse et leurs sources.',
     },
     notfound: {
@@ -422,7 +422,7 @@ export default {
     map: 'Ouvrir la carte',
   },
   places: {
-    title: 'Lieux à découvrir',
+    title: 'Lieux de Morges',
     intro: 'Tous les lieux présentés sur la carte de Morges.info, classés par catégorie. Chacun a sa page, avec sa description, son adresse et ses sources.',
     home: 'Accueil',
     breadcrumb: 'Fil d’Ariane',

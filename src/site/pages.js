@@ -23,7 +23,6 @@ import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { DISCOVER_THEMES } from '../data/discover.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
-  placeCard,
   eventCard,
   featuredEventBlock,
   eventCalendar,
@@ -50,7 +49,6 @@ import { formatDate } from './format.js';
 const LEGAL_UPDATED = '2026-10-31'; // "Parole aux Morgiens" form added
 
 /** Places highlighted on the home page (all have verified or confirmed positions). */
-export const HOME_PLACE_IDS = ['chateau', 'port', 'parc-independance', 'temple'];
 
 function sectionHead(id, title, link) {
   return `<div class="section-head">
@@ -94,7 +92,6 @@ export function homeSectionOrder(sections, now = new Date()) {
  */
 function renderHome({ today, heroId, now = new Date() } = {}) {
   const lang = getLang();
-  const places = HOME_PLACE_IDS.map(getPlace).filter(Boolean);
   // the next five weeks at a glance, then the event of the moment and the next three
   const day = today || todayInMorges();
   const upcoming = upcomingEvents(undefined, day);
@@ -177,10 +174,6 @@ function renderHome({ today, heroId, now = new Date() } = {}) {
     ${businessSpotlight(businesses, day)}
   </section>`
       : ''],
-    ['places', `<section class="section" aria-labelledby="home-places">
-    ${sectionHead('home-places', t('home.placesTitle'), { href: pageHref('map', lang), label: t('home.placesCta') })}
-    <div class="grid grid-4">${places.map(placeCard).join('')}</div>
-  </section>`],
     ['story', story
       ? `<section class="section" aria-labelledby="home-story">
     ${sectionHead('home-story', t('home.storyTitle'))}
