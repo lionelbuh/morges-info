@@ -4,7 +4,6 @@ import { PAGES } from '../../src/site/config.js';
 import fr from '../../src/i18n/locales/fr.js';
 import de from '../../src/i18n/locales/de.js';
 import en from '../../src/i18n/locales/en.js';
-import { VOICES_FORM_KEY } from '../../src/site/config.js';
 import { HERO_PHOTOS } from '../../src/data/photos.js';
 
 let errors;
