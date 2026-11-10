@@ -384,7 +384,33 @@ export const VIEWPOINTS = [
       },
       image: { src: '/images/photos/college-couvaloup-1904.webp', width: 1600, height: 999 },
     },
-    now: null,
+    now: {
+      id: 'college-couvaloup-aujourdhui',
+      title: {
+        fr: 'Morges, le collège de Couvaloup aujourd’hui',
+        en: 'Morges, the Couvaloup school today',
+        de: 'Morges, das Collège de Couvaloup heute',
+        it: 'Morges, il collegio di Couvaloup oggi',
+      },
+      caption: {
+        fr: 'Le collège en novembre 2026, avec son clocheton au toit de tuiles colorées ; devant, une place piétonne et des arbres aux couleurs d’automne.',
+        en: 'The school in November 2026, with its little bell tower and roof of coloured tiles; in front, a pedestrian square and trees in autumn colours.',
+        de: 'Das Schulhaus im November 2026 mit seinem Glockentürmchen und dem Dach aus farbigen Ziegeln; davor ein Fussgängerplatz und Bäume in Herbstfarben.',
+        it: 'Il collegio nel novembre 2026, con il campaniletto dal tetto di tegole colorate; davanti, una piazza pedonale e alberi dai colori autunnali.',
+      },
+      date: {
+        value: '2026-11-09',
+        precision: 'day',
+      },
+      source: { institution: 'Morges.info' },
+      rights: {
+        status: 'granted',
+        credit: 'Monique Robin-Barth',
+        evidence: 'Photo taken on 9.11.2026, sent by the photographer herself to the site owner for publication (10.11.2026)',
+      },
+      verification: { status: 'verified', verifiedBy: 'Morges.info', verifiedAt: '2026-11-10' },
+      image: { src: '/images/photos/college-couvaloup-aujourdhui.webp', width: 1500, height: 2000 },
+    },
   },
   {
     id: 'vue-aerienne-parc-des-sports',
