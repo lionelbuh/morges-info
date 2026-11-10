@@ -20,7 +20,7 @@ import heroManifest from '../data/hero-manifest.json' with { type: 'json' };
 import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapHref, directionsLinks, businessPageHref } from './links.js';
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
-import { renderVoices, homeVoices } from './voices.js';
+import { DISCOVER_THEMES } from '../data/discover.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
   placeCard,
@@ -111,12 +111,10 @@ function renderHome({ today, heroId } = {}) {
     <p class="lead">${e(t('home.intro'))}</p>
     <p class="hero-actions">
       <a class="btn" href="${photosMap}">${e(t('home.mapCta'))}</a>
-      <a class="btn btn-ghost" href="${pageHref('voices', lang)}#ecrire">${e(t('home.voicesCta'))}</a>
     </p>
   </section>
   </div>
 
-  ${homeVoices()}
 
   <section class="section" aria-labelledby="home-map">
     ${sectionHead('home-map', t('home.mapTitle'), { href: photosMap, label: t('home.mapCta') })}
@@ -358,6 +356,33 @@ function renderContribute() {
   </section>`;
 }
 
+/**
+ * Découvrir Morges: the themes of a first visit, each with a photo already published on the site (shown
+ * whole, with its credit) and links to the site's pages. New content goes into src/data/discover.js.
+ */
+function renderDiscover() {
+  const lang = getLang();
+  const themes = DISCOVER_THEMES.map((theme) => {
+    const photo = theme.photo;
+    const links = theme.links
+      .map((link) => `<li><a href="${pageHref(link.page, lang)}">${e(localized(link.label))}<span aria-hidden="true"> →</span></a></li>`)
+      .join('');
+    return `<article class="card discover-theme" id="${e(theme.id)}">
+      <figure class="photo discover-photo">
+        <img src="${e(photo.src)}" alt="${e(localized(photo.alt))}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async" />
+        <figcaption>${e(t('common.photoCredit', { credit: photo.credit }))}</figcaption>
+      </figure>
+      <div class="discover-body">
+        <h2 class="discover-title">${e(localized(theme.title))}</h2>
+        <p>${e(localized(theme.text))}</p>
+        <ul class="discover-links">${links}</ul>
+      </div>
+    </article>`;
+  }).join('');
+  return `${pageIntro(t('discover.title'), t('discover.intro'))}
+  <section class="section"><div class="discover-grid">${themes}</div></section>`;
+}
+
 /** Publisher, contact and data protection. */
 function renderLegal() {
   const lang = getLang();
@@ -368,7 +393,7 @@ function renderLegal() {
   return `${pageIntro(t('legal.title'), t('legal.intro'))}
   ${block('publisher')}
   ${block('contact', ` ${emailLink()}`)}
-  ${['data', 'voices', 'photos', 'storage'].map((k) => block(k)).join('')}
+  ${['data', 'photos', 'storage'].map((k) => block(k)).join('')}
   <section class="section prose" id="mesure-audience">
     <h2>${e(t('legal.analyticsTitle'))}</h2>
     <p>${e(t('legal.analyticsText'))}</p>
@@ -627,7 +652,7 @@ const RENDERERS = {
   places: renderPlaces,
   photos: renderPhotos,
   visit: renderVisit,
-  voices: renderVoices,
+  discover: renderDiscover,
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

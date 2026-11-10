@@ -80,6 +80,7 @@ export default {
     home: 'Accueil Morges.info',
   },
   nav: {
+    discover: 'Découvrir Morges',
     voices: 'Parole aux Morgiens',
     visit: 'Visiter Morges',
     photos: 'Photos',
@@ -95,6 +96,10 @@ export default {
     us: 'Qui sommes-nous',
   },
   pages: {
+    discover: {
+      title: 'Découvrir Morges : incontournables, promenades, patrimoine et beaux endroits — Morges.info',
+      description: 'Une invitation à découvrir Morges : ses incontournables, ses promenades au bord du Léman, son patrimoine, ses curiosités, des idées en famille et ses plus beaux endroits.',
+    },
     voices: {
       title: 'Parole aux Morgiens : vos avis, idées et questions sur Morges — Morges.info',
       description: 'Habitants de Morges, donnez votre avis, partagez une idée, un souvenir ou une question. Chaque message est lu avant publication ; pas besoin d’e-mail, votre prénom suffit.',
@@ -241,6 +246,10 @@ export default {
     milestonesTitle: 'Repères',
     archiveTitle: 'Photographies d’archives',
     archiveText: 'Les photographies anciennes seront publiées uniquement lorsque leur provenance, leur date et les droits de reproduction auront été vérifiés. Chacune sera associée à une vue actuelle du même endroit, avec sa légende et son crédit.',
+  },
+  discover: {
+    title: 'Découvrir Morges',
+    intro: 'Entre lac, vieille ville et parcs, une invitation à découvrir Morges : ses incontournables, ses promenades, son patrimoine et ses curiosités. Chaque thème mène aux lieux et aux photos du site.',
   },
   life: {
     title: 'Vie locale et infos pratiques',

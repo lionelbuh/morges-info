@@ -80,6 +80,7 @@ export default {
     home: 'Morges.info home',
   },
   nav: {
+    discover: 'Discover Morges',
     voices: 'Voices of Morges',
     visit: 'Visiting Morges',
     photos: 'Photos',
@@ -95,6 +96,10 @@ export default {
     us: 'About us',
   },
   pages: {
+    discover: {
+      title: 'Discover Morges: must-sees, walks, heritage and beautiful spots — Morges.info',
+      description: 'An invitation to discover Morges: its must-sees, its walks along Lake Geneva, its heritage, its curiosities, ideas for families and its most beautiful spots.',
+    },
     voices: {
       title: 'Voices of Morges: residents’ views, ideas and questions — Morges.info',
       description: 'Residents of Morges share their views, ideas, memories and questions. Every message is read before it is published; no email needed, your first name is enough.',
@@ -241,6 +246,10 @@ export default {
     milestonesTitle: 'Milestones',
     archiveTitle: 'Archive photographs',
     archiveText: 'Old photographs will be published only once their provenance, date and reproduction rights have been verified. Each will be paired with a current view of the same spot, with caption and credit.',
+  },
+  discover: {
+    title: 'Discover Morges',
+    intro: 'Between the lake, the old town and the parks, an invitation to discover Morges: its must-sees, its walks, its heritage and its curiosities. Each theme leads to the site’s places and photos.',
   },
   life: {
     title: 'Local life and practical information',

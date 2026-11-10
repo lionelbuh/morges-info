@@ -85,7 +85,7 @@ export function robotsTxt() {
 export function llmsTxt() {
   setLang('fr', { persist: false });
   const line = (id) => `- [${fr.pages[id].title.replace(/ — Morges\.info$/, '')}](${absoluteUrl(id)}): ${fr.pages[id].description}`;
-  const main = ['map', 'visit', 'photos', 'places', 'history', 'stories', 'life', 'businesses', 'voices', 'contribute'].map(line);
+  const main = ['map', 'visit', 'photos', 'places', 'history', 'stories', 'life', 'businesses', 'discover', 'contribute'].map(line);
   const places = PLACES.map((p) => `- [${p.name.fr}](${absoluteUrl(placePageId(p.id))})`);
   const photos = publishedViewpoints().map((vp) => `- [${vp.title.fr}](${absoluteUrl(photoPageId(vp.id))})`);
   const stories = STORIES.map((s) => `- [${s.title.fr}](${SITE_URL}/recits/#${s.id})`);
