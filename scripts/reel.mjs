@@ -182,7 +182,7 @@ function content() {
         ...(free ? [{ kicker: 'Le saviez-vous ?', title: place.name.fr, body: fact }] : []),
         { kicker: 'Lieux de Morges', title: 'Plus de lieux, sur la carte', body: `morges.info/lieux/${place.id}` },
       ],
-      caption: `Le saviez-vous ? ${place.name.fr} 💡\n\n${fact}\n\nÀ lire sur morges.info/lieux/${place.id}\n\n${HASHTAGS}`,
+      caption: `Le saviez-vous ? ${place.name.fr} 💡\n\n${fact}\n\nÀ lire sur morges.info/lieux/${place.id}\n\n${free ? `Photo : ${free.photo.rights.credit}, domaine public\n\n` : ''}${HASHTAGS}`,
     };
   }
   // Monday: an old photograph
