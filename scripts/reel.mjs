@@ -5,10 +5,12 @@
  * Output: reels/out/<date>/morges-info-<date>.mp4 and legende.txt (git-ignored). Needs ffmpeg.
  *
  * The theme follows the day of the week:
- *   Mon, Wed, Sun  Morges hier      an old photograph and its story
- *   Tue, Thu       Le saviez-vous ? a fact about a place of Morges
- *   Fri            Ce week-end à Morges (the calendar's events from Friday to Sunday)
- *   Sat            Découvrir Morges (one theme of the page, in turn)
+ *   Mon  Morges hier      an old photograph and its story
+ *   Wed  Le saviez-vous ? a fact about a place of Morges
+ *   Fri  Ce week-end à Morges (the calendar's events from Friday to Sunday)
+ *   Sun  Découvrir Morges (one theme of the page, in turn)
+ * Videos are posted on those four days. Any other date falls back on a neighbour's theme
+ * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
  * Photos: only public-domain photographs are used. The others were published on the site with their
  * authors' agreement, or under licences that forbid changes: they need a separate yes for Instagram.
@@ -38,7 +40,8 @@ const dayNumber = Math.floor(Date.parse(`${day}T00:00:00Z`) / 86400000);
 const weekday = new Date(`${day}T12:00:00Z`).getUTCDay(); // 0 = Sunday
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const pick = (list, salt = 0) => list[(((dayNumber + salt) % list.length) + list.length) % list.length];
+const week = Math.floor((dayNumber + 3) / 7); // changes every Monday
+const pick = (list) => list[((week % list.length) + list.length) % list.length];
 
 /** First sentences of a text, up to about `max` characters. */
 function short(text, max = 230) {
@@ -155,8 +158,8 @@ function content() {
       caption: `${title} 📅\n\n${list.map((l) => `• ${l.when} : ${l.what}`).join('\n')}\n\nHoraires, lieux et détails : morges.info/vie-locale\n\n${HASHTAGS} #AgendaMorges`,
     };
   }
-  // Saturday: a theme of Découvrir Morges
-  if (weekday === 6) {
+  // Sunday (and Saturday): a theme of Découvrir Morges
+  if (weekday === 0 || weekday === 6) {
     const theme = pick(DISCOVER_THEMES);
     const free = freePhotos.find(({ photo }) => photo.image.src === theme.photo.src);
     return {
@@ -168,9 +171,9 @@ function content() {
       caption: `${theme.title.fr} ✨\n\n${theme.text.fr}\n\nToutes les idées : morges.info/decouvrir-morges\n\n${HASHTAGS} #DécouvrirMorges`,
     };
   }
-  // Tuesday and Thursday: a fact about a place
-  if (weekday === 2 || weekday === 4) {
-    const place = pick(PLACES, weekday);
+  // Wednesday (and Tuesday, Thursday): a fact about a place
+  if (weekday >= 2 && weekday <= 4) {
+    const place = pick(PLACES);
     const fact = short(place.description.fr);
     const free = freePhotos.find(({ vp }) => vp.placeId === place.id);
     return {
@@ -182,8 +185,8 @@ function content() {
       caption: `Le saviez-vous ? ${place.name.fr} 💡\n\n${fact}\n\nÀ lire sur morges.info/lieux/${place.id}\n\n${HASHTAGS}`,
     };
   }
-  // Monday, Wednesday and Sunday: an old photograph
-  const { vp, photo } = pick(freePhotos, weekday);
+  // Monday: an old photograph
+  const { vp, photo } = pick(freePhotos);
   const year = photo.date.value.slice(0, 4);
   const when = photo.date.precision === 'circa' ? `vers ${year}` : year;
   const credit = `Photo : ${photo.rights.credit}, domaine public`;
