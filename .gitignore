@@ -11,3 +11,6 @@ commerces/*/
 
 # original photos for the photo map (only the optimized copies in public/images/photos are published)
 assets/photos/map/
+
+# daily Instagram videos (scripts/reel.mjs)
+reels/out/
