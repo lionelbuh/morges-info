@@ -7,7 +7,7 @@
  * The theme follows the day of the week:
  *   Mon  Morges hier      an old photograph and its story
  *   Wed  Le saviez-vous ? a fact about a place of Morges
- *   Fri  Ce week-end à Morges (the calendar's events from Friday to Sunday)
+ *   Fri  Ce week-end à Morges (the Saturday market, the lake and an invitation to the calendar)
  *   Sun  Découvrir Morges (one theme of the page, in turn)
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
  * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { publishedViewpoints, shownPhotos } from '../src/data/viewpoints.js';
 import { PLACES } from '../src/data/places.js';
-import { upcomingEvents, eventsOnDay, todayInMorges } from '../src/data/events.js';
+import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -57,7 +57,7 @@ function short(text, max = 230) {
 function wrap(text, max) {
   const lines = [];
   let line = '';
-  for (const word of text.split(/\s+/)) {
+  for (const word of text.split(/[ \t\n]+/)) {
     if ((`${line} ${word}`).trim().length > max && line) {
       lines.push(line);
       line = word;
@@ -67,9 +67,6 @@ function wrap(text, max) {
   return lines;
 }
 const tspans = (lines, x, y, lh) => lines.map((l, i) => `<tspan x="${x}" y="${y + i * lh}">${esc(l)}</tspan>`).join('');
-
-const formatDay = (iso) =>
-  new Intl.DateTimeFormat('fr-CH', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${iso}T12:00:00Z`));
 
 /** Photographs that may be used outside the site without asking: public domain only. */
 const freePhotos = publishedViewpoints()
@@ -138,24 +135,28 @@ async function slide(file, { kicker, title, photo, credit, body, lines = [] }) {
 
 /** The day's content: slides and caption. */
 function content() {
-  // Friday: the weekend's events
+  // Friday: the weekend in Morges. No event names, an invitation to the calendar
   if (weekday === 5) {
-    const days = [0, 1, 2].map((i) => new Date(Date.parse(`${day}T12:00:00Z`) + i * 86400000).toISOString().slice(0, 10));
-    const events = upcomingEvents(undefined, day);
-    const weekend = days.flatMap((d) => eventsOnDay(events, d).map((ev) => ({ d, ev })));
-    const seen = new Set();
-    const items = weekend.filter(({ ev }) => !seen.has(ev.id) && seen.add(ev.id)).slice(0, 5);
-    const list = (items.length ? items : events.slice(0, 4).map((ev) => ({ d: ev.startDate, ev }))).map(({ d, ev }) => ({
-      when: formatDay(d),
-      what: ev.title.fr,
-    }));
-    const title = items.length ? 'Ce week-end à Morges' : 'Bientôt à Morges';
     return {
       slides: [
-        { kicker: 'Agenda', title, lines: list },
+        {
+          kicker: 'Ce week-end à Morges',
+          title: 'Samedi matin, c’est jour de marché',
+          body: 'Toute l’année sur la Grand-Rue piétonne, jusqu’à 14 h. L’occasion de flâner dans la vieille ville.',
+        },
+        {
+          kicker: 'Ce week-end à Morges',
+          title: 'Puis le lac, à deux pas',
+          body: 'Les quais, le port et le château : une balade au bord du Léman, juste en bas de la Grand-Rue.',
+        },
+        {
+          kicker: 'Agenda',
+          title: 'Que faire ce week-end\u00a0?',
+          body: 'Concerts, ateliers, expositions, fêtes : le calendrier de Morges.info rassemble les événements de la ville, jour par jour.',
+        },
         { kicker: 'Agenda', title: 'Tous les événements, horaires et lieux', body: 'Le calendrier complet sur morges.info/vie-locale' },
       ],
-      caption: `${title} 📅\n\n${list.map((l) => `• ${l.when} : ${l.what}`).join('\n')}\n\nHoraires, lieux et détails : morges.info/vie-locale\n\n${HASHTAGS} #AgendaMorges`,
+      caption: `Ce week-end à Morges 📅\n\nSamedi matin, c’est jour de marché sur la Grand-Rue piétonne, jusqu’à 14 h. Puis une balade au bord du lac, entre les quais, le port et le château.\n\nEt pour le reste du week-end, concerts, ateliers, expositions ou fêtes : tout est dans le calendrier de Morges.info, jour par jour.\n\n👉 morges.info/vie-locale\n\n${HASHTAGS} #AgendaMorges #WeekendMorges`,
     };
   }
   // Sunday (and Saturday): a theme of Découvrir Morges
