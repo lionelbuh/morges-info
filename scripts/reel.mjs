@@ -5,10 +5,12 @@
  * Output: reels/out/<date>/morges-info-<date>.mp4 and legende.txt (git-ignored). Needs ffmpeg.
  *
  * The theme follows the day of the week:
- *   Mon, Wed, Sun  Morges hier      an old photograph and its story
- *   Tue, Thu       Le saviez-vous ? a fact about a place of Morges
- *   Fri            Ce week-end à Morges (the calendar's events from Friday to Sunday)
- *   Sat            Découvrir Morges (one theme of the page, in turn)
+ *   Mon  Morges hier      an old photograph and its story
+ *   Wed  Le saviez-vous ? a fact about a place of Morges
+ *   Fri  Ce week-end à Morges (the Saturday market, the lake and an invitation to the calendar)
+ *   Sun  Découvrir Morges (one theme of the page, in turn)
+ * Videos are posted on those four days. Any other date falls back on a neighbour's theme
+ * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
  * Photos: only public-domain photographs are used. The others were published on the site with their
  * authors' agreement, or under licences that forbid changes: they need a separate yes for Instagram.
@@ -21,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { publishedViewpoints, shownPhotos } from '../src/data/viewpoints.js';
 import { PLACES } from '../src/data/places.js';
-import { upcomingEvents, eventsOnDay, todayInMorges } from '../src/data/events.js';
+import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -38,7 +40,8 @@ const dayNumber = Math.floor(Date.parse(`${day}T00:00:00Z`) / 86400000);
 const weekday = new Date(`${day}T12:00:00Z`).getUTCDay(); // 0 = Sunday
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const pick = (list, salt = 0) => list[(((dayNumber + salt) % list.length) + list.length) % list.length];
+const week = Math.floor((dayNumber + 3) / 7); // changes every Monday
+const pick = (list) => list[((week % list.length) + list.length) % list.length];
 
 /** First sentences of a text, up to about `max` characters. */
 function short(text, max = 230) {
@@ -54,7 +57,7 @@ function short(text, max = 230) {
 function wrap(text, max) {
   const lines = [];
   let line = '';
-  for (const word of text.split(/\s+/)) {
+  for (const word of text.split(/[ \t\n]+/)) {
     if ((`${line} ${word}`).trim().length > max && line) {
       lines.push(line);
       line = word;
@@ -64,9 +67,6 @@ function wrap(text, max) {
   return lines;
 }
 const tspans = (lines, x, y, lh) => lines.map((l, i) => `<tspan x="${x}" y="${y + i * lh}">${esc(l)}</tspan>`).join('');
-
-const formatDay = (iso) =>
-  new Intl.DateTimeFormat('fr-CH', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${iso}T12:00:00Z`));
 
 /** Photographs that may be used outside the site without asking: public domain only. */
 const freePhotos = publishedViewpoints()
@@ -135,28 +135,32 @@ async function slide(file, { kicker, title, photo, credit, body, lines = [] }) {
 
 /** The day's content: slides and caption. */
 function content() {
-  // Friday: the weekend's events
+  // Friday: the weekend in Morges. No event names, an invitation to the calendar
   if (weekday === 5) {
-    const days = [0, 1, 2].map((i) => new Date(Date.parse(`${day}T12:00:00Z`) + i * 86400000).toISOString().slice(0, 10));
-    const events = upcomingEvents(undefined, day);
-    const weekend = days.flatMap((d) => eventsOnDay(events, d).map((ev) => ({ d, ev })));
-    const seen = new Set();
-    const items = weekend.filter(({ ev }) => !seen.has(ev.id) && seen.add(ev.id)).slice(0, 5);
-    const list = (items.length ? items : events.slice(0, 4).map((ev) => ({ d: ev.startDate, ev }))).map(({ d, ev }) => ({
-      when: formatDay(d),
-      what: ev.title.fr,
-    }));
-    const title = items.length ? 'Ce week-end à Morges' : 'Bientôt à Morges';
     return {
       slides: [
-        { kicker: 'Agenda', title, lines: list },
+        {
+          kicker: 'Ce week-end à Morges',
+          title: 'Samedi matin, c’est jour de marché',
+          body: 'Toute l’année sur la Grand-Rue piétonne, jusqu’à 14 h. L’occasion de flâner dans la vieille ville.',
+        },
+        {
+          kicker: 'Ce week-end à Morges',
+          title: 'Puis le lac, à deux pas',
+          body: 'Les quais, le port et le château : une balade au bord du Léman, juste en bas de la Grand-Rue.',
+        },
+        {
+          kicker: 'Agenda',
+          title: 'Que faire ce week-end\u00a0?',
+          body: 'Concerts, ateliers, expositions, fêtes : le calendrier de Morges.info rassemble les événements de la ville, jour par jour.',
+        },
         { kicker: 'Agenda', title: 'Tous les événements, horaires et lieux', body: 'Le calendrier complet sur morges.info/vie-locale' },
       ],
-      caption: `${title} 📅\n\n${list.map((l) => `• ${l.when} : ${l.what}`).join('\n')}\n\nHoraires, lieux et détails : morges.info/vie-locale\n\n${HASHTAGS} #AgendaMorges`,
+      caption: `Ce week-end à Morges 📅\n\nSamedi matin, c’est jour de marché sur la Grand-Rue piétonne, jusqu’à 14 h. Puis une balade au bord du lac, entre les quais, le port et le château.\n\nEt pour le reste du week-end, concerts, ateliers, expositions ou fêtes : tout est dans le calendrier de Morges.info, jour par jour.\n\n👉 morges.info/vie-locale\n\n${HASHTAGS} #AgendaMorges #WeekendMorges`,
     };
   }
-  // Saturday: a theme of Découvrir Morges
-  if (weekday === 6) {
+  // Sunday (and Saturday): a theme of Découvrir Morges
+  if (weekday === 0 || weekday === 6) {
     const theme = pick(DISCOVER_THEMES);
     const free = freePhotos.find(({ photo }) => photo.image.src === theme.photo.src);
     return {
@@ -168,9 +172,9 @@ function content() {
       caption: `${theme.title.fr} ✨\n\n${theme.text.fr}\n\nToutes les idées : morges.info/decouvrir-morges\n\n${HASHTAGS} #DécouvrirMorges`,
     };
   }
-  // Tuesday and Thursday: a fact about a place
-  if (weekday === 2 || weekday === 4) {
-    const place = pick(PLACES, weekday);
+  // Wednesday (and Tuesday, Thursday): a fact about a place
+  if (weekday >= 2 && weekday <= 4) {
+    const place = pick(PLACES);
     const fact = short(place.description.fr);
     const free = freePhotos.find(({ vp }) => vp.placeId === place.id);
     return {
@@ -179,11 +183,11 @@ function content() {
         ...(free ? [{ kicker: 'Le saviez-vous ?', title: place.name.fr, body: fact }] : []),
         { kicker: 'Lieux de Morges', title: 'Plus de lieux, sur la carte', body: `morges.info/lieux/${place.id}` },
       ],
-      caption: `Le saviez-vous ? ${place.name.fr} 💡\n\n${fact}\n\nÀ lire sur morges.info/lieux/${place.id}\n\n${HASHTAGS}`,
+      caption: `Le saviez-vous ? ${place.name.fr} 💡\n\n${fact}\n\nÀ lire sur morges.info/lieux/${place.id}\n\n${free ? `Photo : ${free.photo.rights.credit}, domaine public\n\n` : ''}${HASHTAGS}`,
     };
   }
-  // Monday, Wednesday and Sunday: an old photograph
-  const { vp, photo } = pick(freePhotos, weekday);
+  // Monday: an old photograph
+  const { vp, photo } = pick(freePhotos);
   const year = photo.date.value.slice(0, 4);
   const when = photo.date.precision === 'circa' ? `vers ${year}` : year;
   const credit = `Photo : ${photo.rights.credit}, domaine public`;
