@@ -1,5 +1,5 @@
 /**
- * Instagram video (Reel, 1080×1920, no sound) presented by Gaston, the little swan of Morges.info,
+ * Instagram video (Reel, 1080×1920, with the Morges.info music) presented by Gaston, the little swan of Morges.info,
  * with its caption and the text for Instagram's text-to-speech voice, made from the site's data.
  *
  * Usage: node scripts/reel.mjs [YYYY-MM-DD]   (default: today in Morges)
@@ -14,12 +14,13 @@
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
  * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
- * The video has no sound: the voice is added in Instagram ("Texte en voix") from voix.txt.
+ * The video carries the Morges.info music (scripts/music.mjs); the voice is added in Instagram
+ * ("Texte en voix") from voix.txt.
  * Photos: only public-domain photographs are used. The others were published on the site with their
  * authors' agreement, or under licences that forbid changes: they need a separate yes for Instagram.
  * Photos are always shown whole, never cropped.
  */
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,12 +29,12 @@ import { publishedViewpoints, shownPhotos } from '../src/data/viewpoints.js';
 import { PLACES } from '../src/data/places.js';
 import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
+import { music } from './music.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const W = 1080;
 const H = 1920;
 const FPS = 25;
-const PAPER = '#f3eee4';
 const INK = '#1c1b19';
 const RED = '#b3121a';
 const SOFT = '#57524a';
@@ -46,6 +47,22 @@ const dayNumber = Math.floor(Date.parse(`${day}T00:00:00Z`) / 86400000);
 const weekday = new Date(`${day}T12:00:00Z`).getUTCDay(); // 0 = Sunday
 const week = Math.floor((dayNumber + 3) / 7); // changes every Monday
 const pick = (list) => list[((week % list.length) + list.length) % list.length];
+
+/**
+ * So that two videos never look alike: each theme has its own background colour and its own
+ * accessory for Gaston, and he swims in from the left one week and from the right the next.
+ */
+const THEME = weekday === 5 ? 'weekend' : weekday === 0 || weekday === 6 ? 'discover' : weekday >= 2 && weekday <= 4 ? 'fact' : 'past';
+const STYLE = {
+  past: { bg: '#efe2c8', accessory: 'boater' },
+  fact: { bg: '#e1ecf5', accessory: 'glasses' },
+  weekend: { bg: '#fbe6c4', accessory: 'sunglasses' },
+  discover: { bg: '#e2eedd', accessory: 'beret' },
+}[THEME];
+const HELLO = ['Coucou !', 'Salut tout le monde !', 'Hello Morges !', 'Bonjour, bonjour !', 'Hé, coucou !'][((week % 5) + 5) % 5];
+const FACING = week % 2 ? -1 : 1; // 1: Gaston looks right, -1: he looks left
+const GASTON_X = FACING === 1 ? 470 : 610;
+const HEAD_X = GASTON_X + FACING * 232;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -113,6 +130,23 @@ const backOut = (x) => {
   return 1 + (c + 1) * v ** 3 + c * v ** 2;
 };
 
+const ACCESSORIES = {
+  // a straw boater, as on the quays around 1900
+  boater: `<ellipse cx="170" cy="-236" rx="50" ry="9" fill="#e2bf73" stroke="#b8933f" stroke-width="3"/>
+    <path d="M146 -238 L150 -266 L192 -266 L196 -238 Z" fill="#e8c77a" stroke="#b8933f" stroke-width="3"/>
+    <rect x="148" y="-251" width="46" height="8" fill="#b3121a"/>`,
+  // round reading glasses
+  glasses: `<circle cx="183" cy="-216" r="15" fill="#fff" fill-opacity=".25" stroke="${INK}" stroke-width="4"/>
+    <path d="M168 -218 L140 -222" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`,
+  // sunglasses for the weekend
+  sunglasses: `<path d="M166 -228 L204 -228 L201 -210 C196 -202 172 -202 168 -210 Z" fill="${INK}"/>
+    <path d="M176 -224 L184 -224" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+    <path d="M166 -224 L140 -226" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`,
+  // a red beret, ready to explore
+  beret: `<ellipse cx="164" cy="-240" rx="44" ry="15" transform="rotate(-12 164 -240)" fill="#d52b1e"/>
+    <circle cx="168" cy="-256" r="5" fill="#d52b1e"/>`,
+};
+
 /** Gaston: a white swan with a red and white scarf (the colours of Morges), floating on the lake. */
 function gaston(t, talking, sceneT) {
   const bob = Math.sin(t * 2.4) * 10;
@@ -123,7 +157,8 @@ function gaston(t, talking, sceneT) {
   const flap = sceneT < 0.7 ? Math.sin((sceneT / 0.7) * Math.PI * 3) * 22 : Math.sin(t * 2) * 3;
   const brow = talking ? Math.abs(Math.sin(t * 5)) * 6 : 0;
   const tail = Math.sin(t * 6);
-  return `<g transform="translate(470 ${1290 + bob + hop}) rotate(${tilt}) scale(1.35)">
+  const enter = (1 - easeOut(t / 1.1)) * -FACING * 720;
+  return `<g transform="translate(${(GASTON_X + enter).toFixed(1)} ${1290 + bob + hop}) rotate(${tilt * FACING}) scale(${1.35 * FACING} 1.35)">
     <ellipse cx="0" cy="102" rx="190" ry="14" fill="#000" opacity=".08"/>
     <path d="M70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="${SWAN_LINE}" stroke-width="48" stroke-linecap="round"/>
     <path d="M70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round"/>
@@ -145,6 +180,7 @@ function gaston(t, talking, sceneT) {
     <path d="M172 ${-234 - brow} q11 -7 22 0" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
     <ellipse cx="182" cy="-216" rx="8" ry="${9 * blink}" fill="${INK}"/>
     <circle cx="185" cy="-219.5" r="2.6" fill="#fff" opacity="${blink > 0.5 ? 1 : 0}"/>
+    ${ACCESSORIES[STYLE.accessory]}
   </g>`;
 }
 
@@ -201,8 +237,8 @@ function bubble(scene, sceneT, last) {
     talking: sceneT > 0.3 && sceneT < 0.3 + speak,
     svg: `<g opacity="${fade.toFixed(3)}" transform="translate(540 ${bottom}) scale(${s.toFixed(4)}) translate(-540 ${-bottom})">
     <rect x="70" y="${top}" width="940" height="${h}" rx="56" fill="#fff" stroke="${INK}" stroke-width="6"/>
-    <path d="M640 ${bottom - 3} L735 ${bottom + 80} L720 ${bottom - 3} Z" fill="#fff" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
-    <rect x="636" y="${bottom - 12}" width="90" height="12" fill="#fff"/>
+    <path d="M${HEAD_X - FACING * 62} ${bottom - 3} L${HEAD_X + FACING * 33} ${bottom + 80} L${HEAD_X + FACING * 18} ${bottom - 3} Z" fill="#fff" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+    <rect x="${Math.min(HEAD_X - FACING * 62, HEAD_X + FACING * 18) + 4}" y="${bottom - 12}" width="72" height="12" fill="#fff"/>
     ${texts}
   </g>`,
   };
@@ -216,7 +252,7 @@ function content() {
       kicker: 'Ce week-end à Morges',
       title: 'Bon week-end !',
       scenes: [
-        { big: 'Coucou !', small: 'C’est Gaston. Le week-end arrive, on en profite ?' },
+        { big: HELLO, small: 'C’est Gaston. Le week-end arrive, on en profite ?' },
         { big: 'Samedi matin, c’est jour de marché !', small: 'Sur la Grand-Rue piétonne, jusqu’à 14 h.' },
         { big: 'Puis on file au bord du lac !', small: 'Les quais, le port et le château, à deux pas.' },
         { big: 'Que faire ce week-end ?', small: 'Tout est dans le calendrier : morges.info/vie-locale' },
@@ -233,7 +269,7 @@ function content() {
       kicker: 'Découvrir Morges',
       title: theme.title.fr,
       scenes: [
-        { big: 'Coucou !', small: 'C’est Gaston. Une idée de sortie pour cette semaine ?' },
+        { big: HELLO, small: 'C’est Gaston. Une idée de sortie pour cette semaine ?' },
         ...(free ? [{ photo: free.photo.image.src, credit: `Photo : ${free.photo.rights.credit}, domaine public` }] : []),
         ...pieces.map((p, i) => ({ big: i === 0 ? theme.title.fr : undefined, small: p })),
         { big: 'Allez, on se bouge les plumes !', small: 'Toutes mes idées sur morges.info' },
@@ -250,7 +286,7 @@ function content() {
       kicker: 'Le saviez-vous ?',
       title: place.name.fr,
       scenes: [
-        { big: 'Coucou !', small: 'C’est Gaston. J’ai une petite anecdote pour vous !' },
+        { big: HELLO, small: 'C’est Gaston. J’ai une petite anecdote pour vous !' },
         ...(free ? [{ photo: free.photo.image.src, credit: `Photo : ${free.photo.rights.credit}, domaine public` }] : []),
         ...chunks(fact).map((p) => ({ small: p })),
         { big: 'Épatant, non ?', small: `La suite sur morges.info/lieux/${place.id}` },
@@ -268,7 +304,7 @@ function content() {
     kicker: 'Morges hier',
     title: vp.title.fr,
     scenes: [
-      { big: 'Coucou !', small: `C’est Gaston. On remonte le temps, ${when} ?` },
+      { big: HELLO, small: `C’est Gaston. On remonte le temps, ${when} ?` },
       { photo: photo.image.src, credit },
       ...chunks(story).map((p) => ({ small: p })),
       { big: 'Et aujourd’hui ?', small: 'Comparez sur la carte photo : morges.info/photos' },
@@ -298,7 +334,7 @@ for (const sc of scenes.filter((s) => s.photo)) {
   const img = sharp(path.join(root, 'public', sc.photo));
   const meta = await img.metadata();
   const boxTop = head.bottom + 40;
-  const boxH = 900 - boxTop;
+  const boxH = 830 - boxTop;
   let pw = 960;
   let ph = Math.round((meta.height / meta.width) * pw);
   if (ph > boxH) {
@@ -323,12 +359,12 @@ function frame(t) {
     .join('');
   const credit = scene.photo ? `<text x="540" y="${scene.creditY}" text-anchor="middle" font-family="Inter" font-size="28" fill="${SOFT}">${esc(scene.credit)}</text>` : '';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-    <rect width="${W}" height="${H}" fill="${PAPER}"/>
+    <rect width="${W}" height="${H}" fill="${STYLE.bg}"/>
     ${head.svg}
     ${sparkle}
     ${lake(t)}
     ${gaston(t, b ? b.talking : false, sceneT)}
-    <rect x="0" y="1470" width="${W}" height="450" fill="${PAPER}"/>
+    <rect x="0" y="1470" width="${W}" height="450" fill="${STYLE.bg}"/>
     ${lake(t)}
     ${b ? b.svg : credit}
     ${LOGO}
@@ -338,10 +374,11 @@ function frame(t) {
 }
 
 const video = path.join(outDir, `morges-info-${day}.mp4`);
+const silent = path.join(outDir, 'image.mp4');
 const ffmpeg = spawn(
   'ffmpeg',
   ['-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', `${W}x${H}`, '-r', String(FPS), '-i', '-',
-    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-movflags', '+faststart', video],
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-movflags', '+faststart', silent],
   { stdio: ['pipe', 'inherit', 'inherit'] },
 );
 const done = new Promise((resolve, reject) => ffmpeg.on('close', (code) => (code ? reject(new Error(`ffmpeg exited with ${code}`)) : resolve())));
@@ -355,6 +392,14 @@ for (let n = 0; n < Math.round(TOTAL * FPS); n++) {
 }
 ffmpeg.stdin.end();
 await done;
+
+// the Morges.info music under the pictures (Instagram's voice goes on top)
+const wav = path.join(outDir, 'musique.wav');
+music(TOTAL, wav);
+execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', silent, '-i', wav, '-map', '0:v', '-map', '1:a',
+  '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', video]);
+rmSync(silent);
+rmSync(wav);
 
 const voice = scenes
   .filter((s) => !s.photo)
