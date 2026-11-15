@@ -1,5 +1,5 @@
 /**
- * Instagram video (Reel, 1080×1920, no sound) presented by Gaston, the little swan of Morges.info,
+ * Instagram video (Reel, 1080×1920, with the Morges.info music) presented by Gaston, the little swan of Morges.info,
  * with its caption and the text for Instagram's text-to-speech voice, made from the site's data.
  *
  * Usage: node scripts/reel.mjs [YYYY-MM-DD]   (default: today in Morges)
@@ -14,12 +14,13 @@
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
  * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
- * The video has no sound: the voice is added in Instagram ("Texte en voix") from voix.txt.
+ * The video carries the Morges.info music (scripts/music.mjs); the voice is added in Instagram
+ * ("Texte en voix") from voix.txt.
  * Photos: only public-domain photographs are used. The others were published on the site with their
  * authors' agreement, or under licences that forbid changes: they need a separate yes for Instagram.
  * Photos are always shown whole, never cropped.
  */
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,6 +29,7 @@ import { publishedViewpoints, shownPhotos } from '../src/data/viewpoints.js';
 import { PLACES } from '../src/data/places.js';
 import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
+import { music } from './music.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const W = 1080;
@@ -372,10 +374,11 @@ function frame(t) {
 }
 
 const video = path.join(outDir, `morges-info-${day}.mp4`);
+const silent = path.join(outDir, 'image.mp4');
 const ffmpeg = spawn(
   'ffmpeg',
   ['-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', `${W}x${H}`, '-r', String(FPS), '-i', '-',
-    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-movflags', '+faststart', video],
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-movflags', '+faststart', silent],
   { stdio: ['pipe', 'inherit', 'inherit'] },
 );
 const done = new Promise((resolve, reject) => ffmpeg.on('close', (code) => (code ? reject(new Error(`ffmpeg exited with ${code}`)) : resolve())));
@@ -389,6 +392,14 @@ for (let n = 0; n < Math.round(TOTAL * FPS); n++) {
 }
 ffmpeg.stdin.end();
 await done;
+
+// the Morges.info music under the pictures (Instagram's voice goes on top)
+const wav = path.join(outDir, 'musique.wav');
+music(TOTAL, wav);
+execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', silent, '-i', wav, '-map', '0:v', '-map', '1:a',
+  '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', video]);
+rmSync(silent);
+rmSync(wav);
 
 const voice = scenes
   .filter((s) => !s.photo)
