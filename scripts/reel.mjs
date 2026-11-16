@@ -14,7 +14,7 @@
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
  * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
- * The video carries the Morges.info music (scripts/music.mjs); the voice is added in Instagram
+ * The video opens with the Morges.info sound logo (scripts/music.mjs); the voice is added in Instagram
  * ("Texte en voix") from voix.txt.
  * Photos: only public-domain photographs are used. The others were published on the site with their
  * authors' agreement, or under licences that forbid changes: they need a separate yes for Instagram.
@@ -393,7 +393,7 @@ for (let n = 0; n < Math.round(TOTAL * FPS); n++) {
 ffmpeg.stdin.end();
 await done;
 
-// the Morges.info music under the pictures (Instagram's voice goes on top)
+// the Morges.info sound logo at the start (Instagram's voice goes on top)
 const wav = path.join(outDir, 'musique.wav');
 music(TOTAL, wav);
 execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', silent, '-i', wav, '-map', '0:v', '-map', '1:a',
