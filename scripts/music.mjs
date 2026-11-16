@@ -1,6 +1,6 @@
 /**
  * The Morges.info music, composed for the site: a 5-note "sound logo" (marimba-like, "Mor-ges . in-fo")
- * that opens and closes every video, and a light plucked backing loop in between.
+ * that opens every video. A light plucked backing loop (and the logo again at the end) is available with `withBacking`.
  * Pure synthesis, no samples or third-party recordings: writes a 16-bit stereo WAV.
  *
  * Usage: node scripts/music.mjs <file.wav> [seconds]
@@ -89,12 +89,15 @@ function backing(buf, t0, t1) {
   }
 }
 
-export function music(seconds, file) {
+/** The music for a video of `seconds`: the sound logo at the start, then silence (or, with `withBacking`, the loop and the logo again at the end). */
+export function music(seconds, file, { withBacking = false } = {}) {
   const L = new Float32Array(Math.round(seconds * SR));
   logo(L, 0.15, 1);
-  const end = seconds - 2.2;
-  backing(L, 1.4, end);
-  logo(L, end, 0.9);
+  if (withBacking) {
+    const end = seconds - 2.2;
+    backing(L, 1.4, end);
+    logo(L, end, 0.9);
+  }
   // gentle fade out and normalise to about -3 dBFS
   let peak = 0;
   for (let i = 0; i < L.length; i++) {
