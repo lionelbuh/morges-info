@@ -823,6 +823,19 @@ export const BUSINESSES = [
         licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
       },
       {
+        src: '/images/businesses/vitalyfit-coach.webp',
+        width: 675,
+        height: 1200,
+        alt: {
+          fr: 'Une coach de VitalyFit, souriante, appuyée sur une barre de musculation, devant les appareils et un grand miroir',
+          en: 'A VitalyFit coach, smiling, leaning on a barbell in front of the machines and a large mirror',
+          de: 'Eine Trainerin von VitalyFit, lächelnd, auf eine Langhantel gestützt, vor den Geräten und einem grossen Spiegel',
+          it: 'Una coach di VitalyFit, sorridente, appoggiata a un bilanciere, davanti alle macchine e a un grande specchio',
+        },
+        credit: 'VitalyFit',
+        licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
+      },
+      {
         src: '/images/businesses/vitalyfit-cardio.webp',
         width: 1200,
         height: 560,
