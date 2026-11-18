@@ -94,16 +94,20 @@ describe('site pages', () => {
     expect(map).not.toContain('masthead-dateline');
   });
 
-  it('the brand mark is the site’s own emblem (the harbour towers), neither the arms of Morges nor the Swiss cross; the flag of Morges sits beside the motto', () => {
+  it('the brand mark is the flag of Morges, not the Swiss cross', () => {
     for (const page of ['home', 'map']) {
       const html = renderHeader(page);
       expect(html).toContain('class="brand-mark"');
-      expect(html).toContain('id="brand-mark-clip"');
-      expect(html.match(/<svg[^>]*class="brand-mark"[\s\S]*?<\/svg>/)[0]).not.toContain('#d52b1e'); // not the flag of Morges
-      // the flag of Morges (allowed for anyone, LPAP art. 10) beside the gazette motto
-      expect(html).toMatch(/class="brand-motto">[^<]*<svg class="morges-flag"/);
+      expect(html).toContain('#d52b1e');
       expect(html).not.toContain('M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z'); // the Swiss cross
     }
+  });
+
+  it('masthead: the Morges.info emblem between the date and the founding year (not on the map page)', () => {
+    const html = renderHeader('home');
+    expect(html).toMatch(/class="masthead-date">[^<]*<\/span><span class="masthead-right"><span class="masthead-emblem"><svg[^>]*class="masthead-emblem-svg"/);
+    expect(html).toContain('<span class="masthead-founded">');
+    expect(renderHeader('map')).not.toContain('masthead-emblem');
   });
 
   it('header: the gazette motto sits under the logo, on every page and in every language', () => {
@@ -111,7 +115,7 @@ describe('site pages', () => {
     for (const lang of LANGUAGES) {
       setLang(lang);
       for (const page of ['home', 'map', 'history', 'place:chateau']) {
-        expect(renderHeader(page)).toMatch(new RegExp(`brand-dot">\\.info</span></span>\\s*<span class="brand-motto">${mottos[lang]}<svg class="morges-flag"`));
+        expect(renderHeader(page)).toMatch(new RegExp(`brand-dot">\\.info</span></span>\\s*<span class="brand-motto">${mottos[lang]}</span>`));
       }
     }
     setLang('fr');
