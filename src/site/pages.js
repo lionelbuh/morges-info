@@ -21,6 +21,7 @@ import { pageHref, placeHref, placePageHref, storyHref, photoPageHref, photoMapH
 import { jsonLd, websiteSchema, placeSchema, breadcrumbSchema, eventSchema, storySchema, viewpointSchema, faqSchema, businessSchema } from './structured-data.js';
 import { publishedViewpoints, getViewpoint } from '../data/viewpoints.js';
 import { DISCOVER_THEMES } from '../data/discover.js';
+import { renderAdvent, adventHomeBanner } from './advent.js';
 import { viewpointBody, viewpointCard, viewpointKind, placePhotosBlock, homePhotoCard } from './photos.js';
 import {
   eventCard,
@@ -127,6 +128,7 @@ function renderHome({ today, heroId, now = new Date() } = {}) {
     </p>
   </section>
   </div>
+  ${adventHomeBanner(day)}
 
 
   ${homeSectionOrder([
@@ -666,6 +668,7 @@ const RENDERERS = {
   photos: renderPhotos,
   visit: renderVisit,
   discover: renderDiscover,
+  advent: ({ today, opened } = {}) => renderAdvent({ today: today || todayInMorges(), opened }),
 };
 
 export const CONTENT_PAGE_IDS = Object.keys(RENDERERS);

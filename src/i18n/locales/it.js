@@ -80,6 +80,7 @@ export default {
     home: 'Pagina iniziale di Morges.info',
   },
   nav: {
+    advent: 'Calendario dell’Avvento',
     discover: 'Scoprire Morges',
     voices: 'Voci di Morges',
     visit: 'Visitare Morges',
@@ -96,6 +97,10 @@ export default {
     us: 'Chi siamo',
   },
   pages: {
+    advent: {
+      title: 'Calendario dell’Avvento 2026 di Morges: una sorpresa al giorno fino a Natale — Morges.info',
+      description: 'Dal 1° al 24 dicembre, una casella da aprire ogni giorno: foto d’epoca, luoghi, storie, buoni indirizzi di Morges e il Mercatino di Natale.',
+    },
     discover: {
       title: 'Scoprire Morges: da non perdere, passeggiate, patrimonio e luoghi più belli — Morges.info',
       description: 'Un invito a scoprire Morges: i luoghi da non perdere, le passeggiate in riva al Lemano, il patrimonio, le curiosità, idee per le famiglie e i luoghi più belli.',
@@ -248,6 +253,32 @@ export default {
     milestonesTitle: 'Tappe',
     archiveTitle: 'Fotografie d’archivio',
     archiveText: 'Le fotografie d’epoca saranno pubblicate solo dopo la verifica di provenienza, data e diritti di riproduzione. Ognuna sarà affiancata a una veduta attuale dello stesso luogo, con didascalia e credito.',
+  },
+  advent: {
+    title: 'Calendario dell’Avvento',
+    intro: 'Dal 1° al 24 dicembre, Gaston il piccolo cigno apre con voi una casella al giorno: foto d’epoca, luoghi, storie e buoni indirizzi di Morges.',
+    before: 'Pazienza! La prima casella si apre il 1° dicembre. Tornate ogni giorno fino a Natale.',
+    after: 'Buon Natale! Tutte le caselle sono aperte: buona scoperta.',
+    hint: 'Toccate una casella per aprirla.',
+    door: 'Casella {n}',
+    today: 'Oggi',
+    locked: 'Pazienza! Questa casella si apre il {date}.',
+    more: 'Per saperne di più',
+    eventMore: 'Orari e accesso',
+    kinds: {
+      open: 'Benvenuti',
+      event: 'Mercatino di Natale',
+      photo: 'Morges d’altri tempi',
+      place: 'Lo sapevate?',
+      story: 'Una storia di Morges',
+      business: 'Un buon indirizzo',
+      christmas: 'Buon Natale',
+    },
+    homeKicker: 'Calendario dell’Avvento',
+    homeTitle: 'Una sorpresa al giorno fino a Natale',
+    homeTeaser: 'Dal 1° dicembre, aprite ogni giorno una casella del calendario dell’Avvento di Morges.info.',
+    homeText: 'La casella di oggi è pronta: foto d’epoca, luoghi, storie e buoni indirizzi di Morges.',
+    homeCta: 'Aprire il calendario',
   },
   discover: {
     title: 'Scoprire Morges',

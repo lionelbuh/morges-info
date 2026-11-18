@@ -18,7 +18,8 @@
     "icons": "node scripts/build-icons.mjs",
     "photos": "node scripts/build-photos.mjs",
     "share": "node scripts/build-share.mjs",
-    "reel": "node scripts/reel.mjs"
+    "reel": "node scripts/reel.mjs",
+    "story": "node scripts/story.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

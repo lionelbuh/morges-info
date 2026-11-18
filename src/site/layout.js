@@ -121,6 +121,10 @@ export function shareImage(pageId) {
   } else if (page.businessId) {
     const photo = (editorialSelection().find((b) => b.id === page.businessId).photos || [])[0];
     image = photo && sharedPhoto(photo.src, photo.alt);
+  } else if (pageId === 'advent') {
+    // the greetings card of 1898, port and castle from the jetty
+    const photo = shownPhotos(getViewpoint('vue-port-jetee')).then;
+    image = photo && sharedPhoto(photo.image.src, photo.title);
   } else if (pageId === 'businesses') {
     const photo = editorialSelection().flatMap((b) => b.photos || [])[0];
     image = photo && sharedPhoto(photo.src, photo.alt);

@@ -9,6 +9,9 @@ import { renderMain, homePhotoViewpoints } from './pages.js';
 import { placeHref, photoMapHref } from './links.js';
 import { initCompare, photoMarker, homePhotoCard } from './photos.js';
 import { startAnalytics, analyticsOptedOut, setAnalyticsOptOut, browserRefusesTracking } from './analytics.js';
+import { ADVENT_DOORS, isOpenable } from '../data/advent.js';
+import { todayInMorges } from '../data/events.js';
+import { adventDoorContent, adventLockedMessage } from './advent.js';
 
 const pageId = document.body.dataset.page;
 
@@ -323,6 +326,67 @@ document.addEventListener('click', (event) => {
   syncAnalyticsControl();
 });
 
+/** Advent calendar: the doors already opened in this browser (only a look: open doors stay openable anyway). */
+const ADVENT_KEY = 'morges-advent-opened';
+let adventLinkHandled = false;
+function adventOpened() {
+  try {
+    return JSON.parse(localStorage.getItem(ADVENT_KEY) || '[]').filter(Number.isInteger);
+  } catch {
+    return [];
+  }
+}
+function rememberOpened(day) {
+  try {
+    localStorage.setItem(ADVENT_KEY, JSON.stringify([...new Set([...adventOpened(), day])]));
+  } catch {
+    // private browsing: nothing to remember
+  }
+}
+
+/** Advent calendar: a door shows its content in the panel below the grid, from its own day only. */
+function startAdvent() {
+  const grid = document.querySelector('.advent-grid');
+  const panel = document.getElementById('advent-panel');
+  if (!grid || !panel) return;
+  panel.tabIndex = -1;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const open = (day, { scroll = true } = {}) => {
+    const door = ADVENT_DOORS.find((d) => d.day === day);
+    const button = grid.querySelector(`.advent-door[data-day="${day}"]`);
+    if (!door || !button) return;
+    grid.querySelectorAll('.advent-door[aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+    if (isOpenable(day, todayInMorges())) {
+      panel.innerHTML = adventDoorContent(door);
+      panel.dataset.day = String(day);
+      button.classList.add('is-open');
+      button.setAttribute('aria-expanded', 'true');
+      if (!reduced) {
+        button.classList.remove('is-opening');
+        void button.offsetWidth; // restart the animation
+        button.classList.add('is-opening');
+      }
+      rememberOpened(day);
+      history.replaceState(null, '', `#case-${day}`);
+    } else {
+      panel.innerHTML = adventLockedMessage(day);
+      panel.dataset.day = '';
+    }
+    if (scroll) {
+      panel.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      panel.focus({ preventScroll: true });
+    }
+  };
+  grid.addEventListener('click', (event) => {
+    const button = event.target.closest('.advent-door');
+    if (button) open(Number(button.dataset.day));
+  });
+  // from a link (Instagram, home page): #case-5 opens door 5, once; after a language change, no scroll
+  const fromLink = /^#case-(\d{1,2})$/.exec(window.location.hash);
+  if (fromLink) open(Number(fromLink[1]), { scroll: !adventLinkHandled });
+  adventLinkHandled = true;
+}
+
 function render() {
   if (previewObserver) previewObserver.disconnect();
   clearInterval(photoTimer);
@@ -334,13 +398,14 @@ function render() {
   }
   const heroId = document.querySelector('[data-hero-id]')?.dataset.heroId;
   renderChrome(pageId);
-  document.getElementById('main').innerHTML = renderMain(pageId, { heroId });
+  document.getElementById('main').innerHTML = renderMain(pageId, { heroId, opened: pageId === 'advent' ? adventOpened() : undefined });
   if (pageId === 'home') {
     mountMapPreview();
     startHomePhotos();
     startBusinessSpotlight();
   }
   if (pageId === 'photos') startPhotoPairs();
+  if (pageId === 'advent') startAdvent();
   if (pageId === 'legal') syncAnalyticsControl();
   const filters = document.querySelector('.biz-filters');
   if (filters) filters.hidden = false;
