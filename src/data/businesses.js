@@ -627,6 +627,133 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'bijouterie-golaz',
+    name: 'Bijouterie Golaz',
+    category: 'shops',
+    address: 'Grand-Rue 57, 1110 Morges',
+    phone: '+41 21 801 12 41',
+    email: 'info@bijouteriegolaz.com',
+    coordinates: null,
+    description: {
+      fr: 'Horloger, bijoutier et maison créatrice fondée en 1910 à Morges, sur la Grand-Rue depuis 1914. Son atelier crée bijoux, bagues de fiançailles et alliances sur mesure, en or écologique et pierres de source éthique.',
+      en: 'Watchmaker, jeweller and creative house founded in Morges in 1910, on the Grand-Rue since 1914. Its workshop makes jewellery, engagement rings and wedding bands to measure, in ecological gold with ethically sourced stones.',
+      de: 'Uhrmacher, Juwelier und Kreativhaus, 1910 in Morges gegründet, seit 1914 an der Grand-Rue. Die Werkstatt fertigt Schmuck, Verlobungsringe und Eheringe nach Mass, aus ökologischem Gold und Steinen aus ethischer Herkunft.',
+      it: 'Orologeria, gioielleria e maison creativa fondata a Morges nel 1910, sulla Grand-Rue dal 1914. Il suo laboratorio crea gioielli, anelli di fidanzamento e fedi su misura, in oro ecologico e pietre di provenienza etica.',
+    },
+    services: [
+      {
+        title: { fr: 'Création sur mesure', en: 'Made to measure', de: 'Massanfertigung', it: 'Creazione su misura' },
+        text: {
+          fr: 'Bijoux, bagues de fiançailles et alliances imaginés et fabriqués dans l’atelier, avec plus de 3000 modèles d’alliances. Chaque pièce est unique, avec devis et prototype 3D offerts.',
+          en: 'Jewellery, engagement rings and wedding bands designed and made in the workshop, with more than 3,000 wedding band designs. Each piece is unique, with a free quote and 3D prototype.',
+          de: 'Schmuck, Verlobungs- und Eheringe, in der Werkstatt entworfen und gefertigt, mit über 3000 Ehering-Modellen. Jedes Stück ist ein Unikat; Offerte und 3D-Prototyp sind kostenlos.',
+          it: 'Gioielli, anelli di fidanzamento e fedi ideati e realizzati nel laboratorio, con oltre 3000 modelli di fedi. Ogni pezzo è unico, con preventivo e prototipo 3D gratuiti.',
+        },
+      },
+      {
+        title: { fr: 'Atelier et services', en: 'Workshop and services', de: 'Werkstatt und Dienstleistungen', it: 'Laboratorio e servizi' },
+        text: {
+          fr: 'Réparation et transformation de bijoux, sertissage, gravure, gemmologie et expertise, réparation de montres.',
+          en: 'Jewellery repair and remodelling, stone setting, engraving, gemmology and valuations, watch repair.',
+          de: 'Reparatur und Umarbeitung von Schmuck, Fassen von Steinen, Gravur, Gemmologie und Expertisen, Uhrenreparatur.',
+          it: 'Riparazione e trasformazione di gioielli, incastonatura, incisione, gemmologia e perizie, riparazione di orologi.',
+        },
+      },
+    ],
+    about: {
+      fr: 'Une histoire de famille : depuis 1910, la passion du fondateur se transmet de génération en génération. Cinq générations plus tard, la maison allie l’artisanat, la technologie et l’émotion, sur la Grand-Rue où elle est installée depuis 1914.',
+      en: 'A family story: since 1910, the founder’s passion has been handed down from generation to generation. Five generations later, the house combines craftsmanship, technology and emotion, on the Grand-Rue where it has been since 1914.',
+      de: 'Eine Familiengeschichte: Seit 1910 wird die Leidenschaft des Gründers von Generation zu Generation weitergegeben. Fünf Generationen später verbindet das Haus Handwerk, Technologie und Emotion, an der Grand-Rue, wo es seit 1914 zu Hause ist.',
+      it: 'Una storia di famiglia: dal 1910 la passione del fondatore si tramanda di generazione in generazione. Cinque generazioni dopo, la maison unisce artigianato, tecnologia ed emozione, sulla Grand-Rue dove si trova dal 1914.',
+    },
+    website: 'https://bijouteriegolaz.com/',
+    instagram: 'https://www.instagram.com/golaz1910/',
+    openingHours: {
+      text: {
+        fr: ['Lundi : fermé', 'Mardi à vendredi : 9 h – 12 h 30 et 13 h 45 – 18 h 30', 'Samedi : 9 h – 17 h'],
+        en: ['Monday: closed', 'Tuesday to Friday: 9:00–12:30 and 13:45–18:30', 'Saturday: 9:00–17:00'],
+        de: ['Montag: geschlossen', 'Dienstag bis Freitag: 9–12.30 und 13.45–18.30 Uhr', 'Samstag: 9–17 Uhr'],
+        it: ['Lunedì: chiuso', 'Da martedì a venerdì: 9–12.30 e 13.45–18.30', 'Sabato: 9–17'],
+      },
+      sources: [{ label: 'Morges.info — horaires transmis par la Bijouterie Golaz (18.11.2026)' }],
+      lastVerified: '2026-11-18',
+    },
+    photos: [
+      {
+        src: '/images/businesses/golaz-facade.webp',
+        width: 905,
+        height: 1200,
+        alt: {
+        fr: 'La façade de la Bijouterie Golaz sur la Grand-Rue : volets bleus, enseigne en fer forgé « Golaz » et bandeau « Horloger, bijoutier, Golaz 1910, maison créatrice » au-dessus des vitrines',
+        en: 'The front of the Bijouterie Golaz on the Grand-Rue: blue shutters, a wrought-iron “Golaz” sign and the band “Horloger, bijoutier, Golaz 1910, maison créatrice” above the windows',
+        de: 'Die Fassade der Bijouterie Golaz an der Grand-Rue: blaue Fensterläden, ein schmiedeeisernes Schild «Golaz» und der Schriftzug «Horloger, bijoutier, Golaz 1910, maison créatrice» über den Schaufenstern',
+        it: 'La facciata della Bijouterie Golaz sulla Grand-Rue: persiane blu, un’insegna in ferro battuto «Golaz» e la scritta «Horloger, bijoutier, Golaz 1910, maison créatrice» sopra le vetrine',
+      },
+        credit: 'Bijouterie Golaz',
+        licence: 'Tous droits réservés, publié avec l’accord de la Bijouterie Golaz (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/golaz-salon.webp',
+        width: 1200,
+        height: 675,
+        alt: {
+        fr: 'L’intérieur de la bijouterie : un canapé et des poufs en velours bleu canard autour d’une table ronde, des vitrines éclairées et le comptoir au diamant doré',
+        en: 'Inside the shop: a sofa and poufs in teal velvet around a round table, lit display cases and the counter with its golden diamond',
+        de: 'Im Geschäft: ein Sofa und Hocker aus petrolblauem Samt um einen runden Tisch, beleuchtete Vitrinen und die Theke mit dem goldenen Diamanten',
+        it: 'L’interno della gioielleria: un divano e pouf in velluto blu petrolio attorno a un tavolo rotondo, vetrine illuminate e il bancone con il diamante dorato',
+      },
+        credit: 'Bijouterie Golaz',
+        licence: 'Tous droits réservés, publié avec l’accord de la Bijouterie Golaz (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/golaz-comptoir.webp',
+        width: 1181,
+        height: 1200,
+        alt: {
+        fr: 'Le comptoir de la bijouterie, sous des suspensions dorées, avec une horloge murale et des niches éclairées où sont exposés des bijoux',
+        en: 'The shop counter, under golden pendant lights, with a wall clock and lit niches displaying jewellery',
+        de: 'Die Theke des Geschäfts unter goldenen Hängeleuchten, mit einer Wanduhr und beleuchteten Nischen mit Schmuck',
+        it: 'Il bancone della gioielleria, sotto lampade a sospensione dorate, con un orologio a muro e nicchie illuminate con gioielli',
+      },
+        credit: 'Bijouterie Golaz',
+        licence: 'Tous droits réservés, publié avec l’accord de la Bijouterie Golaz (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/golaz-table-conseil.webp',
+        width: 675,
+        height: 1200,
+        alt: {
+        fr: 'Une table de conseil en bois avec deux chaises en velours bleu canard, entre deux vitrines de verre, devant des niches éclairées',
+        en: 'A wooden consultation table with two teal velvet chairs, between two glass display cases, in front of lit niches',
+        de: 'Ein Beratungstisch aus Holz mit zwei petrolblauen Samtstühlen zwischen zwei Glasvitrinen, vor beleuchteten Nischen',
+        it: 'Un tavolo di consulenza in legno con due sedie di velluto blu petrolio, tra due vetrine di vetro, davanti a nicchie illuminate',
+      },
+        credit: 'Bijouterie Golaz',
+        licence: 'Tous droits réservés, publié avec l’accord de la Bijouterie Golaz (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/golaz-bijoux-emailles.webp',
+        width: 1012,
+        height: 1200,
+        alt: {
+        fr: 'Un bracelet, une bague et des pendentifs ronds émaillés, noir et or à motifs de spirales, présentés sur des supports blancs',
+        en: 'An enamelled bangle, ring and round pendants in black and gold with spiral patterns, on white stands',
+        de: 'Ein emaillierter Armreif, ein Ring und runde Anhänger in Schwarz und Gold mit Spiralmustern auf weissen Ständern',
+        it: 'Un bracciale, un anello e pendenti rotondi smaltati, neri e oro con motivi a spirale, su supporti bianchi',
+      },
+        credit: 'Bijouterie Golaz',
+        licence: 'Tous droits réservés, publié avec l’accord de la Bijouterie Golaz (18.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Bijouterie Golaz — site web', url: 'https://bijouteriegolaz.com/' },
+      { label: 'Morges.info — informations et photos transmises par la Bijouterie Golaz, avec son accord (18.11.2026)' },
+    ],
+    lastVerified: '2026-11-18',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */

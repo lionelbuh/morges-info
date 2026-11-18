@@ -190,7 +190,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(51); // 15 listed pages + 20 places + 12 photo pages + 4 businesses
+  expect(sitemap.match(/<loc>/g)).toHaveLength(52); // 15 listed pages + 20 places + 12 photo pages + 5 businesses
   expect(sitemap).toContain('<loc>https://morges.info/commerces/lykke/</loc>\n    <lastmod>');
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
@@ -399,7 +399,7 @@ test('each business has its own page: title, share photo, breadcrumb, the others
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/images\/share\/chez-loubna-vitrine\.jpg$/);
   await expect(page.locator('.site-header [aria-current="page"], header nav [aria-current="page"]').first()).toHaveText(fr.nav.businesses);
   await expect(page.locator('.breadcrumb a[href="/commerces/"]')).toBeVisible();
-  await expect(page.locator('section[aria-labelledby="business-others"] .business-card')).toHaveCount(3);
+  await expect(page.locator('section[aria-labelledby="business-others"] .business-card')).toHaveCount(4);
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join();
   expect(ld).toContain('"mainEntityOfPage":"https://morges.info/commerces/chez-loubna/"');
   // in German
@@ -415,7 +415,7 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   await page.mouse.move(0, 0);
   await expect(shown(page)).toHaveCount(1);
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
-  await expect(page.locator('[data-biz-slide].is-off[inert]')).toHaveCount(3);
+  await expect(page.locator('[data-biz-slide].is-off[inert]')).toHaveCount(4);
   const photo = shown(page).locator('.business-photo img');
   await expect(photo).toHaveAttribute('src', /luckycats-estelle-franzone/);
   // after 4 s, the next photo of the same business (with a short fade)
@@ -427,7 +427,7 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   // after 12 s, the next business
   await page.clock.runFor(8000);
   await expect(shown(page).locator('.card-title')).toHaveText('Chez Loubna');
-  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 4');
+  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 5');
   // the buttons
   await page.locator('[data-biz-step="-1"]').click();
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
