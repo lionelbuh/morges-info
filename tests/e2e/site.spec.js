@@ -565,6 +565,11 @@ test('local life lists upcoming events only', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-12-21T10:00:00+01:00'));
   await page.reload();
   await expect(page.locator('#event-marche-de-noel-2026')).toHaveCount(0);
+  await expect(page.locator('#event-beausobre-pierre-arditi-2026')).toBeVisible();
+
+  // after the last event (the exhibition at Espace 81, until 11 January)
+  await page.clock.setFixedTime(new Date('2027-01-12T10:00:00+01:00'));
+  await page.reload();
   await expect(page.locator('.empty-note')).toHaveText(fr.life.agendaEmpty);
 });
 
@@ -582,7 +587,7 @@ test('local life: the Christmas market is featured, and the calendar opens the e
 
   const december = page.locator('.cal-month').filter({ has: page.locator('h3', { hasText: 'décembre 2026' }) });
   await expect(december.locator('a.cal-day.is-featured')).toHaveCount(15); // Wednesday to Sunday, three weeks
-  await expect(december.locator('[data-day="2026-12-07"]')).toHaveCount(0); // Monday: closed
+  await expect(december.locator('[data-day="2026-12-07"].is-featured')).toHaveCount(0); // Monday: the market is closed
   await expect(page.locator('.cal-day.is-today')).toHaveAttribute('data-day', '2026-11-04');
   await december.locator('[data-day="2026-12-05"]').click();
   const panel = december.locator('.cal-panel');

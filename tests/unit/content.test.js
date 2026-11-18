@@ -141,9 +141,10 @@ describe('content model', () => {
 
   it('upcoming events hide past ones and use the Morges calendar date', () => {
     expect(upcomingEvents(EVENTS, '2026-11-01')[0].id).toBe('beausobre-zip-zap-circus-2026'); // the first event in November
-    expect(upcomingEvents(EVENTS, '2026-11-30').map((e) => e.id)).toEqual(['marche-de-noel-2026']);
-    expect(upcomingEvents(EVENTS, '2026-12-20')).toHaveLength(1); // last day still listed
-    expect(upcomingEvents(EVENTS, '2026-12-21')).toHaveLength(0);
+    expect(upcomingEvents(EVENTS, '2026-11-30').map((e) => e.id)).toContain('marche-de-noel-2026');
+    expect(upcomingEvents(EVENTS, '2026-11-30').map((e) => e.id)).not.toContain('requiem-for-a-dead-sun-2026'); // 29 November
+    expect(upcomingEvents(EVENTS, '2027-01-11').map((e) => e.id)).toEqual(['expo-cazenave-espace81-2026']); // last day still listed
+    expect(upcomingEvents(EVENTS, '2027-01-12')).toHaveLength(0);
     expect(todayInMorges(new Date('2026-12-20T23:30:00Z'))).toBe('2026-12-21'); // already the 21st in Zurich
   });
 
@@ -158,9 +159,13 @@ describe('content model', () => {
 
   it('an event with opening days is only on the days it is open; the featured one comes first', () => {
     const market = EVENTS.find((e) => e.id === 'marche-de-noel-2026');
-    expect(eventsOnDay(EVENTS, '2026-12-05')).toEqual([market]); // a Saturday
-    expect(eventsOnDay(EVENTS, '2026-12-07')).toEqual([]); // a Monday: closed
-    expect(eventsOnDay(EVENTS, '2026-12-21')).toEqual([]); // after the end
+    expect(eventsOnDay(EVENTS, '2026-12-05')[0]).toBe(market); // a Saturday, the featured event first
+    expect(eventsOnDay(EVENTS, '2026-12-07')).not.toContain(market); // a Monday: closed
+    expect(eventsOnDay(EVENTS, '2026-12-21')).not.toContain(market); // after the end
+    // the shops' Sunday openings: on the two Sundays only
+    const sundays = EVENTS.find((e) => e.id === 'dimanches-commerces-2026');
+    expect(eventsOnDay(EVENTS, '2026-12-13')).toContain(sundays);
+    expect(eventsOnDay(EVENTS, '2026-12-16')).not.toContain(sundays);
     expect(featuredEvent(EVENTS, '2026-11-04')).toBe(market);
     expect(featuredEvent(EVENTS, '2026-12-21')).toBeNull();
     expect(validateEvent({ ...market, weekHours: { ...market.weekHours, mon: ['9h', '17h'] } })).toContain('event(marche-de-noel-2026).weekHours.mon must be null or [\'HH:MM\', \'HH:MM\']');
@@ -170,9 +175,10 @@ describe('content model', () => {
     const html = eventCalendar(upcomingEvents(EVENTS, '2026-11-04'), '2026-11-04');
     expect(html).toContain('novembre 2026');
     expect(html).toContain('décembre 2026');
-    expect(html).not.toContain('janvier 2027');
+    expect(html).toContain('janvier 2027'); // the exhibition at Espace 81 runs until 11 January
+    expect(html).not.toContain('février 2027');
     expect(html).toContain('data-day="2026-12-05"');
-    expect(html).not.toContain('data-day="2026-12-07"'); // closed on Mondays
+    expect(html).not.toMatch(/class="[^"]*is-featured[^"]*"[^>]*data-day="2026-12-07"/); // the market is closed on Mondays
     expect(html).toMatch(/class="cal-day is-today has-events" href="#event-beausobre-zip-zap-circus-2026" data-day="2026-11-04" aria-current="date"/);
     expect(eventCalendar([], '2026-12-21')).toBe('');
     const panel = calendarDayPanel('2026-12-06', EVENTS);
