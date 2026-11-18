@@ -94,12 +94,14 @@ describe('site pages', () => {
     expect(map).not.toContain('masthead-dateline');
   });
 
-  it('the brand mark is the site’s own emblem (the harbour towers), neither the arms of Morges nor the Swiss cross', () => {
+  it('the brand mark is the site’s own emblem (the harbour towers), neither the arms of Morges nor the Swiss cross; the flag of Morges sits beside the motto', () => {
     for (const page of ['home', 'map']) {
       const html = renderHeader(page);
       expect(html).toContain('class="brand-mark"');
       expect(html).toContain('id="brand-mark-clip"');
-      expect(html).not.toContain('#d52b1e'); // the red of the flag of Morges
+      expect(html.match(/<svg[^>]*class="brand-mark"[\s\S]*?<\/svg>/)[0]).not.toContain('#d52b1e'); // not the flag of Morges
+      // the flag of Morges (allowed for anyone, LPAP art. 10) beside the gazette motto
+      expect(html).toMatch(/class="brand-motto">[^<]*<svg class="morges-flag"/);
       expect(html).not.toContain('M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z'); // the Swiss cross
     }
   });
@@ -109,7 +111,7 @@ describe('site pages', () => {
     for (const lang of LANGUAGES) {
       setLang(lang);
       for (const page of ['home', 'map', 'history', 'place:chateau']) {
-        expect(renderHeader(page)).toMatch(new RegExp(`brand-dot">\\.info</span></span>\\s*<span class="brand-motto">${mottos[lang]}</span>`));
+        expect(renderHeader(page)).toMatch(new RegExp(`brand-dot">\\.info</span></span>\\s*<span class="brand-motto">${mottos[lang]}<svg class="morges-flag"`));
       }
     }
     setLang('fr');
