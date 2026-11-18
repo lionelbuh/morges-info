@@ -49,6 +49,7 @@ export const PAGES = [
   { id: 'life', path: '/vie-locale/', nav: true },
   { id: 'stories', path: '/recits/', nav: true },
   { id: 'discover', path: '/decouvrir-morges/', nav: true },
+  { id: 'advent', path: '/calendrier-avent/', nav: false },
   { id: 'contribute', path: '/contribuer/', nav: true },
   { id: 'places', path: '/lieux/', nav: false },
   { id: 'photos', path: '/photos/', nav: false },

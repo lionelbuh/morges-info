@@ -190,7 +190,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(50); // 14 listed pages + 20 places + 12 photo pages + 4 businesses
+  expect(sitemap.match(/<loc>/g)).toHaveLength(51); // 15 listed pages + 20 places + 12 photo pages + 4 businesses
   expect(sitemap).toContain('<loc>https://morges.info/commerces/lykke/</loc>\n    <lastmod>');
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
@@ -662,4 +662,43 @@ test('SEO files: sitemap lists every page, robots points to it', async ({ reques
   const llms = await request.get('/llms.txt');
   expect(llms.status()).toBe(200);
   expect(await llms.text()).toContain('# Morges.info');
+});
+
+test('Advent calendar: doors locked before December', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-11-20T10:00:00+01:00'));
+  await page.goto('/calendrier-avent/');
+  await expect(page.locator('main h1')).toHaveText(fr.advent.title);
+  await expect(page.locator('.advent-door')).toHaveCount(24);
+  await expect(page.locator('.advent-door.is-locked')).toHaveCount(24);
+  await page.locator('.advent-door[data-day="1"]').click();
+  await expect(page.locator('#advent-panel')).toContainText('Cette case s’ouvre le 1 décembre 2026');
+});
+
+test('Advent calendar: today’s door opens, earlier doors too, later ones stay shut', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-12-05T10:00:00+01:00'));
+  await page.goto('/calendrier-avent/');
+  await expect(page.locator('.advent-door.is-openable')).toHaveCount(5);
+  await expect(page.locator('.advent-door.is-today')).toHaveAttribute('data-day', '5');
+  await expect(page.locator('#advent-panel')).toContainText('Direction le lykke');
+  await page.locator('.advent-door[data-day="3"]').click();
+  await expect(page.locator('#advent-panel')).toContainText('carte de vœux de 1898');
+  await expect(page.locator('#advent-panel img').first()).toBeVisible();
+  await expect(page.locator('.advent-door[data-day="3"]')).toHaveClass(/is-open/);
+  await expect(page).toHaveURL(/#case-3$/);
+  await page.locator('.advent-door[data-day="9"]').click();
+  await expect(page.locator('#advent-panel')).toContainText('Patience');
+  await expect(page.locator('#advent-panel')).not.toContainText('Lochmann');
+  // the opened doors are remembered in this browser
+  await page.reload();
+  await expect(page.locator('.advent-door[data-day="3"]')).toHaveClass(/is-open/);
+  await expect(page.locator('#advent-panel')).toContainText('carte de vœux de 1898');
+});
+
+test('Advent calendar: announced on the home page, in German too', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-12-07T10:00:00+01:00'));
+  await page.goto('/?lang=de');
+  await expect(page.locator('#home-advent')).toHaveText(de.advent.homeTitle);
+  await page.locator('.advent-banner a').click();
+  await expect(page).toHaveURL(/\/calendrier-avent\/\?lang=de#case-7$/);
+  await expect(page.locator('#advent-panel')).toContainText('Strawinsky');
 });

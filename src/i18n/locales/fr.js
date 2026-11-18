@@ -80,6 +80,7 @@ export default {
     home: 'Accueil Morges.info',
   },
   nav: {
+    advent: 'Calendrier de l’Avent',
     discover: 'Découvrir Morges',
     voices: 'Parole aux Morgiens',
     visit: 'Visiter Morges',
@@ -96,6 +97,10 @@ export default {
     us: 'Qui sommes-nous',
   },
   pages: {
+    advent: {
+      title: 'Calendrier de l’Avent 2026 de Morges : une surprise par jour jusqu’à Noël — Morges.info',
+      description: 'Du 1er au 24 décembre, une case à ouvrir chaque jour : photos anciennes, lieux, histoires, bonnes adresses de Morges et le Marché de Noël.',
+    },
     discover: {
       title: 'Découvrir Morges : incontournables, promenades, patrimoine et beaux endroits — Morges.info',
       description: 'Une invitation à découvrir Morges : ses incontournables, ses promenades au bord du Léman, son patrimoine, ses curiosités, des idées en famille et ses plus beaux endroits.',
@@ -248,6 +253,32 @@ export default {
     milestonesTitle: 'Repères',
     archiveTitle: 'Photographies d’archives',
     archiveText: 'Les photographies anciennes seront publiées uniquement lorsque leur provenance, leur date et les droits de reproduction auront été vérifiés. Chacune sera associée à une vue actuelle du même endroit, avec sa légende et son crédit.',
+  },
+  advent: {
+    title: 'Calendrier de l’Avent',
+    intro: 'Du 1er au 24 décembre, Gaston le petit cygne ouvre avec vous une case par jour : photos d’autrefois, lieux, histoires et bonnes adresses de Morges.',
+    before: 'Patience ! La première case s’ouvre le 1er décembre. Revenez chaque jour jusqu’à Noël.',
+    after: 'Joyeux Noël ! Toutes les cases sont ouvertes : bonne découverte.',
+    hint: 'Touchez une case pour l’ouvrir.',
+    door: 'Case {n}',
+    today: 'Aujourd’hui',
+    locked: 'Patience ! Cette case s’ouvre le {date}.',
+    more: 'En savoir plus',
+    eventMore: 'Horaires et accès',
+    kinds: {
+      open: 'Bienvenue',
+      event: 'Marché de Noël',
+      photo: 'Morges d’autrefois',
+      place: 'Le saviez-vous ?',
+      story: 'Une histoire de Morges',
+      business: 'Une bonne adresse',
+      christmas: 'Joyeux Noël',
+    },
+    homeKicker: 'Calendrier de l’Avent',
+    homeTitle: 'Une surprise par jour jusqu’à Noël',
+    homeTeaser: 'Dès le 1er décembre, ouvrez chaque jour une case du calendrier de l’Avent de Morges.info.',
+    homeText: 'La case d’aujourd’hui est prête : photos d’autrefois, lieux, histoires et bonnes adresses de Morges.',
+    homeCta: 'Ouvrir le calendrier',
   },
   discover: {
     title: 'Découvrir Morges',

@@ -80,6 +80,7 @@ export default {
     home: 'Morges.info home',
   },
   nav: {
+    advent: 'Advent calendar',
     discover: 'Discover Morges',
     voices: 'Voices of Morges',
     visit: 'Visiting Morges',
@@ -96,6 +97,10 @@ export default {
     us: 'About us',
   },
   pages: {
+    advent: {
+      title: 'Morges Advent calendar 2026: a surprise every day until Christmas — Morges.info',
+      description: 'From 1 to 24 December, a door to open every day: old photos, places, stories, good addresses in Morges and the Christmas Market.',
+    },
     discover: {
       title: 'Discover Morges: must-sees, walks, heritage and beautiful spots — Morges.info',
       description: 'An invitation to discover Morges: its must-sees, its walks along Lake Geneva, its heritage, its curiosities, ideas for families and its most beautiful spots.',
@@ -248,6 +253,32 @@ export default {
     milestonesTitle: 'Milestones',
     archiveTitle: 'Archive photographs',
     archiveText: 'Old photographs will be published only once their provenance, date and reproduction rights have been verified. Each will be paired with a current view of the same spot, with caption and credit.',
+  },
+  advent: {
+    title: 'Advent calendar',
+    intro: 'From 1 to 24 December, Gaston the little swan opens a door with you every day: old photos, places, stories and good addresses in Morges.',
+    before: 'Patience! The first door opens on 1 December. Come back every day until Christmas.',
+    after: 'Merry Christmas! All the doors are open: enjoy exploring.',
+    hint: 'Tap a door to open it.',
+    door: 'Door {n}',
+    today: 'Today',
+    locked: 'Patience! This door opens on {date}.',
+    more: 'Find out more',
+    eventMore: 'Opening hours and access',
+    kinds: {
+      open: 'Welcome',
+      event: 'Christmas Market',
+      photo: 'Morges in times past',
+      place: 'Did you know?',
+      story: 'A Morges story',
+      business: 'A good address',
+      christmas: 'Merry Christmas',
+    },
+    homeKicker: 'Advent calendar',
+    homeTitle: 'A surprise every day until Christmas',
+    homeTeaser: 'From 1 December, open a door of the Morges.info Advent calendar every day.',
+    homeText: 'Today’s door is ready: old photos, places, stories and good addresses in Morges.',
+    homeCta: 'Open the calendar',
   },
   discover: {
     title: 'Discover Morges',

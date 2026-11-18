@@ -80,6 +80,7 @@ export default {
     home: 'Morges.info Startseite',
   },
   nav: {
+    advent: 'Adventskalender',
     discover: 'Morges entdecken',
     voices: 'Stimmen aus Morges',
     visit: 'Morges besuchen',
@@ -96,6 +97,10 @@ export default {
     us: 'Über uns',
   },
   pages: {
+    advent: {
+      title: 'Adventskalender 2026 von Morges: jeden Tag eine Überraschung bis Weihnachten — Morges.info',
+      description: 'Vom 1. bis 24. Dezember jeden Tag ein Türchen: alte Fotos, Orte, Geschichten, gute Adressen in Morges und der Weihnachtsmarkt.',
+    },
     discover: {
       title: 'Morges entdecken: Sehenswertes, Spaziergänge, Kulturerbe und schöne Orte — Morges.info',
       description: 'Eine Einladung, Morges zu entdecken: das Wichtigste, Spaziergänge am Genfersee, das Kulturerbe, Kurioses, Ideen für Familien und die schönsten Orte.',
@@ -248,6 +253,32 @@ export default {
     milestonesTitle: 'Eckdaten',
     archiveTitle: 'Archivfotografien',
     archiveText: 'Alte Fotografien werden erst veröffentlicht, wenn Herkunft, Datum und Reproduktionsrechte überprüft sind. Jede wird einer aktuellen Ansicht desselben Ortes gegenübergestellt, mit Legende und Bildnachweis.',
+  },
+  advent: {
+    title: 'Adventskalender',
+    intro: 'Vom 1. bis 24. Dezember öffnet Gaston, der kleine Schwan, jeden Tag mit Ihnen ein Türchen: alte Fotos, Orte, Geschichten und gute Adressen in Morges.',
+    before: 'Geduld! Das erste Türchen öffnet sich am 1. Dezember. Schauen Sie bis Weihnachten jeden Tag vorbei.',
+    after: 'Frohe Weihnachten! Alle Türchen sind offen: viel Spass beim Entdecken.',
+    hint: 'Tippen Sie auf ein Türchen, um es zu öffnen.',
+    door: 'Türchen {n}',
+    today: 'Heute',
+    locked: 'Geduld! Dieses Türchen öffnet sich am {date}.',
+    more: 'Mehr erfahren',
+    eventMore: 'Öffnungszeiten und Anreise',
+    kinds: {
+      open: 'Willkommen',
+      event: 'Weihnachtsmarkt',
+      photo: 'Morges von früher',
+      place: 'Schon gewusst?',
+      story: 'Eine Geschichte aus Morges',
+      business: 'Eine gute Adresse',
+      christmas: 'Frohe Weihnachten',
+    },
+    homeKicker: 'Adventskalender',
+    homeTitle: 'Jeden Tag eine Überraschung bis Weihnachten',
+    homeTeaser: 'Ab dem 1. Dezember öffnen Sie jeden Tag ein Türchen des Adventskalenders von Morges.info.',
+    homeText: 'Das heutige Türchen ist bereit: alte Fotos, Orte, Geschichten und gute Adressen in Morges.',
+    homeCta: 'Kalender öffnen',
   },
   discover: {
     title: 'Morges entdecken',

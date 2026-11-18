@@ -3852,3 +3852,172 @@ a.mini-day.is-featured::after {
     transform: none;
   }
 }
+
+/* ---------- Advent calendar (/calendrier-avent/) ---------- */
+.advent-status {
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+}
+.advent-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+  perspective: 900px;
+}
+@media (min-width: 640px) {
+  .advent-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+}
+.advent-door {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 10px;
+  background: var(--door, var(--red));
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.35), var(--shadow-sm);
+  transform-origin: left center;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  background-image: radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.35) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 0.3) 0 2px, transparent 3px),
+    radial-gradient(circle at 60% 18%, rgba(255, 255, 255, 0.25) 0 1.5px, transparent 2.5px);
+}
+.advent-door:hover {
+  transform: translateY(-2px);
+}
+.advent-num {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+  line-height: 1;
+}
+.advent-today {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  font-size: clamp(0.5rem, 2.1vw, 0.68rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  max-width: 94%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.04em;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.1rem 0.3rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.advent-door.is-today {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px #c08a1e, var(--shadow);
+}
+.advent-door.is-locked {
+  filter: saturate(0.55) brightness(0.92);
+  cursor: help;
+}
+.advent-door.is-open {
+  background-color: var(--surface);
+  color: var(--door, var(--red));
+  box-shadow: inset 0 0 0 3px var(--door, var(--red));
+  background-image: none;
+}
+.advent-door.is-opening {
+  animation: advent-open 0.6s ease-out;
+}
+@keyframes advent-open {
+  0% {
+    transform: rotateY(0);
+  }
+  45% {
+    transform: rotateY(-70deg);
+  }
+  100% {
+    transform: rotateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .advent-door,
+  .advent-door.is-opening {
+    animation: none;
+    transition: none;
+  }
+}
+.advent-card {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+.advent-card:focus {
+  outline: none;
+}
+.advent-hook {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin: 0.3rem 0 0.8rem;
+}
+.advent-title {
+  margin: 0 0 0.8rem;
+}
+.advent-photos {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 720px) {
+  .advent-photos:has(> :nth-child(2)) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.advent-card img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+.advent-more {
+  margin-top: 1rem;
+}
+.advent-gaston {
+  display: block;
+  width: 130px;
+  height: auto;
+  margin: 0 auto 0.5rem;
+}
+.advent-banner {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: var(--surface);
+  border-left: 6px solid var(--red);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+}
+.advent-banner h2 {
+  margin: 0.2rem 0 0.4rem;
+}
+.advent-banner p {
+  margin: 0 0 0.6rem;
+}
+.advent-banner-gaston {
+  flex: none;
+  width: 96px;
+  height: auto;
+}
+@media (max-width: 480px) {
+  .advent-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
