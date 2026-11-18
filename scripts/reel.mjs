@@ -54,10 +54,11 @@ const pick = (list) => list[((week % list.length) + list.length) % list.length];
  */
 const THEME = weekday === 5 ? 'weekend' : weekday === 0 || weekday === 6 ? 'discover' : weekday >= 2 && weekday <= 4 ? 'fact' : 'past';
 const STYLE = {
-  past: { bg: '#efe2c8', accessory: 'boater' },
-  fact: { bg: '#e1ecf5', accessory: 'glasses' },
-  weekend: { bg: '#fbe6c4', accessory: 'sunglasses' },
-  discover: { bg: '#e2eedd', accessory: 'beret' },
+  // top: deep colour behind the title; bg: light colour of the lower half (lake, Gaston, logo)
+  past: { top: '#4a3324', mid: '#9c7148', bg: '#f1e2c6', accent: '#e9c27a', accessory: 'boater' },
+  fact: { top: '#15406e', mid: '#3d7cb8', bg: '#dcebf7', accent: '#8fd0ff', accessory: 'glasses' },
+  weekend: { top: '#b4421d', mid: '#ea8a3c', bg: '#fde6c2', accent: '#ffd36b', accessory: 'sunglasses' },
+  discover: { top: '#174f3a', mid: '#3f8a63', bg: '#dff0d8', accent: '#bfe9a4', accessory: 'beret' },
 }[THEME];
 const HELLO = ['Coucou !', 'Salut tout le monde !', 'Hello Morges !', 'Bonjour, bonjour !', 'Hé, coucou !'][((week % 5) + 5) % 5];
 const FACING = week % 2 ? -1 : 1; // 1: Gaston looks right, -1: he looks left
@@ -157,7 +158,7 @@ function gaston(t, talking, sceneT) {
   const flap = sceneT < 0.7 ? Math.sin((sceneT / 0.7) * Math.PI * 3) * 22 : Math.sin(t * 2) * 3;
   const brow = talking ? Math.abs(Math.sin(t * 5)) * 6 : 0;
   const tail = Math.sin(t * 6);
-  const enter = (1 - easeOut(t / 1.1)) * -FACING * 720;
+  const enter = (1 - easeOut((t - GASTON_FROM) / 1.1)) * -FACING * 720;
   return `<g transform="translate(${(GASTON_X + enter).toFixed(1)} ${1290 + bob + hop}) rotate(${tilt * FACING}) scale(${1.35 * FACING} 1.35)">
     <ellipse cx="0" cy="102" rx="190" ry="14" fill="#000" opacity=".08"/>
     <path d="M70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="${SWAN_LINE}" stroke-width="48" stroke-linecap="round"/>
@@ -193,16 +194,38 @@ function lake(t) {
   return wave(1400, 10, 0, '#7fb3d5') + wave(1425, 8, 2, '#5b97c2');
 }
 
-function header(kicker, title) {
-  const lines = wrap(title, 24).slice(0, 2);
-  const svg = `<rect x="60" y="120" width="960" height="6" fill="${INK}"/>
-    <text x="60" y="210" font-family="Inter" font-size="34" font-weight="bold" letter-spacing="4" fill="${RED}">${esc(kicker.toUpperCase())}</text>
-    ${lines.map((l, i) => `<text x="60" y="${300 + i * 76}" font-family="DejaVu Serif" font-size="66" font-weight="bold" fill="${INK}">${esc(l)}</text>`).join('')}`;
-  return { svg, bottom: 300 + (lines.length - 1) * 76 + 30 };
+/** A rounded label ("pill") with the kicker. */
+function pill(text, x, y, { fill = '#fff', colour = STYLE.top, size = 30 } = {}) {
+  const w = Math.round(text.length * size * 0.78 + size * 1.6);
+  return `<rect x="${x}" y="${y}" width="${w}" height="${size * 1.9}" rx="${size * 0.95}" fill="${fill}"/>
+    <text x="${x + size * 0.8}" y="${y + size * 1.3}" font-family="Inter" font-size="${size}" font-weight="800" letter-spacing="2" fill="${colour}">${esc(text.toUpperCase())}</text>`;
 }
 
-const BIG = { size: 70, lh: 84, max: 20 };
-const SMALL = { size: 50, lh: 60, max: 30 };
+/** Top of every frame: story-style progress bars, the kicker in a pill and the title in white. */
+function header(kicker, title) {
+  const lines = wrap(title, 22).slice(0, 2);
+  const svg = (progress) => `${progress}
+    ${pill(kicker, 60, 112)}
+    ${lines.map((l, i) => `<text x="60" y="${262 + i * 78}" font-family="Inter" font-size="68" font-weight="800" fill="#fff">${esc(l)}</text>`).join('')}`;
+  return { svg, bottom: 262 + (lines.length - 1) * 78 + 40 };
+}
+
+/** One thin bar per scene, filled as the video goes on (as in Instagram stories). */
+function progressBars(t) {
+  const gap = 10;
+  const w = (W - 120 - gap * (scenes.length - 1)) / scenes.length;
+  return scenes
+    .map((sc, i) => {
+      const x = 60 + i * (w + gap);
+      const fill = clamp01((t - sc.start) / sc.d);
+      return `<rect x="${x.toFixed(1)}" y="56" width="${w.toFixed(1)}" height="8" rx="4" fill="#fff" opacity=".35"/>
+        <rect x="${x.toFixed(1)}" y="56" width="${(w * fill).toFixed(1)}" height="8" rx="4" fill="#fff"/>`;
+    })
+    .join('');
+}
+
+const BIG = { size: 66, lh: 80, max: 21 };
+const SMALL = { size: 48, lh: 60, max: 30 };
 
 /** The scene's speech bubble; the words appear one by one while Gaston speaks. */
 function bubble(scene, sceneT, last) {
@@ -225,8 +248,8 @@ function bubble(scene, sceneT, last) {
       left -= ws.length;
       const link = /morges\.info/.test(x.l);
       return x.big
-        ? `<text x="540" y="${y - 18}" text-anchor="middle" font-family="DejaVu Serif" font-size="${BIG.size}" font-weight="bold" fill="${INK}">${esc(visible)}</text>`
-        : `<text x="540" y="${y - 14}" text-anchor="middle" font-family="Inter" font-size="${SMALL.size}" font-weight="${link ? 'bold' : 'normal'}" fill="${link ? RED : SOFT}">${esc(visible)}</text>`;
+        ? `<text x="540" y="${y - 18}" text-anchor="middle" font-family="Inter" font-size="${BIG.size}" font-weight="800" fill="${INK}">${esc(visible)}</text>`
+        : `<text x="540" y="${y - 14}" text-anchor="middle" font-family="Inter" font-size="${SMALL.size}" font-weight="${link ? '800' : '500'}" fill="${link ? STYLE.top : SOFT}">${esc(visible)}</text>`;
     })
     .join('');
   const s = backOut(sceneT / 0.45);
@@ -236,9 +259,10 @@ function bubble(scene, sceneT, last) {
     top,
     talking: sceneT > 0.3 && sceneT < 0.3 + speak,
     svg: `<g opacity="${fade.toFixed(3)}" transform="translate(540 ${bottom}) scale(${s.toFixed(4)}) translate(-540 ${-bottom})">
-    <rect x="70" y="${top}" width="940" height="${h}" rx="56" fill="#fff" stroke="${INK}" stroke-width="6"/>
-    <path d="M${HEAD_X - FACING * 62} ${bottom - 3} L${HEAD_X + FACING * 33} ${bottom + 80} L${HEAD_X + FACING * 18} ${bottom - 3} Z" fill="#fff" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
-    <rect x="${Math.min(HEAD_X - FACING * 62, HEAD_X + FACING * 18) + 4}" y="${bottom - 12}" width="72" height="12" fill="#fff"/>
+    <rect x="74" y="${top + 14}" width="932" height="${h}" rx="44" fill="#000" opacity=".16" filter="url(#soft)"/>
+    <rect x="70" y="${top}" width="940" height="${h}" rx="44" fill="#fff"/>
+    <rect x="70" y="${top}" width="14" height="${h}" rx="7" fill="${STYLE.mid}"/>
+    <path d="M${HEAD_X - FACING * 62} ${bottom - 2} L${HEAD_X + FACING * 33} ${bottom + 80} L${HEAD_X + FACING * 18} ${bottom - 2} Z" fill="#fff"/>
     ${texts}
   </g>`,
   };
@@ -318,52 +342,90 @@ rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 const { kicker, title, scenes, caption } = content();
 const head = header(kicker, title);
+// the cover: what the Instagram grid shows. Big title, the day's photo if there is one, a teaser line
+const firstPhoto = scenes.find((sc) => sc.photo);
+scenes.unshift({ cover: true, photo: firstPhoto && firstPhoto.photo, credit: firstPhoto && firstPhoto.credit });
+// with a photo on the cover, Gaston swims in just after it; without one, he is on the cover
+const GASTON_FROM = firstPhoto ? 2.4 : 0;
 
 // timing: a photo stays 3.5 s, a bubble long enough to be read (and spoken)
 let acc = 0;
 for (const sc of scenes) {
   const chars = `${sc.big || ''} ${sc.small || ''}`.length;
-  sc.d = sc.photo ? 3.5 : Math.min(6.5, Math.max(3, 1.3 + chars * 0.055));
+  sc.d = sc.cover ? 2.4 : sc.photo ? 3.5 : Math.min(6.5, Math.max(3, 1.3 + chars * 0.055));
   sc.start = acc;
   acc += sc.d;
 }
 const TOTAL = acc;
 
 // photos are resized once, whole, into the space between the header and Gaston
+// shown whole, as a print with a white border, slightly tilted
 for (const sc of scenes.filter((s) => s.photo)) {
   const img = sharp(path.join(root, 'public', sc.photo));
   const meta = await img.metadata();
-  const boxTop = head.bottom + 40;
-  const boxH = 830 - boxTop;
-  let pw = 960;
+  const boxTop = sc.cover ? 640 : head.bottom + 50;
+  const boxH = (sc.cover ? 1300 : 820) - boxTop;
+  const maxW = sc.cover ? 900 : 900;
+  let pw = maxW;
   let ph = Math.round((meta.height / meta.width) * pw);
   if (ph > boxH) {
     ph = boxH;
     pw = Math.round((meta.width / meta.height) * ph);
   }
-  sc.layer = { input: await img.resize(pw, ph).png().toBuffer(), left: Math.round((W - pw) / 2), top: boxTop + Math.round((boxH - ph) / 2) };
-  sc.creditY = boxTop + boxH + 40;
+  const b = 18;
+  const print = await sharp({ create: { width: pw + 2 * b, height: ph + 2 * b, channels: 4, background: '#ffffff' } })
+    .composite([{ input: await img.resize(pw, ph).png().toBuffer(), left: b, top: b }])
+    .png()
+    .toBuffer();
+  const angle = sc.cover ? (FACING === 1 ? -3 : 3) : FACING === 1 ? 2 : -2;
+  const tilted = await sharp(print).rotate(angle, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+  const tm = await sharp(tilted).metadata();
+  sc.layer = { input: tilted, left: Math.round((W - tm.width) / 2), top: boxTop + Math.round((boxH - tm.height) / 2) };
+  sc.creditY = boxTop + Math.round((boxH + tm.height) / 2) + 46;
+}
+
+/** The cover's text: the theme in a pill, then the title, big. */
+function coverText() {
+  const lines = wrap(title, 16).slice(0, 3);
+  const size = lines.length > 2 ? 92 : 108;
+  const top = firstPhoto ? 250 : 380;
+  // without a photo, a first line of the story, so that each cover says something of its own
+  const story = scenes.find((sc) => !sc.cover && !sc.photo && sc.big !== HELLO);
+  const teaser = story ? wrap(story.big && story.big !== title ? story.big : story.small, 26).slice(0, 3) : [];
+  const ty = top + 60 + lines.length * (size + 8);
+  return `${pill(kicker, 60, top - 120, { size: 34 })}
+    ${lines.map((l, i) => `<text x="60" y="${top + 40 + i * (size + 8)}" font-family="Inter" font-size="${size}" font-weight="800" fill="#fff">${esc(l)}</text>`).join('')}
+    ${firstPhoto ? '' : `<rect x="60" y="${ty - 46}" width="10" height="${teaser.length * 62 + 10}" rx="5" fill="${STYLE.accent}"/>
+    ${teaser.map((l, i) => `<text x="96" y="${ty + i * 62}" font-family="Inter" font-size="50" font-weight="600" fill="#fff">${esc(l)}</text>`).join('')}`}`;
 }
 
 function frame(t) {
   const i = scenes.findLastIndex((s) => t >= s.start);
   const scene = scenes[Math.max(0, i)];
   const sceneT = t - scene.start;
-  const b = scene.photo ? null : bubble(scene, sceneT, scene === scenes.at(-1));
+  const b = scene.photo || scene.cover ? null : bubble(scene, sceneT, scene === scenes.at(-1));
   if (b && b.top < head.bottom + 20) throw new Error(`Bubble too tall on ${day}: ${scene.big || ''} ${scene.small || ''}`);
   const sparkle = [0, 1, 2]
     .map((k) => {
       const a = (t * 1.3 + k * 2.1) % 3;
-      return `<text x="${150 + k * 360}" y="${(1000 - a * 60).toFixed(1)}" font-family="DejaVu Sans" font-size="44" fill="${RED}" opacity="${Math.max(0, 0.5 - Math.abs(a - 1.5) / 3).toFixed(3)}">✦</text>`;
+      return `<text x="${150 + k * 360}" y="${(1000 - a * 60).toFixed(1)}" font-family="DejaVu Sans" font-size="44" fill="#fff" opacity="${Math.max(0, 0.6 - Math.abs(a - 1.5) / 3).toFixed(3)}">✦</text>`;
     })
     .join('');
-  const credit = scene.photo ? `<text x="540" y="${scene.creditY}" text-anchor="middle" font-family="Inter" font-size="28" fill="${SOFT}">${esc(scene.credit)}</text>` : '';
+  const credit = scene.photo ? `<text x="540" y="${scene.creditY}" text-anchor="middle" font-family="Inter" font-size="26" font-weight="500" fill="#fff" opacity=".9">${esc(scene.credit)}</text>` : '';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-    <rect width="${W}" height="${H}" fill="${STYLE.bg}"/>
-    ${head.svg}
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${STYLE.top}"/><stop offset=".42" stop-color="${STYLE.mid}"/><stop offset=".62" stop-color="${STYLE.bg}"/>
+      </linearGradient>
+      <filter id="soft" x="-10%" y="-10%" width="120%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#bg)"/>
+    <circle cx="${FACING === 1 ? 930 : 150}" cy="220" r="260" fill="#fff" opacity=".06"/>
+    <circle cx="${FACING === 1 ? 140 : 940}" cy="760" r="180" fill="#fff" opacity=".05"/>
+    ${scene.cover ? `${progressBars(t)}${coverText()}` : head.svg(progressBars(t))}
     ${sparkle}
     ${lake(t)}
-    ${gaston(t, b ? b.talking : false, sceneT)}
+    ${scene.cover && firstPhoto ? '' : gaston(t, b ? b.talking : false, sceneT)}
     <rect x="0" y="1470" width="${W}" height="450" fill="${STYLE.bg}"/>
     ${lake(t)}
     ${b ? b.svg : credit}
@@ -402,7 +464,7 @@ rmSync(silent);
 rmSync(wav);
 
 const voice = scenes
-  .filter((s) => !s.photo)
+  .filter((s) => !s.photo && !s.cover)
   .map((s) => [s.big && (/[.!?:]$/.test(s.big) ? s.big : `${s.big}.`), s.small].filter(Boolean).join(' '))
   .join(' ')
   .replace(/morges\.info(\/[\w/-]*)?/g, 'Morges point info')
