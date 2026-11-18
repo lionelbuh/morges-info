@@ -30,6 +30,7 @@ import { PLACES } from '../src/data/places.js';
 import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
 import { music } from './music.mjs';
+import { emblemShapes } from '../src/site/emblem.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const W = 1080;
@@ -112,13 +113,8 @@ const freePhotos = publishedViewpoints()
   .map((vp) => ({ vp, photo: shownPhotos(vp).then }))
   .filter(({ photo }) => photo && photo.rights.status === 'public-domain');
 
-/** The site's emblem (the arms of Morges, as in the header) above its name and motto, at the foot of every frame. */
-const LOGO = `<g transform="translate(490 1580)">
-    <path d="M0 0h100v50H0z" fill="#fff"/><path d="M0 50h100v50H0z" fill="#d52b1e"/>
-    <path d="M0 18Q12.5 12.5 25 18T50 18T75 18T100 18V32Q87.5 37.5 75 32T50 32T25 32T0 32Z" fill="#d52b1e"/>
-    <path d="M0 68Q12.5 62.5 25 68T50 68T75 68T100 68V82Q87.5 87.5 75 82T50 82T25 82T0 82Z" fill="#fff"/>
-    <path d="M1 1h98v98H1z" fill="none" stroke="${INK}" stroke-opacity=".35" stroke-width="2"/>
-  </g>
+/** The Morges.info emblem (src/site/emblem.js, as in the header) above its name and motto, at the foot of every frame. */
+const LOGO = `<svg x="490" y="1580" width="100" height="100" viewBox="0 0 200 200">${emblemShapes('reel-emblem-clip')}</svg>
   <text x="540" y="1770" text-anchor="middle" font-family="DejaVu Serif" font-size="60" font-weight="bold" fill="${INK}">Morges<tspan fill="${RED}" font-style="italic">.info</tspan></text>
   <text x="540" y="1818" text-anchor="middle" font-family="Inter" font-size="24" font-weight="bold" letter-spacing="5" fill="${SOFT}">LA GAZETTE INDÉPENDANTE DE MORGES</text>`;
 

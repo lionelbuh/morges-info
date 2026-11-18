@@ -15,20 +15,24 @@ import { editorialSelection } from '../data/businesses.js';
 import { HERO_PHOTO } from '../data/photos.js';
 import { pageHref } from './links.js';
 import { formatToday } from './format.js';
+import { emblemSvg } from './emblem.js';
 
 const NATIVE_NAMES = { fr: 'Français', en: 'English', de: 'Deutsch', it: 'Italiano' };
 const OG_LOCALES = { fr: 'fr_CH', en: 'en_GB', de: 'de_CH', it: 'it_CH' };
 
-/** Flag of Morges (white over red, two counterchanged wavy bands: the Morges and the Bief rivers).
- * Flags of communes may be used by anyone when the use is not misleading (LPAP art. 10);
- * the coat of arms in a shield is reserved for the commune (art. 8), so the flag form is used. */
-const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+/** Flag of Morges (white over red, two counterchanged wavy bands: the Morges and the Bief rivers),
+ * small, beside the place line and the motto. Flags of communes may be used by anyone when the use is
+ * not misleading (LPAP art. 10); the coat of arms in a shield is reserved for the commune (art. 8). */
+const MORGES_FLAG = `<svg class="morges-flag" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
   <path d="M0 0h40v20H0z" fill="#fff"/>
   <path d="M0 20h40v20H0z" fill="#d52b1e"/>
   <path d="M0 7.2Q5 5 10 7.2T20 7.2T30 7.2T40 7.2V12.8Q35 15 30 12.8T20 12.8T10 12.8T0 12.8Z" fill="#d52b1e"/>
   <path d="M0 27.2Q5 25 10 27.2T20 27.2T30 27.2T40 27.2V32.8Q35 35 30 32.8T20 32.8T10 32.8T0 32.8Z" fill="#fff"/>
   <path d="M.5.5h39v39H.5z" fill="none" stroke="#1c1b19" stroke-opacity=".35"/>
 </svg>`;
+
+/** Emblem of Morges.info (src/site/emblem.js), in place of the flag of Morges. */
+const BRAND_MARK = emblemSvg({ clipId: 'brand-mark-clip', attrs: 'class="brand-mark" aria-hidden="true" focusable="false"' });
 
 export function absoluteUrl(pageId, lang = 'fr') {
   return `${SITE_URL}${pageHref(pageId, lang)}`;
@@ -53,7 +57,7 @@ export function renderHeader(pageId) {
   // The date is filled in the browser only, so the prerendered page never shows a stale one.
   const today = typeof window === 'undefined' ? '' : formatToday(lang);
   const dateline = masthead
-    ? `<p class="masthead-dateline"><span>${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span>${e(t('site.founded'))}</span></p>`
+    ? `<p class="masthead-dateline"><span>${MORGES_FLAG}${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span>${e(t('site.founded'))}</span></p>`
     : '';
   // On the home page the tagline is already the page title; the map page's compact bar shows only the motto line.
   const tagline = masthead && pageId !== 'home' ? `<span class="brand-tagline">${e(t('site.tagline'))}</span>` : '';
@@ -65,7 +69,7 @@ export function renderHeader(pageId) {
     ${BRAND_MARK}
     <span class="brand-text">
       <span class="brand-name">Morges<span class="brand-dot">.info</span></span>
-      <span class="brand-motto">${e(t('site.motto'))}</span>
+      <span class="brand-motto">${e(t('site.motto'))}${MORGES_FLAG}</span>
       ${tagline}
     </span>
   </a>

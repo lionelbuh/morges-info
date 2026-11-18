@@ -1,0 +1,36 @@
+/**
+ * Emblem of Morges.info: the harbour entrance seen from the lake, with the two little towers at the
+ * ends of the jetties and a small cabin motorboat between them, under the sun. Drawn for the site
+ * (no coat of arms, no flag). Used by the header (src/site/layout.js), the favicon and phone icons
+ * (scripts/build-icons.mjs) and the foot of the videos (scripts/reel.mjs). Drawn in a 200 × 200 box.
+ */
+export const LAKE_BLUE = '#2f5d6e';
+
+/** The drawing, without its <svg> wrapper; `clipId` must be unique in the page. */
+export function emblemShapes(clipId = 'emblem-clip') {
+  return `  <circle cx="100" cy="100" r="96" fill="#2f5d6e"/>
+  <clipPath id="${clipId}"><circle cx="100" cy="100" r="96"/></clipPath>
+  <g clip-path="url(#${clipId})">
+  <circle cx="100" cy="74" r="22" fill="#f6d27a" opacity=".9"/>
+  <rect x="0" y="134" width="70" height="10" fill="#fff"/><rect x="130" y="134" width="70" height="10" fill="#fff"/>
+  <path d="M44 92 L56 62 L68 92 Z" fill="#b3121a"/>
+  <rect x="47" y="92" width="18" height="44" fill="#fff"/><path d="M132 92 L144 62 L156 92 Z" fill="#b3121a"/>
+  <rect x="135" y="92" width="18" height="44" fill="#fff"/>
+  <g transform="translate(102 134) scale(1.12) translate(-102 -134)">
+  <path d="M90 100 L90 109" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M85 109 L113 109 L119 120 L82 120 Z" fill="#fff"/>
+  <path d="M84 109 L113 109 L115 113 L83 113 Z" fill="#4f8fd0"/>
+  <path d="M88 114 L101 114 L101 119 L87 119 Z" fill="#1c2b33"/><path d="M104 114 L111 114 L114 119 L104 119 Z" fill="#1c2b33"/>
+  <path d="M73 120 L131 118 L125 136 L79 136 Z" fill="#fff"/>
+  <path d="M74 124 L130 122 L128 127 L75 128 Z" fill="#4f8fd0"/>
+  <path d="M78 133 L126 132 L125 136 L79 136 Z" fill="#3a2e2a"/>
+  </g>
+  <path d="M10 160 C40 150 70 170 100 160 S160 150 190 160" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+  <path d="M24 176 C52 168 76 184 100 176 S148 168 176 176" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+  </g>`;
+}
+
+/** A standalone SVG of the emblem. */
+export function emblemSvg({ clipId = 'emblem-clip', attrs = '' } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"${attrs ? ` ${attrs}` : ''}>${emblemShapes(clipId)}</svg>`;
+}
