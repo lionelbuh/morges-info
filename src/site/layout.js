@@ -19,15 +19,30 @@ import { formatToday } from './format.js';
 const NATIVE_NAMES = { fr: 'Français', en: 'English', de: 'Deutsch', it: 'Italiano' };
 const OG_LOCALES = { fr: 'fr_CH', en: 'en_GB', de: 'de_CH', it: 'it_CH' };
 
-/** Flag of Morges (white over red, two counterchanged wavy bands: the Morges and the Bief rivers).
- * Flags of communes may be used by anyone when the use is not misleading (LPAP art. 10);
- * the coat of arms in a shield is reserved for the commune (art. 8), so the flag form is used. */
-const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-  <path d="M0 0h40v20H0z" fill="#fff"/>
-  <path d="M0 20h40v20H0z" fill="#d52b1e"/>
-  <path d="M0 7.2Q5 5 10 7.2T20 7.2T30 7.2T40 7.2V12.8Q35 15 30 12.8T20 12.8T10 12.8T0 12.8Z" fill="#d52b1e"/>
-  <path d="M0 27.2Q5 25 10 27.2T20 27.2T30 27.2T40 27.2V32.8Q35 35 30 32.8T20 32.8T10 32.8T0 32.8Z" fill="#fff"/>
-  <path d="M.5.5h39v39H.5z" fill="none" stroke="#1c1b19" stroke-opacity=".35"/>
+/** Emblem of Morges.info: the harbour entrance seen from the lake, with the two little towers at the
+ * ends of the jetties and a small cabin motorboat between them, under the sun. Drawn for the site
+ * (no coat of arms, no flag). */
+const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+  <circle cx="100" cy="100" r="96" fill="#2f5d6e"/>
+  <clipPath id="brand-mark-clip"><circle cx="100" cy="100" r="96"/></clipPath>
+  <g clip-path="url(#brand-mark-clip)">
+  <circle cx="100" cy="74" r="22" fill="#f6d27a" opacity=".9"/>
+  <rect x="0" y="134" width="70" height="10" fill="#fff"/><rect x="130" y="134" width="70" height="10" fill="#fff"/>
+  <path d="M44 92 L56 62 L68 92 Z" fill="#b3121a"/>
+  <rect x="47" y="92" width="18" height="44" fill="#fff"/><path d="M132 92 L144 62 L156 92 Z" fill="#b3121a"/>
+  <rect x="135" y="92" width="18" height="44" fill="#fff"/>
+  <g transform="translate(102 134) scale(1.12) translate(-102 -134)">
+  <path d="M90 100 L90 109" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M85 109 L113 109 L119 120 L82 120 Z" fill="#fff"/>
+  <path d="M84 109 L113 109 L115 113 L83 113 Z" fill="#4f8fd0"/>
+  <path d="M88 114 L101 114 L101 119 L87 119 Z" fill="#1c2b33"/><path d="M104 114 L111 114 L114 119 L104 119 Z" fill="#1c2b33"/>
+  <path d="M73 120 L131 118 L125 136 L79 136 Z" fill="#fff"/>
+  <path d="M74 124 L130 122 L128 127 L75 128 Z" fill="#4f8fd0"/>
+  <path d="M78 133 L126 132 L125 136 L79 136 Z" fill="#3a2e2a"/>
+  </g>
+  <path d="M10 160 C40 150 70 170 100 160 S160 150 190 160" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+  <path d="M24 176 C52 168 76 184 100 176 S148 168 176 176" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+  </g>
 </svg>`;
 
 export function absoluteUrl(pageId, lang = 'fr') {

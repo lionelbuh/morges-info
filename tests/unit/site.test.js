@@ -94,11 +94,12 @@ describe('site pages', () => {
     expect(map).not.toContain('masthead-dateline');
   });
 
-  it('the brand mark is the flag of Morges, not the Swiss cross', () => {
+  it('the brand mark is the site’s own emblem (the harbour towers), neither the arms of Morges nor the Swiss cross', () => {
     for (const page of ['home', 'map']) {
       const html = renderHeader(page);
       expect(html).toContain('class="brand-mark"');
-      expect(html).toContain('#d52b1e');
+      expect(html).toContain('id="brand-mark-clip"');
+      expect(html).not.toContain('#d52b1e'); // the red of the flag of Morges
       expect(html).not.toContain('M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8z'); // the Swiss cross
     }
   });
