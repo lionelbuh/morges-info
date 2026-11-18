@@ -754,6 +754,122 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'vitalyfit',
+    name: 'VitalyFit',
+    category: 'health',
+    address: 'Promenade de l’Eglantine 3, 1110 Morges',
+    phone: '+41 79 327 55 37',
+    email: 'contact@vitalyfit.ch',
+    coordinates: null,
+    description: {
+      fr: 'Studio de fitness intimiste réservé aux femmes : au plus quatre personnes à la fois, un programme défini ensemble au départ, un accès 7 jours sur 7 et 24 heures sur 24 sur réservation, du coaching personnalisé et des massages.',
+      en: 'An intimate fitness studio for women only: no more than four people at a time, a programme set up together at the start, access 7 days a week, 24 hours a day by booking, personal coaching and massages.',
+      de: 'Ein intimes Fitnessstudio nur für Frauen: höchstens vier Personen gleichzeitig, ein zu Beginn gemeinsam erstelltes Programm, Zugang an 7 Tagen und rund um die Uhr nach Reservation, persönliches Coaching und Massagen.',
+      it: 'Uno studio fitness intimo riservato alle donne: al massimo quattro persone alla volta, un programma definito insieme all’inizio, accesso 7 giorni su 7 e 24 ore su 24 su prenotazione, coaching personalizzato e massaggi.',
+    },
+    services: [
+      {
+        title: { fr: 'Le studio, 24 h/24', en: 'The studio, 24/7', de: 'Das Studio, rund um die Uhr', it: 'Lo studio, 24 ore su 24' },
+        text: {
+          fr: 'Un espace féminin, calme et discret, limité à quatre personnes en même temps. Après le choix de l’abonnement, le programme d’entraînement est défini lors des séances de départ ; ensuite, on vient librement, en réservant son créneau.',
+          en: 'A calm, discreet space for women, limited to four people at a time. After choosing a membership, the training programme is set up in the first sessions; then members come when they like, booking their slot.',
+          de: 'Ein ruhiger, diskreter Raum für Frauen, auf vier Personen gleichzeitig beschränkt. Nach der Wahl des Abos wird das Trainingsprogramm in den ersten Sitzungen festgelegt; danach kommt man frei und reserviert seinen Zeitraum.',
+          it: 'Uno spazio femminile, calmo e discreto, limitato a quattro persone alla volta. Dopo la scelta dell’abbonamento, il programma di allenamento viene definito nelle prime sedute; poi si viene liberamente, prenotando la propria fascia oraria.',
+        },
+      },
+      {
+        title: { fr: 'Coaching personnalisé', en: 'Personal coaching', de: 'Persönliches Coaching', it: 'Coaching personalizzato' },
+        text: {
+          fr: 'Remise en forme, débuter une activité physique, perte de poids, force et tonicité, confiance et estime de soi. Les programmes reposent sur une régularité hebdomadaire.',
+          en: 'Getting back in shape, starting physical activity, weight loss, strength and tone, confidence and self-esteem. The programmes are based on a weekly routine.',
+          de: 'Wieder fit werden, mit Bewegung beginnen, Gewicht verlieren, Kraft und Straffheit, Selbstvertrauen und Selbstwertgefühl. Die Programme beruhen auf wöchentlicher Regelmässigkeit.',
+          it: 'Rimettersi in forma, iniziare un’attività fisica, perdere peso, forza e tonicità, fiducia e autostima. I programmi si basano su una regolarità settimanale.',
+        },
+      },
+      {
+        title: { fr: 'Massages', en: 'Massages', de: 'Massagen', it: 'Massaggi' },
+        text: {
+          fr: 'Des massages pour femmes, dans un espace calme et chaleureux, pour relâcher les tensions et retrouver de l’équilibre.',
+          en: 'Massages for women, in a calm and warm space, to release tension and find balance again.',
+          de: 'Massagen für Frauen in einem ruhigen, warmen Raum, um Verspannungen zu lösen und wieder ins Gleichgewicht zu finden.',
+          it: 'Massaggi per donne, in uno spazio calmo e accogliente, per sciogliere le tensioni e ritrovare l’equilibrio.',
+        },
+      },
+    ],
+    website: 'https://vitalyfit.ch/',
+    openingHours: {
+      text: {
+        fr: ['Studio : accès 7 jours sur 7, 24 h sur 24 pour les abonnées, sur réservation du créneau'],
+        en: ['Studio: access 7 days a week, 24 hours a day for members, by booking a slot'],
+        de: ['Studio: Zugang an 7 Tagen, rund um die Uhr für Abonnentinnen, mit Reservation des Zeitraums'],
+        it: ['Studio: accesso 7 giorni su 7, 24 ore su 24 per le abbonate, prenotando la fascia oraria'],
+      },
+      sources: [{ label: 'VitalyFit — site web', url: 'https://vitalyfit.ch/' }],
+      lastVerified: '2026-11-18',
+    },
+    photos: [
+      {
+        src: '/images/businesses/vitalyfit-accueil.webp',
+        width: 1200,
+        height: 674,
+        alt: {
+        fr: 'L’accueil du studio VitalyFit : un comptoir en bois clair et verre blanc avec une orchidée, et derrière, la salle d’entraînement',
+        en: 'The VitalyFit studio’s reception: a light wood and white glass counter with an orchid, and the training room behind it',
+        de: 'Der Empfang des Studios VitalyFit: eine Theke aus hellem Holz und weissem Glas mit einer Orchidee, dahinter der Trainingsraum',
+        it: 'L’accoglienza dello studio VitalyFit: un bancone in legno chiaro e vetro bianco con un’orchidea, e dietro la sala di allenamento',
+      },
+        credit: 'VitalyFit',
+        licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/vitalyfit-cardio.webp',
+        width: 1200,
+        height: 560,
+        alt: {
+        fr: 'L’espace cardio : vélos d’appartement, tapis de course incurvé et machine elliptique devant un mur à lames de bois et un grand miroir',
+        en: 'The cardio area: exercise bikes, a curved treadmill and an elliptical machine in front of a wood-slat wall and a large mirror',
+        de: 'Der Cardiobereich: Heimtrainer, ein gebogenes Laufband und ein Crosstrainer vor einer Holzlamellenwand und einem grossen Spiegel',
+        it: 'La zona cardio: cyclette, tapis roulant curvo e macchina ellittica davanti a una parete a listelli di legno e a un grande specchio',
+      },
+        credit: 'VitalyFit',
+        licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/vitalyfit-musculation.webp',
+        width: 1200,
+        height: 560,
+        alt: {
+        fr: 'Les appareils de musculation : une station multifonction et une presse à cuisses, entre des miroirs et un mur à lames de bois',
+        en: 'The strength machines: a multi-station and a leg press, between mirrors and a wood-slat wall',
+        de: 'Die Kraftgeräte: eine Multistation und eine Beinpresse zwischen Spiegeln und einer Holzlamellenwand',
+        it: 'Le macchine per la muscolazione: una stazione multifunzione e una pressa per le gambe, tra specchi e una parete a listelli di legno',
+      },
+        credit: 'VitalyFit',
+        licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
+      },
+      {
+        src: '/images/businesses/vitalyfit-accueil-orchidee.webp',
+        width: 900,
+        height: 1200,
+        alt: {
+        fr: 'Une orchidée blanche dans une coupe de marbre sur le comptoir d’accueil, avec un écran et des cartes de visite',
+        en: 'A white orchid in a marble bowl on the reception counter, with a screen and business cards',
+        de: 'Eine weisse Orchidee in einer Marmorschale auf der Empfangstheke, mit einem Bildschirm und Visitenkarten',
+        it: 'Un’orchidea bianca in una ciotola di marmo sul bancone dell’accoglienza, con uno schermo e biglietti da visita',
+      },
+        credit: 'VitalyFit',
+        licence: 'Tous droits réservés, publié avec l’accord de VitalyFit (18.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'VitalyFit — site web', url: 'https://vitalyfit.ch/' },
+      { label: 'Morges.info — informations et photos transmises par VitalyFit, avec son accord (18.11.2026)' },
+    ],
+    lastVerified: '2026-11-18',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */
