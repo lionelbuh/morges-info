@@ -318,20 +318,20 @@ body.page-map {
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-/* the Morges.info emblem, centred between the date and the founding year */
+/* the Morges.info emblem: level with the title, in the right-hand column */
 .masthead-place {
   justify-self: start;
 }
-.masthead-right {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.masthead-founded {
+  justify-self: end;
 }
 .masthead-emblem {
-  flex: 1;
-  display: flex;
-  justify-content: center;
+  grid-row: 2;
+  grid-column: 3;
+  justify-self: center;
+  align-self: start;
+  /* below the flag (10px padding, flag, 10px gap), then centred on the title's height */
+  margin-top: clamp(49px, calc(21px + 4vw), 68px);
 }
 .masthead-emblem-svg {
   display: block;
@@ -468,6 +468,13 @@ body.page-map {
   .masthead-founded,
   .site-header--masthead .brand-tagline {
     display: none;
+  }
+  /* on a phone the title fills the width: the emblem goes up to the date line, on the right */
+  .masthead-emblem {
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    margin-top: 0;
   }
   .masthead-emblem-svg {
     width: 40px;

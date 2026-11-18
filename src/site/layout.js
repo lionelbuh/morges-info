@@ -31,7 +31,7 @@ const BRAND_MARK = `<svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="tru
   <path d="M.5.5h39v39H.5z" fill="none" stroke="#1c1b19" stroke-opacity=".35"/>
 </svg>`;
 
-/** The Morges.info emblem (harbour entrance, src/site/emblem.js), between the date and the founding year. */
+/** The Morges.info emblem (harbour entrance, src/site/emblem.js), level with the title, on the right (under the space between the date and the founding year). */
 const MASTHEAD_EMBLEM = emblemSvg({ clipId: 'masthead-emblem-clip', attrs: 'class="masthead-emblem-svg" aria-hidden="true" focusable="false"' });
 
 export function absoluteUrl(pageId, lang = 'fr') {
@@ -57,7 +57,7 @@ export function renderHeader(pageId) {
   // The date is filled in the browser only, so the prerendered page never shows a stale one.
   const today = typeof window === 'undefined' ? '' : formatToday(lang);
   const dateline = masthead
-    ? `<p class="masthead-dateline"><span class="masthead-place">${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span class="masthead-right"><span class="masthead-emblem">${MASTHEAD_EMBLEM}</span><span class="masthead-founded">${e(t('site.founded'))}</span></span></p>`
+    ? `<p class="masthead-dateline"><span class="masthead-place">${e(t('site.place'))}</span><span class="masthead-date">${e(today)}</span><span class="masthead-founded">${e(t('site.founded'))}</span></p>`
     : '';
   // On the home page the tagline is already the page title; the map page's compact bar shows only the motto line.
   const tagline = masthead && pageId !== 'home' ? `<span class="brand-tagline">${e(t('site.tagline'))}</span>` : '';
@@ -65,6 +65,7 @@ export function renderHeader(pageId) {
   return `<a class="skip-link" href="#main">${e(t('site.skipToContent'))}</a>
 <header class="site-header site-header--${masthead ? 'masthead' : 'compact'}" id="site-header">
   ${dateline}
+  ${masthead ? `<span class="masthead-emblem">${MASTHEAD_EMBLEM}</span>` : ''}
   <a class="brand" href="${pageHref('home', lang)}" aria-label="${e(t('site.home'))}">
     ${BRAND_MARK}
     <span class="brand-text">

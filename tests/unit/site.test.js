@@ -103,9 +103,9 @@ describe('site pages', () => {
     }
   });
 
-  it('masthead: the Morges.info emblem between the date and the founding year (not on the map page)', () => {
+  it('masthead: the Morges.info emblem level with the title, on the right (not on the map page)', () => {
     const html = renderHeader('home');
-    expect(html).toMatch(/class="masthead-date">[^<]*<\/span><span class="masthead-right"><span class="masthead-emblem"><svg[^>]*class="masthead-emblem-svg"/);
+    expect(html).toMatch(/<\/p>\s*<span class="masthead-emblem"><svg[^>]*class="masthead-emblem-svg"/); // after the date line, beside the title
     expect(html).toContain('<span class="masthead-founded">');
     expect(renderHeader('map')).not.toContain('masthead-emblem');
   });
