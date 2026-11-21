@@ -883,6 +883,71 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'mon-petit-bali',
+    name: 'Mon Petit Bali',
+    category: 'health',
+    person: 'Adeline',
+    address: '1110 Morges',
+    coordinates: null,
+    description: {
+      fr: 'Espace de bien-être holistique au cœur de Morges, à deux minutes à pied de la gare de Morges-Saint-Jean : un studio pour les cours et les ateliers, un cabinet pour les séances individuelles. Un refuge pour ralentir et revenir à soi.',
+      en: 'A holistic well-being space in the heart of Morges, a two-minute walk from Morges-Saint-Jean station: a studio for classes and workshops, a treatment room for one-to-one sessions. A refuge for slowing down and coming back to yourself.',
+      de: 'Ein ganzheitlicher Wohlfühlort im Herzen von Morges, zwei Gehminuten vom Bahnhof Morges-Saint-Jean: ein Studio für Kurse und Workshops, ein Praxisraum für Einzelsitzungen. Ein Rückzugsort, um langsamer zu werden und zu sich zurückzufinden.',
+      it: 'Uno spazio di benessere olistico nel cuore di Morges, a due minuti a piedi dalla stazione di Morges-Saint-Jean: uno studio per corsi e laboratori, uno studio privato per le sedute individuali. Un rifugio per rallentare e ritornare a sé.',
+    },
+    services: [
+      {
+        title: { fr: 'Au studio', en: 'In the studio', de: 'Im Studio', it: 'Nello studio' },
+        text: {
+          fr: 'Méditation, bain sonore et rituel du matin ; danse (cours collectifs et privés), yoga et mouvement ; cercles de parole et cercles de femmes ; ateliers autour de l’intuition (oracles…) et soirées à thème, comme une soirée Harry Potter.',
+          en: 'Meditation, sound baths and a morning ritual; dance (group and private classes), yoga and movement; talking circles and women’s circles; workshops on intuition (oracles…) and themed evenings, such as a Harry Potter night.',
+          de: 'Meditation, Klangbad und Morgenritual; Tanz (Gruppen- und Privatstunden), Yoga und Bewegung; Gesprächs- und Frauenkreise; Workshops rund um die Intuition (Orakel…) und Themenabende, etwa ein Harry-Potter-Abend.',
+          it: 'Meditazione, bagno sonoro e rituale del mattino; danza (corsi collettivi e privati), yoga e movimento; cerchi di parola e cerchi di donne; laboratori sull’intuizione (oracoli…) e serate a tema, come una serata Harry Potter.',
+        },
+      },
+      {
+        title: { fr: 'Au cabinet', en: 'In the treatment room', de: 'Im Praxisraum', it: 'Nello studio privato' },
+        text: {
+          fr: 'Des séances individuelles : thérapie, guidances, soins énergétiques et libérations émotionnelles (Adeline), massages (Lanka), kinésiologie (Timéa), coaching et autres accompagnements holistiques.',
+          en: 'One-to-one sessions: therapy, guidance, energy work and emotional release (Adeline), massages (Lanka), kinesiology (Timéa), coaching and other holistic support.',
+          de: 'Einzelsitzungen: Therapie, Begleitung, Energiearbeit und emotionale Befreiung (Adeline), Massagen (Lanka), Kinesiologie (Timéa), Coaching und weitere ganzheitliche Begleitung.',
+          it: 'Sedute individuali: terapia, guida, trattamenti energetici e liberazione emotiva (Adeline), massaggi (Lanka), kinesiologia (Timéa), coaching e altri accompagnamenti olistici.',
+        },
+      },
+    ],
+    about: {
+      fr: 'Créé par Adeline, Mon Petit Bali est avant tout une aventure humaine : un lieu sans jugement où l’on vient tel que l’on est, et où plusieurs intervenants passionnés font se rencontrer leurs pratiques, entre expériences collectives et accompagnements individuels.',
+      en: 'Created by Adeline, Mon Petit Bali is above all a human adventure: a place free of judgement where people come as they are, and where several passionate practitioners bring their practices together, between group experiences and one-to-one support.',
+      de: 'Mon Petit Bali, gegründet von Adeline, ist vor allem ein menschliches Abenteuer: ein Ort ohne Urteil, an den man kommt, wie man ist, und an dem mehrere engagierte Fachleute ihre Praktiken zusammenbringen, zwischen Gruppenerlebnissen und Einzelbegleitung.',
+      it: 'Creato da Adeline, Mon Petit Bali è prima di tutto un’avventura umana: un luogo senza giudizio dove si viene come si è, e dove diversi operatori appassionati fanno incontrare le loro pratiche, tra esperienze collettive e accompagnamenti individuali.',
+    },
+    website: 'https://www.monpetitbali.com/',
+    instagram: 'https://www.instagram.com/monpetitbali.ch/',
+    openingHours: null,
+    photos: [
+      {
+        src: '/images/businesses/mon-petit-bali-studio.webp',
+        width: 1200,
+        height: 1001,
+        alt: {
+          fr: 'Le studio de Mon Petit Bali à la lumière des bougies : des tapis, des coussins et des peaux sur le parquet, une guirlande lumineuse et des plantes séchées au mur',
+          en: 'The Mon Petit Bali studio by candlelight: mats, cushions and sheepskins on the wooden floor, fairy lights and dried plants on the wall',
+          de: 'Das Studio von Mon Petit Bali im Kerzenlicht: Matten, Kissen und Felle auf dem Parkett, eine Lichterkette und getrocknete Pflanzen an der Wand',
+          it: 'Lo studio di Mon Petit Bali a lume di candela: tappetini, cuscini e pelli sul parquet, una ghirlanda luminosa e piante secche alla parete',
+        },
+        credit: 'Mon Petit Bali',
+        licence: 'Tous droits réservés, publié avec l’accord de Mon Petit Bali (21.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Mon Petit Bali — site web', url: 'https://www.monpetitbali.com/' },
+      { label: 'Morges.info — informations et photo transmises par Mon Petit Bali, avec son accord (21.11.2026)' },
+    ],
+    lastVerified: '2026-11-21',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */
