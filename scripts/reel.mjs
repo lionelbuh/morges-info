@@ -30,17 +30,17 @@ import { PLACES } from '../src/data/places.js';
 import { todayInMorges } from '../src/data/events.js';
 import { DISCOVER_THEMES } from '../src/data/discover.js';
 import { music } from './music.mjs';
+import { emblemShapes } from '../src/site/emblem.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const W = 1080;
 const H = 1920;
 const FPS = 25;
 const INK = '#1c1b19';
-const RED = '#b3121a';
 const SOFT = '#57524a';
 const SWAN_LINE = '#c9c4ba';
 const HASHTAGS = '#Morges #MorgesInfo #Vaud #LacLéman #Suisse #GastonLeCygne';
-const BUBBLE_BOTTOM = 880;
+const BUBBLE_BOTTOM = 1140;
 
 const day = process.argv[2] || todayInMorges();
 const dayNumber = Math.floor(Date.parse(`${day}T00:00:00Z`) / 86400000);
@@ -61,9 +61,7 @@ const STYLE = {
   discover: { top: '#174f3a', mid: '#3f8a63', bg: '#dff0d8', accent: '#bfe9a4', accessory: 'beret' },
 }[THEME];
 const HELLO = ['Coucou !', 'Salut tout le monde !', 'Hello Morges !', 'Bonjour, bonjour !', 'Hé, coucou !'][((week % 5) + 5) % 5];
-const FACING = week % 2 ? -1 : 1; // 1: Gaston looks right, -1: he looks left
-const GASTON_X = FACING === 1 ? 470 : 610;
-const HEAD_X = GASTON_X + FACING * 232;
+const FACING = week % 2 ? -1 : 1; // tilt of the photos, and the side of the decorative circles
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -113,15 +111,15 @@ const freePhotos = publishedViewpoints()
   .map((vp) => ({ vp, photo: shownPhotos(vp).then }))
   .filter(({ photo }) => photo && photo.rights.status === 'public-domain');
 
-/** The site's emblem (the arms of Morges, as in the header) above its name and motto, at the foot of every frame. */
-const LOGO = `<g transform="translate(490 1580)">
-    <path d="M0 0h100v50H0z" fill="#fff"/><path d="M0 50h100v50H0z" fill="#d52b1e"/>
+/** Foot of every frame: on a dark band, the Morges.info harbour emblem beside the flag of Morges, above the name. */
+const FLAG = `<path d="M0 0h100v50H0z" fill="#fff"/><path d="M0 50h100v50H0z" fill="#d52b1e"/>
     <path d="M0 18Q12.5 12.5 25 18T50 18T75 18T100 18V32Q87.5 37.5 75 32T50 32T25 32T0 32Z" fill="#d52b1e"/>
-    <path d="M0 68Q12.5 62.5 25 68T50 68T75 68T100 68V82Q87.5 87.5 75 82T50 82T25 82T0 82Z" fill="#fff"/>
-    <path d="M1 1h98v98H1z" fill="none" stroke="${INK}" stroke-opacity=".35" stroke-width="2"/>
-  </g>
-  <text x="540" y="1770" text-anchor="middle" font-family="DejaVu Serif" font-size="60" font-weight="bold" fill="${INK}">Morges<tspan fill="${RED}" font-style="italic">.info</tspan></text>
-  <text x="540" y="1818" text-anchor="middle" font-family="Inter" font-size="24" font-weight="bold" letter-spacing="5" fill="${SOFT}">LA GAZETTE INDÉPENDANTE DE MORGES</text>`;
+    <path d="M0 68Q12.5 62.5 25 68T50 68T75 68T100 68V82Q87.5 87.5 75 82T50 82T25 82T0 82Z" fill="#fff"/>`;
+const BAND_TOP = 1650;
+const LOGO = `<rect x="0" y="${BAND_TOP}" width="${W}" height="${H - BAND_TOP}" fill="${STYLE.top}"/>
+  <svg x="${540 - 120}" y="${BAND_TOP + 30}" width="110" height="110" viewBox="0 0 200 200">${emblemShapes('reel-emblem')}</svg>
+  <g transform="translate(${540 + 22} ${BAND_TOP + 47}) scale(0.76)">${FLAG}<path d="M1 1h98v98H1z" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3"/></g>
+  <text x="540" y="${BAND_TOP + 210}" text-anchor="middle" font-family="DejaVu Serif" font-size="58" font-weight="bold" fill="#fff">Morges<tspan fill="${STYLE.accent}" font-style="italic">.info</tspan></text>`;
 
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 const easeOut = (x) => 1 - Math.pow(1 - clamp01(x), 3);
@@ -148,31 +146,25 @@ const ACCESSORIES = {
     <circle cx="168" cy="-256" r="5" fill="#d52b1e"/>`,
 };
 
-/** Gaston: a white swan with a red and white scarf (the colours of Morges), floating on the lake. */
-function gaston(t, talking, sceneT) {
-  const bob = Math.sin(t * 2.4) * 10;
-  const hop = sceneT < 0.5 ? -Math.sin((sceneT / 0.5) * Math.PI) * 40 : 0;
-  const tilt = Math.sin(t * 1.7) * 2.5;
+/** Which side Gaston peeks from in a scene (it changes from scene to scene, and from week to week). */
+const sideOf = (index) => ((index + week) % 2 ? -1 : 1); // 1: from the left, looking right
+const headX = (side) => (side === 1 ? 40 + 172 * 1.35 : 1040 - 172 * 1.35);
+
+/** Gaston peeks over the band at the bottom, from the side, in the theme's accessory; he speaks while the bubble fills. */
+function gaston(t, talking, sceneT, side) {
+  const bob = Math.sin(t * 2.4) * 8;
+  const rise = (1 - easeOut(sceneT / 0.6)) * 260;
+  const tilt = Math.sin(t * 1.7) * 3;
   const blink = t % 3.1 < 0.12 ? 0.1 : 1;
   const beak = talking ? Math.abs(Math.sin(t * 14)) * 14 : 0;
-  const flap = sceneT < 0.7 ? Math.sin((sceneT / 0.7) * Math.PI * 3) * 22 : Math.sin(t * 2) * 3;
   const brow = talking ? Math.abs(Math.sin(t * 5)) * 6 : 0;
-  const tail = Math.sin(t * 6);
-  const enter = (1 - easeOut((t - GASTON_FROM) / 1.1)) * -FACING * 720;
-  return `<g transform="translate(${(GASTON_X + enter).toFixed(1)} ${1290 + bob + hop}) rotate(${tilt * FACING}) scale(${1.35 * FACING} 1.35)">
-    <ellipse cx="0" cy="102" rx="190" ry="14" fill="#000" opacity=".08"/>
-    <path d="M70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="${SWAN_LINE}" stroke-width="48" stroke-linecap="round"/>
-    <path d="M70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round"/>
-    <path d="M-175 35 C-215 -30 -150 -70 -60 -55 C20 -42 90 -15 130 25 C160 55 125 98 40 98 L-115 98 C-170 98 -195 70 -175 35 Z" fill="#fff" stroke="${SWAN_LINE}" stroke-width="5"/>
-    <g transform="rotate(${-flap} 50 10)">
-      <path d="M-140 30 C-95 -35 20 -35 75 15 C25 40 -60 55 -140 30 Z" fill="#f4f1ea" stroke="${SWAN_LINE}" stroke-width="4"/>
-      <path d="M-100 28 C-60 5 -10 5 30 22" fill="none" stroke="#d9d4ca" stroke-width="4" stroke-linecap="round"/>
-    </g>
+  const x = side === 1 ? 40 : 1040;
+  return `<g transform="translate(${x} ${(BAND_TOP + 10 + bob + rise).toFixed(1)}) rotate(${tilt * side}) scale(${1.35 * side} 1.35)">
+    <path d="M60 220 L70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="${SWAN_LINE}" stroke-width="48" stroke-linecap="round"/>
+    <path d="M60 220 L70 10 C130 -40 50 -120 85 -190 C105 -235 165 -238 178 -200" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round"/>
     <g transform="rotate(-28 92 -50)">
       <rect x="62" y="-66" width="64" height="30" rx="10" fill="#d52b1e"/>
       <rect x="62" y="-56" width="64" height="9" fill="#fff"/>
-      <path d="M66 -50 C40 -46 22 -30 ${8 + tail * 6} -14 L${18 + tail * 6} -2 C34 -18 50 -30 70 -36 Z" fill="#d52b1e"/>
-      <path d="M50 -40 C38 -32 30 -24 ${22 + tail * 4} -15 L${27 + tail * 4} -10 C36 -20 44 -28 54 -34 Z" fill="#fff"/>
     </g>
     <circle cx="172" cy="-205" r="36" fill="#fff" stroke="${SWAN_LINE}" stroke-width="4"/>
     <circle cx="168" cy="-190" r="9" fill="#f6b6b0" opacity=".8"/>
@@ -185,13 +177,16 @@ function gaston(t, talking, sceneT) {
   </g>`;
 }
 
+/** Soft waves of the lake, just above the band. */
 function lake(t) {
-  const wave = (y, amp, phase, colour) => {
-    let d = `M0 ${y}`;
-    for (let x = 0; x <= W; x += 30) d += ` L${x} ${(y + Math.sin(x / 70 + t * 2 + phase) * amp).toFixed(1)}`;
-    return `<path d="${d} L${W} 1540 L0 1540 Z" fill="${colour}" opacity=".55"/>`;
-  };
-  return wave(1400, 10, 0, '#7fb3d5') + wave(1425, 8, 2, '#5b97c2');
+  return [0, 1, 2]
+    .map((k) => {
+      const y = BAND_TOP - 150 + k * 50;
+      let d = `M0 ${y}`;
+      for (let x = 0; x <= W; x += 30) d += ` L${x} ${(y + Math.sin(x / 90 + t * 1.6 + k) * 12).toFixed(1)}`;
+      return `<path d="${d} L${W} ${BAND_TOP} L0 ${BAND_TOP} Z" fill="#fff" opacity="${(0.1 + k * 0.06).toFixed(2)}"/>`;
+    })
+    .join('');
 }
 
 /** A rounded label ("pill") with the kicker. */
@@ -228,7 +223,8 @@ const BIG = { size: 66, lh: 80, max: 21 };
 const SMALL = { size: 48, lh: 60, max: 30 };
 
 /** The scene's speech bubble; the words appear one by one while Gaston speaks. */
-function bubble(scene, sceneT, last) {
+function bubble(scene, sceneT, last, side) {
+  const hx = headX(side) + side * 40;
   const big = scene.big ? wrap(scene.big, BIG.max) : [];
   const small = scene.small ? wrap(scene.small, SMALL.max) : [];
   const h = big.length * BIG.lh + small.length * SMALL.lh + (big.length && small.length ? 24 : 0) + 90;
@@ -262,7 +258,7 @@ function bubble(scene, sceneT, last) {
     <rect x="74" y="${top + 14}" width="932" height="${h}" rx="44" fill="#000" opacity=".16" filter="url(#soft)"/>
     <rect x="70" y="${top}" width="940" height="${h}" rx="44" fill="#fff"/>
     <rect x="70" y="${top}" width="14" height="${h}" rx="7" fill="${STYLE.mid}"/>
-    <path d="M${HEAD_X - FACING * 62} ${bottom - 2} L${HEAD_X + FACING * 33} ${bottom + 80} L${HEAD_X + FACING * 18} ${bottom - 2} Z" fill="#fff"/>
+    <path d="M${hx - side * 50} ${bottom - 2} L${hx} ${bottom + 90} L${hx + side * 30} ${bottom - 2} Z" fill="#fff"/>
     ${texts}
   </g>`,
   };
@@ -345,8 +341,6 @@ const head = header(kicker, title);
 // the cover: what the Instagram grid shows. Big title, the day's photo if there is one, a teaser line
 const firstPhoto = scenes.find((sc) => sc.photo);
 scenes.unshift({ cover: true, photo: firstPhoto && firstPhoto.photo, credit: firstPhoto && firstPhoto.credit });
-// with a photo on the cover, Gaston swims in just after it; without one, he is on the cover
-const GASTON_FROM = firstPhoto ? 2.4 : 0;
 
 // timing: a photo stays 3.5 s, a bubble long enough to be read (and spoken)
 let acc = 0;
@@ -364,7 +358,7 @@ for (const sc of scenes.filter((s) => s.photo)) {
   const img = sharp(path.join(root, 'public', sc.photo));
   const meta = await img.metadata();
   const boxTop = sc.cover ? 640 : head.bottom + 50;
-  const boxH = (sc.cover ? 1300 : 820) - boxTop;
+  const boxH = (sc.cover ? 1280 : 1220) - boxTop;
   const maxW = sc.cover ? 900 : 900;
   let pw = maxW;
   let ph = Math.round((meta.height / meta.width) * pw);
@@ -403,7 +397,8 @@ function frame(t) {
   const i = scenes.findLastIndex((s) => t >= s.start);
   const scene = scenes[Math.max(0, i)];
   const sceneT = t - scene.start;
-  const b = scene.photo || scene.cover ? null : bubble(scene, sceneT, scene === scenes.at(-1));
+  const side = sideOf(Math.max(0, i));
+  const b = scene.photo || scene.cover ? null : bubble(scene, sceneT, scene === scenes.at(-1), side);
   if (b && b.top < head.bottom + 20) throw new Error(`Bubble too tall on ${day}: ${scene.big || ''} ${scene.small || ''}`);
   const sparkle = [0, 1, 2]
     .map((k) => {
@@ -425,10 +420,8 @@ function frame(t) {
     ${scene.cover ? `${progressBars(t)}${coverText()}` : head.svg(progressBars(t))}
     ${sparkle}
     ${lake(t)}
-    ${scene.cover && firstPhoto ? '' : gaston(t, b ? b.talking : false, sceneT)}
-    <rect x="0" y="1470" width="${W}" height="450" fill="${STYLE.bg}"/>
-    ${lake(t)}
     ${b ? b.svg : credit}
+    ${gaston(t, b ? b.talking : false, sceneT, side)}
     ${LOGO}
   </svg>`;
   const img = sharp(Buffer.from(svg));
