@@ -7,7 +7,7 @@
  * slide-<n>.png (one still per scene, for checking). Needs ffmpeg.
  *
  * The theme follows the day of the week:
- *   Mon  Morges hier      an old photograph and its story
+ *   Mon  Morges hier      an old photograph and its story, as a silent film (scripts/reel-film.mjs)
  *   Wed  Le saviez-vous ? a fact about a place of Morges
  *   Fri  Ce week-end à Morges (the Saturday market, the lake and an invitation to the calendar)
  *   Sun  Découvrir Morges (one theme of the page, in turn)
@@ -47,6 +47,12 @@ const dayNumber = Math.floor(Date.parse(`${day}T00:00:00Z`) / 86400000);
 const weekday = new Date(`${day}T12:00:00Z`).getUTCDay(); // 0 = Sunday
 const week = Math.floor((dayNumber + 3) / 7); // changes every Monday
 const pick = (list) => list[((week % list.length) + list.length) % list.length];
+
+// Monday: "Morges hier" has its own look, a silent film (scripts/reel-film.mjs)
+if (weekday === 1) {
+  await import('./reel-film.mjs');
+  process.exit(0);
+}
 
 /**
  * So that two videos never look alike: each theme has its own background colour and its own
