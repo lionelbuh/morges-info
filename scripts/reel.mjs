@@ -10,7 +10,7 @@
  *   Mon  Morges hier      an old photograph and its story, as a silent film (scripts/reel-film.mjs)
  *   Wed  Le saviez-vous ? a fact about a place of Morges, as a bold poster (scripts/reel-poster.mjs)
  *   Fri  Ce week-end à Morges (the Saturday market, the lake and an invitation to the calendar), as a chat (scripts/reel-chat.mjs)
- *   Sun  Découvrir Morges (one theme of the page, in turn)
+ *   Sun  Découvrir Morges (one theme of the page, in turn), as a walking map (scripts/reel-map.mjs)
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
  * (Tue and Thu: Le saviez-vous ?, Sat: Découvrir Morges). Each theme moves on by one item every week.
  *
@@ -56,6 +56,11 @@ if (weekday === 1) {
 // Friday: "Ce week-end à Morges" as a chat with Gaston (scripts/reel-chat.mjs)
 if (weekday === 5) {
   await import('./reel-chat.mjs');
+  process.exit(0);
+}
+// Sunday (and Saturday): "Découvrir Morges" as an illustrated walking map (scripts/reel-map.mjs)
+if (weekday === 0 || weekday === 6) {
+  await import('./reel-map.mjs');
   process.exit(0);
 }
 // Wednesday (and Tuesday, Thursday): "Le saviez-vous ?" as a bold poster (scripts/reel-poster.mjs)
