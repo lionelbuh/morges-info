@@ -8,7 +8,7 @@
  *
  * The theme follows the day of the week:
  *   Mon  Morges hier      an old photograph and its story, as a silent film (scripts/reel-film.mjs)
- *   Wed  Le saviez-vous ? a fact about a place of Morges
+ *   Wed  Le saviez-vous ? a fact about a place of Morges, as a bold poster (scripts/reel-poster.mjs)
  *   Fri  Ce week-end à Morges (the Saturday market, the lake and an invitation to the calendar)
  *   Sun  Découvrir Morges (one theme of the page, in turn)
  * Videos are posted on those four days. Any other date falls back on a neighbour's theme
@@ -51,6 +51,11 @@ const pick = (list) => list[((week % list.length) + list.length) % list.length];
 // Monday: "Morges hier" has its own look, a silent film (scripts/reel-film.mjs)
 if (weekday === 1) {
   await import('./reel-film.mjs');
+  process.exit(0);
+}
+// Wednesday (and Tuesday, Thursday): "Le saviez-vous ?" as a bold poster (scripts/reel-poster.mjs)
+if (weekday >= 2 && weekday <= 4) {
+  await import('./reel-poster.mjs');
   process.exit(0);
 }
 
