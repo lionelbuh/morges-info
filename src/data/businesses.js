@@ -948,6 +948,128 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'boutique-for-ever',
+    name: 'Boutique For Ever',
+    category: 'shops',
+    address: 'Rue Centrale 1, 1110 Morges',
+    phone: '+41 21 803 31 32',
+    email: 'info@boutiqueforever.ch',
+    coordinates: null,
+    description: {
+      fr: 'Boutique de robes de mariée et concept store au cœur de Morges. Depuis 2002, l’équipe accompagne les futures mariées, du premier essayage aux retouches réalisées dans son propre atelier de couture.',
+      en: 'A bridal boutique and concept store in the heart of Morges. Since 2002, the team has been helping brides-to-be, from the first fitting to the alterations made in its own sewing workshop.',
+      de: 'Brautmodengeschäft und Concept Store im Herzen von Morges. Seit 2002 begleitet das Team zukünftige Bräute, von der ersten Anprobe bis zu den Änderungen in der eigenen Schneiderwerkstatt.',
+      it: 'Boutique di abiti da sposa e concept store nel cuore di Morges. Dal 2002 il team accompagna le future spose, dalla prima prova alle modifiche realizzate nel proprio laboratorio di sartoria.',
+    },
+    services: [
+      {
+        title: { fr: 'Robes de mariée', en: 'Wedding dresses', de: 'Brautkleider', it: 'Abiti da sposa' },
+        text: {
+          fr: 'Un accompagnement personnalisé pour trouver la tenue du grand jour, avec un large choix de robes de mariée et de tenues pour le cortège.',
+          en: 'Personal guidance to find the outfit for the big day, with a wide choice of wedding dresses and outfits for the wedding party.',
+          de: 'Persönliche Beratung, um das Outfit für den grossen Tag zu finden, mit einer grossen Auswahl an Brautkleidern und Outfits für die Hochzeitsgesellschaft.',
+          it: 'Un accompagnamento personalizzato per trovare l’abito del grande giorno, con un’ampia scelta di abiti da sposa e di abiti per il corteo.',
+        },
+      },
+      {
+        title: { fr: 'L’atelier de couture', en: 'The sewing workshop', de: 'Die Schneiderwerkstatt', it: 'Il laboratorio di sartoria' },
+        text: {
+          fr: 'Au cœur de la boutique, les couturières réalisent les retouches. De l’essayage aux derniers réglages, la même équipe suit chaque mariée.',
+          en: 'In the heart of the shop, the seamstresses make the alterations. From the fitting to the final adjustments, the same team follows each bride.',
+          de: 'Mitten im Geschäft nehmen die Schneiderinnen die Änderungen vor. Von der Anprobe bis zu den letzten Anpassungen begleitet dasselbe Team jede Braut.',
+          it: 'Nel cuore della boutique, le sarte realizzano le modifiche. Dalla prova agli ultimi ritocchi, lo stesso team segue ogni sposa.',
+        },
+      },
+      {
+        title: { fr: 'Le concept store', en: 'The concept store', de: 'Der Concept Store', it: 'Il concept store' },
+        text: {
+          fr: 'Un espace ouvert à toutes et à tous, où l’on entre librement pour flâner et découvrir des créations, des pièces mode, des accessoires ou un cadeau original.',
+          en: 'A space open to everyone, where you can walk in freely to browse and discover new creations, fashion pieces, accessories or an original gift.',
+          de: 'Ein Ort, der allen offensteht und den man frei betreten kann, um zu stöbern und neue Kreationen, Modestücke, Accessoires oder ein originelles Geschenk zu entdecken.',
+          it: 'Uno spazio aperto a tutti, dove si entra liberamente per curiosare e scoprire nuove creazioni, capi di moda, accessori o un regalo originale.',
+        },
+      },
+    ],
+    about: {
+      fr: 'Une maison familiale, installée à Morges depuis 2002, où l’on prend le temps de découvrir, d’échanger et de s’inspirer.',
+      en: 'A family business, in Morges since 2002, where people take the time to discover, talk and find inspiration.',
+      de: 'Ein Familienbetrieb, seit 2002 in Morges, wo man sich Zeit nimmt, um zu entdecken, sich auszutauschen und sich inspirieren zu lassen.',
+      it: 'Un’attività di famiglia, a Morges dal 2002, dove ci si prende il tempo di scoprire, scambiare e lasciarsi ispirare.',
+    },
+    website: 'https://boutiqueforever.ch/',
+    openingHours: {
+      text: {
+        fr: ['Lundi à vendredi : 9 h 30 – 12 h 30 et 14 h – 18 h 30', 'Samedi : 9 h – 12 h 30 et 13 h 30 – 17 h', 'Dimanche : fermé'],
+        en: ['Monday to Friday: 9:30–12:30 and 14:00–18:30', 'Saturday: 9:00–12:30 and 13:30–17:00', 'Sunday: closed'],
+        de: ['Montag bis Freitag: 9.30–12.30 und 14–18.30 Uhr', 'Samstag: 9–12.30 und 13.30–17 Uhr', 'Sonntag: geschlossen'],
+        it: ['Da lunedì a venerdì: 9.30–12.30 e 14–18.30', 'Sabato: 9–12.30 e 13.30–17', 'Domenica: chiuso'],
+      },
+      sources: [{ label: 'Morges.info — horaires transmis par Boutique For Ever (28.11.2026)' }],
+      lastVerified: '2026-11-28',
+    },
+    photos: [
+      {
+        src: '/images/businesses/boutique-for-ever-boutique.webp',
+        width: 1024,
+        height: 768,
+        alt: {
+          fr: 'L’intérieur de Boutique For Ever : un canapé et un fauteuil rose, des tables basses fleuries, des claustras en bois et, à droite, une rangée de robes de mariée',
+          en: 'Inside Boutique For Ever: a sofa and a pink armchair, coffee tables with flowers, wooden screens and, on the right, a row of wedding dresses',
+          de: 'Im Inneren von Boutique For Ever: ein Sofa und ein rosa Sessel, Beistelltische mit Blumen, Holzparavents und rechts eine Reihe Brautkleider',
+          it: 'L’interno di Boutique For Ever: un divano e una poltrona rosa, tavolini con fiori, paraventi in legno e, a destra, una fila di abiti da sposa',
+        },
+        credit: 'Boutique For Ever',
+        licence: 'Tous droits réservés, publié avec l’accord de Boutique For Ever (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/boutique-for-ever-equipe.webp',
+        width: 1024,
+        height: 768,
+        alt: {
+          fr: 'L’équipe de Boutique For Ever, quatre femmes souriantes assises sur un canapé devant les robes de mariée',
+          en: 'The Boutique For Ever team, four smiling women sitting on a sofa in front of the wedding dresses',
+          de: 'Das Team von Boutique For Ever, vier lächelnde Frauen auf einem Sofa vor den Brautkleidern',
+          it: 'Il team di Boutique For Ever, quattro donne sorridenti sedute su un divano davanti agli abiti da sposa',
+        },
+        credit: 'Boutique For Ever',
+        licence: 'Tous droits réservés, publié avec l’accord de Boutique For Ever (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/boutique-for-ever-robes.webp',
+        width: 1024,
+        height: 683,
+        alt: {
+          fr: 'Huit jeunes femmes dans la boutique, sept en robe de mariée et une en robe longue bleue',
+          en: 'Eight young women in the shop, seven in wedding dresses and one in a long blue dress',
+          de: 'Acht junge Frauen im Geschäft, sieben in Brautkleidern und eine in einem langen blauen Kleid',
+          it: 'Otto giovani donne nella boutique, sette in abito da sposa e una in un lungo abito blu',
+        },
+        credit: 'Boutique For Ever',
+        licence: 'Tous droits réservés, publié avec l’accord de Boutique For Ever (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/boutique-for-ever-demoiselle.webp',
+        width: 683,
+        height: 1024,
+        alt: {
+          fr: 'Une demoiselle d’honneur en robe longue vert sauge, un coussin d’alliances à la main, devant les robes de mariée',
+          en: 'A bridesmaid in a long sage-green dress, holding a ring cushion, in front of the wedding dresses',
+          de: 'Eine Brautjungfer in einem langen salbeigrünen Kleid mit einem Ringkissen in der Hand vor den Brautkleidern',
+          it: 'Una damigella in un lungo abito verde salvia, con un cuscino portafedi in mano, davanti agli abiti da sposa',
+        },
+        credit: 'Boutique For Ever',
+        licence: 'Tous droits réservés, publié avec l’accord de Boutique For Ever (28.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Boutique For Ever — site web', url: 'https://boutiqueforever.ch/' },
+      { label: 'Morges.info — informations et photos transmises par Boutique For Ever, avec son accord (28.11.2026)' },
+    ],
+    lastVerified: '2026-11-28',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */
