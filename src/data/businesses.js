@@ -1070,6 +1070,94 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'magasin-du-monde',
+    name: 'Magasin du Monde de Morges',
+    category: 'shops',
+    address: 'Rue des Fossés 51, 1110 Morges',
+    addressNote: 'Derrière la poste',
+    coordinates: null,
+    description: {
+      fr: 'Boutique de commerce équitable tenue par une vingtaine de bénévoles, derrière la poste : produits alimentaires et artisanat venus principalement de pays émergents, avec les projets qu’il y a derrière.',
+      en: 'A fair-trade shop run by some twenty volunteers, behind the post office: food and crafts mainly from emerging countries, with the projects behind them.',
+      de: 'Ein Fair-Trade-Laden hinter der Post, geführt von rund zwanzig Freiwilligen: Lebensmittel und Kunsthandwerk vor allem aus Schwellenländern, mit den Projekten, die dahinterstehen.',
+      it: 'Un negozio di commercio equo gestito da una ventina di volontari, dietro la posta: prodotti alimentari e artigianato provenienti soprattutto da Paesi emergenti, con i progetti che ci sono dietro.',
+    },
+    services: [
+      {
+        title: { fr: 'Épicerie équitable', en: 'Fair-trade grocery', de: 'Fairer Lebensmittelladen', it: 'Alimentari equi' },
+        text: {
+          fr: 'Cafés, thés, tisanes et autres produits alimentaires du commerce équitable, souvent biologiques.',
+          en: 'Fair-trade coffees, teas, herbal teas and other foods, often organic.',
+          de: 'Kaffee, Tee, Kräutertee und weitere Lebensmittel aus fairem Handel, oft biologisch.',
+          it: 'Caffè, tè, tisane e altri prodotti alimentari del commercio equo, spesso biologici.',
+        },
+      },
+      {
+        title: { fr: 'Artisanat et cadeaux', en: 'Crafts and gifts', de: 'Kunsthandwerk und Geschenke', it: 'Artigianato e regali' },
+        text: {
+          fr: 'Sculptures, vaisselle, sacs, accessoires et idées cadeaux, avec des informations sur les artisans et les projets soutenus.',
+          en: 'Sculptures, tableware, bags, accessories and gift ideas, with information on the craftspeople and the projects supported.',
+          de: 'Skulpturen, Geschirr, Taschen, Accessoires und Geschenkideen, mit Informationen zu den Kunsthandwerkern und den unterstützten Projekten.',
+          it: 'Sculture, stoviglie, borse, accessori e idee regalo, con informazioni sugli artigiani e sui progetti sostenuti.',
+        },
+      },
+    ],
+    about: {
+      fr: 'Membre de l’Association romande des Magasins du Monde, le magasin est né à Morges vers 1979 : les marchandises étaient alors vendues sur une charrette tirée jusqu’au marché, une fois par mois. Après la salle de paroisse, la rue de la Gare et la rue des Charpentiers, il est installé depuis juin 2016 à la rue des Fossés, dans des locaux de la Ville de Morges.',
+      en: 'A member of the Association romande des Magasins du Monde, the shop began in Morges around 1979, when goods were sold from a cart pulled to the market once a month. After the parish hall, the Rue de la Gare and the Rue des Charpentiers, it has been on the Rue des Fossés since June 2016, in premises owned by the Town of Morges.',
+      de: 'Der Laden, Mitglied der Association romande des Magasins du Monde, entstand um 1979 in Morges: Damals wurden die Waren einmal im Monat von einem Handwagen auf dem Markt verkauft. Nach dem Kirchgemeindesaal, der Rue de la Gare und der Rue des Charpentiers befindet er sich seit Juni 2016 an der Rue des Fossés, in Räumen der Stadt Morges.',
+      it: 'Membro dell’Association romande des Magasins du Monde, il negozio è nato a Morges verso il 1979, quando la merce veniva venduta da un carretto portato al mercato una volta al mese. Dopo la sala parrocchiale, la Rue de la Gare e la Rue des Charpentiers, dal giugno 2016 si trova in Rue des Fossés, in locali della Città di Morges.',
+    },
+    website: 'https://mdm.ch/magasins/morges/',
+    instagram: 'https://www.instagram.com/mdm_morges/',
+    facebook: 'https://www.facebook.com/mdmmorges/',
+    openingHours: {
+      text: {
+        fr: ['Lundi : 12 h – 18 h', 'Mardi à vendredi : 9 h – 18 h non-stop', 'Samedi : 9 h – 15 h', 'Horaires adaptés lors des manifestations de la Ville (nocturnes)'],
+        en: ['Monday: 12:00–18:00', 'Tuesday to Friday: 9:00–18:00, open all day', 'Saturday: 9:00–15:00', 'Hours adapted during town events (late openings)'],
+        de: ['Montag: 12–18 Uhr', 'Dienstag bis Freitag: 9–18 Uhr durchgehend', 'Samstag: 9–15 Uhr', 'Angepasste Öffnungszeiten bei Anlässen der Stadt (Abendverkauf)'],
+        it: ['Lunedì: 12–18', 'Da martedì a venerdì: 9–18 orario continuato', 'Sabato: 9–15', 'Orari adattati durante le manifestazioni della Città (aperture serali)'],
+      },
+      sources: [{ label: 'Morges.info — horaires transmis par le Magasin du Monde de Morges (28.11.2026)' }],
+      lastVerified: '2026-11-28',
+    },
+    photos: [
+      {
+        src: '/images/businesses/magasin-du-monde-artisanat.webp',
+        width: 971,
+        height: 1200,
+        alt: {
+          fr: 'L’artisanat du Magasin du Monde de Morges : statuettes en bronze et figurines perlées sur des étagères en bambou, bols bleus et blancs, sacs suspendus au mur',
+          en: 'Crafts at the Magasin du Monde de Morges: bronze statuettes and beaded figures on bamboo shelves, blue and white bowls, bags hanging on the wall',
+          de: 'Kunsthandwerk im Magasin du Monde de Morges: Bronzestatuetten und Perlenfiguren auf Bambusregalen, blau-weisse Schalen, Taschen an der Wand',
+          it: 'L’artigianato del Magasin du Monde de Morges: statuette in bronzo e figurine di perline su scaffali di bambù, ciotole bianche e blu, borse appese al muro',
+        },
+        credit: 'Magasin du Monde de Morges',
+        licence: 'Tous droits réservés, publié avec l’accord du Magasin du Monde de Morges (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/magasin-du-monde-cafe-the.webp',
+        width: 906,
+        height: 1200,
+        alt: {
+          fr: 'Le rayon cafés et thés équitables du Magasin du Monde de Morges, à côté de théières, de tasses et de gourdes',
+          en: 'The fair-trade coffee and tea shelves of the Magasin du Monde de Morges, next to teapots, cups and bottles',
+          de: 'Das Regal mit fairem Kaffee und Tee im Magasin du Monde de Morges, neben Teekannen, Tassen und Trinkflaschen',
+          it: 'Lo scaffale di caffè e tè equi del Magasin du Monde de Morges, accanto a teiere, tazze e borracce',
+        },
+        credit: 'Magasin du Monde de Morges',
+        licence: 'Tous droits réservés, publié avec l’accord du Magasin du Monde de Morges (28.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Magasins du Monde — page du magasin de Morges', url: 'https://mdm.ch/magasins/morges/' },
+      { label: 'Morges.info — informations et photos transmises par le Magasin du Monde de Morges, avec son accord (28.11.2026)' },
+    ],
+    lastVerified: '2026-11-28',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */
