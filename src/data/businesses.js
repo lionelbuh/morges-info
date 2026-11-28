@@ -1158,6 +1158,107 @@ export const BUSINESSES = [
     editorial: { selected: true },
     commercial: { status: 'none' },
   },
+  {
+    id: 'aux-petits-soi',
+    name: 'Aux Petits Soi',
+    category: 'health',
+    address: 'Chemin de la Brume 2, 1110 Morges',
+    addressNote: '2e étage',
+    email: 'auxpetits-soi@hotmail.com',
+    coordinates: null,
+    description: {
+      fr: 'Un cabinet de bien-être au cœur de Morges, dédié à la reconnexion à soi : soins holistiques, soins énergétiques et coaching PNL, pour les adultes et les enfants dès 7 ans.',
+      en: 'A well-being practice in the heart of Morges, devoted to reconnecting with yourself: holistic care, energy work and NLP coaching, for adults and children from the age of 7.',
+      de: 'Eine Wohlfühlpraxis im Herzen von Morges, die der Wiederverbindung mit sich selbst gewidmet ist: ganzheitliche Behandlungen, Energiearbeit und NLP-Coaching, für Erwachsene und Kinder ab 7 Jahren.',
+      it: 'Uno studio di benessere nel cuore di Morges, dedicato a ritrovare il contatto con sé: trattamenti olistici, trattamenti energetici e coaching PNL, per adulti e bambini dai 7 anni.',
+    },
+    services: [
+      {
+        title: { fr: 'Soins holistiques et énergétiques', en: 'Holistic care and energy work', de: 'Ganzheitliche Behandlungen und Energiearbeit', it: 'Trattamenti olistici ed energetici' },
+        text: {
+          fr: 'Un accompagnement qui prend en compte le corps, les émotions, l’énergie et l’histoire de chacun : enfant intérieur, mémoires familiales ou exploration symbolique des vies antérieures.',
+          en: 'Support that takes into account each person’s body, emotions, energy and story: the inner child, family memories or a symbolic exploration of past lives.',
+          de: 'Eine Begleitung, die Körper, Gefühle, Energie und die eigene Geschichte berücksichtigt: inneres Kind, Familienerinnerungen oder eine symbolische Erkundung früherer Leben.',
+          it: 'Un accompagnamento che tiene conto del corpo, delle emozioni, dell’energia e della storia di ciascuno: bambino interiore, memorie familiari o esplorazione simbolica delle vite passate.',
+        },
+      },
+      {
+        title: { fr: 'Coaching PNL', en: 'NLP coaching', de: 'NLP-Coaching', it: 'Coaching PNL' },
+        text: {
+          fr: 'Un accompagnement personnalisé, à son rythme, pour explorer ses ressources et retrouver son équilibre intérieur.',
+          en: 'Personal support, at your own pace, to explore your resources and find your inner balance again.',
+          de: 'Eine persönliche Begleitung im eigenen Tempo, um die eigenen Ressourcen zu entdecken und das innere Gleichgewicht wiederzufinden.',
+          it: 'Un accompagnamento personalizzato, al proprio ritmo, per esplorare le proprie risorse e ritrovare l’equilibrio interiore.',
+        },
+      },
+      {
+        title: { fr: 'Bijoux', en: 'Jewellery', de: 'Schmuck', it: 'Gioielli' },
+        text: {
+          fr: 'Des bracelets et des bagues en pierres et en perles, créés par Aux Petits Soi.',
+          en: 'Bracelets and rings made of stones and beads, created by Aux Petits Soi.',
+          de: 'Armbänder und Ringe aus Steinen und Perlen, von Aux Petits Soi gestaltet.',
+          it: 'Braccialetti e anelli di pietre e perle, creati da Aux Petits Soi.',
+        },
+      },
+    ],
+    note: {
+      fr: 'Ces soins ne remplacent en aucun cas un avis ni un traitement médical.',
+      en: 'These treatments never replace medical advice or treatment.',
+      de: 'Diese Behandlungen ersetzen in keinem Fall eine ärztliche Beratung oder Behandlung.',
+      it: 'Questi trattamenti non sostituiscono in alcun caso un parere né un trattamento medico.',
+    },
+    website: 'https://www.auxpetits-soi.ch/',
+    instagram: 'https://www.instagram.com/aux_petits_soi/',
+    openingHours: null,
+    photos: [
+      {
+        src: '/images/businesses/aux-petits-soi-lac.webp',
+        width: 1080,
+        height: 1080,
+        alt: {
+          fr: 'Une femme de dos au bord du Léman, une chemise blanche brodée d’un œil, un panier à pompons à ses pieds ; au loin, une barque à voiles latines et les montagnes',
+          en: 'A woman seen from behind by Lake Geneva, in a white shirt embroidered with an eye, a basket with pompoms at her feet; in the distance, a lateen-sailed boat and the mountains',
+          de: 'Eine Frau von hinten am Genfersee, in einem weissen Hemd mit gesticktem Auge, ein Korb mit Bommeln zu ihren Füssen; in der Ferne ein Lastsegelschiff und die Berge',
+          it: 'Una donna di spalle sulla riva del Lemano, con una camicia bianca ricamata con un occhio e un cesto con pompon ai suoi piedi; in lontananza, una barca a vela latina e le montagne',
+        },
+        credit: 'Aux Petits Soi',
+        licence: 'Tous droits réservés, publié avec l’accord d’Aux Petits Soi (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/aux-petits-soi-bracelet.webp',
+        width: 1080,
+        height: 1080,
+        alt: {
+          fr: 'Une main tenant une tasse, au poignet un bracelet de chaînes dorées et de pierres blanches d’Aux Petits Soi',
+          en: 'A hand holding a mug, with an Aux Petits Soi bracelet of gold chains and white stones on the wrist',
+          de: 'Eine Hand, die eine Tasse hält, am Handgelenk ein Armband von Aux Petits Soi aus goldenen Ketten und weissen Steinen',
+          it: 'Una mano che regge una tazza, al polso un braccialetto di catenine dorate e pietre bianche di Aux Petits Soi',
+        },
+        credit: 'Aux Petits Soi',
+        licence: 'Tous droits réservés, publié avec l’accord d’Aux Petits Soi (28.11.2026)',
+      },
+      {
+        src: '/images/businesses/aux-petits-soi-bagues.webp',
+        width: 967,
+        height: 1080,
+        alt: {
+          fr: 'Une main portant des bagues de perles et des bracelets de pierres violettes et de chaînes argentées d’Aux Petits Soi',
+          en: 'A hand wearing Aux Petits Soi rings of beads and bracelets of purple stones and silver chains',
+          de: 'Eine Hand mit Perlenringen und Armbändern aus violetten Steinen und silbernen Ketten von Aux Petits Soi',
+          it: 'Una mano con anelli di perle e braccialetti di pietre viola e catenine argentate di Aux Petits Soi',
+        },
+        credit: 'Aux Petits Soi',
+        licence: 'Tous droits réservés, publié avec l’accord d’Aux Petits Soi (28.11.2026)',
+      },
+    ],
+    sources: [
+      { label: 'Aux Petits Soi — site web', url: 'https://www.auxpetits-soi.ch/' },
+      { label: 'Morges.info — informations et photos transmises par Aux Petits Soi, avec son accord (28.11.2026)' },
+    ],
+    lastVerified: '2026-11-28',
+    editorial: { selected: true },
+    commercial: { status: 'none' },
+  },
 ];
 
 /** Bounding box of the commune (generous): businesses must be inside Morges. */

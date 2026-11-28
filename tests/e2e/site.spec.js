@@ -190,7 +190,7 @@ test('structured data: site, events and stories are described for search engines
 test('sitemap lists the place pages with their verification date; robots allow everything', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('<loc>https://morges.info/lieux/chateau/</loc>\n    <lastmod>');
-  expect(sitemap.match(/<loc>/g)).toHaveLength(56); // 15 listed pages + 20 places + 12 photo pages + 9 businesses
+  expect(sitemap.match(/<loc>/g)).toHaveLength(57); // 15 listed pages + 20 places + 12 photo pages + 10 businesses
   expect(sitemap).toContain('<loc>https://morges.info/commerces/lykke/</loc>\n    <lastmod>');
   // photos listed for image search
   expect(sitemap).toContain('<image:loc>https://morges.info/images/photos/debarcadere-1909.webp</image:loc>');
@@ -380,7 +380,7 @@ test('home: the photo of the day stays the same when the language changes', asyn
 });
 
 test('home: a click anywhere on a business card opens its profile on the businesses page', async ({ page }) => {
-  await page.clock.install({ time: new Date('2026-11-07T10:00:00+01:00') }); // Luckycats comes first that day
+  await page.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') }); // Luckycats comes first that day
   await page.goto('/');
   const card = page.locator('section[aria-labelledby="home-businesses"] .business-card').filter({ hasText: 'Luckycats' });
   await expect(card.locator('.business-card-more')).toHaveText(`${fr.home.businessMore} →`);
@@ -399,7 +399,7 @@ test('each business has its own page: title, share photo, breadcrumb, the others
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/images\/share\/chez-loubna-vitrine\.jpg$/);
   await expect(page.locator('.site-header [aria-current="page"], header nav [aria-current="page"]').first()).toHaveText(fr.nav.businesses);
   await expect(page.locator('.breadcrumb a[href="/commerces/"]')).toBeVisible();
-  await expect(page.locator('section[aria-labelledby="business-others"] .business-card')).toHaveCount(8);
+  await expect(page.locator('section[aria-labelledby="business-others"] .business-card')).toHaveCount(9);
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join();
   expect(ld).toContain('"mainEntityOfPage":"https://morges.info/commerces/chez-loubna/"');
   // in German
@@ -410,12 +410,12 @@ test('each business has its own page: title, share photo, breadcrumb, the others
 test('home: one business at a time, its photos in turn, then the next; nothing moves for reduced motion', async ({ browser }) => {
   const shown = (page) => page.locator('[data-biz-slide]:not(.is-off)');
   const page = await browser.newPage();
-  await page.clock.install({ time: new Date('2026-11-07T10:00:00+01:00') });
+  await page.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') });
   await page.goto('/');
   await page.mouse.move(0, 0);
   await expect(shown(page)).toHaveCount(1);
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
-  await expect(page.locator('[data-biz-slide].is-off[inert]')).toHaveCount(8);
+  await expect(page.locator('[data-biz-slide].is-off[inert]')).toHaveCount(9);
   const photo = shown(page).locator('.business-photo img');
   await expect(photo).toHaveAttribute('src', /luckycats-estelle-franzone/);
   // after 4 s, the next photo of the same business (with a short fade)
@@ -427,14 +427,14 @@ test('home: one business at a time, its photos in turn, then the next; nothing m
   // after 12 s, the next business
   await page.clock.runFor(8000);
   await expect(shown(page).locator('.card-title')).toHaveText('Chez Loubna');
-  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 9');
+  await expect(page.locator('[data-biz-pos]')).toHaveText('2 / 10');
   // the buttons
   await page.locator('[data-biz-step="-1"]').click();
   await expect(shown(page).locator('.card-title')).toHaveText('Luckycats');
   await page.close();
 
   const still = await browser.newPage({ reducedMotion: 'reduce' });
-  await still.clock.install({ time: new Date('2026-11-07T10:00:00+01:00') });
+  await still.clock.install({ time: new Date('2026-11-04T10:00:00+01:00') });
   await still.goto('/');
   await still.clock.runFor(13000);
   await expect(shown(still).locator('.card-title')).toHaveText('Luckycats');
